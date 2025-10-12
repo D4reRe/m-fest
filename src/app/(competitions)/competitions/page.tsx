@@ -1,7 +1,12 @@
 import React from "react";
+import CompetitionsSection from "./competitions";
 
 function CompetitionsPage() {
-  return <div>CompetitionsPage</div>;
+  return (
+    <>
+      <CompetitionsSection />
+    </>
+  );
 }
 
 export default CompetitionsPage;

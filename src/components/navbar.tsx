@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const menuItems = [
-  { name: "Events", href: "#link" },
-  { name: "Competitions", href: "#link" },
+  { name: "Events", href: "/#events" },
+  { name: "Competitions", href: "/competitions" },
   { name: "Tickets", href: "#link" },
   { name: "Timeline", href: "#link" },
 ];

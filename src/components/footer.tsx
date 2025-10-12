@@ -5,11 +5,11 @@ import Link from "next/link";
 const links = [
   {
     title: "Events",
-    href: "#",
+    href: "/#events",
   },
   {
     title: "Competitions",
-    href: "#",
+    href: "/competitions",
   },
   {
     title: "Tickets",
