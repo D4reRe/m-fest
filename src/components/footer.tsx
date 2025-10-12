@@ -4,6 +4,10 @@ import Link from "next/link";
 
 const links = [
   {
+    title: "Timeline",
+    href: "/#timeline",
+  },
+  {
     title: "Events",
     href: "/#events",
   },
@@ -17,10 +21,6 @@ const links = [
   },
   {
     title: "Help",
-    href: "#",
-  },
-  {
-    title: "Timeline",
     href: "#",
   },
 ];

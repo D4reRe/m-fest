@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const menuItems = [
+  { name: "Timeline", href: "/#timeline" },
   { name: "Events", href: "/#events" },
   { name: "Competitions", href: "/competitions" },
   { name: "Tickets", href: "#link" },
-  { name: "Timeline", href: "#link" },
 ];
 
 export const Navbar = () => {
