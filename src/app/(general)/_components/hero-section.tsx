@@ -148,9 +148,9 @@ export default function HeroSection() {
                       size="lg"
                       className="rounded-xl px-5 text-base"
                     >
-                      <Link href="#link" className="flex items-center gap-3 ">
+                      <Link href="#events" className="flex items-center gap-3 ">
                         <Rocket className="relative size-4" />
-                        <span className="text-nowrap">Events</span>
+                        <span className="text-nowrap">Explore Events</span>
                       </Link>
                     </Button>
                   </div>
@@ -180,13 +180,13 @@ export default function HeroSection() {
                     width="2700"
                     height="1440"
                   />
-                  <Image
+                  {/* <Image
                     className="z-2 border-border/25 aspect-15/8 relative rounded-2xl border dark:hidden"
                     src="/mail2-light.png"
                     alt="app screen"
                     width="2700"
                     height="1440"
-                  />
+                  /> */}
                 </div>
               </div>
             </AnimatedGroup>
