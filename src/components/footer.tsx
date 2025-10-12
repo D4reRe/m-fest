@@ -20,7 +20,7 @@ const links = [
     href: "#",
   },
   {
-    title: "About",
+    title: "Timeline",
     href: "#",
   },
 ];

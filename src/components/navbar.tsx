@@ -10,10 +10,10 @@ const menuItems = [
   { name: "Events", href: "#link" },
   { name: "Competitions", href: "#link" },
   { name: "Tickets", href: "#link" },
-  { name: "About", href: "#link" },
+  { name: "Timeline", href: "#link" },
 ];
 
-export const HeroHeader = () => {
+export const Navbar = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
 
