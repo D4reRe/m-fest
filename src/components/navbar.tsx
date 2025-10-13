@@ -122,7 +122,7 @@ export const Navbar = () => {
                       type="button"
                       onClick={() => signOut()}
                     >
-                      Sign Out
+                      Log Out
                     </Button>
                   </div>
                 )}
