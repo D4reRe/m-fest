@@ -114,7 +114,7 @@ export default async function HeroSection() {
                   speedSegment={0.3}
                   delay={0.5}
                   as="p"
-                  className="mx-auto mt-8 max-w-2xl text-balance text-3xl text-semibold"
+                  className="mx-auto mt-8 max-w-2xl text-balance text-3xl [font-family:var(--font-next-montserrat)] font-semibold"
                 >
                   {session?.user?.name
                     ? `Welcome back, ${session.user.name}`
@@ -124,7 +124,7 @@ export default async function HeroSection() {
                   preset="fade-in-blur"
                   speedSegment={0.3}
                   as="h1"
-                  className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-extrabold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
+                  className="mx-auto mt-8 max-w-4xl text-balance text-5xl md:text-8xl lg:mt-16 xl:text-[5.25rem] [font-family:var(--font-next-montserrat)] font-bold"
                 >
                   Mechanical Festival 2026
                 </TextEffect>
@@ -134,7 +134,7 @@ export default async function HeroSection() {
                   speedSegment={0.3}
                   delay={0.5}
                   as="p"
-                  className="mx-auto mt-8 max-w-2xl text-balance text-3xl text-semibold"
+                  className="mx-auto mt-8 max-w-2xl text-balance text-3xl [font-family:var(--font-next-montserrat)] font-semibold"
                 >
                   Innovate Ideas. Create Impact.
                 </TextEffect>
