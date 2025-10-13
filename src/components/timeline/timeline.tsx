@@ -7,11 +7,11 @@ export default function Timeline() {
       <h1 className="text-6xl font-bold text-center mt-8">Timeline</h1>
       <div className="group relative m-auto max-w-7xl px-6">
         <div className="flex flex-col items-center md:flex-row">
-          <div className="md:max-w-44 md:border-r md:pr-6">
-            <p className="text-end text-sm">Powering the best teams</p>
+          <div className="md:max-w-20 md:border-r md:pr-6">
+            <p className="text-end text-base">See our timelines</p>
           </div>
           <div className="relative py-6 md:w-[calc(100%-11rem)] mt-12">
-            <InfiniteSlider speedOnHover={20} speed={40} gap={112}>
+            <InfiniteSlider speed={40} gap={112}>
               <div className="flex">
                 <img
                   className="mx-auto h-5 w-fit dark:invert"
@@ -21,7 +21,6 @@ export default function Timeline() {
                   width="auto"
                 />
               </div>
-
               <div className="flex">
                 <img
                   className="mx-auto h-4 w-fit dark:invert"
@@ -76,7 +75,6 @@ export default function Timeline() {
                   width="auto"
                 />
               </div>
-
               <div className="flex">
                 <img
                   className="mx-auto h-6 w-fit dark:invert"
@@ -87,8 +85,7 @@ export default function Timeline() {
                 />
               </div>
             </InfiniteSlider>
-
-            <div className="bg-linear-to-r from-background/0 absolute inset-y-0 left-0 w-20"></div>
+            {/* <div className="bg-linear-to-r from-background/0 absolute inset-y-0 left-0 w-20"></div>
             <div className="bg-linear-to-l from-background/0 absolute inset-y-0 right-0 w-20"></div>
             <ProgressiveBlur
               className="pointer-events-none absolute left-0 top-0 h-full w-20"
@@ -99,7 +96,7 @@ export default function Timeline() {
               className="pointer-events-none absolute right-0 top-0 h-full w-20"
               direction="right"
               blurIntensity={1}
-            />
+            /> */}
           </div>
         </div>
       </div>
