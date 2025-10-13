@@ -97,7 +97,13 @@ export const Navbar = () => {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                {session?.user ? (
+                {status === "loading" && (
+                  <div className="flex items-center gap-2 animate-pulse">
+                    <div className="w-8 h-8 rounded-full bg-gray-300" />
+                    <div className="w-20 h-4 bg-gray-300 rounded" />
+                  </div>
+                )}
+                {status === "authenticated" && session?.user && (
                   <div className="flex gap-5 items-center">
                     <Image
                       src={session.user.image!}
@@ -119,7 +125,8 @@ export const Navbar = () => {
                       Sign Out
                     </Button>
                   </div>
-                ) : (
+                )}
+                {status === "unauthenticated" && (
                   <>
                     <Button
                       asChild
