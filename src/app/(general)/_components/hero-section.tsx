@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import { auth } from "@/auth";
 
 const transitionVariants = {
   item: {
@@ -26,7 +27,8 @@ const transitionVariants = {
   },
 };
 
-export default function HeroSection() {
+export default async function HeroSection() {
+  const session = await auth();
   return (
     <>
       <main className="overflow-hidden">
@@ -107,10 +109,22 @@ export default function HeroSection() {
                 </AnimatedGroup>
 
                 <TextEffect
+                  per="line"
+                  preset="fade-in-blur"
+                  speedSegment={0.3}
+                  delay={0.5}
+                  as="p"
+                  className="mx-auto mt-8 max-w-2xl text-balance text-3xl text-semibold"
+                >
+                  {session?.user?.name
+                    ? `Welcome back, ${session.user.name}`
+                    : "Welcome to"}
+                </TextEffect>
+                <TextEffect
                   preset="fade-in-blur"
                   speedSegment={0.3}
                   as="h1"
-                  className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-bold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
+                  className="mx-auto mt-8 max-w-4xl text-balance text-5xl max-md:font-extrabold md:text-7xl lg:mt-16 xl:text-[5.25rem]"
                 >
                   Mechanical Festival 2026
                 </TextEffect>

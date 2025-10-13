@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 const menuItems = [
   { name: "Timeline", href: "/#timeline" },
@@ -16,6 +18,7 @@ const menuItems = [
 export const Navbar = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const { data: session, status } = useSession();
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -94,34 +97,60 @@ export const Navbar = () => {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                <Button
-                  asChild
-                  variant="outline"
-                  size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
-                >
-                  <Link href="/login">
-                    <span>Login</span>
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="sm"
-                  className={cn(isScrolled && "lg:hidden")}
-                >
-                  <Link href="/sign-up">
-                    <span>Sign Up</span>
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  size="sm"
-                  className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
-                >
-                  <Link href="#">
-                    <span>Get Started</span>
-                  </Link>
-                </Button>
+                {session?.user ? (
+                  <div className="flex gap-5 items-center">
+                    <Image
+                      src={session.user.image!}
+                      alt="User Image"
+                      width={45}
+                      height={45}
+                      className="object-cover rounded-full"
+                    />
+                    <p className={cn(isScrolled ? "lg:hidden" : "text-sm")}>
+                      {session.user.name}
+                    </p>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="cursor-pointer"
+                      type="button"
+                      onClick={() => signOut()}
+                    >
+                      Sign Out
+                    </Button>
+                  </div>
+                ) : (
+                  <>
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className={cn(isScrolled && "lg:hidden")}
+                    >
+                      <Link href="/login">
+                        <span>Login</span>
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      size="sm"
+                      className={cn(isScrolled && "lg:hidden")}
+                    >
+                      <Link href="/sign-up">
+                        <span>Sign Up</span>
+                      </Link>
+                    </Button>
+                    <Button
+                      asChild
+                      size="sm"
+                      className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
+                    >
+                      <Link href="#">
+                        <span>Get Started</span>
+                      </Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
