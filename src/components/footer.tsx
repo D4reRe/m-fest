@@ -16,8 +16,8 @@ const links = [
     href: "/competitions",
   },
   {
-    title: "Tickets",
-    href: "#",
+    title: "Ticket",
+    href: "/ticket",
   },
   {
     title: "Help",

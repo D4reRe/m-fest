@@ -51,9 +51,6 @@ export function InfiniteSlider({
       ease: "linear",
       duration: duration,
       repeat: Infinity,
-      // 'loop' is not a valid repeatType for `animate`, it resets.
-      // We manually reset the position in the onComplete/onRepeat of a non-repeating animation loop,
-      // but for a simple infinity, framer-motion handles it.
     });
 
     // Cleanup function to stop the animation when dependencies change or component unmounts.

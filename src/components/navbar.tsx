@@ -10,7 +10,7 @@ const menuItems = [
   { name: "Timeline", href: "/#timeline" },
   { name: "Events", href: "/#events" },
   { name: "Competitions", href: "/competitions" },
-  { name: "Tickets", href: "#link" },
+  { name: "Ticket", href: "/ticket" },
 ];
 
 export const Navbar = () => {
