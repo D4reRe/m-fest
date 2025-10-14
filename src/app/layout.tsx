@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { montserrat, onest, roboto } from "@/styles/font";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Navbar } from "@/components/Navbar";
-import FooterSection from "@/components/footer";
-import SessionProviders from "@/components/session-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { Navbar } from "@/components/general/Navbar";
+import FooterSection from "@/components/general/footer";
+import SessionProviders from "@/components/providers/session-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
           >
             <Navbar />
             {children}
+            <Toaster />
             <FooterSection />
           </ThemeProvider>
         </SessionProviders>
