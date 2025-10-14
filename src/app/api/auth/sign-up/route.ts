@@ -3,9 +3,9 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const { fullname, email, password } = await req.json();
+  const { fullName, email, password } = await req.json();
   try {
-    const existing = await prisma.users.findUnique({
+    const existing = await prisma.customUser.findUnique({
       where: {
         email,
       },
@@ -17,9 +17,9 @@ export async function POST(req: Request) {
       );
     }
     const password_hash = await bcrypt.hash(password, 10);
-    const user = await prisma.users.create({
+    const user = await prisma.customUser.create({
       data: {
-        name: fullname,
+        fullName,
         email,
         password: password_hash,
       },
