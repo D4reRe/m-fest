@@ -1,20 +1,19 @@
 import NextAuth, { CredentialsSignin } from "next-auth";
 import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
-import { SupabaseAdapter } from "@auth/supabase-adapter";
 import { prisma } from "./lib/prisma";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
+import PostgresAdapter from "@auth/pg-adapter";
+import { Pool } from "@neondatabase/serverless";
 
 class InvalidLoginError extends CredentialsSignin {
   code = "Invalid identifier or password";
 }
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: SupabaseAdapter({
-    url: process.env.SUPABASE_URL!,
-    secret: process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  }),
+  adapter: PostgresAdapter(pool),
   providers: [
     Google,
     Github,
@@ -56,6 +55,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  pages: {
+    signIn: "/sign-in",
+  },
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
@@ -63,6 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.name = user.name;
         token.email = user.email;
         token.image =
+          user.image ??
           "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff";
       }
       console.log("JWT callback:", { token, user });

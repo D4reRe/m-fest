@@ -1,34 +1,18 @@
-"use client";
+import { signIn } from "@/auth";
+import React from "react";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { signIn } from "next-auth/react";
-import { useState } from "react";
-import { toast } from "sonner";
 
-function AuthButtons() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+function AuthButtonsServer() {
   return (
     <div className="flex gap-5 justify-center">
-      <div>
-        <Button
-          type="button"
-          variant="outline"
-          className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
-          disabled={isLoading}
-          onClick={async () => {
-            setIsLoading(true);
-            toast.loading("Signing in...");
-            try {
-              await signIn("google", { redirectTo: "/" });
-              toast.success("Signed in successfully");
-            } catch (error) {
-              toast.error("Failed to sign in");
-              console.error(error);
-            } finally {
-              setIsLoading(false);
-            }
-          }}
-        >
+      <form
+        action={async () => {
+          "use server";
+          await signIn("google", { redirectTo: "/" });
+        }}
+      >
+        <Button type="submit" variant="outline">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="0.98em"
@@ -54,28 +38,14 @@ function AuthButtons() {
           </svg>
           <span>Google</span>
         </Button>
-      </div>
-      <div>
-        <Button
-          type="button"
-          variant="outline"
-          className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
-          disabled={isLoading}
-          onClick={async () => {
-            setIsLoading(true);
-            toast.loading("Signing in...", { id: "signing-in" });
-            try {
-              await signIn("github", { redirectTo: "/" });
-              toast.success("Signed in successfully");
-              toast.dismiss("signing-in");
-            } catch (error) {
-              toast.error("Failed to sign in");
-              console.error(error);
-            } finally {
-              setIsLoading(false);
-            }
-          }}
-        >
+      </form>
+      <form
+        action={async () => {
+          "use server";
+          await signIn("github", { redirectTo: "/" });
+        }}
+      >
+        <Button type="submit" variant="outline">
           <Image
             src="/github/github-mark-white.svg"
             alt="github"
@@ -84,9 +54,9 @@ function AuthButtons() {
           />
           <span>Github</span>
         </Button>
-      </div>
+      </form>
     </div>
   );
 }
 
-export default AuthButtons;
+export default AuthButtonsServer;

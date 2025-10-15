@@ -2,13 +2,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
@@ -23,19 +24,24 @@ function LoginForm() {
     formState: { errors },
   } = useForm<loginSchema>({ resolver: zodResolver(loginSchema) });
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function onSubmit(formData: loginSchema) {
+    setIsLoading(true);
+    toast.loading("Signing in...", { id: "signing-in" });
     const auth = await signIn("credentials", {
       ...formData,
       redirect: false,
       callbackUrl: "/",
     });
+    setIsLoading(false);
     if (auth.ok) {
       toast.success("Logged in successfully!");
+      toast.dismiss("signing-in");
       router.replace("/");
     } else {
       toast.error("Logged in failed", {
-        description: auth.error,
+        description: auth?.error ?? "Invalid email or password",
       });
     }
   }
@@ -72,8 +78,21 @@ function LoginForm() {
         )}
       </div>
 
-      <Button className="w-full" type="submit">
-        Sign In
+      <Button
+        className={`w-full ${
+          isLoading ? "cursor-not-allowed" : "cursor-pointer"
+        }`}
+        disabled={isLoading}
+        type="submit"
+      >
+        {isLoading ? (
+          <div className="flex gap-2">
+            <span>Signing In...</span>
+            <Loader2 className="animate-spin" />
+          </div>
+        ) : (
+          "Sign In"
+        )}
       </Button>
     </form>
   );

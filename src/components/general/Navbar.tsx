@@ -1,12 +1,14 @@
 "use client";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Loader2, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import React from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const menuItems = [
   { name: "Timeline", href: "/#timeline" },
@@ -15,11 +17,13 @@ const menuItems = [
 ];
 
 export const Navbar = () => {
-  const [menuState, setMenuState] = React.useState(false);
-  const [isScrolled, setIsScrolled] = React.useState(false);
+  const [menuState, setMenuState] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const { data: session, status } = useSession();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
@@ -119,11 +123,37 @@ export const Navbar = () => {
                     <Button
                       variant="destructive"
                       size="sm"
-                      className="cursor-pointer"
+                      className={`${
+                        isLoading ? "cursor-not-allowed" : "cursor-pointer"
+                      }`}
+                      disabled={isLoading}
                       type="button"
-                      onClick={() => signOut()}
+                      onClick={async () => {
+                        setIsLoading(true);
+                        toast.loading("Logging out...", {
+                          id: "logging-out",
+                        });
+                        try {
+                          await signOut({ redirect: false });
+                          toast.success("Logged out successfully");
+                          toast.dismiss("logging-out");
+                          router.replace("/");
+                        } catch (error) {
+                          toast.error("Failed to log out");
+                          console.error(error);
+                        } finally {
+                          setIsLoading(false);
+                        }
+                      }}
                     >
-                      Log Out
+                      {isLoading ? (
+                        <div className="flex gap-2">
+                          <span>Logging out...</span>
+                          <Loader2 className="animate-spin" />
+                        </div>
+                      ) : (
+                        "Log Out"
+                      )}
                     </Button>
                   </div>
                 )}
