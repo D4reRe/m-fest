@@ -117,7 +117,7 @@ export default async function HeroSection() {
                   className="mx-auto mt-8 max-w-2xl text-balance text-3xl [font-family:var(--font-next-montserrat)] font-semibold"
                 >
                   {session?.user?.name
-                    ? `Welcome back, ${session.user.name}`
+                    ? `Welcome, ${session.user.name}`
                     : "Welcome to"}
                 </TextEffect>
                 <TextEffect

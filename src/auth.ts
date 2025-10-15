@@ -1,10 +1,14 @@
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
 import { SupabaseAdapter } from "@auth/supabase-adapter";
 import { prisma } from "./lib/prisma";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
+
+class InvalidLoginError extends CredentialsSignin {
+  code = "Invalid identifier or password";
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: SupabaseAdapter({
@@ -15,27 +19,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google,
     Github,
     Credentials({
+      type: "credentials",
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null;
+        const credentialDetails = {
+          email: credentials.email,
+          password: credentials.password,
+        };
+        if (!credentialDetails?.email || !credentialDetails?.password)
+          throw new InvalidLoginError();
 
         // Find user from sign-up instead of auth.js
         const user = await prisma.customUser.findUnique({
-          where: { email: credentials.email as string },
+          where: { email: credentialDetails.email as string },
         });
 
-        if (!user) return null;
+        if (!user) throw new InvalidLoginError();
 
         // Verify password
         const isValid = await compare(
-          credentials.password as string,
+          credentialDetails.password as string,
           user.password
         );
-        if (!isValid) return null;
+        if (!isValid) throw new InvalidLoginError();
 
         // Return a user object compatible with Auth.js
         return {
@@ -46,8 +56,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image =
+          "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff";
+      }
+      console.log("JWT callback:", { token, user });
+      return token;
+    },
+    session: async ({ session, token, user }) => {
+      if (token) {
+        session.user.name = token.name;
+        session.user.email = token.email as string;
+        session.user.image = token.image as string;
+      }
+      return session;
+    },
+  },
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
 });

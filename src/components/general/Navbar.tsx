@@ -104,13 +104,15 @@ export const Navbar = () => {
                 )}
                 {status === "authenticated" && session?.user && (
                   <div className="flex gap-5 items-center">
-                    <Image
-                      src={session.user.image!}
-                      alt="User Image"
-                      width={45}
-                      height={45}
-                      className="object-cover rounded-full"
-                    />
+                    {session?.user.image && (
+                      <Image
+                        src={session.user.image!}
+                        alt="User Image"
+                        width={45}
+                        height={45}
+                        className="object-cover rounded-full"
+                      />
+                    )}
                     <p className={cn(isScrolled ? "lg:hidden" : "text-sm")}>
                       {session.user.name}
                     </p>

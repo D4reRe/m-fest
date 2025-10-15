@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const registerSchema = z.object({
   fullName: z.string().min(1, "Fullname is required"),
@@ -21,6 +22,7 @@ function SignUpForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<registerSchema>({ resolver: zodResolver(registerSchema) });
+  const router = useRouter();
 
   async function onSubmit(formData: registerSchema) {
     const res = await fetch("/api/auth/sign-up", {
@@ -30,6 +32,7 @@ function SignUpForm() {
     });
     if (res.ok) {
       toast.success("Signed up successfully");
+      router.replace("/login");
     } else {
       const err = await res.json();
       toast.error(err.error);
