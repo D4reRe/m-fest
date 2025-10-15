@@ -1,13 +1,16 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { SupabaseAdapter } from "@auth/supabase-adapter";
 import { prisma } from "./lib/prisma";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(prisma),
+  adapter: SupabaseAdapter({
+    url: process.env.SUPABASE_URL!,
+    secret: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  }),
   providers: [
     Google,
     Github,

@@ -1,5 +1,6 @@
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
+import TimelineItem from "./timeline-item";
 
 export default function Timeline() {
   return (
@@ -12,78 +13,68 @@ export default function Timeline() {
           </div>
           <div className="relative py-6 md:w-[calc(100%-11rem)] mt-12">
             <InfiniteSlider speed={40} gap={112}>
-              <div className="flex">
-                <img
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/nvidia.svg"
-                  alt="Nvidia Logo"
-                  height="20"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <img
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/column.svg"
-                  alt="Column Logo"
-                  height="16"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <img
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/github.svg"
-                  alt="GitHub Logo"
-                  height="16"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <img
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/nike.svg"
-                  alt="Nike Logo"
-                  height="20"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <img
-                  className="mx-auto h-5 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/lemonsqueezy.svg"
-                  alt="Lemon Squeezy Logo"
-                  height="20"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <img
-                  className="mx-auto h-4 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/laravel.svg"
-                  alt="Laravel Logo"
-                  height="16"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <img
-                  className="mx-auto h-7 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/lilly.svg"
-                  alt="Lilly Logo"
-                  height="28"
-                  width="auto"
-                />
-              </div>
-              <div className="flex">
-                <img
-                  className="mx-auto h-6 w-fit dark:invert"
-                  src="https://html.tailus.io/blocks/customers/openai.svg"
-                  alt="OpenAI Logo"
-                  height="24"
-                  width="auto"
-                />
-              </div>
+              <TimelineItem
+                icon="octicon"
+                iconName="logo-github-16"
+                alt="Github"
+                height={8}
+              />
+              <TimelineItem
+                icon="logos"
+                iconName="nextjs"
+                alt="Next.js"
+                height={6}
+                invert
+              />
+              <TimelineItem
+                icon="logos"
+                iconName="supabase"
+                alt="Supabase"
+                height={8}
+                invert
+              />
+              <TimelineItem
+                icon="logos"
+                iconName="neon"
+                alt="Neon DB"
+                height={8}
+                invert
+              />
+              <TimelineItem
+                icon="logos"
+                iconName="amd"
+                alt="AMD"
+                height={8}
+                invert
+              />
+              <TimelineItem
+                icon="logos"
+                iconName="astro"
+                alt="Astro"
+                height={10}
+                invert
+              />
+              <TimelineItem
+                icon="logos"
+                iconName="nuxt"
+                alt="Nuxt"
+                height={8}
+                invert
+              />
+              <TimelineItem
+                icon="logos"
+                iconName="gitlab"
+                alt="Gitlab"
+                height={8}
+                invert
+              />
+              <TimelineItem
+                icon="logos"
+                iconName="express"
+                alt="Express"
+                height={8}
+                invert
+              />
             </InfiniteSlider>
             {/* <div className="bg-linear-to-r from-background/0 absolute inset-y-0 left-0 w-20"></div>
             <div className="bg-linear-to-l from-background/0 absolute inset-y-0 right-0 w-20"></div>

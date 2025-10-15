@@ -12,12 +12,6 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "html.tailus.io",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
         hostname: "images.unsplash.com",
         port: "",
         pathname: "/**",
@@ -31,6 +25,12 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.iconify.design",
         port: "",
         pathname: "/**",
       },
