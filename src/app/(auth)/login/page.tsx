@@ -19,7 +19,7 @@ async function LoginPage() {
             <Link href="/" aria-label="go home" className="mx-auto block w-fit">
               <Image
                 src="/logo.svg"
-                alt="Mechanical Festival 2025"
+                alt="Mechanical Festival 2026"
                 width={60}
                 height={60}
               />

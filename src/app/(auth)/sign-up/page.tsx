@@ -24,7 +24,7 @@ async function SignUpPage() {
             >
               <Image
                 src="/logo.svg"
-                alt="Mechanical Festival 2025"
+                alt="Mechanical Festival 2026"
                 width={60}
                 height={60}
               />
