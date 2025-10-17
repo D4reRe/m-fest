@@ -11,8 +11,7 @@
     "migrate": "npx prisma generate && dotenv -e .env -- npx prisma migrate dev"
   },
   "dependencies": {
-    "@auth/pg-adapter": "^1.11.0",
-    "@auth/supabase-adapter": "^1.11.0",
+    "@auth/prisma-adapter": "^2.11.0",
     "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^1.0.2",
     "@prisma/client": "^6.17.1",

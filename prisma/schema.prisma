@@ -1,56 +1,79 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+ 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
-
-datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+ 
+model User {
+  id            String          @id @default(cuid())
+  name          String?
+  email         String          @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  // Optional for WebAuthn support
+  Authenticator Authenticator[]
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
-model accounts {
-  id                Int     @id @default(autoincrement())
-  userId            Int
-  type              String  @db.VarChar(255)
-  provider          String  @db.VarChar(255)
-  providerAccountId String  @db.VarChar(255)
+ 
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
   refresh_token     String?
   access_token      String?
-  expires_at        BigInt?
-  id_token          String?
-  scope             String?
-  session_state     String?
+  expires_at        Int?
   token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([provider, providerAccountId])
 }
-
-model sessions {
-  id           Int      @id @default(autoincrement())
-  userId       Int
-  expires      DateTime @db.Timestamptz(6)
-  sessionToken String   @db.VarChar(255)
+ 
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
-model users {
-  id            Int       @id @default(autoincrement())
-  name          String?   @db.VarChar(255)
-  email         String?   @db.VarChar(255)
-  emailVerified DateTime? @db.Timestamptz(6)
-  image         String?
-}
-
-model verification_token {
+ 
+model VerificationToken {
   identifier String
-  expires    DateTime @db.Timestamptz(6)
   token      String
-
+  expires    DateTime
+ 
   @@id([identifier, token])
 }
-
-model CustomUser {
-  id        Int      @id @default(autoincrement())
-  fullName  String   @db.VarChar(255)
-  email     String   @unique @db.VarChar(255)
-  password  String   @db.VarChar(255)
-  createdAt DateTime @default(now())
+ 
+// Optional for WebAuthn support
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@id([userId, credentialID])
 }
-

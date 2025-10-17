@@ -66,12 +66,12 @@ function AuthButtons() {
             toast.loading("Signing in...", { id: "signing-in" });
             try {
               await signIn("github", { redirectTo: "/" });
-              toast.success("Signed in successfully");
-              toast.dismiss("signing-in");
             } catch (error) {
               toast.error("Failed to sign in");
               console.error(error);
             } finally {
+              toast.dismiss("signing-in");
+              toast.success("Signed in successfully");
               setIsLoading(false);
             }
           }}

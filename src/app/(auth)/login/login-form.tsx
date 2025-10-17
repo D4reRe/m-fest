@@ -36,8 +36,8 @@ function LoginForm() {
     });
     setIsLoading(false);
     if (auth.ok) {
-      toast.success("Logged in successfully!");
       toast.dismiss("signing-in");
+      toast.success("Logged in successfully!");
       router.replace("/");
     } else {
       toast.error("Logged in failed", {

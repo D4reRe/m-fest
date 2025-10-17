@@ -4,16 +4,14 @@ import Github from "next-auth/providers/github";
 import { prisma } from "./lib/prisma";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import PostgresAdapter from "@auth/pg-adapter";
-import { Pool } from "@neondatabase/serverless";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
 class InvalidLoginError extends CredentialsSignin {
   code = "Invalid identifier or password";
 }
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PostgresAdapter(pool),
+  adapter: PrismaAdapter(prisma),
   providers: [
     Google,
     Github,
@@ -33,7 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new InvalidLoginError();
 
         // Find user from sign-up instead of auth.js
-        const user = await prisma.customUser.findUnique({
+        const user = await prisma.user.findUnique({
           where: { email: credentialDetails.email as string },
         });
 
@@ -42,14 +40,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Verify password
         const isValid = await compare(
           credentialDetails.password as string,
-          user.password
+          user.password as string
         );
         if (!isValid) throw new InvalidLoginError();
 
         // Return a user object compatible with Auth.js
         return {
           id: user.id.toString(),
-          name: user.fullName,
+          name: user.name,
           email: user.email,
         };
       },
@@ -71,8 +69,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       console.log("JWT callback:", { token, user });
       return token;
     },
-    session: async ({ session, token, user }) => {
+    session: async ({ session, token }) => {
       if (token) {
+        session.user.id = token.id as string;
         session.user.name = token.name;
         session.user.email = token.email as string;
         session.user.image = token.image as string;

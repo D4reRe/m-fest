@@ -11,7 +11,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
 const registerSchema = z.object({
-  fullName: z.string().min(1, "Fullname is required"),
+  name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email").min(1, "Email is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
@@ -36,8 +36,8 @@ function SignUpForm() {
     });
     setIsLoading(false);
     if (res.ok) {
-      toast.success("Signed up successfully");
       toast.dismiss("signing-up");
+      toast.success("Signed up successfully");
       router.replace("/login");
     } else {
       const err = await res.json();
@@ -49,14 +49,12 @@ function SignUpForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
       <div className="grid grid-cols-1 gap-3">
         <div className="space-y-2">
-          <Label htmlFor="fullName" className="block text-sm">
-            Fullname
+          <Label htmlFor="name" className="block text-sm">
+            Name
           </Label>
-          <Input {...register("fullName")} placeholder="John Doe" />
-          {errors.fullName && (
-            <p className="text-destructive text-sm">
-              {errors.fullName.message}
-            </p>
+          <Input {...register("name")} placeholder="John Doe" />
+          {errors.name && (
+            <p className="text-destructive text-sm">{errors.name.message}</p>
           )}
         </div>
       </div>
