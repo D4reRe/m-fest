@@ -1,5 +1,13 @@
 import RegisterForm from "./register-form";
 
+export async function generateMetadata({params} : {params : Promise<{comp : string}>}){
+  const comp = (await params).comp;
+  return {
+    title: `Register ${comp.toUpperCase()} | Mechanical Festival 2026`,
+    description: `Register for ${comp.toUpperCase()} Competition`,
+  };
+}
+
 async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
   const { comp } = await params;
   return (

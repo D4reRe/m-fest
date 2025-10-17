@@ -5,6 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 import AuthButtons from "@/components/auth/auth-buttons";
 import LoginForm from "./login-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login | Mechanical Festival 2026",
+  description: "Login to Mechanical Festival 2026",
+};
 
 async function LoginPage() {
   const session = await auth();

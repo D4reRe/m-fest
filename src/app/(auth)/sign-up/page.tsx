@@ -6,6 +6,12 @@ import AuthButtons from "@/components/auth/auth-buttons";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import React from "react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign Up | Mechanical Festival 2026",
+  description: "Sign Up to Mechanical Festival 2026",
+};
 
 async function SignUpPage() {
   const session = await auth();
