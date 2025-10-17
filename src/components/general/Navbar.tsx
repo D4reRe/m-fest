@@ -8,11 +8,10 @@ import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const menuItems = [
-  { name: "Timeline", href: "/#timeline" },
-  { name: "Events", href: "/#events" },
+  { name: "Events", href: "/events" },
   { name: "Competitions", href: "/competitions" },
 ];
 
@@ -22,6 +21,7 @@ export const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
+  const currentPath = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,12 +75,30 @@ export const Navbar = () => {
                   <li key={index}>
                     <Link
                       href={item.href}
-                      className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                      className={cn(
+                        currentPath === item.href
+                          ? "text-accent-foreground"
+                          : "text-muted-foreground hover:text-accent-foreground"
+                      )}
                     >
                       <span>{item.name}</span>
                     </Link>
                   </li>
                 ))}
+                {status === "authenticated" && session?.user && (
+                  <li>
+                    <Link
+                      href="/dashboard"
+                      className={cn(
+                        currentPath === "/dashboard"
+                          ? "text-accent-foreground"
+                          : "text-muted-foreground hover:text-accent-foreground"
+                      )}
+                    >
+                      <span>Dashboard</span>
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
 

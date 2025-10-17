@@ -10,7 +10,11 @@ export default function EventsSection() {
       <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-12">
         <h1 className="text-center text-6xl font-bold">Events</h1>
         {events.map((event, index) => (
-          <div key={index} className="flex flex-col gap-10">
+          <div
+            id={event.title.toLowerCase()}
+            key={index}
+            className="flex flex-col gap-10 mt-32"
+          >
             <Image
               className="rounded-(--radius) grayscale"
               src={event.img}

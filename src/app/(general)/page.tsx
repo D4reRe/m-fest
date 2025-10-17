@@ -8,7 +8,6 @@ export default function Home() {
     <main>
       <HeroSection />
       <Timeline />
-      <EventsSection />
       <FAQs />
     </main>
   );
