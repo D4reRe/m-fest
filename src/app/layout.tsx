@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${montserrat.variable} ${roboto.variable} ${onest.className} antialiased min-h-screen bg-[url("/landing.png")] bg-cover bg-center bg-fixed`}
+        className={`${montserrat.variable} ${roboto.variable} ${onest.className} antialiased`}
       >
         <SessionProviders>
           <ThemeProvider
