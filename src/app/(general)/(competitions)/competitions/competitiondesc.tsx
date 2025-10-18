@@ -15,7 +15,7 @@ export default function CompetitionsDesc() {
             className="flex flex-col gap-10 mt-32"
           >
             <Image
-              className="rounded-(--radius) grayscale"
+              className="rounded-(--radius)"
               src={competition.logo}
               alt={competition.title}
               height={2747}
