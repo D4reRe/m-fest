@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function CompetitionsDesc() {
     return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-12">
-        <h1 className="text-center text-6xl font-bold">Events</h1>
+        <h1 className="text-center text-6xl font-bold">Competitions</h1>
         {competitions.map((competition, index) => (
           <div
             id={competition.title.toLowerCase()}
