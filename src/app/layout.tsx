@@ -1,25 +1,10 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+"use client";
 import { montserrat, onest, roboto } from "@/styles/font";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import SessionProviders from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/sonner";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Mechanical Festival 2026",
-  description: "official website of M-Fest for events and competitions",
-};
+import { HeroUIProvider } from "@heroui/react";
 
 export default function RootLayout({
   children,
@@ -32,15 +17,17 @@ export default function RootLayout({
         className={`${montserrat.variable} ${roboto.variable} ${onest.className} antialiased`}
       >
         <SessionProviders>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-            <Toaster />
-          </ThemeProvider>
+          <HeroUIProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </HeroUIProvider>
         </SessionProviders>
       </body>
     </html>
