@@ -28,12 +28,10 @@ const profileSchema = z.object({
     .number<number>()
     .min(1, "Minimum semester is 1")
     .max(8, "Maximum semester is 8"),
-  birthDate: z.coerce
-    .date<Date>({
-      error: (issue) =>
-        issue.input === undefined ? "Required field" : "Invalid date",
-    })
-    .optional(),
+  birthDate: z.coerce.date<Date>({
+    error: (issue) =>
+      issue.input === undefined ? "Required field" : "Invalid date",
+  }),
 });
 type profileSchema = z.infer<typeof profileSchema>;
 
