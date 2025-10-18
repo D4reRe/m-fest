@@ -1,7 +1,44 @@
+import { Button } from "@/components/ui/button";
+import ProfileUpdateForm from "./profile-form";
+import Image from "next/image";
+import Link from "next/link";
+import AuthButtons from "@/components/auth/auth-buttons";
 import React from "react";
+import { Metadata } from "next";
 
-function ProfilePage() {
-  return <div>ProfilePage</div>;
+export const metadata: Metadata = {
+  title: "Sign Up | Mechanical Festival 2026",
+  description: "Sign Up to Mechanical Festival 2026",
+};
+
+async function SignUpPage() {
+  return (
+    <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
+      <div className="bg-muted m-auto h-fit w-full max-w-sm overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
+        <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
+          <div className="text-center">
+            <Link
+              href="/"
+              aria-label="go home"
+              className="flex items-center gap-4 justify-center"
+            >
+              <Image
+                src="/logo.svg"
+                alt="Mechanical Festival 2026"
+                width={60}
+                height={60}
+              />
+            </Link>
+            <h1 className="mb-1 mt-4 text-xl font-semibold">Update Profile</h1>
+            <p className="text-sm">
+              Complete your profile below to register competitions!
+            </p>
+          </div>
+          <ProfileUpdateForm />
+        </div>
+      </div>
+    </section>
+  );
 }
 
-export default ProfilePage;
+export default SignUpPage;

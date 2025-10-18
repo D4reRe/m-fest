@@ -187,7 +187,7 @@ export const Navbar = () => {
                         <span>Login</span>
                       </Link>
                     </Button>
-                    <Button
+                    {/* <Button
                       asChild
                       size="sm"
                       className={cn(isScrolled && "lg:hidden")}
@@ -195,7 +195,7 @@ export const Navbar = () => {
                       <Link href="/sign-up">
                         <span>Sign Up</span>
                       </Link>
-                    </Button>
+                    </Button> */}
                     <Button
                       asChild
                       size="sm"

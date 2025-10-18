@@ -8,12 +8,14 @@ import { toast } from "sonner";
 function AuthButtons() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
-    <div className="flex gap-5 justify-center">
-      <div>
+    <div className="flex flex-col gap-5 items-center justify-center">
+      <div className="w-full">
         <Button
           type="button"
           variant="outline"
-          className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
+          className={`w-full ${
+            isLoading ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
           disabled={isLoading}
           onClick={async () => {
             setIsLoading(true);
@@ -55,11 +57,47 @@ function AuthButtons() {
           <span>Google</span>
         </Button>
       </div>
-      <div>
+      <div className="w-full">
         <Button
           type="button"
           variant="outline"
-          className={`${isLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
+          className={`w-full ${
+            isLoading ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
+          disabled={isLoading}
+          onClick={async () => {
+            setIsLoading(true);
+            toast.loading("Signing in...", { id: "signing-in" });
+            try {
+              await signIn("discord", { redirectTo: "/" });
+            } catch (error) {
+              toast.error("Failed to sign in");
+              console.error(error);
+            } finally {
+              toast.dismiss("signing-in");
+              toast.success("Signed in successfully");
+              setIsLoading(false);
+            }
+          }}
+        >
+          <div className="flex items-center justify-center  gap-2">
+            <Image
+              src="https://api.iconify.design/skill-icons/discord.svg?color=%23fff"
+              alt="Discord"
+              width={20}
+              height={20}
+            />
+            <span>Discord</span>
+          </div>
+        </Button>
+      </div>
+      <div className="w-full">
+        <Button
+          type="button"
+          variant="outline"
+          className={`w-full ${
+            isLoading ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
           disabled={isLoading}
           onClick={async () => {
             setIsLoading(true);
@@ -76,13 +114,15 @@ function AuthButtons() {
             }
           }}
         >
-          <Image
-            src="/github/github-mark-white.svg"
-            alt="github"
-            width={20}
-            height={20}
-          />
-          <span>Github</span>
+          <div className="flex items-center justify-center gap-2">
+            <Image
+              src="/github/github-mark-white.svg"
+              alt="github"
+              width={20}
+              height={20}
+            />
+            <span>Github</span>
+          </div>
         </Button>
       </div>
     </div>

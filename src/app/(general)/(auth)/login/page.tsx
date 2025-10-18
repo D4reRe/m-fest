@@ -1,10 +1,9 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import AuthButtons from "@/components/auth/auth-buttons";
-import LoginForm from "./login-form";
+// import LoginForm from "./login-form";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -33,25 +32,15 @@ async function LoginPage() {
             <h1 className="mb-1 mt-4 text-xl font-semibold">Sign In</h1>
             <p className="text-sm">Welcome back! Sign in to continue</p>
           </div>
-          <LoginForm />
+          {/* <LoginForm /> */}
           <div className="my-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
             <hr className="border-dashed" />
-            <span className="text-muted-foreground text-xs">
-              Or continue With
+            <span className="text-muted-foreground text-base">
+              Continue With
             </span>
             <hr className="border-dashed" />
           </div>
-
           <AuthButtons />
-        </div>
-
-        <div className="p-3">
-          <p className="text-accent-foreground text-center text-sm">
-            Do not have an account ?
-            <Button asChild variant="link" className="px-2">
-              <Link href="/sign-up">Create account</Link>
-            </Button>
-          </p>
         </div>
       </div>
     </section>

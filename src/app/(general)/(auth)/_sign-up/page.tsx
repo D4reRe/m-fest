@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import SignUpForm from "./sign-up-form";
+import SignUpForm from "./sign-up";
 import Image from "next/image";
 import Link from "next/link";
 import AuthButtons from "@/components/auth/auth-buttons";

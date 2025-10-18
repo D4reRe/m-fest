@@ -2,51 +2,63 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 
-const loginSchema = z.object({
+const registerSchema = z.object({
+  name: z.string().min(1, "Name is required"),
   email: z.string().email("Invalid email").min(1, "Email is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
 });
-type loginSchema = z.infer<typeof loginSchema>;
+type registerSchema = z.infer<typeof registerSchema>;
 
-function LoginForm() {
+function ProfileUpdateForm() {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<loginSchema>({ resolver: zodResolver(loginSchema) });
+  } = useForm<registerSchema>({ resolver: zodResolver(registerSchema) });
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function onSubmit(formData: loginSchema) {
+  async function onSubmit(formData: registerSchema) {
     setIsLoading(true);
-    toast.loading("Signing in...", { id: "signing-in" });
-    const auth = await signIn("credentials", {
-      ...formData,
-      redirect: false,
-      callbackUrl: "/",
+    toast.loading("Signing up...", { id: "signing-up" });
+    const res = await fetch("/api/auth/sign-up", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
     });
     setIsLoading(false);
-    if (auth.ok) {
-      toast.dismiss("signing-in");
-      toast.success("Logged in successfully!");
-      router.replace("/");
+    if (res.ok) {
+      toast.dismiss("signing-up");
+      toast.success("Signed up successfully");
+      router.replace("/login");
     } else {
-      toast.error("Logged in failed", {
-        description: auth?.error ?? "Invalid email or password",
-      });
+      const err = await res.json();
+      toast.error(err.error);
     }
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
+      <div className="grid grid-cols-1 gap-3">
+        <div className="space-y-2">
+          <Label htmlFor="name" className="block text-sm">
+            Name
+          </Label>
+          <Input {...register("name")} placeholder="John Doe" />
+          {errors.name && (
+            <p className="text-destructive text-sm">{errors.name.message}</p>
+          )}
+        </div>
+      </div>
+
       <div className="space-y-2">
         <Label htmlFor="email" className="block text-sm">
           Email
@@ -57,7 +69,7 @@ function LoginForm() {
         )}
       </div>
 
-      <div className="space-y-0.5">
+      <div className="space-y-2">
         <div className="flex items-center justify-between">
           <Label htmlFor="pwd" className="text-sm">
             Password
@@ -82,15 +94,15 @@ function LoginForm() {
       >
         {isLoading ? (
           <div className="flex gap-2">
-            <span>Signing In...</span>
+            <span>Updating...</span>
             <Loader2 className="animate-spin" />
           </div>
         ) : (
-          "Sign In"
+          "Update"
         )}
       </Button>
     </form>
   );
 }
 
-export default LoginForm;
+export default ProfileUpdateForm;
