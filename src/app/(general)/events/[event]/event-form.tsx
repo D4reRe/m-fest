@@ -67,19 +67,23 @@ function EventForm({ event }: { event: string }) {
           Register{" "}
           {event.split("-").join(" ") === "engine tune up"
             ? "Engine Tune Up"
-            : `${event.split("-")[0].toUpperCase()}-${event
+            : event.split("-")[0] === "M"
+            ? `${event.split("-")[0].toUpperCase()}-${event
                 .split("-")[1]
                 .charAt(0)
-                .toUpperCase()}${event.split("-")[1].slice(1)}`}
+                .toUpperCase()}${event.split("-")[1].slice(1)}`
+            : event.charAt(0).toUpperCase() + event.slice(1)}
         </h1>
         <p className="text-sm">
           Please fill in the form below to register for{" "}
           {event.split("-").join(" ") === "engine tune up"
             ? "Engine Tune Up"
-            : `${event.split("-")[0].toUpperCase()}-${event
+            : event.split("-")[0] === "M"
+            ? `${event.split("-")[0].toUpperCase()}-${event
                 .split("-")[1]
                 .charAt(0)
-                .toUpperCase()}${event.split("-")[1].slice(1)}`}{" "}
+                .toUpperCase()}${event.split("-")[1].slice(1)}`
+            : event.charAt(0).toUpperCase() + event.slice(1)}{" "}
           event
         </p>
       </div>
