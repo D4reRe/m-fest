@@ -13,7 +13,37 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 
+const menus = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+  },
+  {
+    title: "Profile",
+    url: "/dashboard/profile",
+  },
+  {
+    title: "Events",
+    url: "/dashboard/events",
+  },
+  {
+    title: "Competitions",
+    url: "/dashboard/competitions",
+  },
+  {
+    title: "Team",
+    url: "/dashboard/team",
+  },
+];
+
 import { usePathname } from "next/navigation";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { SlashIcon } from "lucide-react";
 export function SiteHeader() {
   const pathname = usePathname();
 
@@ -29,18 +59,22 @@ export function SiteHeader() {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link
-                  href="/dashboard"
-                  className={pathname === "/dashboard" ? "text-foreground" : ""}
-                >
-                  Dashboard
-                </Link>
-              </BreadcrumbLink>
+              <DropdownMenu>
+                <DropdownMenuTrigger>Dashboard</DropdownMenuTrigger>
+                <DropdownMenuContent align="start">
+                  {menus.map((menu) => (
+                    <Link key={menu.title} href={menu.url}>
+                      <DropdownMenuItem>{menu.title}</DropdownMenuItem>
+                    </Link>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </BreadcrumbItem>
             {pathname === "/dashboard/profile" ? (
               <>
-                <BreadcrumbSeparator />
+                <BreadcrumbSeparator>
+                  <SlashIcon />
+                </BreadcrumbSeparator>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Link
@@ -58,7 +92,9 @@ export function SiteHeader() {
               </>
             ) : pathname === "/dashboard/competitions" ? (
               <>
-                <BreadcrumbSeparator />
+                <BreadcrumbSeparator>
+                  <SlashIcon />
+                </BreadcrumbSeparator>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Link
@@ -76,7 +112,9 @@ export function SiteHeader() {
               </>
             ) : pathname === "/dashboard/team" ? (
               <>
-                <BreadcrumbSeparator />
+                <BreadcrumbSeparator>
+                  <SlashIcon />
+                </BreadcrumbSeparator>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Link
@@ -92,7 +130,9 @@ export function SiteHeader() {
               </>
             ) : pathname === "/dashboard/events" ? (
               <>
-                <BreadcrumbSeparator />
+                <BreadcrumbSeparator>
+                  <SlashIcon />
+                </BreadcrumbSeparator>
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
                     <Link
