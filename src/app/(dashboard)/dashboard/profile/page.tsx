@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { Metadata } from "next";
+import { auth } from "@/auth";
 
 export const metadata: Metadata = {
   title: "Profile | Mechanical Festival 2026",
@@ -10,23 +11,21 @@ export const metadata: Metadata = {
 };
 
 async function SignUpPage() {
+  const session = await auth();
   return (
     <section className="flex min-h-screen bg-zinc-50 px-4 py-8 md:py-16 dark:bg-transparent">
       <div className="bg-muted m-auto h-fit w-full max-w-xl overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
         <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
           <div className="text-center">
-            <Link
-              href="/"
-              aria-label="go home"
-              className="flex items-center gap-4 justify-center"
-            >
+            <div className="flex items-center gap-4 justify-center">
               <Image
-                src="/logo.svg"
-                alt="Mechanical Festival 2026"
-                width={60}
-                height={60}
+                src={session?.user.image as string}
+                alt={session?.user.name as string}
+                className="rounded-full object-cover"
+                width={80}
+                height={80}
               />
-            </Link>
+            </div>
             <h1 className="mb-1 mt-4 text-xl font-semibold">My Profile</h1>
             <p className="text-sm">
               Complete your profile below to register competitions!
