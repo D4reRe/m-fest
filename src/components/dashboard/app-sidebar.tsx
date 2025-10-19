@@ -2,12 +2,11 @@
 
 import * as React from "react";
 import {
-  IconChartBar,
   IconDashboard,
-  IconFolder,
   IconListDetails,
   IconUsers,
   IconUser,
+  IconConfetti,
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/dashboard/nav-main";
@@ -37,6 +36,11 @@ const data = {
       icon: IconUser,
     },
     {
+      title: "Events",
+      url: "/dashboard/events",
+      icon: IconConfetti,
+    },
+    {
       title: "Competitions",
       url: "/dashboard/competitions",
       icon: IconListDetails,
@@ -54,7 +58,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar
       collapsible="offcanvas"
       {...props}
-      className="bg-transparent backdrop-blur-lg"
+      className="bg-transparent backdrop-blur-lg border-r-1"
     >
       <SidebarHeader>
         <SidebarMenu>

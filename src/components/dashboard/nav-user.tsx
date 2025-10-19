@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  IconCreditCard,
-  IconDotsVertical,
-  IconLogout,
-  IconNotification,
-  IconUserCircle,
-} from "@tabler/icons-react";
+import { IconDotsVertical, IconLogout } from "@tabler/icons-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -29,10 +23,11 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
+import { Skeleton } from "@heroui/react";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   console.log(session?.user.image);
@@ -41,33 +36,50 @@ export function NavUser() {
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-white/20data-[state=open]:text-sidebar-accent-foreground hover:bg-white/20 "
-            >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage
-                  src={session?.user.image as string}
-                  alt={session?.user.name as string}
-                />
-                <Image
-                  src={session?.user.image as string}
-                  alt={session?.user.name as string}
-                  width={32}
-                  height={32}
-                />
-                <AvatarFallback className="rounded-lg h-8 w-8 bg-gray-500"></AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
-                  {session?.user.name as string}
-                </span>
-                <span className="text-muted-foreground truncate text-xs">
-                  {session?.user.email as string}
-                </span>
-              </div>
-              <IconDotsVertical className="ml-auto size-4" />
-            </SidebarMenuButton>
+            {status === "authenticated" ? (
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-white/20data-[state=open]:text-sidebar-accent-foreground hover:bg-white/20 "
+              >
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage
+                    src={session?.user.image as string}
+                    alt={session?.user.name as string}
+                  />
+                  <Image
+                    src={session?.user.image as string}
+                    alt={session?.user.name as string}
+                    width={32}
+                    height={32}
+                  />
+                  <AvatarFallback className="rounded-lg h-8 w-8 bg-gray-500 animate-pulse"></AvatarFallback>
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-medium">
+                    {session?.user.name as string}
+                  </span>
+                  <span className="text-muted-foreground truncate text-xs">
+                    {session?.user.email as string}
+                  </span>
+                </div>
+                <IconDotsVertical className="ml-auto size-4" />
+              </SidebarMenuButton>
+            ) : (
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-white/20data-[state=open]:text-sidebar-accent-foreground hover:bg-white/20 "
+                disabled
+              >
+                <>
+                  <Skeleton className="h-8 w-8 rounded-lg"></Skeleton>
+                  <div className="grid flex-1 text-left text-sm leading-tight gap-2">
+                    <Skeleton className="h-4 w-24 rounded-lg"></Skeleton>
+                    <Skeleton className="h-4 w-32 rounded-lg"></Skeleton>
+                  </div>
+                  <IconDotsVertical className="ml-auto size-4" />
+                </>
+              </SidebarMenuButton>
+            )}
           </DropdownMenuTrigger>
           <DropdownMenuContent
             className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg bg-white/10"

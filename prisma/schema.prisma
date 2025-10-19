@@ -30,6 +30,7 @@ model User {
   phoneNumber    String?
   domicile       String?
   institution    String?
+  major          String?
   education      Education?
   semester       Int?
   birthDate      DateTime?

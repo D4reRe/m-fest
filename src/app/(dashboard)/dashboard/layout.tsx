@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
+import { SiteHeader } from "@/components/dashboard/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { redirect } from "next/navigation";
 
@@ -22,6 +23,8 @@ export default async function Layout({
     >
       <AppSidebar variant="inset" />
       <SidebarInset className="bg-transparent backdrop-blur-lg">
+        <SiteHeader />
+
         {children}
       </SidebarInset>
     </SidebarProvider>

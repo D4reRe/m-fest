@@ -20,6 +20,7 @@ declare module "next-auth" {
       phoneNumber?: string | null;
       domicile?: string | null;
       institution?: string | null;
+      major?: string | null;
       education?: Education | null;
       semester?: int | null;
       birthDate?: Date | null;

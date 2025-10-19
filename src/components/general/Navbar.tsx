@@ -115,6 +115,20 @@ export const Navbar = () => {
                       </Link>
                     </li>
                   ))}
+                  {status === "authenticated" && session?.user && (
+                    <li>
+                      <Link
+                        href="/dashboard"
+                        className={cn(
+                          currentPath === "/dashboard"
+                            ? "text-accent-foreground"
+                            : "text-muted-foreground hover:text-accent-foreground"
+                        )}
+                      >
+                        <span>Dashboard</span>
+                      </Link>
+                    </li>
+                  )}
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">

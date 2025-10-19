@@ -18,6 +18,7 @@ const profileSchema = z.object({
   phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
   domicile: z.string().min(1, "Domicile is required"),
   institution: z.string().min(1, "institution is required"),
+  major: z.string().min(1, "Major is required"),
   education: z.enum(["SMP", "SMA", "SMK", "D3", "S1"], "Education is required"),
   semester: z.coerce
     .number<number>()
@@ -47,6 +48,7 @@ function ProfileUpdateForm() {
       phoneNumber: "081234567890",
       domicile: "Bandung",
       institution: "Institut Teknologi Bandung",
+      major: "Mechanical Engineering",
       education: "S1",
       semester: 1,
     },
@@ -60,6 +62,7 @@ function ProfileUpdateForm() {
         phoneNumber: session?.user?.phoneNumber || "081234567890",
         domicile: session?.user?.domicile || "Bandung",
         institution: session?.user?.institution || "Institut Teknologi Bandung",
+        major: session?.user?.major || "Mechanical Engineering",
         education: session?.user?.education || "S1",
         semester: (session?.user?.semester as unknown as number) || 1,
       });
@@ -89,6 +92,7 @@ function ProfileUpdateForm() {
         phoneNumber: formData.phoneNumber,
         domicile: formData.domicile,
         institution: formData.institution,
+        major: formData.major,
         education: formData.education,
         semester: formData.semester,
         birthDate: formData.birthDate?.toISOString(),
@@ -187,6 +191,21 @@ function ProfileUpdateForm() {
           <p className="text-destructive text-sm">
             {errors.institution.message}
           </p>
+        )}
+      </div>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="major" className="text-sm">
+            Major
+          </Label>
+        </div>
+        <Input
+          {...register("major")}
+          placeholder="Bandung"
+          className="input sz-md variant-mixed"
+        />
+        {errors.major && (
+          <p className="text-destructive text-sm">{errors.major.message}</p>
         )}
       </div>
       <div className="space-y-2">

@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function NavMain({
   items,
@@ -20,6 +21,7 @@ export function NavMain({
     icon?: Icon;
   }[];
 }) {
+  const pathname = usePathname();
   return (
     <SidebarGroup className="bg-transparent backdrop-blur-lg">
       <SidebarGroupContent className="flex flex-col gap-2 bg-transparent backdrop-blur-lg ">
@@ -48,7 +50,9 @@ export function NavMain({
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  className="hover:bg-white/30 "
+                  className={`hover:bg-white/30 ${
+                    pathname === item.url ? "bg-white/15" : ""
+                  }`}
                 >
                   {item.icon && <item.icon />}
                   <span>{item.title}</span>
