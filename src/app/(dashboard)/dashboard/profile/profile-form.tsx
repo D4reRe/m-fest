@@ -6,50 +6,133 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { DatePicker, NumberInput, Select, SelectItem } from "@heroui/react";
+import { DateInput, NumberInput, Select, SelectItem } from "@heroui/react";
 import { educations } from "@/lib/profile";
-
+import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { CalendarDate } from "@internationalized/date";
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email").min(1, "Email is required"),
   phoneNumber: z
     .string()
     .regex(/^(\+?\d{9,15})$/, "Invalid phone number")
-    .optional(),
-  domicile: z.string().min(1, "Domicile is required"),
-  institution: z.string().min(1, "institution is required"),
-  education: z.enum(
-    ["SMP", "SMA", "SMK", "D3", "S1", "S2", "S3"],
-    "Education is required"
-  ),
+    .optional()
+    .nullable(),
+  domicile: z.string().min(1, "Domicile is required").optional().nullable(),
+  institution: z
+    .string()
+    .min(1, "institution is required")
+    .optional()
+    .nullable(),
+  education: z
+    .enum(["SMP", "SMA", "SMK", "D3", "S1"], "Education is required")
+    .optional()
+    .nullable(),
   semester: z.coerce
     .number<number>()
     .min(1, "Minimum semester is 1")
     .max(8, "Maximum semester is 8"),
-  birthDate: z.coerce.date<Date>({
-    error: (issue) =>
-      issue.input === undefined ? "Required field" : "Invalid date",
-  }),
+  birthDate: z.coerce
+    .date<Date>({
+      error: (issue) =>
+        issue.input === undefined ? "Required field" : "Invalid date",
+    })
+    .optional()
+    .nullable(),
 });
 type profileSchema = z.infer<typeof profileSchema>;
 
 function ProfileUpdateForm() {
+  const { data: session, update } = useSession();
+  console.log(session?.user.birthDate, typeof session?.user.birthDate);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
-  } = useForm<profileSchema>({ resolver: zodResolver(profileSchema) });
+  } = useForm<profileSchema>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: "John Doe",
+      phoneNumber: "081234567890",
+      domicile: "Bandung",
+      institution: "Institut Teknologi Bandung",
+      education: "S1",
+      semester: 1,
+    },
+  });
   const router = useRouter();
 
+  useEffect(() => {
+    if (session?.user) {
+      reset({
+        name: session?.user?.name as string,
+        phoneNumber: session?.user?.phoneNumber,
+        domicile: session?.user?.domicile,
+        institution: session?.user?.institution,
+        education: session?.user?.education,
+        semester: session?.user?.semester as unknown as number,
+      });
+    }
+  }, [session, reset]);
+
   async function onSubmit(formData: profileSchema) {
-    console.log({
-      ...formData,
-      birthDate: formData.birthDate?.toISOString(),
+    setIsLoading(true);
+    toast.loading("Updating profile...", {
+      id: "update-profile",
     });
+    try {
+      const res = await fetch("/api/update-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          birthDate: formData.birthDate?.toISOString(),
+          email: session?.user?.email,
+        }),
+      });
+
+      await update({
+        name: formData.name,
+        phoneNumber: formData.phoneNumber,
+        domicile: formData.domicile,
+        institution: formData.institution,
+        education: formData.education,
+        semester: formData.semester,
+        birthDate: formData.birthDate?.toISOString(),
+      });
+
+      setIsLoading(false);
+
+      if (res.ok) {
+        toast.dismiss("update-profile");
+        toast.success("Profile updated");
+        router.refresh();
+      } else {
+        const err = await res.json();
+        toast.error("Failed to update profile", {
+          description: err.message,
+        });
+        console.log(err.message);
+      }
+
+      console.log({
+        ...formData,
+        birthDate: formData.birthDate?.toISOString(),
+      });
+    } catch (error) {
+      setIsLoading(false);
+      toast.dismiss("update-profile");
+      toast.error("Failed to update profile", {
+        description: (error as Error).message,
+      });
+    }
   }
 
   return (
@@ -69,10 +152,7 @@ function ProfileUpdateForm() {
         <Label htmlFor="email" className="block text-sm">
           Email
         </Label>
-        <Input {...register("email")} placeholder="johndoe@gmail.com" />
-        {errors.email && (
-          <p className="text-destructive text-sm">{errors.email.message}</p>
-        )}
+        <Input disabled placeholder={session?.user?.email as string} />
       </div>
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -132,7 +212,7 @@ function ProfileUpdateForm() {
         <Select
           className="w-full"
           items={educations}
-          label="Last Education"
+          label="Education"
           placeholder="Select an education"
           {...register("education")}
         >
@@ -157,9 +237,11 @@ function ProfileUpdateForm() {
               label="Semester"
               placeholder="1"
               {...field}
+              minValue={1}
+              maxValue={8}
             />
           )}
-          rules={{ required: "Semester is required" }}
+          rules={{ required: true }}
         />
         {errors.semester && (
           <p className="text-destructive text-sm">{errors.semester.message}</p>
@@ -174,14 +256,36 @@ function ProfileUpdateForm() {
         <Controller
           name="birthDate"
           control={control}
-          render={({ field }) => (
-            <DatePicker className="w-full" label="Birth date" {...field} />
+          render={({
+            field: { name, onChange, onBlur, ref },
+            fieldState: { invalid, error },
+          }) => (
+            <div className="flex w-full flex-col md:flex-nowrap gap-4">
+              <DateInput
+                className="w-full"
+                label={"Birth date"}
+                name={name}
+                onChange={onChange}
+                onBlur={onBlur}
+                ref={ref}
+                isRequired
+                isInvalid={invalid}
+                granularity="day"
+                errorMessage={error?.message}
+                defaultValue={
+                  session?.user.birthDate
+                    ? new CalendarDate(
+                        new Date(session?.user.birthDate).getFullYear(),
+                        new Date(session?.user.birthDate).getMonth() + 1,
+                        new Date(session?.user.birthDate).getDate()
+                      )
+                    : undefined
+                }
+              />
+            </div>
           )}
-          rules={{ required: "Birth date is required" }}
+          rules={{ required: true }}
         />
-        {errors.birthDate && (
-          <p className="text-destructive text-sm">{errors.birthDate.message}</p>
-        )}
       </div>
       <Button
         className={`w-full ${

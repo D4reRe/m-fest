@@ -6,6 +6,18 @@ datasource db {
 generator client {
   provider = "prisma-client-js"
 }
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Education {
+  SMA
+  SMK
+  D3
+  S1
+}
  
 model User {
   id            String          @id @default(cuid())
@@ -18,9 +30,10 @@ model User {
   phoneNumber    String?
   domicile       String?
   institution    String?
-  education      String?
+  education      Education?
   semester       Int?
   birthDate      DateTime?
+  role           Role            @default(USER)
 
 
   accounts      Account[]
