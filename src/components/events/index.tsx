@@ -34,7 +34,12 @@ export default function EventsSection() {
                   size="sm"
                   className="gap-1 pr-1.5"
                 >
-                  <Link href="#">
+                  <Link
+                    href={`/events/${event.title
+                      .toLowerCase()
+                      .split(" ")
+                      .join("-")}`}
+                  >
                     <span>Learn More</span>
                     <ChevronRight className="size-2" />
                   </Link>
