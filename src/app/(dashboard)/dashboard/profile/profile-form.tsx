@@ -15,32 +15,18 @@ import { useSession } from "next-auth/react";
 import { CalendarDate } from "@internationalized/date";
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  phoneNumber: z
-    .string()
-    .regex(/^(\+?\d{9,15})$/, "Invalid phone number")
-    .optional()
-    .nullable(),
-  domicile: z.string().min(1, "Domicile is required").optional().nullable(),
-  institution: z
-    .string()
-    .min(1, "institution is required")
-    .optional()
-    .nullable(),
-  education: z
-    .enum(["SMP", "SMA", "SMK", "D3", "S1"], "Education is required")
-    .optional()
-    .nullable(),
+  phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
+  domicile: z.string().min(1, "Domicile is required"),
+  institution: z.string().min(1, "institution is required"),
+  education: z.enum(["SMP", "SMA", "SMK", "D3", "S1"], "Education is required"),
   semester: z.coerce
     .number<number>()
     .min(1, "Minimum semester is 1")
     .max(8, "Maximum semester is 8"),
-  birthDate: z.coerce
-    .date<Date>({
-      error: (issue) =>
-        issue.input === undefined ? "Required field" : "Invalid date",
-    })
-    .optional()
-    .nullable(),
+  birthDate: z.coerce.date<Date>({
+    error: (issue) =>
+      issue.input === undefined ? "Required field" : "Invalid date",
+  }),
 });
 type profileSchema = z.infer<typeof profileSchema>;
 
@@ -71,11 +57,11 @@ function ProfileUpdateForm() {
     if (session?.user) {
       reset({
         name: session?.user?.name as string,
-        phoneNumber: session?.user?.phoneNumber,
-        domicile: session?.user?.domicile,
-        institution: session?.user?.institution,
-        education: session?.user?.education,
-        semester: session?.user?.semester as unknown as number,
+        phoneNumber: session?.user?.phoneNumber || "081234567890",
+        domicile: session?.user?.domicile || "Bandung",
+        institution: session?.user?.institution || "Institut Teknologi Bandung",
+        education: session?.user?.education || "S1",
+        semester: (session?.user?.semester as unknown as number) || 1,
       });
     }
   }, [session, reset]);

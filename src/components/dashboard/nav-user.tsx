@@ -28,13 +28,14 @@ import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { data: session } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
+  console.log(session?.user.image);
   return (
     <SidebarMenu className="bg-transparent backdrop-blur-lg">
       <SidebarMenuItem>
@@ -48,6 +49,12 @@ export function NavUser() {
                 <AvatarImage
                   src={session?.user.image as string}
                   alt={session?.user.name as string}
+                />
+                <Image
+                  src={session?.user.image as string}
+                  alt={session?.user.name as string}
+                  width={32}
+                  height={32}
                 />
                 <AvatarFallback className="rounded-lg h-8 w-8 bg-gray-500"></AvatarFallback>
               </Avatar>
