@@ -37,7 +37,6 @@ function RegisterForm({ comp }: { comp: string }) {
     script.src = snapScript;
     script.async = true;
     script.setAttribute("data-client-key", clientKey as string);
-
     document.body.appendChild(script);
 
     return () => {
@@ -85,6 +84,7 @@ function RegisterForm({ comp }: { comp: string }) {
     };
 
     setIsLoading(true);
+    toast.loading("Checking out...", { id: "checking-out" });
 
     const response = await fetch("/api/payment", {
       method: "POST",
@@ -93,11 +93,78 @@ function RegisterForm({ comp }: { comp: string }) {
       },
       body: JSON.stringify(data),
     });
-    const { data: requestData } = await response.json();
+    const { transactionData: requestData } = await response.json();
     console.log(requestData);
     console.log(requestData.token);
-    // @ts-expect-error snap is from Midtrans script tag that loaded from useEffect so we called it with window, but error is expected in this case
-    window.snap.pay(requestData.token);
+
+    if (response.ok) {
+      // @ts-expect-error snap global object
+      // TODO: handle cases when user does successful payments, pending payments, and failed payments
+      window.snap.pay(requestData.token, {
+        onSuccess: async function (result) {
+          toast.dismiss("checking-out");
+          toast.success("Payment Successful!");
+          console.log("Payment success:", result);
+
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ result }),
+          });
+
+          router.replace("/dashboard/invoices");
+        },
+        onPending: async (result: any) => {
+          toast.dismiss("checking-out");
+          toast.info("Payment Pending. Please complete the transaction.");
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ result }),
+          });
+          console.log("Payment pending:", result);
+          router.replace("/dashboard/invoices");
+        },
+        onError: async (result: any) => {
+          toast.dismiss("checking-out");
+          toast.error("Payment Failed. Please try again.");
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ result }),
+          });
+          console.log("Payment error:", result);
+          router.replace("/dashboard/invoices");
+        },
+        onClose: async (result) => {
+          toast.dismiss("checking-out");
+          toast.warning("Payment window closed before completing.");
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ result }),
+          });
+          console.log("Payment popup closed.");
+          router.replace("/dashboard/invoices");
+        },
+      });
+    }
+    if (!response.ok) {
+      setIsLoading(false);
+      console.log(requestData);
+      toast.dismiss("checking-out");
+      toast.error("Failed to checkout");
+      return;
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -184,8 +251,24 @@ function RegisterForm({ comp }: { comp: string }) {
               }
             </span>
           </Label>
-          <Button type="button" variant={"outline"} onClick={checkout}>
-            Checkout
+          <Button
+            type="button"
+            variant={"outline"}
+            onClick={checkout}
+            disabled={isLoading}
+            className={`*:
+          
+          ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}
+          `}
+          >
+            {isLoading ? (
+              <div className="flex gap-2">
+                <span>Checking out...</span>
+                <Loader2 className="animate-spin" />
+              </div>
+            ) : (
+              "Checkout"
+            )}
           </Button>
         </div>
         <Button

@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
 import { Snap } from "midtrans-client";
 import { NextResponse } from "next/server";
 
@@ -42,6 +43,19 @@ export async function POST(request: Request) {
     },
   };
 
-  const data = await snap.createTransaction(parameter);
-  return NextResponse.json({ data }, { status: 200 });
+  const transactionData = await snap.createTransaction(parameter);
+
+  await prisma.payment.create({
+    data: {
+      orderId: id,
+      userId: session?.user.id,
+      amount: price * quantity,
+      competition: competitionName,
+      redirectUrl: transactionData.redirect_url,
+      snapToken: transactionData.token,
+    },
+  });
+  console.log(transactionData);
+
+  return NextResponse.json({ transactionData }, { status: 200 });
 }

@@ -34,6 +34,10 @@ const menus = [
     title: "Team",
     url: "/dashboard/team",
   },
+  {
+    title: "Invoices",
+    url: "/dashboard/invoices",
+  },
 ];
 
 import { usePathname } from "next/navigation";
@@ -144,6 +148,26 @@ export function SiteHeader() {
                       }
                     >
                       Events
+                    </Link>
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </>
+            ) : pathname === "/dashboard/invoices" ? (
+              <>
+                <BreadcrumbSeparator>
+                  <SlashIcon />
+                </BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbLink asChild>
+                    <Link
+                      href="/dashboard/events"
+                      className={
+                        pathname === "/dashboard/invoices"
+                          ? "text-foreground"
+                          : ""
+                      }
+                    >
+                      Invoices
                     </Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>

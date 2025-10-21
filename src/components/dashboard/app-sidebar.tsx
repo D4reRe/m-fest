@@ -7,6 +7,7 @@ import {
   IconUsers,
   IconUser,
   IconConfetti,
+  IconInvoice,
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/dashboard/nav-main";
@@ -49,6 +50,11 @@ const data = {
       title: "Team",
       url: "/dashboard/team",
       icon: IconUsers,
+    },
+    {
+      title: "Invoices",
+      url: "/dashboard/invoices",
+      icon: IconInvoice,
     },
   ],
 };
