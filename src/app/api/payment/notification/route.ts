@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
   const payload = await req.json();
 
   const {
