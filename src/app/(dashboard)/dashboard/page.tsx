@@ -1,11 +1,15 @@
+import { auth } from "@/auth";
 import { Competitions } from "@/components/dashboard/competition";
 import { RegisteredEvents } from "@/components/dashboard/registered-events";
 import { TeamMembers } from "@/components/dashboard/team-member";
 import { UserInfo } from "@/components/dashboard/user-info";
 import { UserProfile } from "@/components/dashboard/user-profile";
+import { redirect } from "next/navigation";
 import React from "react";
 
-function DashboardHomePage() {
+async function DashboardHomePage() {
+  const session = await auth();
+  if (!session) redirect("/login");
   return (
     <div className="min-h-screen bg-transparent">
       {/* Background gradient effect */}

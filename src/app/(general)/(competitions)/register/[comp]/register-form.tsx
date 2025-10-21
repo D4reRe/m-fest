@@ -48,6 +48,10 @@ function RegisterForm({ comp }: { comp: string }) {
     }
   }
 
+  const checkout = async () => {
+    alert("Checkout SNAP from MidTrans anjay! 🌟");
+  };
+
   return (
     <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
       <div className="text-center">
@@ -121,7 +125,21 @@ function RegisterForm({ comp }: { comp: string }) {
             </p>
           )}
         </div>
-
+        <div className="space-y-2">
+          <Label htmlFor="fee" className="text-sm">
+            Fee :
+            <span className="font-bold italic">
+              Rp. {""}
+              {
+                competitions.find((c) => c.abbreviation === comp.toUpperCase())
+                  ?.fee1
+              }
+            </span>
+          </Label>
+          <Button type="button" variant={"outline"} onClick={checkout}>
+            Checkout
+          </Button>
+        </div>
         <Button
           className={`w-full ${
             isLoading ? "cursor-not-allowed" : "cursor-pointer"

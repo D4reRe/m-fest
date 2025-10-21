@@ -1,4 +1,6 @@
+import { auth } from "@/auth";
 import EventForm from "./event-form";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -13,6 +15,9 @@ export async function generateMetadata({
 }
 
 async function CompPage({ params }: { params: Promise<{ event: string }> }) {
+  const session = await auth();
+  if (!session) redirect("/login");
+
   const { event } = await params;
   return (
     <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">

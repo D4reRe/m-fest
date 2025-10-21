@@ -1,6 +1,12 @@
+import { auth } from "@/auth";
 import RegisterForm from "./register-form";
+import { redirect } from "next/navigation";
 
-export async function generateMetadata({params} : {params : Promise<{comp : string}>}){
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ comp: string }>;
+}) {
   const comp = (await params).comp;
   return {
     title: `Register ${comp.toUpperCase()} | Mechanical Festival 2026`,
@@ -9,6 +15,9 @@ export async function generateMetadata({params} : {params : Promise<{comp : stri
 }
 
 async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
+  const session = await auth();
+  if (!session) redirect("/login");
+
   const { comp } = await params;
   return (
     <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
