@@ -15,6 +15,7 @@ export async function POST(req: Request) {
 
   // Verify signature received from Midtrans (from documentation must be SHA512
   //    with order_id + status_code + gross_amount + serverKey )
+  console.log(payload);
   const serverKey = process.env.MIDTRANS_SERVER_KEY!;
   const expectedSignature = crypto
     .createHash("sha512")
@@ -22,6 +23,7 @@ export async function POST(req: Request) {
     .digest("hex");
 
   if (expectedSignature !== signature_key) {
+    console.log(expectedSignature !== signature_key);
     return NextResponse.json({ message: "Invalid signature" }, { status: 403 });
   }
 
@@ -49,5 +51,5 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ message: "OK" }, { status: 200 });
 }
