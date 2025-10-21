@@ -129,7 +129,7 @@ function ProfileUpdateForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="">
-      <section className="mt-6 space-y-6 grid grid-cols-2 gap-5">
+      <section className="mt-6 space-y-6 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-5">
         <div className="grid grid-cols-1 gap-3">
           <div className="space-y-2">
             <Label htmlFor="name" className="block text-sm">
@@ -220,17 +220,14 @@ function ProfileUpdateForm() {
             </Label>
           </div>
           <Select
-            className="w-full bg-transparent!"
+            className="w-full "
             items={educations}
             label="Education"
             placeholder="Select an education"
+            variant="bordered"
             {...register("education")}
           >
-            {(educations) => (
-              <SelectItem className="bg-transparent!">
-                {educations.label}
-              </SelectItem>
-            )}
+            {(educations) => <SelectItem>{educations.label}</SelectItem>}
           </Select>
           {errors.education && (
             <p className="text-destructive text-sm">
@@ -250,6 +247,7 @@ function ProfileUpdateForm() {
             render={({ field }) => (
               <NumberInput
                 className="w-full"
+                variant="bordered"
                 label="Semester"
                 placeholder="1"
                 {...field}
@@ -281,6 +279,7 @@ function ProfileUpdateForm() {
               <div className="flex w-full flex-col md:flex-nowrap gap-4">
                 <DateInput
                   className="w-full"
+                  variant="bordered"
                   label={"Birth date"}
                   name={name}
                   onChange={onChange}
@@ -307,7 +306,7 @@ function ProfileUpdateForm() {
         </div>
       </section>
       <Button
-        className={`w-full max-w-lg flex justify-self-center mt-12 ${
+        className={`w-full max-w-lg flex justify-self-center mt-12 bg-transparent border hover:bg-white/25 ${
           isLoading ? "cursor-not-allowed" : "cursor-pointer"
         }`}
         disabled={isSubmitting}
