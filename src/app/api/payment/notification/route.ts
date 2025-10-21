@@ -11,7 +11,6 @@ export async function POST(req: Request) {
     signature_key,
     status_code,
     gross_amount,
-    fraud_status,
   } = payload;
 
   // Verify signature received from Midtrans (from documentation must be SHA512
@@ -22,11 +21,28 @@ export async function POST(req: Request) {
     .update(order_id + status_code + gross_amount + serverKey)
     .digest("hex");
 
-  if (expectedSignature !== signature_key && fraud_status !== "accept") {
+  if (expectedSignature !== signature_key) {
     return NextResponse.json({ message: "Invalid signature" }, { status: 403 });
   }
+
+  const res = await fetch(
+    `https://api.sandbox.midtrans.com/v2/${order_id}/status`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Basic ${Buffer.from(
+          `${process.env.MIDTRANS_SECRET_KEY}:`
+        ).toString("base64")}`,
+      },
+    }
+  );
+
+  const result = await res.json();
+
   await prisma.payment.update({
-    where: { orderId: order_id },
+    where: { orderId: result.order_id },
     data: {
       status: transaction_status,
       createdAt: new Date(),
