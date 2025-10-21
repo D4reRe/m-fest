@@ -10,37 +10,37 @@ export function TeamMembers() {
     members: [
       {
         id: 1,
-        name: "Alex Johnson",
+        name: "Momo Ayase",
         role: "Team Lead",
-        avatar: "/team-member-one.png",
+        avatar: "/dashboard/Momo-Ayase.jpg",
         status: "Active",
       },
       {
         id: 2,
-        name: "Sarah Chen",
+        name: "Aira Shiratori",
         role: "Frontend Developer",
-        avatar: "/team-member-2.png",
+        avatar: "/dashboard/Shiratori-Aira.jpg",
         status: "Active",
       },
       {
         id: 3,
-        name: "Marcus Williams",
+        name: "Jiji Enjoji",
         role: "Backend Developer",
-        avatar: "/diverse-team-member-3.png",
+        avatar: "/dashboard/Jiji.jpg",
         status: "Active",
       },
       {
         id: 4,
-        name: "Emma Davis",
+        name: "Ken Takakura",
         role: "UI/UX Designer",
-        avatar: "/team-member-4.jpg",
+        avatar: "/dashboard/Okarun.jpg",
         status: "Active",
       },
       {
         id: 5,
-        name: "James Rodriguez",
+        name: "Kinta Sakata",
         role: "Data Analyst",
-        avatar: "/team-member-5.jpg",
+        avatar: "/dashboard/Kinta.jpg",
         status: "Inactive",
       },
     ],
@@ -62,9 +62,10 @@ export function TeamMembers() {
             key={member.id}
             className="glass-sm p-4 flex flex-col items-center text-center"
           >
-            <Avatar className="w-16 h-16 border-2 border-primary/50 mb-3">
+            <Avatar className="w-24 h-24 border-2 border-primary/50 mb-3">
               <AvatarImage
                 src={member.avatar || "/placeholder.svg"}
+                className="object-cover object-center"
                 alt={member.name}
               />
               <AvatarFallback className="bg-gradient-accent text-foreground font-bold">

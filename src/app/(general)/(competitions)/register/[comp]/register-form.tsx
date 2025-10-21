@@ -25,7 +25,7 @@ function RegisterForm({ comp }: { comp: string }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<registerSchema>({ resolver: zodResolver(registerSchema) });
   const router = useRouter();
 
@@ -126,10 +126,10 @@ function RegisterForm({ comp }: { comp: string }) {
           className={`w-full ${
             isLoading ? "cursor-not-allowed" : "cursor-pointer"
           }`}
-          disabled={isLoading}
+          disabled={isSubmitting}
           type="submit"
         >
-          {isLoading ? (
+          {isSubmitting ? (
             <div className="flex gap-2">
               <span>Submitting...</span>
               <Loader2 className="animate-spin" />

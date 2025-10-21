@@ -11,7 +11,6 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { events } from "@/lib/event";
 
 const registerSchema = z.object({
   fullName: z.string().min(1, "Fullname is required"),
@@ -25,7 +24,7 @@ function EventForm({ event }: { event: string }) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<registerSchema>({ resolver: zodResolver(registerSchema) });
   const router = useRouter();
 
@@ -139,10 +138,10 @@ function EventForm({ event }: { event: string }) {
           className={`w-full ${
             isLoading ? "cursor-not-allowed" : "cursor-pointer"
           }`}
-          disabled={isLoading}
+          disabled={isSubmitting}
           type="submit"
         >
-          {isLoading ? (
+          {isSubmitting ? (
             <div className="flex gap-2">
               <span>Submitting...</span>
               <Loader2 className="animate-spin" />

@@ -13,6 +13,7 @@ import { educations } from "@/lib/profile";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { CalendarDate } from "@internationalized/date";
+
 const profileSchema = z.object({
   name: z.string().min(1, "Name is required"),
   phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
@@ -29,6 +30,7 @@ const profileSchema = z.object({
       issue.input === undefined ? "Required field" : "Invalid date",
   }),
 });
+
 type profileSchema = z.infer<typeof profileSchema>;
 
 function ProfileUpdateForm() {
@@ -40,7 +42,7 @@ function ProfileUpdateForm() {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<profileSchema>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -126,180 +128,192 @@ function ProfileUpdateForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-      <div className="grid grid-cols-1 gap-3">
+    <form onSubmit={handleSubmit(onSubmit)} className="">
+      <section className="mt-6 space-y-6 grid grid-cols-2 gap-5">
+        <div className="grid grid-cols-1 gap-3">
+          <div className="space-y-2">
+            <Label htmlFor="name" className="block text-sm">
+              Name
+            </Label>
+            <Input {...register("name")} placeholder="John Doe" />
+            {errors.name && (
+              <p className="text-destructive text-sm">{errors.name.message}</p>
+            )}
+          </div>
+        </div>
         <div className="space-y-2">
-          <Label htmlFor="name" className="block text-sm">
-            Name
+          <Label htmlFor="email" className="block text-sm">
+            Email
           </Label>
-          <Input {...register("name")} placeholder="John Doe" />
-          {errors.name && (
-            <p className="text-destructive text-sm">{errors.name.message}</p>
+          <Input disabled placeholder={session?.user?.email as string} />
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="phoneNumber" className="text-sm">
+              Phone Number
+            </Label>
+          </div>
+          <Input
+            {...register("phoneNumber")}
+            placeholder="081234567890"
+            className="input sz-md variant-mixed"
+          />
+          {errors.phoneNumber && (
+            <p className="text-destructive text-sm">
+              {errors.phoneNumber.message}
+            </p>
           )}
         </div>
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email" className="block text-sm">
-          Email
-        </Label>
-        <Input disabled placeholder={session?.user?.email as string} />
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="phoneNumber" className="text-sm">
-            Phone Number
-          </Label>
-        </div>
-        <Input
-          {...register("phoneNumber")}
-          placeholder="081234567890"
-          className="input sz-md variant-mixed"
-        />
-        {errors.phoneNumber && (
-          <p className="text-destructive text-sm">
-            {errors.phoneNumber.message}
-          </p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="domicile" className="text-sm">
-            Domicile
-          </Label>
-        </div>
-        <Input
-          {...register("domicile")}
-          placeholder="Bandung"
-          className="input sz-md variant-mixed"
-        />
-        {errors.domicile && (
-          <p className="text-destructive text-sm">{errors.domicile.message}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="institution" className="text-sm">
-            Institution
-          </Label>
-        </div>
-        <Input
-          {...register("institution")}
-          placeholder="Bandung"
-          className="input sz-md variant-mixed"
-        />
-        {errors.institution && (
-          <p className="text-destructive text-sm">
-            {errors.institution.message}
-          </p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="major" className="text-sm">
-            Major
-          </Label>
-        </div>
-        <Input
-          {...register("major")}
-          placeholder="Bandung"
-          className="input sz-md variant-mixed"
-        />
-        {errors.major && (
-          <p className="text-destructive text-sm">{errors.major.message}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="education" className="text-sm">
-            Current Education
-          </Label>
-        </div>
-        <Select
-          className="w-full"
-          items={educations}
-          label="Education"
-          placeholder="Select an education"
-          {...register("education")}
-        >
-          {(educations) => <SelectItem>{educations.label}</SelectItem>}
-        </Select>
-        {errors.education && (
-          <p className="text-destructive text-sm">{errors.education.message}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="semester" className="text-sm">
-            Current Semester
-          </Label>
-        </div>
-        <Controller
-          name="semester"
-          control={control}
-          render={({ field }) => (
-            <NumberInput
-              className="w-full"
-              label="Semester"
-              placeholder="1"
-              {...field}
-              minValue={1}
-              maxValue={8}
-            />
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="domicile" className="text-sm">
+              Domicile
+            </Label>
+          </div>
+          <Input
+            {...register("domicile")}
+            placeholder="Bandung"
+            className="input sz-md variant-mixed"
+          />
+          {errors.domicile && (
+            <p className="text-destructive text-sm">
+              {errors.domicile.message}
+            </p>
           )}
-          rules={{ required: true }}
-        />
-        {errors.semester && (
-          <p className="text-destructive text-sm">{errors.semester.message}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="birthDate" className="text-sm">
-            Birth Date
-          </Label>
         </div>
-        <Controller
-          name="birthDate"
-          control={control}
-          render={({
-            field: { name, onChange, onBlur, ref },
-            fieldState: { invalid, error },
-          }) => (
-            <div className="flex w-full flex-col md:flex-nowrap gap-4">
-              <DateInput
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="institution" className="text-sm">
+              Institution
+            </Label>
+          </div>
+          <Input
+            {...register("institution")}
+            placeholder="Bandung"
+            className="input sz-md variant-mixed"
+          />
+          {errors.institution && (
+            <p className="text-destructive text-sm">
+              {errors.institution.message}
+            </p>
+          )}
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="major" className="text-sm">
+              Major
+            </Label>
+          </div>
+          <Input
+            {...register("major")}
+            placeholder="Bandung"
+            className="input sz-md variant-mixed"
+          />
+          {errors.major && (
+            <p className="text-destructive text-sm">{errors.major.message}</p>
+          )}
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="education" className="text-sm">
+              Current Education
+            </Label>
+          </div>
+          <Select
+            className="w-full bg-transparent!"
+            items={educations}
+            label="Education"
+            placeholder="Select an education"
+            {...register("education")}
+          >
+            {(educations) => (
+              <SelectItem className="bg-transparent!">
+                {educations.label}
+              </SelectItem>
+            )}
+          </Select>
+          {errors.education && (
+            <p className="text-destructive text-sm">
+              {errors.education.message}
+            </p>
+          )}
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="semester" className="text-sm">
+              Current Semester
+            </Label>
+          </div>
+          <Controller
+            name="semester"
+            control={control}
+            render={({ field }) => (
+              <NumberInput
                 className="w-full"
-                label={"Birth date"}
-                name={name}
-                onChange={onChange}
-                onBlur={onBlur}
-                ref={ref}
-                isRequired
-                isInvalid={invalid}
-                granularity="day"
-                errorMessage={error?.message}
-                defaultValue={
-                  session?.user.birthDate
-                    ? new CalendarDate(
-                        new Date(session?.user.birthDate).getFullYear(),
-                        new Date(session?.user.birthDate).getMonth() + 1,
-                        new Date(session?.user.birthDate).getDate()
-                      )
-                    : undefined
-                }
+                label="Semester"
+                placeholder="1"
+                {...field}
+                minValue={1}
+                maxValue={8}
               />
-            </div>
+            )}
+            rules={{ required: true }}
+          />
+          {errors.semester && (
+            <p className="text-destructive text-sm">
+              {errors.semester.message}
+            </p>
           )}
-          rules={{ required: true }}
-        />
-      </div>
+        </div>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="birthDate" className="text-sm">
+              Birth Date
+            </Label>
+          </div>
+          <Controller
+            name="birthDate"
+            control={control}
+            render={({
+              field: { name, onChange, onBlur, ref },
+              fieldState: { invalid, error },
+            }) => (
+              <div className="flex w-full flex-col md:flex-nowrap gap-4">
+                <DateInput
+                  className="w-full"
+                  label={"Birth date"}
+                  name={name}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  ref={ref}
+                  isRequired
+                  isInvalid={invalid}
+                  granularity="day"
+                  errorMessage={error?.message}
+                  defaultValue={
+                    session?.user.birthDate
+                      ? new CalendarDate(
+                          new Date(session?.user.birthDate).getFullYear(),
+                          new Date(session?.user.birthDate).getMonth() + 1,
+                          new Date(session?.user.birthDate).getDate()
+                        )
+                      : undefined
+                  }
+                />
+              </div>
+            )}
+            rules={{ required: true }}
+          />
+        </div>
+      </section>
       <Button
-        className={`w-full ${
+        className={`w-full max-w-lg flex justify-self-center mt-12 ${
           isLoading ? "cursor-not-allowed" : "cursor-pointer"
         }`}
-        disabled={isLoading}
+        disabled={isSubmitting}
         type="submit"
       >
-        {isLoading ? (
+        {isSubmitting ? (
           <div className="flex gap-2">
             <span>Updating...</span>
             <Loader2 className="animate-spin" />
