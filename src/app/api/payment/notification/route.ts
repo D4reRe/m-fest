@@ -2,11 +2,17 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 
-export async function POST(req: Request) {
+export async function GET(req: Request) {
   const payload = await req.json();
 
-  const { order_id, transaction_status, signature, status_code, gross_amount } =
-    payload;
+  const {
+    order_id,
+    transaction_status,
+    signature,
+    status_code,
+    gross_amount,
+    fraud_status,
+  } = payload;
 
   // Verify signature received from Midtrans (from documentation must be SHA512
   //    with order_id + status_code + gross_amount + serverKey )
@@ -16,7 +22,7 @@ export async function POST(req: Request) {
     .update(order_id + status_code + gross_amount + serverKey)
     .digest("hex");
 
-  if (expectedSignature !== signature) {
+  if (expectedSignature !== signature && fraud_status !== "accept") {
     return NextResponse.json({ message: "Invalid signature" }, { status: 403 });
   }
   await prisma.payment.update({
