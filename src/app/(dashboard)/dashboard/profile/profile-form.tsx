@@ -306,7 +306,7 @@ function ProfileUpdateForm() {
         </div>
       </section>
       <Button
-        className={`w-full max-w-lg flex justify-self-center mt-12 bg-transparent border hover:bg-white/25 ${
+        className={`w-full max-w-lg flex justify-self-center mt-12 bg-transparent border text-white hover:bg-white/25 ${
           isLoading ? "cursor-not-allowed" : "cursor-pointer"
         }`}
         disabled={isSubmitting}
