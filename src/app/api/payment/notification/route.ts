@@ -8,7 +8,7 @@ export async function GET(req: Request) {
   const {
     order_id,
     transaction_status,
-    signature,
+    signature_key,
     status_code,
     gross_amount,
     fraud_status,
@@ -22,7 +22,7 @@ export async function GET(req: Request) {
     .update(order_id + status_code + gross_amount + serverKey)
     .digest("hex");
 
-  if (expectedSignature !== signature && fraud_status !== "accept") {
+  if (expectedSignature !== signature_key && fraud_status !== "accept") {
     return NextResponse.json({ message: "Invalid signature" }, { status: 403 });
   }
   await prisma.payment.update({
