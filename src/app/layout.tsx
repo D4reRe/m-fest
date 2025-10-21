@@ -1,21 +1,10 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+"use client";
+import { montserrat, onest, roboto } from "@/styles/font";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "M-Fest",
-  description: "official website of M-Fest for events and competitions",
-};
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import SessionProviders from "@/components/providers/session-provider";
+import { Toaster } from "@/components/ui/sonner";
+import { HeroUIProvider } from "@heroui/react";
 
 export default function RootLayout({
   children,
@@ -23,11 +12,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${montserrat.variable} ${roboto.variable} ${onest.className} antialiased`}
       >
-        {children}
+        <SessionProviders>
+          <HeroUIProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+              <Toaster />
+            </ThemeProvider>
+          </HeroUIProvider>
+        </SessionProviders>
       </body>
     </html>
   );
