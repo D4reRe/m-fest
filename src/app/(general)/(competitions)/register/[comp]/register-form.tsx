@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -29,6 +29,22 @@ function RegisterForm({ comp }: { comp: string }) {
   } = useForm<registerSchema>({ resolver: zodResolver(registerSchema) });
   const router = useRouter();
 
+  useEffect(() => {
+    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
+    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
+
+    const script = document.createElement("script");
+    script.src = snapScript;
+    script.async = true;
+    script.setAttribute("data-client-key", clientKey as string);
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
   async function onSubmit(formData: registerSchema) {
     setIsLoading(true);
     toast.loading("Signing up...", { id: "signing-up" });
@@ -48,8 +64,40 @@ function RegisterForm({ comp }: { comp: string }) {
     }
   }
 
+  function generateFeeId(): string {
+    const timestamp = Date.now().toString(36); // time in base36
+    const randomPart = Math.random().toString(36).substring(2, 10); // random chars
+    return `FEE-${timestamp}-${randomPart}`.toUpperCase();
+  }
+
   const checkout = async () => {
-    alert("Checkout SNAP from MidTrans anjay! 🌟");
+    const data = {
+      id: generateFeeId(),
+      competitionName: `${
+        competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
+      }`,
+      price: competitions.find((c) => c.abbreviation === comp.toUpperCase())
+        ?.fee1,
+      quantity: 1,
+      brand: "Mechanical Festival 2026",
+      category: "Competition Registration Fee",
+      merchant_name: "Himpunan Mahasiswa Mesin ITB",
+    };
+
+    setIsLoading(true);
+
+    const response = await fetch("/api/payment", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const { data: requestData } = await response.json();
+    console.log(requestData);
+    console.log(requestData.token);
+    // @ts-expect-error snap is from Midtrans script tag that loaded from useEffect so we called it with window, but error is expected in this case
+    window.snap.pay(requestData.token);
   };
 
   return (
