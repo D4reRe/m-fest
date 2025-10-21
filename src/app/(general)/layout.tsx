@@ -26,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <main
-      className={`min-h-screen bg-[url("/landing.png")] bg-cover bg-center bg-fixed`}
+      className={`min-h-screen bg-[url("/landing.png")] bg-cover bg-center bg-fixed bg-repeat`}
     >
       <Navbar />
       {children}
