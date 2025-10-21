@@ -80,7 +80,7 @@ export default function TableInvoices({ invoices }: { invoices: any }) {
           <TableCell>Dummy</TableCell>
         </TableRow>
       </TableBody> */}
-      <TableBody>
+      <TableBody emptyContent={<span>No invoices found</span>}>
         {invoices.map((invoice) => (
           <TableRow key={invoice.id}>
             <TableCell>{invoice.orderId}</TableCell>
