@@ -99,7 +99,6 @@ function RegisterForm({ comp }: { comp: string }) {
 
     if (response.ok) {
       // @ts-expect-error snap global object
-      // TODO: handle cases when user does successful payments, pending payments, and failed payments
       window.snap.pay(requestData.token, {
         onSuccess: async function (result) {
           toast.dismiss("checking-out");
