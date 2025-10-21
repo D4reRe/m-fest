@@ -17,7 +17,14 @@ export async function POST(request: Request) {
     }
   );
 
+  if (!response.ok) {
+    return NextResponse.json(
+      { error: "Failed to verify payment", message: response.statusText },
+      { status: 500 }
+    );
+  }
   const status = await response.json();
+  console.log(status);
 
   if (status.transaction_status === "settlement") {
     await prisma.payment.update({
