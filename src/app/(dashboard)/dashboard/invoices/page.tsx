@@ -9,6 +9,9 @@ async function InvoicePage() {
     where: {
       userId: session?.user.id,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return (

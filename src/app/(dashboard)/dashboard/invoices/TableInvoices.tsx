@@ -13,8 +13,10 @@ import { IconRefresh } from "@tabler/icons-react";
 import { RefreshCcw, RefreshCwOff } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function TableInvoices({ invoices }: { invoices: any }) {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   async function refreshPayment(
     invoiceId: string,
@@ -96,7 +98,7 @@ export default function TableInvoices({ invoices }: { invoices: any }) {
             <TableCell>
               {invoice.status === "settlement" ? (
                 <span>Payment Successfull</span>
-              ) : (
+              ) : invoice.status === "pending" ? (
                 <div className="flex items-center justify-between gap-3">
                   <Link
                     className="font-bold underline underline-offset-1"
@@ -113,18 +115,27 @@ export default function TableInvoices({ invoices }: { invoices: any }) {
                         invoice.redirectUrl
                       )
                     }
+                    disabled={isLoading}
                     className="size-6 hover:scale-105 transition-all"
                   >
-                    <RefreshCcw />
+                    {isLoading ? (
+                      <IconRefresh className="animate-spin" />
+                    ) : (
+                      <RefreshCcw />
+                    )}
                   </Button>
                 </div>
+              ) : (
+                <span>Payment Expired</span>
               )}
             </TableCell>
             <TableCell>
               {invoice.status === "settlement" ? (
                 <Chip color="success">Paid</Chip>
-              ) : (
+              ) : invoice.status === "pending" ? (
                 <Chip color="warning">Pending</Chip>
+              ) : (
+                <Chip color="danger">Expired</Chip>
               )}
             </TableCell>
           </TableRow>

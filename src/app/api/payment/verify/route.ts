@@ -28,7 +28,7 @@ export async function POST(request: Request) {
   } else {
     await prisma.payment.update({
       where: { orderId: result.order_id },
-      data: { status: status.transaction_status },
+      data: { status: status.transaction_status, createdAt: new Date() },
     });
     return NextResponse.json({ status: "failed" }, { status: 500 });
   }
