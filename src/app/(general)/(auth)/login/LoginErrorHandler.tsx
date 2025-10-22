@@ -14,7 +14,7 @@ export default function LoginErrorHandler() {
     const successMessage = "Signed in successfully";
     if (error === "OAuthAccountNotLinked") {
       errorMessage =
-        "This email is already registered with another login provider. Please use the same method you signed up with.";
+        "This email address is already associated with another login provider. Please use the same method you logged in with.";
     } else if (error !== "OAuthAccountNotLinked") {
       errorMessage = "Login Failed please try again.";
     }
