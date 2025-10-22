@@ -305,22 +305,24 @@ function ProfileUpdateForm() {
           />
         </div>
       </section>
-      <Button
-        className={`w-full max-w-lg flex justify-self-center mt-12 bg-transparent border text-white hover:bg-white/25 ${
-          isLoading ? "cursor-not-allowed" : "cursor-pointer"
-        }`}
-        disabled={isSubmitting}
-        type="submit"
-      >
-        {isSubmitting ? (
-          <div className="flex gap-2">
-            <span>Updating...</span>
-            <Loader2 className="animate-spin" />
-          </div>
-        ) : (
-          "Update"
-        )}
-      </Button>
+      <div className="w-full flex justify-center items-center">
+        <Button
+          className={`w-full max-w-lg mt-12 border text-white hover:bg-white/25 ${
+            isLoading ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
+          disabled={isSubmitting}
+          type="submit"
+        >
+          {isSubmitting ? (
+            <div className="flex gap-2">
+              <span>Updating...</span>
+              <Loader2 className="animate-spin" />
+            </div>
+          ) : (
+            "Update"
+          )}
+        </Button>
+      </div>
     </form>
   );
 }
