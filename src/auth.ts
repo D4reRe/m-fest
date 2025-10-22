@@ -57,7 +57,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     // }),
   ],
   pages: {
-    signIn: "/sign-in",
+    signIn: "/login",
+    error: "/auth-error",
   },
   callbacks: {
     jwt: async ({ token, user }) => {
@@ -110,4 +111,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.AUTH_SECRET,
+  debug: true,
 });

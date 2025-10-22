@@ -169,7 +169,7 @@ export const Navbar = () => {
                           await signOut({ redirect: false });
                           toast.success("Logged out successfully");
                           toast.dismiss("logging-out");
-                          router.replace("/");
+                          router.replace("/login");
                         } catch (error) {
                           toast.error("Failed to log out");
                           console.error(error);

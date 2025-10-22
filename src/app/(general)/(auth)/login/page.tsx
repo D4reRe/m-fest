@@ -1,10 +1,10 @@
 import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import AuthButtons from "@/components/auth/auth-buttons";
-// import LoginForm from "./login-form";
 import { Metadata } from "next";
+import { redirect } from "next/navigation";
+import LoginErrorHandler from "./LoginErrorHandler";
 
 export const metadata: Metadata = {
   title: "Login | Mechanical Festival 2026",
@@ -20,6 +20,7 @@ async function LoginPage() {
     <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
       <div className="bg-muted m-auto h-fit w-full max-w-sm overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
         <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
+          <LoginErrorHandler />
           <div className="text-center">
             <Link href="/" aria-label="go home" className="mx-auto block w-fit">
               <Image

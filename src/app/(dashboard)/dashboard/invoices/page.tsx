@@ -2,6 +2,12 @@ import React from "react";
 import TableInvoices from "./TableInvoices";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Invoices | Mechanical Festival 2026",
+  description: "Mechanical Festival 2026",
+};
 
 async function InvoicePage() {
   const session = await auth();

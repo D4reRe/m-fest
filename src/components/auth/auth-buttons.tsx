@@ -22,11 +22,11 @@ function AuthButtons() {
             toast.loading("Signing in...");
             try {
               await signIn("google", { redirectTo: "/" });
-              toast.success("Signed in successfully");
             } catch (error) {
               toast.error("Failed to sign in");
               console.error(error);
             } finally {
+              toast.dismiss("signing-in");
               setIsLoading(false);
             }
           }}
@@ -75,7 +75,6 @@ function AuthButtons() {
               console.error(error);
             } finally {
               toast.dismiss("signing-in");
-              toast.success("Signed in successfully");
               setIsLoading(false);
             }
           }}
@@ -109,7 +108,6 @@ function AuthButtons() {
               console.error(error);
             } finally {
               toast.dismiss("signing-in");
-              toast.success("Signed in successfully");
               setIsLoading(false);
             }
           }}
