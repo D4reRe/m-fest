@@ -10,12 +10,12 @@ import {
   Chip,
 } from "@heroui/react";
 import { IconRefresh } from "@tabler/icons-react";
-import { RefreshCcw, RefreshCwOff } from "lucide-react";
+import { RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function TableInvoices({ invoices }: { invoices: any }) {
+export default function TableInvoices({ invoices }: { invoices }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   async function refreshPayment(
@@ -23,6 +23,7 @@ export default function TableInvoices({ invoices }: { invoices: any }) {
     token: string,
     redirectUrl: string
   ) {
+    setIsLoading(true);
     const response = await fetch("/api/payment/verify", {
       method: "POST",
       headers: {
@@ -37,6 +38,7 @@ export default function TableInvoices({ invoices }: { invoices: any }) {
       }),
     });
     if (response.ok) {
+      setIsLoading(false);
       router.refresh();
     }
   }

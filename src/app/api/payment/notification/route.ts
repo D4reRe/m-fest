@@ -8,7 +8,6 @@ export async function POST(req: Request) {
   const {
     order_id,
     transaction_status,
-    transaction_id,
     signature_key,
     status_code,
     gross_amount,

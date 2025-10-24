@@ -1,5 +1,4 @@
 import { InfiniteSlider } from "@/components/ui/infinite-slider";
-import { ProgressiveBlur } from "@/components/ui/progressive-blur";
 import TimelineItem from "./timeline-item";
 
 export default function Timeline() {
