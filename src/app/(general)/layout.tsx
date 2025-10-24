@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { montserrat, onest, roboto } from "@/styles/font";
 import { Navbar } from "@/components/general/Navbar";
 import FooterSection from "@/components/general/footer";
+import { getUserProfile } from "@/action/user.action";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,16 +20,17 @@ export const metadata: Metadata = {
   description: "official website of M-Fest for events and competitions",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUserProfile();
   return (
     <main
       className={`min-h-screen bg-[url("/landing.png")] bg-cover bg-center bg-fixed bg-repeat`}
     >
-      <Navbar />
+      <Navbar user={user} />
       {children}
       <FooterSection />
     </main>

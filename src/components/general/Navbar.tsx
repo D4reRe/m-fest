@@ -9,13 +9,14 @@ import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
+import { User } from "@prisma/client";
 
 const menuItems = [
   { name: "Events", href: "/events" },
   { name: "Competitions", href: "/competitions" },
 ];
 
-export const Navbar = () => {
+export const Navbar = ({ user }: { user: User }) => {
   const [menuState, setMenuState] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -140,9 +141,9 @@ export const Navbar = () => {
                 )}
                 {status === "authenticated" && session?.user && (
                   <div className="flex gap-5 items-center">
-                    {session?.user.image && (
+                    {user.image && (
                       <Image
-                        src={session.user.image!}
+                        src={user.image!}
                         alt="User Image"
                         width={45}
                         height={45}
@@ -150,7 +151,7 @@ export const Navbar = () => {
                       />
                     )}
                     <p className={cn(isScrolled ? "lg:hidden" : "text-sm")}>
-                      {session.user.name}
+                      {user.name}
                     </p>
                     <Button
                       variant="destructive"

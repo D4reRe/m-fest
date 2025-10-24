@@ -21,16 +21,24 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Skeleton } from "@heroui/react";
+import { getUserProfile } from "@/action/user.action";
+import { User } from "@prisma/client";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { data: session, status } = useSession();
+  const { status } = useSession();
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    (async () => {
+      const data = await getUserProfile();
+      setUser(data);
+    })();
+  }, []);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  console.log(session?.user.image);
   return (
     <SidebarMenu className="bg-transparent backdrop-blur-lg">
       <SidebarMenuItem>
@@ -43,23 +51,30 @@ export function NavUser() {
               >
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={session?.user.image as string}
-                    alt={session?.user.name as string}
+                    src={
+                      (user?.image as string) ??
+                      "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
+                    }
+                    alt={(user?.name as string) ?? "User Image"}
                   />
                   <Image
-                    src={session?.user.image as string}
-                    alt={session?.user.name as string}
+                    src={
+                      (user?.image as string) ??
+                      "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
+                    }
+                    alt={(user?.name as string) ?? "User Image"}
                     width={32}
                     height={32}
+                    className="object-cover object-center rounded-full"
                   />
                   <AvatarFallback className="rounded-lg h-8 w-8 bg-gray-500 animate-pulse"></AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">
-                    {session?.user.name as string}
+                    {user?.name as string}
                   </span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {session?.user.email as string}
+                    {user?.email as string}
                   </span>
                 </div>
                 <IconDotsVertical className="ml-auto size-4" />

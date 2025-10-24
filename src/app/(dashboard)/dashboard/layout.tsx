@@ -1,3 +1,4 @@
+import { getUserProfile } from "@/action/user.action";
 import { auth } from "@/auth";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { SiteHeader } from "@/components/dashboard/site-header";

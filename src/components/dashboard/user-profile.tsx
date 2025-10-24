@@ -1,25 +1,37 @@
+import { getUserProfile } from "@/action/user.action";
 import { auth } from "@/auth";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 import Link from "next/link";
 
 export async function UserProfile() {
-  const session = await auth();
-
+  const user = await getUserProfile();
   return (
     <div className="glass p-6 space-y-6">
       {/* Avatar */}
       <div className="flex flex-col items-center">
-        <Avatar className="w-24 h-24 border-2 border-primary/50">
-          <AvatarImage
-            src={session?.user.image as string}
-            alt={session?.user.name as string}
+        {user?.image ? (
+          <Image
+            src={user?.image as string}
+            alt={user?.name as string}
+            width={100}
+            height={100}
+            className="rounded-full object-cover"
           />
-
-          <AvatarFallback className="animate-pulse"></AvatarFallback>
-        </Avatar>
+        ) : (
+          <>
+            <Avatar className="w-24 h-24 border-2 border-primary/50">
+              <AvatarImage
+                src={user?.image as string}
+                alt={user?.name as string}
+              />
+              <AvatarFallback className="animate-pulse"></AvatarFallback>
+            </Avatar>
+          </>
+        )}
         <h2 className="mt-4 text-xl font-bold text-foreground text-center">
-          {session?.user.name}
+          {user?.name}
         </h2>
         <Link href="/dashboard/profile">
           <Badge className="mt-2 bg-primary/30 text-primary border-primary/50 hover:bg-primary/40">
@@ -35,7 +47,7 @@ export async function UserProfile() {
             Institution
           </p>
           <p className="text-sm font-medium text-foreground mt-1">
-            {session?.user.institution ?? "Not set"}
+            {user?.institution ?? "Not set"}
           </p>
         </div>
         <div>
@@ -43,7 +55,7 @@ export async function UserProfile() {
             Major
           </p>
           <p className="text-sm font-medium text-foreground mt-1">
-            {session?.user.major ?? "Not set"}
+            {user?.major ?? "Not set"}
           </p>
         </div>
         <div>
@@ -51,7 +63,7 @@ export async function UserProfile() {
             Current Education
           </p>
           <p className="text-sm font-medium text-foreground mt-1">
-            {session?.user.education ?? "Not set"}
+            {user?.education ?? "Not set"}
           </p>
         </div>
         <div>
@@ -59,7 +71,7 @@ export async function UserProfile() {
             Current Semester
           </p>
           <p className="text-sm font-medium text-foreground mt-1">
-            {session?.user.semester ?? "Not set"}
+            {user?.semester ?? "Not set"}
           </p>
         </div>
       </div>

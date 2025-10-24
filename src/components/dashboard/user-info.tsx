@@ -1,46 +1,35 @@
-"use client";
+import { getUserProfile } from "@/action/user.action";
 import { Skeleton } from "@heroui/react";
 import { Mail, Phone, MapPin, Calendar } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 
-export function UserInfo() {
-  const { data: session, status } = useSession();
-  const [birthDate, setBirthDate] = useState<string | null>("");
-
-  useEffect(() => {
-    if (session?.user?.birthDate) {
-      const date = new Date(session.user.birthDate);
-      setBirthDate(
-        date.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })
-      );
-    }
-  }, [session]);
+export async function UserInfo() {
+  const user = await getUserProfile();
+  const date = new Date(user?.birthDate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   const infoItems = [
     {
       icon: Mail,
       label: "Email",
-      value: session?.user.email || "Not set",
+      value: user?.email || "Not set",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: session?.user.phoneNumber || "Not set",
+      value: user?.phoneNumber || "Not set",
     },
     {
       icon: MapPin,
       label: "Domicile",
-      value: session?.user.domicile || "Not set",
+      value: user?.domicile || "Not set",
     },
     {
       icon: Calendar,
       label: "Birth Date",
-      value: birthDate || "Not set",
+      value: date || "Not set",
     },
   ];
 
@@ -61,14 +50,12 @@ export function UserInfo() {
                 <p className="text-xs text-muted-foreground uppercase tracking-wide">
                   {item.label}
                 </p>
-                {status === "authenticated" && (
+                {item && (
                   <p className="text-sm font-medium text-foreground mt-1 truncate">
                     {item.value}
                   </p>
                 )}
-                {status === "loading" && (
-                  <Skeleton className="h-4 w-24 rounded-lg"></Skeleton>
-                )}
+                {!item && <Skeleton className="h-4 w-24 rounded-lg"></Skeleton>}
               </div>
             </div>
           );
