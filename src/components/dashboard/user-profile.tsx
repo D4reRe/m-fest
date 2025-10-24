@@ -1,27 +1,16 @@
 import { getUserProfile } from "@/action/user.action";
-import { auth } from "@/auth";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import Image from "next/image";
 import Link from "next/link";
 
 export async function UserProfile() {
   const user = await getUserProfile();
   return (
     <div className="glass p-6 space-y-6">
-      {/* Avatar */}
       <div className="flex flex-col items-center">
-        {user?.image ? (
-          <Image
-            src={user?.image as string}
-            alt={user?.name as string}
-            width={100}
-            height={100}
-            className="rounded-full object-cover"
-          />
-        ) : (
+        {user?.image && (
           <>
-            <Avatar className="w-24 h-24 border-2 border-primary/50">
+            <Avatar className="w-32 h-32 border-2 border-primary/50">
               <AvatarImage
                 src={user?.image as string}
                 alt={user?.name as string}

@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 import { User } from "@prisma/client";
+import { Avatar } from "../ui/avatar";
+import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 const menuItems = [
   { name: "Events", href: "/events" },
@@ -39,7 +41,7 @@ export const Navbar = ({ user }: { user: User }) => {
       >
         <div
           className={cn(
-            "mx-auto mt-2 px-6 transition-all duration-300 lg:px-12",
+            "mx-auto w-full mt-2 px-6 transition-all duration-300 lg:px-12",
             isScrolled &&
               "bg-background/50 max-w-6xl rounded-2xl border backdrop-blur-lg lg:px-5"
           )}
@@ -141,14 +143,19 @@ export const Navbar = ({ user }: { user: User }) => {
                 )}
                 {status === "authenticated" && session?.user && (
                   <div className="flex gap-5 items-center">
-                    {user.image && (
-                      <Image
-                        src={user.image!}
-                        alt="User Image"
-                        width={45}
-                        height={45}
-                        className="object-cover rounded-full"
-                      />
+                    {user.image ? (
+                      <Avatar className="h-15 w-15 border-2 border-primary/50">
+                        <AvatarImage
+                          src={user.image}
+                          alt={user.name ?? "User Image"}
+                        />
+                        <AvatarFallback className="animate-pulse"></AvatarFallback>
+                      </Avatar>
+                    ) : (
+                      <div className="flex items-center gap-2 animate-pulse">
+                        <div className="w-8 h-8 rounded-full bg-gray-300" />
+                        <div className="w-20 h-4 bg-gray-300 rounded" />
+                      </div>
                     )}
                     <p className={cn(isScrolled ? "lg:hidden" : "text-sm")}>
                       {user.name}

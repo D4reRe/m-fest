@@ -57,16 +57,6 @@ export function NavUser() {
                     }
                     alt={(user?.name as string) ?? "User Image"}
                   />
-                  <Image
-                    src={
-                      (user?.image as string) ??
-                      "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
-                    }
-                    alt={(user?.name as string) ?? "User Image"}
-                    width={32}
-                    height={32}
-                    className="object-cover object-center rounded-full"
-                  />
                   <AvatarFallback className="rounded-lg h-8 w-8 bg-gray-500 animate-pulse"></AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">

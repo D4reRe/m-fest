@@ -15,7 +15,6 @@ import { useSession } from "next-auth/react";
 import { CalendarDate } from "@internationalized/date";
 import { UploadButton } from "@/utils/uploadthing";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
 import { User } from "@prisma/client";
 
 const profileSchema = z.object({
@@ -29,10 +28,6 @@ const profileSchema = z.object({
     .number<number>()
     .min(1, "Minimum semester is 1")
     .max(8, "Maximum semester is 8"),
-  // ktm: z.url().optional(),
-  // pDDikti: z.url().optional(),
-  // followIg: z.url().optional(),
-  // twibbon: z.url().optional(),
   birthDate: z.coerce.date<Date>({
     error: (issue) =>
       issue.input === undefined ? "Required field" : "Invalid date",
@@ -42,7 +37,7 @@ const profileSchema = z.object({
 type profileSchema = z.infer<typeof profileSchema>;
 
 function ProfileUpdateForm({ user }: { user: User }) {
-  const { data: session, update } = useSession();
+  const { data: session } = useSession();
   console.log(session);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -70,10 +65,10 @@ function ProfileUpdateForm({ user }: { user: User }) {
     if (session?.user) {
       reset({
         name: user?.name as string,
-        phoneNumber: user?.phoneNumber || "081234567890",
-        domicile: user?.domicile || "Bandung",
-        institution: user?.institution || "Institut Teknologi Bandung",
-        major: user?.major || "Mechanical Engineering",
+        phoneNumber: user?.phoneNumber || "",
+        domicile: user?.domicile || "",
+        institution: user?.institution || "",
+        major: user?.major || "",
         education: user?.education || "S1",
         semester: (user?.semester as unknown as number) || 1,
       });
@@ -103,7 +98,10 @@ function ProfileUpdateForm({ user }: { user: User }) {
       if (res.ok) {
         toast.dismiss("update-profile");
         toast.success("Profile updated");
-        router.refresh();
+        setTimeout(() => {
+          router.refresh();
+          window.location.reload();
+        }, 500);
       } else {
         const err = await res.json();
         toast.error("Failed to update profile", {
@@ -131,17 +129,9 @@ function ProfileUpdateForm({ user }: { user: User }) {
         <div className="mt-12 mb-12">
           <div className="flex flex-col items-center justify-center gap-5">
             <div className="">
-              {user.image ? (
-                <Image
-                  src={user.image as string}
-                  alt={user.name as string}
-                  width={100}
-                  height={100}
-                  className="rounded-full object-cover"
-                />
-              ) : (
+              {user.image && (
                 <>
-                  <Avatar className="w-24 h-24 border-2 border-primary/50">
+                  <Avatar className="w-32 h-32 border-2 border-primary/50">
                     <AvatarImage
                       src={user.image as string}
                       alt={user.name as string}
@@ -153,7 +143,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
             </div>
             <div>
               <UploadButton
-                className="ut-button:bg-transparent ut-button:hover:bg-white/25 transition-all "
+                className="ut-button:bg-transparent ut-button:hover:bg-white/15 ut-uploading:cursor-not-allowed transition-all"
                 endpoint={"updateProfilePicture"}
                 onUploadBegin={() => {
                   toast.loading("Waiting to upload...", {
@@ -247,7 +237,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
             </div>
             <Input
               {...register("institution")}
-              placeholder="Bandung"
+              placeholder="Institut Teknologi Bandung"
               className="input sz-md variant-mixed"
             />
             {errors.institution && (
@@ -264,7 +254,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
             </div>
             <Input
               {...register("major")}
-              placeholder="Bandung"
+              placeholder="Mechanical Engineering"
               className="input sz-md variant-mixed"
             />
             {errors.major && (
@@ -321,38 +311,6 @@ function ProfileUpdateForm({ user }: { user: User }) {
               </p>
             )}
           </div>
-          {/* <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="ktm" className="text-sm">
-                Student Card (KTM or Kartu Pelajar)
-              </Label>
-            </div>
-            <Input type="url" {...register("ktm")} />
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="pDDikti" className="text-sm">
-                PDDikti
-              </Label>
-            </div>
-            <Input type="url" {...register("pDDikti")} />
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="twibbon" className="text-sm">
-                Twibbon
-              </Label>
-            </div>
-            <Input type="url" {...register("twibbon")} />
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="followIg  " className="text-sm">
-                Follow IG
-              </Label>
-            </div>
-            <Input type="url" {...register("followIg")} />
-          </div> */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label htmlFor="birthDate" className="text-sm">
@@ -375,7 +333,6 @@ function ProfileUpdateForm({ user }: { user: User }) {
                     onChange={onChange}
                     onBlur={onBlur}
                     ref={ref}
-                    isRequired
                     isInvalid={invalid}
                     granularity="day"
                     errorMessage={error?.message}
