@@ -31,7 +31,7 @@ export default function ContentSection() {
           loading="lazy"
         />
 
-        <div className="relative mx-auto grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-8 lg:grid-cols-6 items-center">
+        <div className="relative mx-auto grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-6 lg:grid-cols-3 items-center">
           {events.map((event) => (
             <Link
               href={`events/#${event.title.toLowerCase()}`}

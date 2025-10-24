@@ -36,6 +36,11 @@ model User {
   birthDate      DateTime?
   role           Role            @default(USER)
 
+  twibbon        String?
+  ktm            String?
+  pDDikti        String?
+  followIg       String?
+
   payments      Payment[]
   accounts      Account[]
   sessions      Session[]

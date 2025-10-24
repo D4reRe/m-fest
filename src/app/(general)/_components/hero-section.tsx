@@ -113,7 +113,7 @@ export default async function HeroSection() {
                       size="lg"
                       className="rounded-xl px-5 text-base"
                     >
-                      <Link href="#events" className="flex items-center gap-3 ">
+                      <Link href="/events" className="flex items-center gap-3 ">
                         <Rocket className="relative size-4" />
                         <span className="text-nowrap">Explore Events</span>
                       </Link>
