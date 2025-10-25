@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Profile to Mechanical Festival 2026",
 };
 
-async function SignUpPage() {
+async function ProfilePage() {
   const user: User = (await getUserProfile()) as User;
   return (
     <section className="flex min-h-screen bg-transparent px-4 py-4 md:py-8 dark:bg-transparent">
@@ -31,4 +31,4 @@ async function SignUpPage() {
   );
 }
 
-export default SignUpPage;
+export default ProfilePage;
