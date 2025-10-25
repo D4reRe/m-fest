@@ -33,6 +33,14 @@ export async function UserProfile() {
       <div className="space-y-3 pt-4 border-t border-border/20">
         <div>
           <p className="text-xs text-muted-foreground uppercase tracking-wide">
+            Gender{" "}
+          </p>
+          <p className="text-sm font-medium text-foreground mt-1">
+            {user?.gender ?? "Not set"}
+          </p>
+        </div>
+        <div>
+          <p className="text-xs text-muted-foreground uppercase tracking-wide">
             Institution
           </p>
           <p className="text-sm font-medium text-foreground mt-1">

@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { Competitions } from "@/components/dashboard/competition";
-import { RegisteredEvents } from "@/components/dashboard/registered-events";
+import { Events } from "@/components/dashboard/events";
 import { TeamMembers } from "@/components/dashboard/team-member";
 import { UserInfo } from "@/components/dashboard/user-info";
 import { UserProfile } from "@/components/dashboard/user-profile";
@@ -44,7 +44,7 @@ async function DashboardHomePage() {
 
             {/* Events and Competitions */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <RegisteredEvents />
+              <Events />
               <Competitions />
             </div>
 

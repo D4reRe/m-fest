@@ -3,7 +3,7 @@
 import { Calendar, Users, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
-export function RegisteredEvents() {
+export function Events() {
   const events = [
     {
       id: 1,
@@ -39,9 +39,7 @@ export function RegisteredEvents() {
 
   return (
     <div className="glass p-6">
-      <h3 className="text-lg font-semibold text-foreground mb-6">
-        Registered Events
-      </h3>
+      <h3 className="text-lg font-semibold text-foreground mb-6">Events</h3>
       <div className="space-y-4">
         {events.map((event) => (
           <div
