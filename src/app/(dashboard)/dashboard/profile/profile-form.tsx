@@ -67,16 +67,18 @@ function ProfileUpdateForm({ user }: { user: User }) {
 
   useEffect(() => {
     if (session?.user) {
-      reset({
-        fullName: user?.name as string,
-        phoneNumber: user?.phoneNumber ?? "",
-        gender: user?.gender ?? undefined,
-        domicile: user?.domicile ?? "",
-        institution: user?.institution ?? "",
-        major: user?.major ?? "",
-        education: user?.education ?? undefined,
-        semester: (user?.semester as unknown as number) ?? 1,
-      });
+      setTimeout(() => {
+        reset({
+          fullName: user?.name as string,
+          phoneNumber: user?.phoneNumber ?? "",
+          gender: user?.gender ?? undefined,
+          domicile: user?.domicile ?? "",
+          institution: user?.institution ?? "",
+          major: user?.major ?? "",
+          education: user?.education ?? undefined,
+          semester: (user?.semester as unknown as number) ?? 1,
+        });
+      }, 500);
     }
   }, [session?.user, reset, user]);
 
