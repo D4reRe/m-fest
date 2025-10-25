@@ -34,7 +34,9 @@ function TeamPage() {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button className="cursor-pointer">Create team</Button>
+          <Link href="team/create-team">
+            <Button className="cursor-pointer">Create team</Button>
+          </Link>
         </div>
       </EmptyContent>
       <Button
@@ -42,11 +44,7 @@ function TeamPage() {
         asChild
         className="text-muted-foreground"
         size="sm"
-      >
-        <Link href="/events">
-          Learn More <ArrowUpRightIcon />
-        </Link>
-      </Button>
+      ></Button>
     </Empty>
   );
 }

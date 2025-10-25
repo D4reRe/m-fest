@@ -45,8 +45,13 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { SlashIcon } from "lucide-react";
+import { Fragment, useEffect, useState } from "react";
 export function SiteHeader() {
   const pathname = usePathname();
+  const [currentPathname, setCurrentPathname] = useState<string[]>([""]);
+  useEffect(() => {
+    setCurrentPathname(pathname.split("/").filter(Boolean));
+  }, [pathname]);
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -61,115 +66,53 @@ export function SiteHeader() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <DropdownMenu>
-                <DropdownMenuTrigger>Dashboard</DropdownMenuTrigger>
+                <DropdownMenuTrigger className="hover:cursor-pointer hover:text-foreground">
+                  Dashboard
+                </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                   {menus.map((menu) => (
                     <Link key={menu.title} href={menu.url}>
-                      <DropdownMenuItem>{menu.title}</DropdownMenuItem>
+                      <DropdownMenuItem className="hover:cursor-pointer hover:text-foreground">
+                        {menu.title}
+                      </DropdownMenuItem>
                     </Link>
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
             </BreadcrumbItem>
-            {pathname === "/dashboard/profile" ? (
-              <>
-                <BreadcrumbSeparator>
-                  <SlashIcon />
-                </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link
-                      href="/dashboard/profile"
-                      className={
-                        pathname === "/dashboard/profile"
-                          ? "text-foreground"
-                          : ""
-                      }
-                    >
-                      Profile
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            ) : pathname === "/dashboard/competitions" ? (
-              <>
-                <BreadcrumbSeparator>
-                  <SlashIcon />
-                </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link
-                      href="/dashboard/competitions"
-                      className={
-                        pathname === "/dashboard/competitions"
-                          ? "text-foreground"
-                          : ""
-                      }
-                    >
-                      Competitions
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            ) : pathname === "/dashboard/team" ? (
-              <>
-                <BreadcrumbSeparator>
-                  <SlashIcon />
-                </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link
-                      href="/dashboard/team"
-                      className={
-                        pathname === "/dashboard/team" ? "text-foreground" : ""
-                      }
-                    >
-                      Team
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            ) : pathname === "/dashboard/events" ? (
-              <>
-                <BreadcrumbSeparator>
-                  <SlashIcon />
-                </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link
-                      href="/dashboard/events"
-                      className={
-                        pathname === "/dashboard/events"
-                          ? "text-foreground"
-                          : ""
-                      }
-                    >
-                      Events
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            ) : pathname === "/dashboard/invoices" ? (
-              <>
-                <BreadcrumbSeparator>
-                  <SlashIcon />
-                </BreadcrumbSeparator>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <Link
-                      href="/dashboard/events"
-                      className={
-                        pathname === "/dashboard/invoices"
-                          ? "text-foreground"
-                          : ""
-                      }
-                    >
-                      Invoices
-                    </Link>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-              </>
-            ) : null}
+            {/* Index starts from 0 */}
+            {currentPathname.slice(1).map((segment, index) => {
+              const href = `/${currentPathname.slice(0, index + 2).join("/")}`;
+              let title;
+              if (segment.split("-")) {
+                title = segment
+                  .split("-")
+                  .map((word) => {
+                    return word.charAt(0).toUpperCase() + word.slice(1);
+                  })
+                  .join(" ");
+              } else {
+                title = segment.charAt(0).toUpperCase() + segment.slice(1);
+              }
+              const isLast = index === currentPathname.slice(1).length - 1;
+
+              return (
+                <Fragment key={href}>
+                  <BreadcrumbSeparator>
+                    <SlashIcon />
+                  </BreadcrumbSeparator>
+                  <BreadcrumbItem>
+                    {isLast ? (
+                      <span className="text-foreground">{title}</span>
+                    ) : (
+                      <BreadcrumbLink asChild>
+                        <Link href={href}>{title}</Link>
+                      </BreadcrumbLink>
+                    )}
+                  </BreadcrumbItem>
+                </Fragment>
+              );
+            })}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
