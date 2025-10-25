@@ -5,6 +5,7 @@ export async function POST(req: Request) {
   const {
     name,
     email,
+    gender,
     phoneNumber,
     domicile,
     institution,
@@ -24,6 +25,7 @@ export async function POST(req: Request) {
       where: { email },
       data: {
         name,
+        gender,
         phoneNumber,
         domicile,
         institution,

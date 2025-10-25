@@ -31,19 +31,24 @@ enum CompetitionName {
   BCC
 }
 
+enum Gender {
+  Male
+  Female
+}
+
 model CompRegistration {
   id              String      @id @default(uuid())
-  userId          String
-  teamId          String      @unique
-  paymentId       String
+  userId          String                                                      // Id User Leader
+  teamId          String      @unique                                         // Specific Team to register
+  paymentId       String      @unique                                         // Specific Payment to register
+  competitionName CompetitionName
 
-  user            User?     @relation(fields: [userId], references: [id])
+  user            User?       @relation(fields: [userId], references: [id])   // Leader
   team            Team        @relation(fields: [teamId], references: [id])
   payment         Payment     @relation(fields: [paymentId], references: [id])
   
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
-  isVerified      Boolean     @default(false)
 }
 
 model EventRegistration {
@@ -58,36 +63,37 @@ model EventRegistration {
 }
 
 model User {
-  id            String          @id @default(cuid())
-  name          String?
-  email         String          @unique
-  emailVerified DateTime?
-  password      String?
-  image         String?
-  imageKey      String?
+  id                String          @id @default(cuid())
+  name              String?
+  email             String          @unique
+  emailVerified     DateTime?
+  password          String?
+  image             String?
+  imageKey          String?
 
-  phoneNumber    String?
-  domicile       String?
-  institution    String?
-  major          String?
-  education      Education?
-  semester       Int?
-  birthDate      DateTime?
-  role           Role            @default(USER)
+  gender            Gender?
+  phoneNumber       String?
+  domicile          String?
+  institution       String?
+  major             String?
+  education         Education?
+  semester          Int?
+  birthDate         DateTime?
+  role              Role            @default(USER)
 
-  twibbon        String?
-  ktm            String?
-  pDDikti        String?
-  followIg       String?
+  twibbon           String?
+  ktm               String?
+  pDDikti           String?
+  followIg          String?
 
-  team_member    TeamMember[]
-  registration  CompRegistration[]
+  team_member       TeamMember[]
+  registration      CompRegistration[]
   eventRegistration EventRegistration[]
 
 
-  payments      Payment[]
-  accounts      Account[]
-  sessions      Session[]
+  payments           Payment[]
+  accounts           Account[]
+  sessions           Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
  
@@ -128,7 +134,7 @@ model Payment {
   userId        String?
   status        String?   @default("Pending")
   competition   String?
-  registration  CompRegistration[]
+  registration  CompRegistration?
   amount        Int
   redirectUrl   String?
   snapToken     String?

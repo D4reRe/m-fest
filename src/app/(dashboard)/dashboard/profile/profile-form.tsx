@@ -2,13 +2,20 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { DateInput, NumberInput, Select, SelectItem } from "@heroui/react";
+import { DateInput, NumberInput } from "@heroui/react";
 import { educations } from "@/lib/profile";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
@@ -16,14 +23,21 @@ import { CalendarDate } from "@internationalized/date";
 import { UploadButton } from "@/utils/uploadthing";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@prisma/client";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 
 const profileSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  fullName: z.string().min(5),
+  gender: z.enum(["Male", "Female"]),
   phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
   domicile: z.string().min(1, "Domicile is required"),
   institution: z.string().min(1, "institution is required"),
   major: z.string().min(1, "Major is required"),
-  education: z.enum(["SMP", "SMA", "SMK", "D3", "S1"], "Education is required"),
+  education: z.enum(["SMP", "SMA", "SMK", "D3", "S1"]),
   semester: z.coerce
     .number<number>()
     .min(1, "Minimum semester is 1")
@@ -38,7 +52,6 @@ type profileSchema = z.infer<typeof profileSchema>;
 
 function ProfileUpdateForm({ user }: { user: User }) {
   const { data: session } = useSession();
-  console.log(session);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {
@@ -49,28 +62,20 @@ function ProfileUpdateForm({ user }: { user: User }) {
     formState: { errors, isSubmitting },
   } = useForm<profileSchema>({
     resolver: zodResolver(profileSchema),
-    defaultValues: {
-      name: "John Doe",
-      phoneNumber: "081234567890",
-      domicile: "Bandung",
-      institution: "Institut Teknologi Bandung",
-      major: "Mechanical Engineering",
-      education: "S1",
-      semester: 1,
-    },
   });
   const router = useRouter();
 
   useEffect(() => {
     if (session?.user) {
       reset({
-        name: user?.name as string,
-        phoneNumber: user?.phoneNumber || "",
-        domicile: user?.domicile || "",
-        institution: user?.institution || "",
-        major: user?.major || "",
-        education: user?.education || "S1",
-        semester: (user?.semester as unknown as number) || 1,
+        fullName: user?.name as string,
+        phoneNumber: user?.phoneNumber ?? "",
+        gender: user?.gender ?? undefined,
+        domicile: user?.domicile ?? "",
+        institution: user?.institution ?? "",
+        major: user?.major ?? "",
+        education: user?.education ?? undefined,
+        semester: (user?.semester as unknown as number) ?? 1,
       });
     }
   }, [session?.user, reset, user]);
@@ -175,19 +180,65 @@ function ProfileUpdateForm({ user }: { user: User }) {
             </div>
           </div>
         </div>
-        <div className="mt-6 space-y-6 grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-5">
+        <div className="mt-6 space-y-6 grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
           <div className="grid grid-cols-1 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="name" className="block text-sm">
-                Name
-              </Label>
-              <Input {...register("name")} placeholder="John Doe" />
-              {errors.name && (
-                <p className="text-destructive text-sm">
-                  {errors.name.message}
-                </p>
-              )}
+              <Controller
+                name="fullName"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Fullname</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
             </div>
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="gender"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-language">
+                      Gender
+                    </FieldLabel>
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-language"
+                      aria-invalid={fieldState.invalid}
+                      className="w-full"
+                    >
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            ></Controller>
           </div>
           <div className="space-y-2">
             <Label htmlFor="email" className="block text-sm">
@@ -196,92 +247,121 @@ function ProfileUpdateForm({ user }: { user: User }) {
             <Input disabled placeholder={session?.user?.email as string} />
           </div>
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="phoneNumber" className="text-sm">
-                Phone Number
-              </Label>
-            </div>
-            <Input
-              {...register("phoneNumber")}
-              placeholder="081234567890"
-              className="input sz-md variant-mixed"
+            <Controller
+              name="phoneNumber"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Phone Number</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
-            {errors.phoneNumber && (
-              <p className="text-destructive text-sm">
-                {errors.phoneNumber.message}
-              </p>
-            )}
           </div>
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="domicile" className="text-sm">
-                Domicile
-              </Label>
-            </div>
-            <Input
-              {...register("domicile")}
-              placeholder="Bandung"
-              className="input sz-md variant-mixed"
+            <Controller
+              name="domicile"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Domicile</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
-            {errors.domicile && (
-              <p className="text-destructive text-sm">
-                {errors.domicile.message}
-              </p>
-            )}
           </div>
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="institution" className="text-sm">
-                Institution
-              </Label>
-            </div>
-            <Input
-              {...register("institution")}
-              placeholder="Institut Teknologi Bandung"
-              className="input sz-md variant-mixed"
+            <Controller
+              name="institution"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Institution</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
-            {errors.institution && (
-              <p className="text-destructive text-sm">
-                {errors.institution.message}
-              </p>
-            )}
           </div>
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="major" className="text-sm">
-                Major
-              </Label>
-            </div>
-            <Input
-              {...register("major")}
-              placeholder="Mechanical Engineering"
-              className="input sz-md variant-mixed"
+            <Controller
+              name="major"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Major</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
             />
-            {errors.major && (
-              <p className="text-destructive text-sm">{errors.major.message}</p>
-            )}
           </div>
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="education" className="text-sm">
-                Current Education
-              </Label>
-            </div>
-            <Select
-              className="w-full "
-              items={educations}
-              label="Education"
-              placeholder="Select an education"
-              variant="bordered"
-              {...register("education")}
-            >
-              {(educations) => <SelectItem>{educations.label}</SelectItem>}
-            </Select>
-            {errors.education && (
-              <p className="text-destructive text-sm">
-                {errors.education.message}
-              </p>
-            )}
+            <Controller
+              name="education"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-language">
+                      Current Education
+                    </FieldLabel>
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-language"
+                      aria-invalid={fieldState.invalid}
+                      className="min-w-[120px]"
+                    >
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      {educations.map((education) => (
+                        <SelectItem key={education.key} value={education.key}>
+                          {education.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            ></Controller>
           </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between">
