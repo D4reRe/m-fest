@@ -1,5 +1,4 @@
 import { getUserProfile } from "@/action/user.action";
-import { Skeleton } from "@heroui/react";
 import { Mail, Phone, MapPin, Calendar } from "lucide-react";
 
 export async function UserInfo() {
@@ -55,7 +54,6 @@ export async function UserInfo() {
                     {item.value}
                   </p>
                 )}
-                {!item && <Skeleton className="h-4 w-24 rounded-lg"></Skeleton>}
               </div>
             </div>
           );
