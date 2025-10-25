@@ -12,13 +12,51 @@ enum Role {
   ADMIN
 }
 
+enum TeamRole{
+  LEADER
+  MEMBER
+}
+
 enum Education {
   SMA
   SMK
   D3
   S1
 }
- 
+
+enum CompetitionName {
+  STEM
+  PDC
+  IPPC
+  BCC
+}
+
+model CompRegistration {
+  id              String      @id @default(uuid())
+  userId          String
+  teamId          String      @unique
+  paymentId       String
+
+  user            User?     @relation(fields: [userId], references: [id])
+  team            Team        @relation(fields: [teamId], references: [id])
+  payment         Payment     @relation(fields: [paymentId], references: [id])
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  isVerified      Boolean     @default(false)
+}
+
+model EventRegistration {
+  id              String      @id @default(uuid())
+  event_name      String
+  userId          String
+
+  user            User?     @relation(fields: [userId], references: [id])
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
 model User {
   id            String          @id @default(cuid())
   name          String?
@@ -42,6 +80,11 @@ model User {
   pDDikti        String?
   followIg       String?
 
+  team_member    TeamMember[]
+  registration  CompRegistration[]
+  eventRegistration EventRegistration[]
+
+
   payments      Payment[]
   accounts      Account[]
   sessions      Session[]
@@ -52,18 +95,45 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
+model Team {
+  id            String    @id @default(cuid())
+  name          String?
+  competition   CompetitionName?
+  members       TeamMember[]
+
+  registration  CompRegistration?
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model TeamMember {
+  userId      String
+  teamId      String
+  
+  role        TeamRole?   // Leader or Member
+  joinDate    DateTime?  @default(now())
+
+  user         User?  @relation(fields: [userId], references: [id])
+  team         Team?  @relation(fields: [teamId], references: [id])
+
+ @@id([userId, teamId])
+}
+
+
 model Payment {
-  id          String    @id @default(cuid())
-  orderId     String    @unique
-  user        User?     @relation(fields : [userId], references: [id])
-  userId      String?
-  status      String?   @default("Pending")
-  competition String?
-  amount      Int
-  redirectUrl String?
-  snapToken   String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id            String    @id @default(cuid())
+  orderId       String    @unique
+  user          User?     @relation(fields : [userId], references: [id])
+  userId        String?
+  status        String?   @default("Pending")
+  competition   String?
+  registration  CompRegistration[]
+  amount        Int
+  redirectUrl   String?
+  snapToken     String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
  
 model Account {
