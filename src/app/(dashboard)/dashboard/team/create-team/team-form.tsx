@@ -1,6 +1,7 @@
+import { User } from "@prisma/client";
 import React from "react";
 
-function TeamFormPage() {
+function TeamFormPage({ user }: { user: User }) {
   return <div>TeamFormPage</div>;
 }
 
