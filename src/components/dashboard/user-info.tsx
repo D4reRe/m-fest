@@ -4,7 +4,7 @@ import { Mail, Phone, MapPin, Calendar } from "lucide-react";
 
 export async function UserInfo() {
   const user = await getUserProfile();
-  const date = new Date(user?.birthDate).toLocaleDateString("en-US", {
+  const date = new Date(user?.birthDate as Date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",

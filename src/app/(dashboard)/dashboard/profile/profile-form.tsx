@@ -95,6 +95,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
         },
         body: JSON.stringify({
           ...formData,
+          name: formData.fullName,
           birthDate: formData.birthDate?.toISOString(),
           email: session?.user?.email,
         }),

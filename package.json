@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && bunx prisma generate",
     "start": "next start",
     "lint": "eslint",
-    "migrate": "npx prisma generate && dotenv -e .env -- npx prisma migrate dev"
+    "migrate": "bunx prisma generate && dotenv -e .env -- bunx prisma migrate dev"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.0",
