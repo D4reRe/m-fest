@@ -86,7 +86,7 @@ function LoginForm() {
             <Loader2 className="animate-spin" />
           </div>
         ) : (
-          "Sign In"
+          "Log In Or Sign Up"
         )}
       </Button>
     </form>

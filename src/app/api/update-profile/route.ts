@@ -37,11 +37,15 @@ export async function POST(req: Request) {
     });
 
     console.log(updatedUser);
-    return NextResponse.json({ updatedUser }, { status: 200 });
+    return NextResponse.json({ success: true, updatedUser }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(
-      { error: "Something went wrong", message: error },
+      {
+        success: false,
+        error: "Something went wrong when updating profile",
+        message: error,
+      },
       { status: 500 }
     );
   }

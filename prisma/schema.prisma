@@ -12,9 +12,9 @@ enum Role {
   ADMIN
 }
 
-enum TeamRole{
-  LEADER
-  MEMBER
+enum TeamRole {
+  Leader
+  Member
 }
 
 enum Education {
@@ -103,7 +103,7 @@ model User {
 
 model Team {
   id            String    @id @default(cuid())
-  name          String?
+  name          String?   @unique
   competition   CompetitionName?
   members       TeamMember[]
 
@@ -116,6 +116,9 @@ model Team {
 model TeamMember {
   userId      String
   teamId      String
+
+  name        String?
+  email       String? 
   
   role        TeamRole?   // Leader or Member
   joinDate    DateTime?  @default(now())

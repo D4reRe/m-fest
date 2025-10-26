@@ -20,6 +20,19 @@ async function CreateTeamPage() {
               Create Team
             </h1>
             <p className="text-sm text-start">Create your dream team!</p>
+            <p className="text-sm text-red-500 text-start font-bold mt-2">
+              Team must be at least 3 members and maximum of 5 members.
+            </p>
+            <p className="text-sm text-red-500 text-start font-bold mt-2">
+              The first member is the team leader and the representative of the
+              team which is the one who create the team and submit the
+              registration.
+            </p>
+            <p className="text-sm text-red-500 text-start font-bold mt-2">
+              Please make sure your members have signed up or logged in on our
+              website and complete their profile before adding them to your
+              team.
+            </p>
           </div>
           <TeamForm user={user} />
         </div>
