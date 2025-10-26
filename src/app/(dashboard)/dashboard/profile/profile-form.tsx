@@ -118,10 +118,11 @@ function ProfileUpdateForm({ user }: { user: User }) {
         console.log(err.message);
       }
 
-      console.log({
-        ...formData,
-        birthDate: formData.birthDate?.toISOString(),
-      });
+      // Debugging
+      // console.log({
+      //   ...formData,
+      //   birthDate: formData.birthDate?.toISOString(),
+      // });
     } catch (error) {
       setIsLoading(false);
       toast.dismiss("update-profile");
