@@ -2,7 +2,6 @@
 
 import { IconDotsVertical, IconLogout } from "@tabler/icons-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,6 +49,7 @@ export function NavUser() {
                   src={user?.image as string}
                   alt={user?.name as string}
                   className="h-8 w-8 rounded-lg"
+                  classNameGoogleImage="rounded-lg object-cover w-full h-full"
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">

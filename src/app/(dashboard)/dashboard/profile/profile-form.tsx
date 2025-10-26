@@ -21,7 +21,6 @@ import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { CalendarDate } from "@internationalized/date";
 import { UploadButton } from "@/utils/uploadthing";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@prisma/client";
 import {
   Field,

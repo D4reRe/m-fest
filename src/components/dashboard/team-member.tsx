@@ -1,10 +1,20 @@
 import { auth } from "@/auth";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import { Users } from "lucide-react";
 import { Fragment } from "react";
 import { UserAvatar } from "../general/UserProfile";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "../ui/empty";
+import { IconUsers } from "@tabler/icons-react";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export async function TeamMembers() {
   const session = await auth();
@@ -20,6 +30,35 @@ export async function TeamMembers() {
       members: true,
     },
   });
+  if (!teams.length) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconUsers />
+          </EmptyMedia>
+          <EmptyTitle>No Teams Yet</EmptyTitle>
+          <EmptyDescription>
+            You haven&apos;t join or create any teams yet. Create your team by
+            clicking the button below.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <div className="flex gap-2">
+            <Link href="dashboard/team/create-team">
+              <Button className="cursor-pointer">Create team</Button>
+            </Link>
+          </div>
+        </EmptyContent>
+        <Button
+          variant="link"
+          asChild
+          className="text-muted-foreground"
+          size="sm"
+        ></Button>
+      </Empty>
+    );
+  }
   return (
     <section className="glass p-6">
       <h3 className="text-lg font-semibold text-foreground mb-6">Teams</h3>
@@ -52,7 +91,7 @@ export async function TeamMembers() {
                       alt={user?.name as string}
                       className="w-24 h-24 border-2 border-primary/50"
                     />
-                    <h4 className="font-medium text-foreground text-sm">
+                    <h4 className="font-medium text-foreground text-sm mt-3">
                       {user?.name}
                     </h4>
                     <p className="text-xs text-muted-foreground mt-1">

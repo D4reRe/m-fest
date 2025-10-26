@@ -10,8 +10,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 import { User } from "@prisma/client";
-import { Avatar } from "../ui/avatar";
-import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import { UserAvatar } from "./UserProfile";
 
 const menuItems = [

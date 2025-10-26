@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
 import { UserAvatar } from "@/components/general/UserProfile";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,7 +36,7 @@ export default async function TeamsPage() {
       members: true,
     },
   });
-  if (!teams) {
+  if (!teams.length) {
     return (
       <Empty>
         <EmptyHeader>
@@ -46,7 +45,7 @@ export default async function TeamsPage() {
           </EmptyMedia>
           <EmptyTitle>No Teams Yet</EmptyTitle>
           <EmptyDescription>
-            You haven&apos;t join or create any teams yet. Get registered by
+            You haven&apos;t join or create any teams yet. Create your team by
             clicking the button below.
           </EmptyDescription>
         </EmptyHeader>
@@ -57,12 +56,6 @@ export default async function TeamsPage() {
             </Link>
           </div>
         </EmptyContent>
-        <Button
-          variant="link"
-          asChild
-          className="text-muted-foreground"
-          size="sm"
-        ></Button>
       </Empty>
     );
   }
@@ -104,7 +97,7 @@ export default async function TeamsPage() {
                         alt={user?.name as string}
                         className="w-24 h-24 border-2 border-primary/50"
                       />
-                      <h4 className="font-medium text-foreground text-sm">
+                      <h4 className="font-medium text-foreground text-sm mt-3">
                         {user?.name}
                       </h4>
                       <p className="text-xs text-muted-foreground mt-1">

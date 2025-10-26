@@ -4,10 +4,12 @@ export function UserAvatar({
   src,
   alt,
   className,
+  classNameGoogleImage,
 }: {
   src: string;
   alt: string;
   className?: string;
+  classNameGoogleImage?: string;
 }) {
   const isGoogleImage = src?.startsWith("https://lh3.googleusercontent.com/");
   return (
@@ -16,7 +18,9 @@ export function UserAvatar({
         <img
           src={src}
           alt={alt}
-          className="rounded-full object-cover w-full h-full"
+          className={
+            classNameGoogleImage ?? "rounded-full object-cover w-full h-full"
+          }
           referrerPolicy="no-referrer"
         />
       ) : (
