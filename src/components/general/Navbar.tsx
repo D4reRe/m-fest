@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { User } from "@prisma/client";
 import { Avatar } from "../ui/avatar";
 import { AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { UserAvatar } from "./UserProfile";
 
 const menuItems = [
   { name: "Events", href: "/events" },
@@ -144,13 +145,11 @@ export const Navbar = ({ user }: { user: User }) => {
                 {status === "authenticated" && session?.user && (
                   <div className="flex gap-5 items-center">
                     {user.image ? (
-                      <Avatar className="h-15 w-15 border-2 border-primary/50">
-                        <AvatarImage
-                          src={user.image}
-                          alt={user.name ?? "User Image"}
-                        />
-                        <AvatarFallback className="animate-pulse"></AvatarFallback>
-                      </Avatar>
+                      <UserAvatar
+                        src={user.image as string}
+                        alt={user.name as string}
+                        className="w-15 h-15 border-2 border-primary/50"
+                      />
                     ) : (
                       <div className="flex items-center gap-2 animate-pulse">
                         <div className="w-8 h-8 rounded-full bg-gray-300" />

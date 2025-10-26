@@ -29,6 +29,7 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field";
+import { UserAvatar } from "@/components/general/UserProfile";
 
 const profileSchema = z.object({
   fullName: z.string().min(5),
@@ -139,15 +140,11 @@ function ProfileUpdateForm({ user }: { user: User }) {
           <div className="flex flex-col items-center justify-center gap-5">
             <div className="">
               {user.image && (
-                <>
-                  <Avatar className="w-32 h-32 border-2 border-primary/50">
-                    <AvatarImage
-                      src={user.image as string}
-                      alt={user.name as string}
-                    />
-                    <AvatarFallback className="animate-pulse"></AvatarFallback>
-                  </Avatar>
-                </>
+                <UserAvatar
+                  src={user.image as string}
+                  alt={user.name as string}
+                  className="w-32 h-32 border-2 border-primary/50"
+                />
               )}
             </div>
             <div>

@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { UserAvatar } from "@/components/general/UserProfile";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -98,19 +99,11 @@ export default async function TeamsPage() {
                       key={user?.id}
                       className="glass-sm p-4 flex flex-col items-center text-center"
                     >
-                      <Avatar className="w-24 h-24 border-2 border-primary/50 mb-3">
-                        <AvatarImage
-                          src={user?.image || "/placeholder.svg"}
-                          className="object-center"
-                          alt={user?.name || "User Image"}
-                        />
-                        <AvatarFallback className="bg-gradient-accent text-foreground font-bold">
-                          {(user?.name as string)
-                            .split(" ")
-                            .map((n) => n[0])
-                            .join("")}
-                        </AvatarFallback>
-                      </Avatar>
+                      <UserAvatar
+                        src={user?.image as string}
+                        alt={user?.name as string}
+                        className="w-24 h-24 border-2 border-primary/50"
+                      />
                       <h4 className="font-medium text-foreground text-sm">
                         {user?.name}
                       </h4>

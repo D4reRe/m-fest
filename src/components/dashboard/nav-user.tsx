@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { Skeleton } from "@heroui/react";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@prisma/client";
+import { UserAvatar } from "../general/UserProfile";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -45,16 +46,11 @@ export function NavUser() {
                 size="lg"
                 className="data-[state=open]:bg-white/20data-[state=open]:text-sidebar-accent-foreground hover:bg-white/20 "
               >
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src={
-                      (user?.image as string) ??
-                      "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
-                    }
-                    alt={(user?.name as string) ?? "User Image"}
-                  />
-                  <AvatarFallback className="rounded-lg h-8 w-8 bg-gray-500 animate-pulse"></AvatarFallback>
-                </Avatar>
+                <UserAvatar
+                  src={user?.image as string}
+                  alt={user?.name as string}
+                  className="h-8 w-8 rounded-lg"
+                />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">
                     {user?.name as string}

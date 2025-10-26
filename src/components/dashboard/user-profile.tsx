@@ -2,6 +2,7 @@ import { getUserProfile } from "@/action/user.action";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { UserAvatar } from "../general/UserProfile";
 
 export async function UserProfile() {
   const user = await getUserProfile();
@@ -9,15 +10,11 @@ export async function UserProfile() {
     <div className="glass p-6 space-y-6">
       <div className="flex flex-col items-center">
         {user?.image && (
-          <>
-            <Avatar className="w-32 h-32 border-2 border-primary/50">
-              <AvatarImage
-                src={user?.image as string}
-                alt={user?.name as string}
-              />
-              <AvatarFallback className="animate-pulse"></AvatarFallback>
-            </Avatar>
-          </>
+          <UserAvatar
+            src={user.image as string}
+            alt={user.name as string}
+            className="w-32 h-32 border-2 border-primary/50"
+          />
         )}
         <h2 className="mt-4 text-xl font-bold text-foreground text-center">
           {user?.name}

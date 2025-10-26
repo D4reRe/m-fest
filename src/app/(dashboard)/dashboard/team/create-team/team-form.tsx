@@ -5,7 +5,7 @@ import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
@@ -56,16 +56,6 @@ function TeamForm({ user }: { user: User }) {
           email: user?.email as string,
           role: "Leader",
         },
-        // {
-        //   name: "Muhamad Hanif Hafizhan",
-        //   email: "muhamadhanifhafizhan@gmail.com",
-        //   role: "Member",
-        // },
-        // {
-        //   name: "Alan Wake",
-        //   email: "envoyxexo@gmail.com",
-        //   role: "Member",
-        // },
       ],
     },
   });
@@ -120,6 +110,7 @@ function TeamForm({ user }: { user: User }) {
           router.refresh();
           window.location.reload();
         }, 500);
+        router.replace("/dashboard/team");
       } else {
         const { error, success } = await res.json();
         toast.dismiss("create-team");
