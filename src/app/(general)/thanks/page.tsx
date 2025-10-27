@@ -14,6 +14,9 @@ async function ThanksPage({
   }>;
 }) {
   const { transaction_status, order_id, status_code } = await searchParams;
+  if (!transaction_status || !order_id || !status_code) {
+    redirect("/");
+  }
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string;
 
   if (transaction_status === "pending") {
@@ -67,7 +70,7 @@ async function ThanksPage({
     },
     paymentData,
   });
-  const response = await fetch(`${baseUrl}/api/payment/verify`, {
+  const response = await fetch(`${baseUrl}/api/payment/check`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -86,8 +89,17 @@ async function ThanksPage({
   }
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex flex-col justify-center items-center h-screen gap-3">
       <h1 className="text-4xl font-bold">Your payment is successful!</h1>
+      <p className="text-xl flex flex-col items-center gap-5">
+        <span>Thank you for your payment!</span>
+        <Button
+          variant={"outline"}
+          className="hover:scale-105 hover:bg-white/25 transition-all"
+        >
+          <Link href="/dashboard/competitions">Go to Competitions</Link>
+        </Button>
+      </p>
     </div>
   );
 }

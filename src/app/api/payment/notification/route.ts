@@ -17,10 +17,10 @@ export async function POST(req: Request) {
   // with order_id + status_code + gross_amount + serverKey )
 
   // For debugging
-  // console.log("Payload", payload);
-  // console.log("order_id: ", order_id);
-  // console.log("status_code: ", status_code);
-  // console.log("gross_amount: ", gross_amount);
+  console.log("Payload", payload);
+  console.log("order_id: ", order_id);
+  console.log("status_code: ", status_code);
+  console.log("gross_amount: ", gross_amount);
   const secretKey = process.env.MIDTRANS_SECRET_KEY as string;
   console.log("secretKey: ", secretKey);
   const expectedSignature = crypto
@@ -29,12 +29,12 @@ export async function POST(req: Request) {
     .digest("hex");
 
   // For debugging
-  // console.log("Signature Key: ", signature_key);
-  // console.log("Expected Signature: ", expectedSignature);
-  // console.log(
-  //   "is Expected Signature not equal to Signature Key?: ",
-  //   expectedSignature !== signature_key
-  // );
+  console.log("Signature Key: ", signature_key);
+  console.log("Expected Signature: ", expectedSignature);
+  console.log(
+    "is Expected Signature not equal to Signature Key?: ",
+    expectedSignature !== signature_key
+  );
 
   if (expectedSignature !== signature_key) {
     return NextResponse.json({ message: "Invalid signature" }, { status: 403 });

@@ -142,10 +142,10 @@ export const Navbar = ({ user }: { user: User }) => {
                 )}
                 {status === "authenticated" && session?.user && (
                   <div className="flex gap-5 items-center">
-                    {user.image ? (
+                    {user?.image ? (
                       <UserAvatar
-                        src={user.image as string}
-                        alt={user.name as string}
+                        src={user?.image as string}
+                        alt={user?.name as string}
                         className="w-15 h-15 border-2 border-primary/50"
                       />
                     ) : (
@@ -155,7 +155,7 @@ export const Navbar = ({ user }: { user: User }) => {
                       </div>
                     )}
                     <p className={cn(isScrolled ? "lg:hidden" : "text-sm")}>
-                      {user.name}
+                      {user?.name}
                     </p>
                     <Button
                       variant="destructive"

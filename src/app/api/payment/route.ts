@@ -1,17 +1,7 @@
 import { getUserProfile } from "@/action/user.action";
-import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
 import { Snap } from "midtrans-client";
 import { NextResponse } from "next/server";
-
-enum CompetitionName {
-  BCC = "BCC",
-  IPPC = "IPPC",
-  PDC = "PDC",
-}
-
 export async function POST(request: Request) {
-  const session = await auth();
   const user = await getUserProfile();
 
   const snap = new Snap({
@@ -27,7 +17,6 @@ export async function POST(request: Request) {
     brand,
     category,
     merchant_name,
-    submittedData,
   } = await request.json();
 
   const parameter = {
@@ -54,47 +43,7 @@ export async function POST(request: Request) {
 
   const transactionData = await snap.createTransaction(parameter);
 
-  await prisma.payment.create({
-    data: {
-      orderId: id,
-      userId: session?.user.id,
-      amount: price * quantity,
-      competition: competitionName,
-      redirectUrl: transactionData.redirect_url,
-      snapToken: transactionData.token,
-    },
-  });
-
-  const thisTransaction = await prisma.payment.findUnique({
-    where: {
-      orderId: id,
-    },
-    select: {
-      orderId: true,
-    },
-  });
-
-  const registerData = await prisma.compRegistration.create({
-    data: {
-      teamName: submittedData.team as string,
-      competitionName: submittedData.competitionName as CompetitionName,
-      userId: user?.id as string,
-      teamId: submittedData.teamId as string,
-      paymentId: thisTransaction?.orderId as string,
-    },
-  });
-  await prisma.team.update({
-    where: {
-      id: submittedData.teamId,
-    },
-    data: {
-      paymentId: thisTransaction?.orderId as string,
-      competition: submittedData.competitionName as CompetitionName,
-      status: "pending",
-    },
-  });
-
   console.log(transactionData);
 
-  return NextResponse.json({ transactionData, registerData }, { status: 200 });
+  return NextResponse.json({ transactionData }, { status: 200 });
 }
