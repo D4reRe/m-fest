@@ -105,9 +105,8 @@ function TeamForm({ user }: { user: User }) {
         toast.success("Team created successfully!");
         setTimeout(() => {
           router.refresh();
-          window.location.reload();
+          router.replace("/dashboard/team");
         }, 500);
-        router.replace("/dashboard/team");
       } else {
         const { error, success } = await res.json();
         toast.dismiss("create-team");

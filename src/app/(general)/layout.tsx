@@ -6,7 +6,7 @@ import { User } from "@prisma/client";
 
 export const metadata: Metadata = {
   title: "Mechanical Festival 2026",
-  description: "official website of M-Fest for events and competitions",
+  description: "Official website of M-Fest for events and competitions",
 };
 
 export default async function RootLayout({
