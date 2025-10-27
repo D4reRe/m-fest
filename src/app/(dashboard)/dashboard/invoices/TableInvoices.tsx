@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function TableInvoices({ invoices }: { invoices }) {
+export default function TableInvoices({ invoices }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   async function refreshPayment(
@@ -48,46 +48,18 @@ export default function TableInvoices({ invoices }: { invoices }) {
         <TableColumn>INVOICE ID</TableColumn>
         <TableColumn>AMOUNT</TableColumn>
         <TableColumn>COMPETITION</TableColumn>
+        <TableColumn>TEAM</TableColumn>
         <TableColumn>INVOKED AT</TableColumn>
         <TableColumn>ACTION</TableColumn>
         <TableColumn>STATUS</TableColumn>
       </TableHeader>
-      {/* <TableBody>
-        <TableRow key="1">
-          <TableCell>Tony Reichert</TableCell>
-          <TableCell>CEO</TableCell>
-          <TableCell>Active</TableCell>
-          <TableCell>Something</TableCell>
-          <TableCell>Dummy</TableCell>
-        </TableRow>
-        <TableRow key="2">
-          <TableCell>Zoey Lang</TableCell>
-          <TableCell>Technical Lead</TableCell>
-          <TableCell>Paused</TableCell>
-          <TableCell>Something</TableCell>
-          <TableCell>Dummy</TableCell>
-        </TableRow>
-        <TableRow key="3">
-          <TableCell>Jane Fisher</TableCell>
-          <TableCell>Senior Developer</TableCell>
-          <TableCell>Active</TableCell>
-          <TableCell>Something</TableCell>
-          <TableCell>Dummy</TableCell>
-        </TableRow>
-        <TableRow key="4">
-          <TableCell>William Howard</TableCell>
-          <TableCell>Community Manager</TableCell>
-          <TableCell>Vacation</TableCell>
-          <TableCell>Something</TableCell>
-          <TableCell>Dummy</TableCell>
-        </TableRow>
-      </TableBody> */}
       <TableBody emptyContent={<span>No invoices found</span>}>
         {invoices.map((invoice) => (
           <TableRow key={invoice.id}>
             <TableCell>{invoice.orderId}</TableCell>
             <TableCell>{invoice.amount}</TableCell>
             <TableCell>{invoice.competition}</TableCell>
+            <TableCell>{invoice.team?.name ?? "Individual"}</TableCell>
             <TableCell>
               {new Date(invoice.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
@@ -104,7 +76,7 @@ export default function TableInvoices({ invoices }: { invoices }) {
                 <div className="flex items-center justify-between gap-3">
                   <Link
                     className="font-bold underline underline-offset-1"
-                    href={invoice.redirectUrl}
+                    href={invoice.redirectUrl as string}
                   >
                     Pay
                   </Link>
@@ -113,8 +85,8 @@ export default function TableInvoices({ invoices }: { invoices }) {
                     onClick={() =>
                       refreshPayment(
                         invoice.orderId,
-                        invoice.snapToken,
-                        invoice.redirectUrl
+                        invoice.snapToken as string,
+                        invoice.redirectUrl as string
                       )
                     }
                     disabled={isLoading}

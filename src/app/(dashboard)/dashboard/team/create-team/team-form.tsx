@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import { User } from "@prisma/client";
 import {
   Field,
@@ -37,9 +36,8 @@ const profileSchema = z.object({
 type profileSchema = z.infer<typeof profileSchema>;
 
 function TeamForm({ user }: { user: User }) {
-  const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -59,7 +57,6 @@ function TeamForm({ user }: { user: User }) {
       ],
     },
   });
-  const router = useRouter();
 
   const { fields, append, remove } = useFieldArray({
     control,

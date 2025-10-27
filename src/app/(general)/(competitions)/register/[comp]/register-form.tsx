@@ -1,8 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
@@ -12,22 +10,141 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { competitions } from "@/lib/competition";
+import { CompRegistration, Team, User } from "@prisma/client";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { educations } from "@/lib/profile";
 
-const registerSchema = z.object({
-  fullName: z.string().min(1, "Fullname is required"),
-  email: z.string().email("Invalid email").min(1, "Email is required"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-});
-type registerSchema = z.infer<typeof registerSchema>;
-
-function RegisterForm({ comp }: { comp: string }) {
+function RegisterForm({
+  comp,
+  user,
+  teams,
+  registeredCompetitions,
+}: {
+  comp: string;
+  user: User;
+  teams: Team[];
+  registeredCompetitions: CompRegistration[];
+}) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<registerSchema>({ resolver: zodResolver(registerSchema) });
   const router = useRouter();
+
+  // TODO: Register Check if user or team already registered for competition
+  const stemIsRegistered = registeredCompetitions.some(
+    (competition) => competition.competitionName === "STEM"
+  );
+  if (stemIsRegistered && comp.toUpperCase() === "STEM") {
+    return (
+      <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
+        <div className="text-center">
+          <h1 className="mb-1 mt-2 text-xl font-semibold">
+            You have already registered for STEM Competition
+          </h1>
+          <p className="text-sm">
+            Please contact us if you want to change your registration
+          </p>
+        </div>
+      </div>
+    );
+  }
+  const registeredTeams = registeredCompetitions.map(
+    (competition) => competition.teamId
+  );
+  console.log("Registered teams: ", registeredTeams);
+  const availableTeams = teams.filter(
+    (team) => !registeredTeams.includes(team.id)
+  );
+  console.log("Available teams: ", availableTeams);
+
+  if (!availableTeams.length) {
+    return (
+      <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
+        <div className="text-center">
+          <h1 className="mb-1 mt-2 text-xl font-semibold">
+            You have already registered for all available teams
+          </h1>
+          <p className="text-sm">
+            Please contact us if you want to change your registration
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const teamNames = availableTeams.map((team) => team.name);
+  const registerSchema = z.object({
+    competitionName: z.enum(["BCC", "IPPC", "PDC"]),
+    team: z.enum(teamNames as string[]),
+  });
+  type registerSchema = z.infer<typeof registerSchema>;
+
+  const stemRegisterSchema = z.object({
+    name: z.string().min(5),
+    gender: z.enum(["Male", "Female"]),
+    school: z.string().min(5),
+    email: z.string().email("Invalid email").min(1, "Email is required"),
+    phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
+    education: z.enum(["SMA", "SMK", "D3", "S1"]),
+    mentor: z.string().min(5),
+    competitionName: z.enum(["STEM"]),
+  });
+
+  type stemRegisterSchema = z.infer<typeof stemRegisterSchema>;
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { isSubmitting },
+  } = useForm<registerSchema>({ resolver: zodResolver(registerSchema) });
+
+  const {
+    control: stemControl,
+    handleSubmit: stemHandleSubmit,
+    reset: stemReset,
+    formState: { isSubmitting: stemIsSubmitting },
+  } = useForm<stemRegisterSchema>({
+    resolver: zodResolver(stemRegisterSchema),
+  });
+
+  useEffect(() => {
+    if (user && comp.toUpperCase() === "STEM") {
+      setTimeout(() => {
+        stemReset({
+          name: user?.name as string,
+          email: user?.email as string,
+          phoneNumber: user?.phoneNumber ?? "",
+          gender: user?.gender ?? undefined,
+          school: user?.institution ?? "",
+          education: user?.education ?? undefined,
+          competitionName: "STEM",
+        });
+      }, 500);
+    }
+  }, [stemReset, user, comp]);
+
+  useEffect(() => {
+    if (user && comp.toUpperCase() !== "STEM") {
+      setTimeout(() => {
+        // @ts-expect-error comp is string
+        reset({
+          competitionName: comp.toUpperCase(),
+        });
+      }, 500);
+    }
+  }, [reset, user, comp]);
 
   useEffect(() => {
     const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
@@ -44,32 +161,20 @@ function RegisterForm({ comp }: { comp: string }) {
     };
   }, []);
 
-  async function onSubmit(formData: registerSchema) {
-    setIsLoading(true);
-    toast.loading("Signing up...", { id: "signing-up" });
-    const res = await fetch("/api/auth/sign-up", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    setIsLoading(false);
-    if (res.ok) {
-      toast.success("Signed up successfully");
-      toast.dismiss("signing-up");
-      router.replace("/login");
-    } else {
-      const err = await res.json();
-      toast.error(err.error);
-    }
-  }
-
   function generateFeeId(): string {
     const timestamp = Date.now().toString(36); // time in base36
     const randomPart = Math.random().toString(36).substring(2, 10); // random chars
     return `FEE-${timestamp}-${randomPart}`.toUpperCase();
   }
 
-  const checkout = async () => {
+  const checkout = async (formData: registerSchema, comp: string) => {
+    const submittedData = {
+      competitionName: formData.competitionName,
+      team: formData.team,
+      userId: user.id,
+      teamId: teams.find((team) => team.name === formData.team)?.id,
+    };
+
     const data = {
       id: generateFeeId(),
       competitionName: `${
@@ -81,6 +186,7 @@ function RegisterForm({ comp }: { comp: string }) {
       brand: "Mechanical Festival 2026",
       category: "Competition Registration Fee",
       merchant_name: "Himpunan Mahasiswa Mesin ITB",
+      submittedData,
     };
 
     setIsLoading(true);
@@ -101,10 +207,6 @@ function RegisterForm({ comp }: { comp: string }) {
       // @ts-expect-error snap global object
       window.snap.pay(requestData.token, {
         onSuccess: async function (result) {
-          toast.dismiss("checking-out");
-          toast.success("Payment Successful!");
-          console.log("Payment success:", result);
-
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
@@ -112,12 +214,20 @@ function RegisterForm({ comp }: { comp: string }) {
             },
             body: JSON.stringify({ result }),
           });
-
-          router.replace("/dashboard/invoices");
+          toast.dismiss("checking-out");
+          toast.success("Payment Successful!");
+          console.log("Payment success:", result);
+          toast.dismiss("register-team");
+          toast.success("Team registered successfully!");
+          router.replace("/dashboard/competitions");
         },
         onPending: async (result: any) => {
           toast.dismiss("checking-out");
           toast.info("Payment Pending. Please complete the transaction.");
+          toast.dismiss("register-team");
+          toast.info(
+            "Please complete the transaction to complete the registration. "
+          );
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
@@ -143,7 +253,11 @@ function RegisterForm({ comp }: { comp: string }) {
         },
         onClose: async (result) => {
           toast.dismiss("checking-out");
-          toast.warning("Payment window closed before completing.");
+          toast.warning("Payment window closed before completing transaction.");
+          toast.dismiss("register-team");
+          toast.warning(
+            "Please complete the transaction to complete the registration."
+          );
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
@@ -161,10 +275,137 @@ function RegisterForm({ comp }: { comp: string }) {
       console.log(requestData);
       toast.dismiss("checking-out");
       toast.error("Failed to checkout");
+      const err = await response.json();
+      toast.error(err.error);
       return;
     }
     setIsLoading(false);
   };
+  const checkoutStem = async (formData: stemRegisterSchema, comp: string) => {
+    const submittedData = {
+      ...formData,
+    };
+
+    const data = {
+      id: generateFeeId(),
+      competitionName: `${
+        competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
+      }`,
+      price: competitions.find((c) => c.abbreviation === comp.toUpperCase())
+        ?.fee1,
+      quantity: 1,
+      brand: "Mechanical Festival 2026",
+      category: "Competition Registration Fee",
+      merchant_name: "Himpunan Mahasiswa Mesin ITB",
+      submittedData,
+    };
+
+    setIsLoading(true);
+    toast.loading("Checking out...", { id: "checking-out" });
+
+    const response = await fetch("/api/payment/stem", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const { transactionData: requestData } = await response.json();
+    console.log(requestData);
+    console.log(requestData.token);
+
+    if (response.ok) {
+      // @ts-expect-error snap global object
+      window.snap.pay(requestData.token, {
+        onSuccess: async function (result) {
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ result }),
+          });
+          toast.dismiss("checking-out");
+          toast.success("Payment Successful!");
+          console.log("Payment success:", result);
+          toast.dismiss("register-stem");
+          toast.success("You have registered successfully!");
+          router.replace("/dashboard/competitions");
+        },
+        onPending: async (result: any) => {
+          toast.dismiss("checking-out");
+          toast.info("Payment Pending. Please complete the transaction.");
+          toast.dismiss("register-stem");
+          toast.info(
+            "Please complete the transaction to complete the registration. "
+          );
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ result }),
+          });
+          console.log("Payment pending:", result);
+          router.replace("/dashboard/invoices");
+        },
+        onError: async (result: any) => {
+          toast.dismiss("checking-out");
+          toast.dismiss("register-stem");
+          toast.error("Payment Failed. Please try again.");
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ result }),
+          });
+          console.log("Payment error:", result);
+          router.replace("/dashboard/invoices");
+        },
+        onClose: async (result) => {
+          toast.dismiss("checking-out");
+          toast.warning("Payment window closed before completing transaction.");
+          toast.dismiss("register-stem");
+          toast.warning(
+            "Please complete the transaction to complete the registration."
+          );
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ result }),
+          });
+          console.log("Payment popup closed.");
+          router.replace("/dashboard/invoices");
+        },
+      });
+    }
+    if (!response.ok) {
+      setIsLoading(false);
+      console.log(requestData);
+      toast.dismiss("checking-out");
+      toast.error("Failed to checkout");
+      const err = await response.json();
+      toast.error(err.error);
+      return;
+    }
+    setIsLoading(false);
+  };
+
+  async function onSubmit(formData: registerSchema) {
+    setIsLoading(true);
+    toast.loading("Registering team...", { id: "register-team" });
+    await checkout(formData, comp);
+    setIsLoading(false);
+  }
+  async function stemOnSubmit(formData: stemRegisterSchema) {
+    setIsLoading(true);
+    toast.loading("Registering...", { id: "register-stem" });
+    await checkoutStem(formData, comp);
+    setIsLoading(false);
+  }
 
   return (
     <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
@@ -191,102 +432,347 @@ function RegisterForm({ comp }: { comp: string }) {
         <p className="text-sm">
           Please fill in the form below to register for {comp.toUpperCase()}
         </p>
+        <h2 className="text-lg text-center mt-2">
+          Fee:{" "}
+          <span className="font-bold italic">
+            Rp. {""}
+            {
+              competitions.find((c) => c.abbreviation === comp.toUpperCase())
+                ?.fee1
+            }
+          </span>
+        </h2>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
-        <div className="grid grid-cols-1 gap-3">
+      {comp === "stem" ? (
+        <form
+          onSubmit={stemHandleSubmit(stemOnSubmit)}
+          className="mt-6 space-y-6"
+        >
+          <div className="grid grid-cols-1 gap-3">
+            <div className="space-y-2">
+              <Controller
+                name="name"
+                control={stemControl}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor={field.name}>Fullname</FieldLabel>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      defaultValue={(user.name as string) ?? ""}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+          </div>
           <div className="space-y-2">
-            <Label htmlFor="fullName" className="block text-sm">
-              Fullname
-            </Label>
-            <Input {...register("fullName")} placeholder="John Doe" />
-            {errors.fullName && (
-              <p className="text-destructive text-sm">
-                {errors.fullName.message}
-              </p>
-            )}
+            <Controller
+              name="gender"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-language">
+                      Gender
+                    </FieldLabel>
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    defaultValue={(user.gender as string) ?? ""}
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-language"
+                      aria-invalid={fieldState.invalid}
+                      className="w-full"
+                    >
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            ></Controller>
           </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="email" className="block text-sm">
-            Email
-          </Label>
-          <Input {...register("email")} placeholder="johndoe@gmail.com" />
-          {errors.email && (
-            <p className="text-destructive text-sm">{errors.email.message}</p>
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="pwd" className="text-sm">
-              Password
-            </Label>
-            {/* <Button asChild variant="link" size="sm">
-            <Link href="#" className="link intent-info variant-ghost text-sm">
-              Forgot your Password ?
-            </Link>
-          </Button> */}
+          <div className="space-y-2">
+            <Controller
+              name="email"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    disabled
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
           </div>
-          <Input
-            {...register("password")}
-            placeholder="Your Password"
-            className="input sz-md variant-mixed"
-          />
-          {errors.password && (
-            <p className="text-destructive text-sm">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="fee" className="text-sm">
-            Fee :
-            <span className="font-bold italic">
-              Rp. {""}
-              {
-                competitions.find((c) => c.abbreviation === comp.toUpperCase())
-                  ?.fee1
-              }
-            </span>
-          </Label>
+          <div className="space-y-2">
+            <Controller
+              name="phoneNumber"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Phone Number</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    defaultValue={(user.phoneNumber as string) ?? ""}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="education"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-language">
+                      Current Education
+                    </FieldLabel>
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    defaultValue={(user.education as string) ?? "SMA"}
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-language"
+                      aria-invalid={fieldState.invalid}
+                      className="min-w-[120px]"
+                    >
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      {educations.map((education) => (
+                        <SelectItem key={education.key} value={education.key}>
+                          {education.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            ></Controller>
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="competitionName"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Competition</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    defaultValue={"STEM"}
+                    disabled
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="school"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>School</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    defaultValue={(user.institution as string) ?? ""}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="mentor"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Mentor</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
           <Button
-            type="button"
-            variant={"outline"}
-            onClick={checkout}
-            disabled={isLoading}
-            className={`*:
-          
-          ${isLoading ? "cursor-not-allowed" : "cursor-pointer"}
-          `}
+            className={`w-full ${
+              isLoading ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            disabled={stemIsSubmitting}
+            type="submit"
           >
-            {isLoading ? (
+            {stemIsSubmitting ? (
               <div className="flex gap-2">
-                <span>Checking out...</span>
+                <span>Registering...</span>
                 <Loader2 className="animate-spin" />
               </div>
             ) : (
-              "Checkout"
+              "Register"
             )}
           </Button>
-        </div>
-        <Button
-          className={`w-full ${
-            isLoading ? "cursor-not-allowed" : "cursor-pointer"
-          }`}
-          disabled={isSubmitting}
-          type="submit"
-        >
-          {isSubmitting ? (
-            <div className="flex gap-2">
-              <span>Submitting...</span>
-              <Loader2 className="animate-spin" />
+        </form>
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
+          <div className="grid grid-cols-1 gap-3">
+            <div className="space-y-2">
+              <Controller
+                name="team"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf-select-language">
+                        Team
+                      </FieldLabel>
+                    </FieldContent>
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id="form-rhf-select-language"
+                        aria-invalid={fieldState.invalid}
+                        className="w-full"
+                      >
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent position="item-aligned">
+                        {availableTeams.map((team) => (
+                          <SelectItem key={team.id} value={team.name as string}>
+                            {team.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              ></Controller>
             </div>
-          ) : (
-            "Submit"
-          )}
-        </Button>
-      </form>
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="competitionName"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf-select-language">
+                      Competition Name
+                    </FieldLabel>
+                  </FieldContent>
+                  <Select
+                    name={field.name}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    defaultValue={comp.toUpperCase()}
+                    disabled
+                  >
+                    <SelectTrigger
+                      id="form-rhf-select-language"
+                      aria-invalid={fieldState.invalid}
+                      className="w-full"
+                    >
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent position="item-aligned">
+                      <SelectItem value="BCC">BCC</SelectItem>
+                      <SelectItem value="IPPC">IPPC</SelectItem>
+                      <SelectItem value="PDC">PDC</SelectItem>
+                      <SelectItem value="STEM">STEM</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            ></Controller>
+          </div>
+          <Button
+            className={`w-full ${
+              isLoading ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            disabled={isSubmitting}
+            type="submit"
+          >
+            {isSubmitting ? (
+              <div className="flex gap-2">
+                <span>Registering...</span>
+                <Loader2 className="animate-spin" />
+              </div>
+            ) : (
+              "Register"
+            )}
+          </Button>
+        </form>
+      )}
     </div>
   );
 }

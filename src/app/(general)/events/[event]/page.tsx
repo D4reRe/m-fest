@@ -14,11 +14,23 @@ export async function generateMetadata({
   };
 }
 
+const EventsName = [
+  "m-care",
+  "m-run",
+  "engine-tune-up",
+  "m-talks",
+  "m-expo",
+  "ceremony",
+];
+
 async function CompPage({ params }: { params: Promise<{ event: string }> }) {
   const session = await auth();
-  if (!session) redirect("/login");
-
   const { event } = await params;
+  if (!session) redirect("/login");
+  if (!EventsName.includes(event)) {
+    redirect("/events");
+  }
+
   return (
     <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
       <div className="bg-muted m-auto h-fit w-full max-w-xl verflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
