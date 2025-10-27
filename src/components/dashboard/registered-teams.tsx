@@ -4,19 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { Users } from "lucide-react";
 import { Fragment } from "react";
 import { UserAvatar } from "../general/UserProfile";
-import {
-  Empty,
-  EmptyContent,
-  EmptyDescription,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "../ui/empty";
-import { IconUsers } from "@tabler/icons-react";
-import { Button } from "../ui/button";
-import Link from "next/link";
 
-export async function TeamMembers() {
+export async function RegisteredCompetitions() {
   const session = await auth();
   const teams = await prisma.team.findMany({
     where: {
@@ -25,40 +14,13 @@ export async function TeamMembers() {
           userId: session?.user.id,
         },
       },
+      status: "settlement",
     },
     include: {
       members: true,
     },
   });
-  if (!teams.length) {
-    return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <IconUsers />
-          </EmptyMedia>
-          <EmptyTitle>No Teams Yet</EmptyTitle>
-          <EmptyDescription>
-            You haven&apos;t join or create any teams yet. Create your team by
-            clicking the button below.
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <div className="flex gap-2">
-            <Link href="dashboard/team/create-team">
-              <Button className="cursor-pointer">Create team</Button>
-            </Link>
-          </div>
-        </EmptyContent>
-        <Button
-          variant="link"
-          asChild
-          className="text-muted-foreground"
-          size="sm"
-        ></Button>
-      </Empty>
-    );
-  }
+
   return (
     <section className="glass p-6">
       <h3 className="text-lg font-semibold text-foreground mb-6">Teams</h3>

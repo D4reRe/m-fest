@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { competitions } from "@/lib/competition";
-import { CompRegistration, Team, User } from "@prisma/client";
+import { CompRegistration, Team, TeamMember, User } from "@prisma/client";
 import {
   Field,
   FieldContent,
@@ -32,11 +32,13 @@ function RegisterForm({
   user,
   teams,
   registeredCompetitions,
+  teamMembers,
 }: {
   comp: string;
   user: User;
   teams: Team[];
   registeredCompetitions: CompRegistration[];
+  teamMembers: TeamMember[];
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
@@ -66,24 +68,32 @@ function RegisterForm({
   const availableTeams = teams.filter(
     (team) => !registeredTeams.includes(team.id)
   );
-  console.log("Available teams: ", availableTeams);
+  const leaderTeams = availableTeams.filter((team) => {
+    return teamMembers.some((member) => {
+      return member.teamId === team.id && member.role === "Leader";
+    });
+  });
 
-  if (!availableTeams.length) {
+  console.log("Available teams: ", leaderTeams);
+
+  if (!leaderTeams.length && comp.toUpperCase() !== "STEM") {
     return (
       <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
         <div className="text-center">
           <h1 className="mb-1 mt-2 text-xl font-semibold">
-            You have already registered for all available teams
+            You have already registered for all available teams or you are not a
+            leader of any team.
           </h1>
           <p className="text-sm">
-            Please contact us if you want to change your registration
+            Please contact us if you want to change your registration or create
+            a new team as a leader to register for a competition.
           </p>
         </div>
       </div>
     );
   }
 
-  const teamNames = availableTeams.map((team) => team.name);
+  const teamNames = leaderTeams.map((team) => team.name);
   const registerSchema = z.object({
     competitionName: z.enum(["BCC", "IPPC", "PDC"]),
     team: z.enum(teamNames as string[]),
@@ -698,7 +708,7 @@ function RegisterForm({
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent position="item-aligned">
-                        {availableTeams.map((team) => (
+                        {leaderTeams.map((team) => (
                           <SelectItem key={team.id} value={team.name as string}>
                             {team.name}
                           </SelectItem>

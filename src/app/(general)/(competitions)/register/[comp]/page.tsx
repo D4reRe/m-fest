@@ -3,7 +3,7 @@ import RegisterForm from "./register-form";
 import { redirect } from "next/navigation";
 import { getUserProfile } from "@/action/user.action";
 import { prisma } from "@/lib/prisma";
-import { Team, User, CompRegistration } from "@prisma/client";
+import { Team, User, CompRegistration, TeamMember } from "@prisma/client";
 
 export async function generateMetadata({
   params,
@@ -38,6 +38,11 @@ async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
       },
     },
   });
+  const teamMembers = await prisma.teamMember.findMany({
+    where: {
+      userId: session?.user.id,
+    },
+  });
   const registeredCompetitions = await prisma.compRegistration.findMany({
     where: {
       userId: session?.user.id,
@@ -51,6 +56,7 @@ async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
           user={user as User}
           teams={teams as Team[]}
           registeredCompetitions={registeredCompetitions as CompRegistration[]}
+          teamMembers={teamMembers as TeamMember[]}
         />
       </div>
     </section>

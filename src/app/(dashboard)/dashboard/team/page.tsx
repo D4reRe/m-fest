@@ -73,9 +73,14 @@ export default async function TeamsPage() {
             <Fragment key={team.id}>
               <div className="flex items-center gap-3 mb-6">
                 <Users className="w-6 h-6 text-primary" />
-                <h3 className="text-lg font-semibold text-foreground">
-                  {team.name}
-                </h3>
+                <div className="flex flex-col ">
+                  <h3 className="text-lg font-semibold text-foreground">
+                    {team.name}
+                  </h3>
+                  <h5 className="text-sm text-muted-foreground">
+                    {team.competition ?? "No competition"}
+                  </h5>
+                </div>
                 <Badge className="bg-primary/30 text-primary border-primary/50 ml-auto">
                   {team.members.length} members
                 </Badge>
@@ -107,7 +112,7 @@ export default async function TeamsPage() {
                         className={`mt-3 text-xs ${
                           member.role === "Leader"
                             ? "bg-primary/30 text-primary border-primary/50"
-                            : "bg-muted/30 text-muted-foreground border-muted/50"
+                            : "bg-primary/15 text-foreground border-muted/50"
                         } border`}
                       >
                         {member.role}

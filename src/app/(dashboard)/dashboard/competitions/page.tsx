@@ -17,36 +17,67 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import Link from "next/link";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { RegisteredCompetitions } from "@/components/dashboard/registered-teams";
 
-function CompPage() {
+async function CompPage() {
+  const session = await auth();
+  const teamMembers = await prisma.teamMember.findMany({
+    where: {
+      userId: session?.user.id,
+    },
+  });
+  const teamIds = teamMembers.map((member) => member.teamId);
+  const registeredCompetitions = await prisma.compRegistration.findMany({
+    where: {
+      teamId: {
+        in: teamIds,
+      },
+    },
+  });
+  if (!registeredCompetitions.length) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconListDetails />
+          </EmptyMedia>
+          <EmptyTitle>No Competitions Yet</EmptyTitle>
+          <EmptyDescription>
+            You haven&apos;t registered any competitions yet. Get registered by
+            clicking the button below.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <div className="flex gap-2">
+            <Button className="cursor-pointer">Register Competition</Button>
+          </div>
+        </EmptyContent>
+        <Button
+          variant="link"
+          asChild
+          className="text-muted-foreground"
+          size="sm"
+        >
+          <Link href="/competitions">
+            Learn More <ArrowUpRightIcon />
+          </Link>
+        </Button>
+      </Empty>
+    );
+  }
   return (
-    <Empty>
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <IconListDetails />
-        </EmptyMedia>
-        <EmptyTitle>No Competitions Yet</EmptyTitle>
-        <EmptyDescription>
-          You haven&apos;t registered any competitions yet. Get registered by
-          clicking the button below.
-        </EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent>
-        <div className="flex gap-2">
-          <Button className="cursor-pointer">Register Competition</Button>
-        </div>
-      </EmptyContent>
-      <Button
-        variant="link"
-        asChild
-        className="text-muted-foreground"
-        size="sm"
-      >
-        <Link href="/competitions">
-          Learn More <ArrowUpRightIcon />
-        </Link>
-      </Button>
-    </Empty>
+    <section className="min-h-screen bg-transparent">
+      <div className="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h3 className="text-3xl font-bold text-foreground">
+          Your Registered Competitions & Teams
+        </h3>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <RegisteredCompetitions />
+      </div>
+    </section>
   );
 }
 
