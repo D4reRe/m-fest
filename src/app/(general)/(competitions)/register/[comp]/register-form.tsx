@@ -43,7 +43,6 @@ function RegisterForm({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  // TODO: Register Check if user or team already registered for competition
   const stemIsRegistered = registeredCompetitions.some(
     (competition) => competition.competitionName === "STEM"
   );
@@ -185,7 +184,7 @@ function RegisterForm({
       teamId: teams.find((team) => team.name === formData.team)?.id,
     };
 
-    const data = {
+    const checkOutData = {
       id: generateFeeId(),
       competitionName: `${
         competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
@@ -196,7 +195,6 @@ function RegisterForm({
       brand: "Mechanical Festival 2026",
       category: "Competition Registration Fee",
       merchant_name: "Himpunan Mahasiswa Mesin ITB",
-      submittedData,
     };
 
     setIsLoading(true);
@@ -207,22 +205,27 @@ function RegisterForm({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(checkOutData),
     });
-    const { transactionData: requestData } = await response.json();
-    console.log(requestData);
-    console.log(requestData.token);
+    const { transactionData } = await response.json();
+    console.log(transactionData);
+    console.log(transactionData.token);
 
     if (response.ok) {
       // @ts-expect-error snap global object
-      window.snap.pay(requestData.token, {
+      window.snap.pay(transactionData.token, {
         onSuccess: async function (result) {
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ result }),
+            body: JSON.stringify({
+              result,
+              submittedData,
+              transactionData,
+              checkOutData,
+            }),
           });
           toast.dismiss("checking-out");
           toast.success("Payment Successful!");
@@ -243,46 +246,34 @@ function RegisterForm({
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ result }),
+            body: JSON.stringify({
+              result,
+              submittedData,
+              transactionData,
+              checkOutData,
+            }),
           });
           console.log("Payment pending:", result);
           router.replace("/dashboard/invoices");
         },
-        onError: async (result: any) => {
+        onError: (result: any) => {
           toast.dismiss("checking-out");
+          toast.dismiss("register-team");
           toast.error("Payment Failed. Please try again.");
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ result }),
-          });
           console.log("Payment error:", result);
-          router.replace("/dashboard/invoices");
         },
-        onClose: async (result) => {
+        onClose: (result) => {
           toast.dismiss("checking-out");
           toast.warning("Payment window closed before completing transaction.");
           toast.dismiss("register-team");
-          toast.warning(
-            "Please complete the transaction to complete the registration."
-          );
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ result }),
-          });
+          toast.warning("Your registration is not completed yet.");
           console.log("Payment popup closed.");
-          router.replace("/dashboard/invoices");
         },
       });
     }
     if (!response.ok) {
       setIsLoading(false);
-      console.log(requestData);
+      console.log(transactionData);
       toast.dismiss("checking-out");
       toast.error("Failed to checkout");
       const err = await response.json();
@@ -296,7 +287,7 @@ function RegisterForm({
       ...formData,
     };
 
-    const data = {
+    const checkOutData = {
       id: generateFeeId(),
       competitionName: `${
         competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
@@ -307,33 +298,37 @@ function RegisterForm({
       brand: "Mechanical Festival 2026",
       category: "Competition Registration Fee",
       merchant_name: "Himpunan Mahasiswa Mesin ITB",
-      submittedData,
     };
 
     setIsLoading(true);
     toast.loading("Checking out...", { id: "checking-out" });
 
-    const response = await fetch("/api/payment/stem", {
+    const response = await fetch("/api/payment/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(checkOutData),
     });
-    const { transactionData: requestData } = await response.json();
-    console.log(requestData);
-    console.log(requestData.token);
+    const { transactionData } = await response.json();
+    console.log(transactionData);
+    console.log(transactionData.token);
 
     if (response.ok) {
       // @ts-expect-error snap global object
-      window.snap.pay(requestData.token, {
+      window.snap.pay(transactionData.token, {
         onSuccess: async function (result) {
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ result }),
+            body: JSON.stringify({
+              result,
+              submittedData,
+              transactionData,
+              checkOutData,
+            }),
           });
           toast.dismiss("checking-out");
           toast.success("Payment Successful!");
@@ -354,47 +349,34 @@ function RegisterForm({
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ result }),
+            body: JSON.stringify({
+              result,
+              submittedData,
+              transactionData,
+              checkOutData,
+            }),
           });
           console.log("Payment pending:", result);
           router.replace("/dashboard/invoices");
         },
-        onError: async (result: any) => {
+        onError: (result: any) => {
           toast.dismiss("checking-out");
           toast.dismiss("register-stem");
           toast.error("Payment Failed. Please try again.");
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ result }),
-          });
           console.log("Payment error:", result);
-          router.replace("/dashboard/invoices");
         },
-        onClose: async (result) => {
+        onClose: (result) => {
           toast.dismiss("checking-out");
           toast.warning("Payment window closed before completing transaction.");
           toast.dismiss("register-stem");
-          toast.warning(
-            "Please complete the transaction to complete the registration."
-          );
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ result }),
-          });
+          toast.warning("Your registration is not completed yet.");
           console.log("Payment popup closed.");
-          router.replace("/dashboard/invoices");
         },
       });
     }
     if (!response.ok) {
       setIsLoading(false);
-      console.log(requestData);
+      console.log(transactionData);
       toast.dismiss("checking-out");
       toast.error("Failed to checkout");
       const err = await response.json();

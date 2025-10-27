@@ -24,7 +24,7 @@ export default function TableInvoices({ invoices }) {
     redirectUrl: string
   ) {
     setIsLoading(true);
-    const response = await fetch("/api/payment/verify", {
+    const response = await fetch("/api/payment/check", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
