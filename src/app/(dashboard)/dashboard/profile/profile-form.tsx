@@ -15,11 +15,10 @@ import * as z from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { DateInput, NumberInput } from "@heroui/react";
+import { NumberInput, Input as HeroInput } from "@heroui/react";
 import { educations } from "@/lib/profile";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { CalendarDate } from "@internationalized/date";
 import { UploadButton } from "@/utils/uploadthing";
 import { User } from "@prisma/client";
 import {
@@ -42,10 +41,7 @@ const profileSchema = z.object({
     .number<number>()
     .min(1, "Minimum semester is 1")
     .max(8, "Maximum semester is 8"),
-  birthDate: z.coerce.date<Date>({
-    error: (issue) =>
-      issue.input === undefined ? "Required field" : "Invalid date",
-  }),
+  birthDate: z.string().min(5, "Birth date is required"),
 });
 
 type profileSchema = z.infer<typeof profileSchema>;
@@ -87,6 +83,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
           major: user?.major ?? "",
           education: user?.education ?? undefined,
           semester: (user?.semester as unknown as number) ?? 1,
+          birthDate: user?.birthDate ?? "",
         });
       }, 500);
     }
@@ -106,7 +103,6 @@ function ProfileUpdateForm({ user }: { user: User }) {
         body: JSON.stringify({
           ...formData,
           name: formData.fullName,
-          birthDate: formData.birthDate?.toISOString(),
           email: session?.user?.email,
         }),
       });
@@ -412,31 +408,15 @@ function ProfileUpdateForm({ user }: { user: User }) {
             <Controller
               name="birthDate"
               control={control}
-              render={({
-                field: { name, onChange, onBlur, ref },
-                fieldState: { invalid, error },
-              }) => (
+              render={({ field, fieldState: { invalid, error } }) => (
                 <div className="flex w-full flex-col md:flex-nowrap gap-4">
-                  <DateInput
-                    className="w-full"
-                    variant="bordered"
-                    label={"Birth date"}
-                    name={name}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    ref={ref}
+                  <HeroInput
+                    label="Your Birth Date"
+                    placeholder="June 2 2005"
+                    {...field}
                     isInvalid={invalid}
-                    granularity="day"
                     errorMessage={error?.message}
-                    defaultValue={
-                      user.birthDate
-                        ? new CalendarDate(
-                            new Date(user.birthDate).getFullYear(),
-                            new Date(user.birthDate).getMonth() + 1,
-                            new Date(user.birthDate).getDate()
-                          )
-                        : undefined
-                    }
+                    variant="bordered"
                   />
                 </div>
               )}

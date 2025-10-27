@@ -89,7 +89,7 @@ model User {
   major             String?
   education         Education?
   semester          Int?
-  birthDate         DateTime?
+  birthDate         String?
   role              Role            @default(USER)
 
   twibbon           String?

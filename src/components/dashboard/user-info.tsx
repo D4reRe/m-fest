@@ -3,11 +3,6 @@ import { Mail, Phone, MapPin, Calendar } from "lucide-react";
 
 export async function UserInfo() {
   const user = await getUserProfile();
-  const date = new Date(user?.birthDate as Date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
 
   const infoItems = [
     {
@@ -28,7 +23,7 @@ export async function UserInfo() {
     {
       icon: Calendar,
       label: "Birth Date",
-      value: date || "Not set",
+      value: user?.birthDate || "Not set",
     },
   ];
 

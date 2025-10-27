@@ -12,14 +12,7 @@ export async function getUserProfile() {
   }
 
   const user = await prisma.user.findUnique({
-    where: session.user.id
-      ? { id: session.user.id }
-      : { email: session.user.email! },
-    include: {
-      team_member: true,
-      registration: true,
-      eventRegistration: true,
-    },
+    where: { email: session?.user?.email as string },
   });
 
   return user;
