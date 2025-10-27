@@ -14,25 +14,13 @@ export function UserAvatar({
   const isGoogleImage = src?.startsWith("https://lh3.googleusercontent.com/");
   return (
     <Avatar className={className}>
-      {isGoogleImage ? (
-        <img
-          src={src}
-          alt={alt}
-          className={
-            classNameGoogleImage ?? "rounded-full object-cover w-full h-full"
-          }
-          referrerPolicy="no-referrer"
-        />
-      ) : (
         <AvatarImage
           src={
-            src ??
-            "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
-          }
+            src ??   "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
+         
           alt={alt ?? "User's Image"}
           className="object-center"
         />
-      )}
       <AvatarFallback className="bg-gradient-accent text-foreground font-bold">
         {(alt as string)
           ? (alt as string)
