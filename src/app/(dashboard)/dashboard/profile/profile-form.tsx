@@ -37,7 +37,7 @@ const profileSchema = z.object({
   domicile: z.string().min(1, "Domicile is required"),
   institution: z.string().min(1, "institution is required"),
   major: z.string().min(1, "Major is required"),
-  education: z.enum(["SMP", "SMA", "SMK", "D3", "S1"]),
+  education: z.enum(["SMA", "SMK", "D3", "S1"]),
   semester: z.coerce
     .number<number>()
     .min(1, "Minimum semester is 1")
@@ -290,7 +290,9 @@ function ProfileUpdateForm({ user }: { user: User }) {
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Institution</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>
+                    Institution/School
+                  </FieldLabel>
                   <Input
                     {...field}
                     id={field.name}

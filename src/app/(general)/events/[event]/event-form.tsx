@@ -74,7 +74,7 @@ function EventForm({ event }: { event: string }) {
             : event.charAt(0).toUpperCase() + event.slice(1)}
         </h1>
         <p className="text-sm">
-          Please fill in the form below to register for{" "}
+          Register for{" "}
           {event.split("-").join(" ") === "engine tune up"
             ? "Engine Tune Up"
             : event.split("-")[0] === "M"
@@ -83,7 +83,7 @@ function EventForm({ event }: { event: string }) {
                 .charAt(0)
                 .toUpperCase()}${event.split("-")[1].slice(1)}`
             : event.charAt(0).toUpperCase() + event.slice(1)}{" "}
-          event
+          event will be coming soon. Stay tuned.
         </p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-6">
@@ -138,7 +138,7 @@ function EventForm({ event }: { event: string }) {
           className={`w-full ${
             isLoading ? "cursor-not-allowed" : "cursor-pointer"
           }`}
-          disabled={isSubmitting}
+          disabled={true as boolean}
           type="submit"
         >
           {isSubmitting ? (

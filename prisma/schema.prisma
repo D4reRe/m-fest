@@ -25,10 +25,10 @@ enum Education {
 }
 
 enum CompetitionName {
-  STEM
   PDC
   IPPC
   BCC
+  STEM
 }
 
 enum Gender {
@@ -39,13 +39,24 @@ enum Gender {
 model CompRegistration {
   id              String      @id @default(uuid())
   userId          String                                                      // Id User Leader
-  teamId          String      @unique                                         // Specific Team to register
+  teamName        String?
+  teamId          String?      @unique                                         // Specific Team to register
   paymentId       String      @unique                                         // Specific Payment to register
+  statusOrder     String?     @default("pending")
   competitionName CompetitionName
 
+  // STEM
+  name            String?
+  gender          Gender?
+  email           String?
+  phoneNumber     String?
+  education       Education?
+  school          String?
+  mentor          String?
+
   user            User?       @relation(fields: [userId], references: [id])   // Leader
-  team            Team        @relation(fields: [teamId], references: [id])
-  payment         Payment     @relation(fields: [paymentId], references: [id])
+  team            Team?        @relation(fields: [teamId], references: [id])
+  payment         Payment     @relation(fields: [paymentId], references: [orderId])
   
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
@@ -105,7 +116,13 @@ model Team {
   id            String    @id @default(cuid())
   name          String?   @unique
   competition   CompetitionName?
+  paymentId     String?   @unique
   members       TeamMember[]
+
+  status        String?   @default("pending")
+  payment       Payment?     @relation(fields: [paymentId], references: [orderId])
+
+
 
   registration  CompRegistration?
 
@@ -135,9 +152,10 @@ model Payment {
   orderId       String    @unique
   user          User?     @relation(fields : [userId], references: [id])
   userId        String?
-  status        String?   @default("Pending")
+  status        String?   @default("pending")
   competition   String?
   registration  CompRegistration?
+  team          Team?
   amount        Int
   redirectUrl   String?
   snapToken     String?

@@ -7,8 +7,6 @@ type Member = {
   role: "Leader" | "Member";
 };
 
-// TODO : Refactor this code
-
 export async function POST(req: Request) {
   const { name, userId, email, members } = await req.json();
   try {

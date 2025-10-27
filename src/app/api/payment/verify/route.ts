@@ -24,19 +24,50 @@ export async function POST(request: Request) {
     );
   }
   const status = await response.json();
-  console.log(status);
+  if (!status) {
+    return NextResponse.json({
+      error: "Failed to verify payment",
+      message: "No status returned",
+    });
+  }
 
   if (status.transaction_status === "settlement") {
     await prisma.payment.update({
       where: { orderId: result.order_id },
       data: { status: "settlement" },
     });
-    return NextResponse.json({ status: "success" }, { status: 200 });
+    await prisma.compRegistration.update({
+      where: { paymentId: result.order_id },
+      data: { statusOrder: "settlement" },
+    });
+    await prisma.team.update({
+      where: {
+        paymentId: result.order_id,
+      },
+      data: {
+        status: "settlement",
+      },
+    });
+    return NextResponse.json(
+      { status: "success", message: "Payment Successful" },
+      { status: 200 }
+    );
   } else {
     await prisma.payment.update({
       where: { orderId: result.order_id },
       data: { status: status.transaction_status, createdAt: new Date() },
     });
-    return NextResponse.json({ status: "failed" }, { status: 500 });
+    await prisma.compRegistration.update({
+      where: { paymentId: result.order_id },
+      data: { statusOrder: status.transaction_status },
+    });
+    await prisma.team.update({
+      where: {
+        paymentId: result.order_id,
+      },
+      data: {
+        status: status.transaction_status,
+      },
+    });
   }
 }

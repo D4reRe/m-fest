@@ -15,6 +15,11 @@ export async function getUserProfile() {
     where: session.user.id
       ? { id: session.user.id }
       : { email: session.user.email! },
+    include: {
+      team_member: true,
+      registration: true,
+      eventRegistration: true,
+    },
   });
 
   return user;

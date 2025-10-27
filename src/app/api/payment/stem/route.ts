@@ -4,12 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { Snap } from "midtrans-client";
 import { NextResponse } from "next/server";
 
-enum CompetitionName {
-  BCC = "BCC",
-  IPPC = "IPPC",
-  PDC = "PDC",
-}
-
 export async function POST(request: Request) {
   const session = await auth();
   const user = await getUserProfile();
@@ -76,21 +70,16 @@ export async function POST(request: Request) {
 
   const registerData = await prisma.compRegistration.create({
     data: {
-      teamName: submittedData.team as string,
-      competitionName: submittedData.competitionName as CompetitionName,
       userId: user?.id as string,
-      teamId: submittedData.teamId as string,
       paymentId: thisTransaction?.orderId as string,
-    },
-  });
-  await prisma.team.update({
-    where: {
-      id: submittedData.teamId,
-    },
-    data: {
-      paymentId: thisTransaction?.orderId as string,
-      competition: submittedData.competitionName as CompetitionName,
-      status: "pending",
+      competitionName: submittedData.competitionName,
+      name: submittedData.name,
+      gender: submittedData.gender,
+      email: submittedData.email,
+      phoneNumber: submittedData.phoneNumber,
+      education: submittedData.education,
+      school: submittedData.school,
+      mentor: submittedData.mentor,
     },
   });
 

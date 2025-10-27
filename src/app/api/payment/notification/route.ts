@@ -48,5 +48,19 @@ export async function POST(req: Request) {
     },
   });
 
+  await prisma.compRegistration.update({
+    where: { paymentId: order_id },
+    data: { statusOrder: transaction_status },
+  });
+
+  await prisma.team.update({
+    where: {
+      paymentId: order_id,
+    },
+    data: {
+      status: transaction_status,
+    },
+  });
+
   return NextResponse.json({ message: "OK" }, { status: 200 });
 }

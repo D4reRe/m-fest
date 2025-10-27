@@ -18,8 +18,12 @@ async function InvoicePage() {
     orderBy: {
       createdAt: "desc",
     },
+    include: {
+      team: true,
+      registration: true,
+      user: true,
+    },
   });
-
   return (
     <section className="flex min-h-screen mx-auto px-4 py-4 md:py-8">
       <div className="bg-transparent h-fit w-full max-w-xs md:max-w-7xl overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
