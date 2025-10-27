@@ -16,7 +16,7 @@ export function UserAvatar({
     <Avatar className={className}>
         <AvatarImage
           src={
-            src ??   "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
+            src ??   "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"}
          
           alt={alt ?? "User's Image"}
           className="object-center"
