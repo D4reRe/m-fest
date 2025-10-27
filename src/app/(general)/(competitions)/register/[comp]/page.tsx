@@ -29,6 +29,18 @@ async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
     }
   }
   const user = await getUserProfile();
+  if (
+    !user?.institution ||
+    !user?.major ||
+    !user?.education ||
+    !user?.semester ||
+    !user?.phoneNumber ||
+    !user?.domicile ||
+    !user?.birthDate ||
+    !user?.gender
+  ) {
+    redirect("/dashboard/profile?notif=incomplete_profile");
+  }
   const teams = await prisma.team.findMany({
     where: {
       members: {

@@ -20,6 +20,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { RegisteredCompetitions } from "@/components/dashboard/registered-teams";
+import { RegisteredStemCompetition } from "@/components/dashboard/registered-stem";
 
 async function CompPage() {
   const session = await auth();
@@ -36,47 +37,68 @@ async function CompPage() {
       },
     },
   });
-  if (!registeredCompetitions.length) {
-    return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <IconListDetails />
-          </EmptyMedia>
-          <EmptyTitle>No Competitions Yet</EmptyTitle>
-          <EmptyDescription>
-            You haven&apos;t registered any competitions yet. Get registered by
-            clicking the button below.
-          </EmptyDescription>
-        </EmptyHeader>
-        <EmptyContent>
-          <div className="flex gap-2">
-            <Button className="cursor-pointer">Register Competition</Button>
-          </div>
-        </EmptyContent>
-        <Button
-          variant="link"
-          asChild
-          className="text-muted-foreground"
-          size="sm"
-        >
-          <Link href="/competitions">
-            Learn More <ArrowUpRightIcon />
-          </Link>
-        </Button>
-      </Empty>
-    );
-  }
+
+  const stemComp = await prisma.compRegistration.findMany({
+    where: {
+      userId: session?.user.id,
+      competitionName: "STEM",
+    },
+  });
+
   return (
     <section className="min-h-screen bg-transparent">
       <div className="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h3 className="text-3xl font-bold text-foreground">
-          Your Registered Competitions & Teams
+          {registeredCompetitions.length ? "Your Competitions" : "Competitions"}
         </h3>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <RegisteredCompetitions />
+        {registeredCompetitions.length ? (
+          <RegisteredCompetitions />
+        ) : (
+          <Empty>
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <IconListDetails />
+              </EmptyMedia>
+              <EmptyTitle>No Competitions Yet</EmptyTitle>
+              <EmptyDescription>
+                You haven&apos;t registered any competitions yet. Get registered
+                by clicking the button below.
+              </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+              <div className="flex gap-2">
+                <Button className="cursor-pointer">
+                  <Link href="/competitions">Register Competition</Link>
+                </Button>
+              </div>
+            </EmptyContent>
+            <Button
+              variant="link"
+              asChild
+              className="text-muted-foreground"
+              size="sm"
+            >
+              <Link href="/competitions">
+                Learn More <ArrowUpRightIcon />
+              </Link>
+            </Button>
+          </Empty>
+        )}
       </div>
+      {stemComp.length ? (
+        <>
+          <div className="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <h3 className="text-3xl font-bold text-foreground">
+              STEM Competition
+            </h3>
+          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <RegisteredStemCompetition />
+          </div>
+        </>
+      ) : null}
     </section>
   );
 }

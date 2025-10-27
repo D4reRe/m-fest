@@ -12,7 +12,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { DateInput, NumberInput } from "@heroui/react";
@@ -53,6 +53,16 @@ type profileSchema = z.infer<typeof profileSchema>;
 function ProfileUpdateForm({ user }: { user: User }) {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const toastType = searchParams.get("notif");
+    if (toastType === "incomplete_profile") {
+      toast.info(
+        "Please complete your profile before registering for a competition."
+      );
+    }
+  }, [searchParams]);
 
   const {
     register,
