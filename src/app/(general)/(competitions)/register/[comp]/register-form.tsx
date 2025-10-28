@@ -30,20 +30,26 @@ import { educations } from "@/lib/profile";
 function RegisterForm({
   comp,
   user,
-  teams,
-  registeredCompetitions,
-  teamMembers,
+  teams: userTeams,
+  registeredCompetitions: userRegisteredCompetitions,
+  teamMembers: userTeamMembers,
+  allTeams,
+  allRegisteredTeams,
+  allTeamMembers,
 }: {
   comp: string;
   user: User;
   teams: Team[];
+  allTeams: Team[];
   registeredCompetitions: CompRegistration[];
   teamMembers: TeamMember[];
+  allRegisteredTeams: CompRegistration[];
+  allTeamMembers: TeamMember[];
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const stemIsRegistered = registeredCompetitions.some(
+  const stemIsRegistered = userRegisteredCompetitions.some(
     (competition) => competition.competitionName === "STEM"
   );
   if (stemIsRegistered && comp.toUpperCase() === "STEM") {
@@ -60,22 +66,22 @@ function RegisterForm({
       </div>
     );
   }
-  const registeredTeams = registeredCompetitions.map(
+  const userRegisteredTeams = userRegisteredCompetitions.map(
     (competition) => competition.teamId
   );
-  console.log("Registered teams: ", registeredTeams);
-  const availableTeams = teams.filter(
-    (team) => !registeredTeams.includes(team.id)
+  // console.log("Registered teams: ", userRegisteredTeams);
+  const userAvailableTeams = userTeams.filter(
+    (team) => !userRegisteredTeams.includes(team.id)
   );
-  const leaderTeams = availableTeams.filter((team) => {
-    return teamMembers.some((member) => {
+  const userAsLeaderTeams = userAvailableTeams.filter((team) => {
+    return userTeamMembers.some((member) => {
       return member.teamId === team.id && member.role === "Leader";
     });
   });
 
-  console.log("Available teams: ", leaderTeams);
+  // console.log("Available teams: ", userAsLeaderTeams);
 
-  if (!leaderTeams.length && comp.toUpperCase() !== "STEM") {
+  if (!userAsLeaderTeams.length && comp.toUpperCase() !== "STEM") {
     return (
       <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
         <div className="text-center">
@@ -92,7 +98,7 @@ function RegisterForm({
     );
   }
 
-  const teamNames = leaderTeams.map((team) => team.name);
+  const teamNames = userAsLeaderTeams.map((team) => team.name);
   const registerSchema = z.object({
     competitionName: z.enum(["BCC", "IPPC", "PDC"]),
     team: z.enum(teamNames as string[]),
@@ -181,7 +187,7 @@ function RegisterForm({
       competitionName: formData.competitionName,
       team: formData.team,
       userId: user.id,
-      teamId: teams.find((team) => team.name === formData.team)?.id,
+      teamId: userTeams.find((team) => team.name === formData.team)?.id,
     };
 
     const checkOutData = {
@@ -208,8 +214,8 @@ function RegisterForm({
       body: JSON.stringify(checkOutData),
     });
     const { transactionData } = await response.json();
-    console.log(transactionData);
-    console.log(transactionData.token);
+    // console.log(transactionData);
+    // console.log(transactionData.token);
 
     if (response.ok) {
       // @ts-expect-error snap global object
@@ -229,7 +235,7 @@ function RegisterForm({
           });
           toast.dismiss("checking-out");
           toast.success("Payment Successful!");
-          console.log("Payment success:", result);
+          // console.log("Payment success:", result);
           toast.dismiss("register-team");
           toast.success("Team registered successfully!");
           router.replace("/dashboard/competitions");
@@ -253,27 +259,27 @@ function RegisterForm({
               checkOutData,
             }),
           });
-          console.log("Payment pending:", result);
+          // console.log("Payment pending:", result);
           router.replace("/dashboard/invoices");
         },
         onError: (result: any) => {
           toast.dismiss("checking-out");
           toast.dismiss("register-team");
           toast.error("Payment Failed. Please try again.");
-          console.log("Payment error:", result);
+          // console.log("Payment error:", result);
         },
         onClose: (result) => {
           toast.dismiss("checking-out");
           toast.warning("Payment window closed before completing transaction.");
           toast.dismiss("register-team");
           toast.warning("Your registration is not completed yet.");
-          console.log("Payment popup closed.");
+          // console.log("Payment popup closed.");
         },
       });
     }
     if (!response.ok) {
       setIsLoading(false);
-      console.log(transactionData);
+      // console.log(transactionData);
       toast.dismiss("checking-out");
       toast.error("Failed to checkout");
       const err = await response.json();
@@ -311,8 +317,8 @@ function RegisterForm({
       body: JSON.stringify(checkOutData),
     });
     const { transactionData } = await response.json();
-    console.log(transactionData);
-    console.log(transactionData.token);
+    // console.log(transactionData);
+    // console.log(transactionData.token);
 
     if (response.ok) {
       // @ts-expect-error snap global object
@@ -332,7 +338,7 @@ function RegisterForm({
           });
           toast.dismiss("checking-out");
           toast.success("Payment Successful!");
-          console.log("Payment success:", result);
+          // console.log("Payment success:", result);
           toast.dismiss("register-stem");
           toast.success("You have registered successfully!");
           router.replace("/dashboard/competitions");
@@ -356,27 +362,27 @@ function RegisterForm({
               checkOutData,
             }),
           });
-          console.log("Payment pending:", result);
+          // console.log("Payment pending:", result);
           router.replace("/dashboard/invoices");
         },
         onError: (result: any) => {
           toast.dismiss("checking-out");
           toast.dismiss("register-stem");
           toast.error("Payment Failed. Please try again.");
-          console.log("Payment error:", result);
+          // console.log("Payment error:", result);
         },
         onClose: (result) => {
           toast.dismiss("checking-out");
           toast.warning("Payment window closed before completing transaction.");
           toast.dismiss("register-stem");
           toast.warning("Your registration is not completed yet.");
-          console.log("Payment popup closed.");
+          // console.log("Payment popup closed.");
         },
       });
     }
     if (!response.ok) {
       setIsLoading(false);
-      console.log(transactionData);
+      // console.log(transactionData);
       toast.dismiss("checking-out");
       toast.error("Failed to checkout");
       const err = await response.json();
@@ -389,8 +395,64 @@ function RegisterForm({
   async function onSubmit(formData: registerSchema) {
     setIsLoading(true);
     toast.loading("Registering team...", { id: "register-team" });
+
+    // TODO: Check if each team member have registered to same competition
+    const selectedTeam = userTeams.find((team) => team.name === formData.team);
+    console.log("Selected team: ", selectedTeam);
+    if (!selectedTeam) {
+      toast.dismiss("register-team");
+      toast.error("Team not found");
+      setIsLoading(false);
+      return;
+    }
+    // @ts-expect-error members is exist based on schema and prisma calls
+    const selectedTeamMembers = selectedTeam.members;
+    console.log("Team members: ", selectedTeamMembers);
+
+    const allRegisteredTeamIds = allRegisteredTeams.map(
+      (competition) => competition.teamId
+    );
+
+    const allTeamsIds = allTeams.map((team) => team.id);
+
+    console.log("All registered competitions team Ids: ", allRegisteredTeamIds);
+    console.log("All teams Ids: ", allTeamsIds);
+
+    const registeredTeamsOnThisComp = allTeams.filter(
+      (team) =>
+        allRegisteredTeamIds.includes(team.id) &&
+        team.competition === comp.toUpperCase()
+    );
+    console.log("Registered teams on this Comp: ", registeredTeamsOnThisComp);
+
+    const registeredTeamsMembersOnThisComp = allTeamMembers.filter((member) =>
+      registeredTeamsOnThisComp.some((team) => team.id === member.teamId)
+    );
+    console.log(
+      "Registered teams members on this Comp: ",
+      registeredTeamsMembersOnThisComp
+    );
+
+    const isTeamMemberRegisteredOnThisComp = selectedTeamMembers.some(
+      (member) => {
+        return registeredTeamsMembersOnThisComp.some(
+          (registeredMember) => registeredMember.email === member.email
+        );
+      }
+    );
+
+    if (isTeamMemberRegisteredOnThisComp) {
+      toast.error(
+        "One or more team members have already registered for this competition"
+      );
+      setIsLoading(false);
+      toast.dismiss("register-team");
+      return;
+    }
+
     await checkout(formData, comp);
     setIsLoading(false);
+    return;
   }
   async function stemOnSubmit(formData: stemRegisterSchema) {
     setIsLoading(true);
@@ -690,7 +752,7 @@ function RegisterForm({
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent position="item-aligned">
-                        {leaderTeams.map((team) => (
+                        {userAsLeaderTeams.map((team) => (
                           <SelectItem key={team.id} value={team.name as string}>
                             {team.name}
                           </SelectItem>

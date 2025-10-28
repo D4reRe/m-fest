@@ -19,8 +19,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 
-const profileSchema = z.object({
-  teamName: z.string().min(8),
+const teamSchema = z.object({
+  teamName: z.string().min(1),
   members: z
     .array(
       z.object({
@@ -33,7 +33,7 @@ const profileSchema = z.object({
     .max(5, "Maximum 5 members allowed"),
 });
 
-type profileSchema = z.infer<typeof profileSchema>;
+type teamSchema = z.infer<typeof teamSchema>;
 
 function TeamForm({ user }: { user: User }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -44,8 +44,8 @@ function TeamForm({ user }: { user: User }) {
     control,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<profileSchema>({
-    resolver: zodResolver(profileSchema),
+  } = useForm<teamSchema>({
+    resolver: zodResolver(teamSchema),
     defaultValues: {
       teamName: "",
       members: [
@@ -63,7 +63,7 @@ function TeamForm({ user }: { user: User }) {
     name: "members",
   });
 
-  async function onSubmit(formData: profileSchema) {
+  async function onSubmit(formData: teamSchema) {
     setIsLoading(true);
     toast.loading("Creating team....", {
       id: "create-team",
