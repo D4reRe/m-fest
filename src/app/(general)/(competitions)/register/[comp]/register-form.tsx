@@ -433,6 +433,17 @@ function RegisterForm({
       registeredTeamsMembersOnThisComp
     );
 
+    const selectedTeamMembersEmails = selectedTeamMembers.map(
+      (member) => member.email
+    );
+    console.log("Selected team members emails: ", selectedTeamMembersEmails);
+    const registeredTeamsMembersEmailsOnThisComp =
+      registeredTeamsMembersOnThisComp.map((member) => member.email);
+    console.log(
+      `Registered teams members emails : `,
+      registeredTeamsMembersEmailsOnThisComp
+    );
+
     const isTeamMemberRegisteredOnThisComp = selectedTeamMembers.some(
       (member) => {
         return registeredTeamsMembersOnThisComp.some(
@@ -441,9 +452,14 @@ function RegisterForm({
       }
     );
 
+    console.log(
+      `Is one or more team member registered on this ${comp.toUpperCase()} comp: `,
+      isTeamMemberRegisteredOnThisComp
+    );
+
     if (isTeamMemberRegisteredOnThisComp) {
       toast.error(
-        "One or more team members have already registered for this competition"
+        `One or more team members have already registered for ${comp.toUpperCase()}`
       );
       setIsLoading(false);
       toast.dismiss("register-team");

@@ -6,6 +6,8 @@ import SessionProviders from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { HeroUIProvider } from "@heroui/react";
 import StoryblokProvider from "@/components/StoryblokProvider";
+import NextTopLoader from "nextjs-toploader";
+import RouteLoader from "@/components/general/RouteLoader";
 
 export default function RootLayout({
   children,
@@ -26,6 +28,12 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
+                <NextTopLoader
+                  color="hsl(var(--primary))"
+                  height={10}
+                  showSpinner={true}
+                />
+                <RouteLoader />
                 {children}
 
                 <Toaster />
