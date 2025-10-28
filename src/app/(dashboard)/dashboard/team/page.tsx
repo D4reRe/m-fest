@@ -78,7 +78,9 @@ export default async function TeamsPage() {
                     {team.name}
                   </h3>
                   <h5 className="text-sm text-muted-foreground">
-                    {team.competition ?? "No competition"}
+                    {team.competition && team.status === "settlement"
+                      ? team.competition
+                      : "No competition"}
                   </h5>
                 </div>
                 <Badge className="bg-primary/30 text-primary border-primary/50 ml-auto">

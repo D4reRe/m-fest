@@ -35,6 +35,7 @@ async function CompPage() {
       teamId: {
         in: teamIds,
       },
+      statusOrder: "settlement",
     },
   });
 
@@ -42,6 +43,7 @@ async function CompPage() {
     where: {
       userId: session?.user.id,
       competitionName: "STEM",
+      statusOrder: "settlement",
     },
   });
 
