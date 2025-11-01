@@ -9,29 +9,42 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { User } from "@prisma/client";
-import {
-  Field,
-  FieldGroup,
-  FieldLegend,
-  FieldDescription,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
-const teamSchema = z.object({
-  teamName: z.string().min(1),
-  members: z
-    .array(
-      z.object({
-        name: z.string().min(5, "Name must be member's fullname"),
-        email: z.string().email("Invalid email"),
-        role: z.enum(["Leader", "Member"]),
-      })
-    )
-    .min(3, "Minimum 3 members required")
-    .max(5, "Maximum 5 members allowed"),
-});
+const teamSchema = z
+  .object({
+    teamName: z.string().min(1),
+    members: z
+      .array(
+        z.object({
+          name: z.string().min(5, "Name must be member's fullname"),
+          email: z.string().email("Invalid email"),
+          role: z.enum(["Leader", "Member"]),
+        })
+      )
+      .min(3, "Minimum 3 members required")
+      .max(5, "Maximum 5 members allowed"),
+  })
+  .superRefine((data, context) => {
+    const emails = data.members.map((member) =>
+      member.email.toLowerCase().trim()
+    );
+    const duplicates = emails.filter(
+      (email, index) => emails.indexOf(email) !== index
+    );
+    if (duplicates.length > 0) {
+      toast.error(
+        `Duplicate emails detected: ${[...new Set(duplicates)].join(", ")}`
+      );
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `Duplicate emails detected: ${[...new Set(duplicates)].join(
+          ", "
+        )}`,
+        path: ["members"],
+      });
+    }
+  });
 
 type teamSchema = z.infer<typeof teamSchema>;
 
@@ -43,6 +56,7 @@ function TeamForm({ user }: { user: User }) {
     handleSubmit,
     control,
     reset,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<teamSchema>({
     resolver: zodResolver(teamSchema),
@@ -164,7 +178,7 @@ function TeamForm({ user }: { user: User }) {
                         id={field.name}
                         aria-invalid={fieldState.invalid}
                         readOnly={index === 0}
-                        disabled={index === 0}
+                        disabled
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -184,6 +198,44 @@ function TeamForm({ user }: { user: User }) {
                         aria-invalid={fieldState.invalid}
                         readOnly={index === 0}
                         disabled={index === 0}
+                        onBlur={async (event) => {
+                          const email = event.target.value.trim();
+                          if (email) {
+                            try {
+                              toast.loading("Checking user...", {
+                                id: "checking-user",
+                              });
+                              const res = await fetch(
+                                `/api/user/by-email?email=${email}`
+                              );
+                              const user = await res.json();
+                              console.log("User: ", user);
+
+                              if (res.ok && user) {
+                                toast.dismiss("checking-user");
+                                const userName = user.name;
+                                toast.success(
+                                  `${userName} is a registered member with email ${email}`
+                                );
+
+                                // Update value of the userName
+                                const values = getValues();
+                                values.members[index].name = userName;
+                                reset(values);
+                              } else {
+                                toast.dismiss("checking-user");
+                                toast.error(
+                                  `Email ${email} is not registered.`
+                                );
+                              }
+                            } catch (error) {
+                              toast.dismiss("checking-user");
+                              toast.error("Failed to check user", {
+                                description: (error as Error).message,
+                              });
+                            }
+                          }
+                        }}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
