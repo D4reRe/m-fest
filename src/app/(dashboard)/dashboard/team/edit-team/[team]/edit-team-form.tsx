@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { User } from "@prisma/client";
+import { Team, User } from "@prisma/client";
 import {
   Field,
   FieldGroup,
@@ -35,7 +35,7 @@ const teamSchema = z.object({
 
 type teamSchema = z.infer<typeof teamSchema>;
 
-function TeamForm({ user }: { user: User }) {
+function TeamForm({ user, team }: { user: User; team: Team }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const {
@@ -47,13 +47,18 @@ function TeamForm({ user }: { user: User }) {
   } = useForm<teamSchema>({
     resolver: zodResolver(teamSchema),
     defaultValues: {
-      teamName: "",
+      teamName: team.name as string,
       members: [
-        {
-          name: user?.name as string,
-          email: user?.email as string,
-          role: "Leader",
-        },
+        // @ts-expect-error members is exist if include members when prisma calls within Team Type
+        ...team.members.map((member) => {
+          return {
+            name:
+              member.userId === user.id ? user.name : (member.name as string),
+            email: member.email as string,
+            userId: member.userId as string,
+            role: member.role as "Leader" | "Member",
+          };
+        }),
       ],
     },
   });
@@ -65,35 +70,37 @@ function TeamForm({ user }: { user: User }) {
 
   async function onSubmit(formData: teamSchema) {
     setIsLoading(true);
-    toast.loading("Creating team....", {
-      id: "create-team",
+    toast.loading("Editing team....", {
+      id: "edit-team",
     });
     if (formData.members.length < 3) {
-      toast.dismiss("create-team");
+      toast.dismiss("edit-team");
       setIsLoading(false);
       toast.error("You must have at least 3 team members!");
       return;
     }
     if (formData.members.length > 5) {
-      toast.dismiss("create-team");
+      toast.dismiss("edit-team");
       setIsLoading(false);
       toast.error("You cannot have more than 5 members!");
       return;
     }
+
     // Debugging
-    console.log({
-      ...formData,
-    });
+    // console.log({
+    //   ...formData,
+    // });
+
     try {
-      const res = await fetch("/api/team/create-team", {
+      const res = await fetch("/api/team/edit-team", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: formData.teamName,
           userId: user?.id,
           email: user?.email,
+          teamId: team.id,
           ...formData,
         }),
       });
@@ -101,24 +108,24 @@ function TeamForm({ user }: { user: User }) {
       setIsLoading(false);
 
       if (res.ok) {
-        toast.dismiss("create-team");
-        toast.success("Team created successfully!");
+        toast.dismiss("edit-team");
+        toast.success("Team edited successfully!");
         setTimeout(() => {
           router.refresh();
           router.replace("/dashboard/team");
         }, 500);
       } else {
         const { error, success } = await res.json();
-        toast.dismiss("create-team");
-        toast.error("Failed to create team", {
+        toast.dismiss("edit-team");
+        toast.error("Failed to edit team", {
           description: error,
         });
         console.log(error);
       }
     } catch (error) {
       setIsLoading(false);
-      toast.dismiss("create-team");
-      toast.error("Failed to create team", {
+      toast.dismiss("edit-team");
+      toast.error("Failed to edit team", {
         description: (error as Error).message,
       });
     }
@@ -256,11 +263,11 @@ function TeamForm({ user }: { user: User }) {
           >
             {isSubmitting ? (
               <div className="flex gap-2">
-                <span>Creating Team...</span>
+                <span>Editing Team...</span>
                 <Loader2 className="animate-spin" />
               </div>
             ) : (
-              "Create Team"
+              "Edit Team"
             )}
           </Button>
         </div>
