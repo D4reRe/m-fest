@@ -1,6 +1,5 @@
 import { Cpu, Lock, Sparkles, Zap } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { competitions } from "@/lib/competition";
 
 export default function CompetitionsSection() {
@@ -27,29 +26,14 @@ export default function CompetitionsSection() {
                   width={2797}
                   height={1137}
                 />
-                {/* <Image
-                  src="/mail-back.png"
-                  className="hidden dark:block"
-                  alt="payments illustration dark"
-                  width={2797}
-                  height={1137}
-                />
-                <Image
-                  src="/mail-back-light.png"
-                  className="dark:hidden"
-                  alt="payments illustration light"
-                  width={2797}
-                  height={1137}
-                /> */}
               </div>
             </div>
           </div>
         </div>
         <div className="relative mx-auto grid grid-cols-2 gap-x-3 gap-y-6 sm:gap-8 lg:grid-cols-4">
           {competitions.map((comp) => (
-            <Link
+            <div
               key={comp.title}
-              href={`/register/${comp.abbreviation.toLowerCase()}`}
               className="space-y-3 hover:scale-105 transition-all"
             >
               <div className="flex items-center gap-2">
@@ -65,7 +49,7 @@ export default function CompetitionsSection() {
                 <h3 className="text-sm font-medium">{comp.abbreviation}</h3>
               </div>
               <p className="text-muted-foreground text-sm">{comp.title}</p>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
