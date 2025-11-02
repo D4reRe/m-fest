@@ -11,46 +11,67 @@ import { toast } from "sonner";
 import { User } from "@prisma/client";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
-const teamSchema = z
-  .object({
-    teamName: z.string().min(1),
-    members: z
-      .array(
-        z.object({
-          name: z.string().min(5, "Name must be member's fullname"),
-          email: z.string().email("Invalid email"),
-          role: z.enum(["Leader", "Member"]),
-        })
-      )
-      .min(3, "Minimum 3 members required")
-      .max(5, "Maximum 5 members allowed"),
-  })
-  .superRefine((data, context) => {
-    const emails = data.members.map((member) =>
-      member.email.toLowerCase().trim()
-    );
-    const duplicates = emails.filter(
-      (email, index) => emails.indexOf(email) !== index
-    );
-    if (duplicates.length > 0) {
-      toast.error(
-        `Duplicate emails detected: ${[...new Set(duplicates)].join(", ")}`
-      );
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: `Duplicate emails detected: ${[...new Set(duplicates)].join(
-          ", "
-        )}`,
-        path: ["members"],
-      });
-    }
-  });
-
-type teamSchema = z.infer<typeof teamSchema>;
-
 function TeamForm({ user }: { user: User }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const teamSchema = z
+    .object({
+      teamName: z.string().min(1),
+      members: z
+        .array(
+          z.object({
+            name: z.string().min(5, "Name must be member's fullname"),
+            email: z.string().email("Invalid email"),
+            institution: z.string().min(5, "Institution is required"),
+            role: z.enum(["Leader", "Member"]),
+          })
+        )
+        .min(3, "Minimum 3 members required")
+        .max(5, "Maximum 5 members allowed"),
+    })
+    .superRefine((data, context) => {
+      const emails = data.members.map((member) =>
+        member.email.toLowerCase().trim()
+      );
+      const members = data.members;
+      const duplicates = emails.filter(
+        (email, index) => emails.indexOf(email) !== index
+      );
+      const differentInstitutions = members
+        .filter((member) => member.institution !== user.institution)
+        .map((member) => member.name);
+      if (duplicates.length > 0) {
+        toast.error(
+          `Duplicate emails detected: ${[...new Set(duplicates)].join(", ")}`
+        );
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Duplicate emails detected: ${[...new Set(duplicates)].join(
+            ", "
+          )}`,
+          path: ["members"],
+        });
+      }
+      if (differentInstitutions.length > 0) {
+        toast.error(
+          `Members from different Institutions detected: ${[
+            ...new Set(differentInstitutions),
+          ].join(", ")}`,
+          {
+            description: "All members must be from the same institution.",
+          }
+        );
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Duplicate Institutions detected: ${[
+            ...new Set(duplicates),
+          ].join(", ")}`,
+          path: ["institutions"],
+        });
+      }
+    });
+
+  type teamSchema = z.infer<typeof teamSchema>;
   const {
     register,
     handleSubmit,
@@ -66,6 +87,7 @@ function TeamForm({ user }: { user: User }) {
         {
           name: user?.name as string,
           email: user?.email as string,
+          institution: user?.institution as string,
           role: "Leader",
         },
       ],
@@ -94,10 +116,6 @@ function TeamForm({ user }: { user: User }) {
       toast.error("You cannot have more than 5 members!");
       return;
     }
-    // Debugging
-    console.log({
-      ...formData,
-    });
     try {
       const res = await fetch("/api/team/create-team", {
         method: "POST",
@@ -172,7 +190,9 @@ function TeamForm({ user }: { user: User }) {
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Member Name</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Member&apos;s Name
+                      </FieldLabel>
                       <Input
                         {...field}
                         id={field.name}
@@ -191,7 +211,9 @@ function TeamForm({ user }: { user: User }) {
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Member Email</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Member&apos;s Email
+                      </FieldLabel>
                       <Input
                         {...field}
                         id={field.name}
@@ -209,11 +231,11 @@ function TeamForm({ user }: { user: User }) {
                                 `/api/user/by-email?email=${email}`
                               );
                               const user = await res.json();
-                              console.log("User: ", user);
 
                               if (res.ok && user) {
                                 toast.dismiss("checking-user");
                                 const userName = user.name;
+                                const userInstitution = user.institution;
                                 toast.success(
                                   `${userName} is a registered member with email ${email}`
                                 );
@@ -221,6 +243,8 @@ function TeamForm({ user }: { user: User }) {
                                 // Update value of the userName
                                 const values = getValues();
                                 values.members[index].name = userName;
+                                values.members[index].institution =
+                                  userInstitution;
                                 reset(values);
                               } else {
                                 toast.dismiss("checking-user");
@@ -244,11 +268,34 @@ function TeamForm({ user }: { user: User }) {
                   )}
                 />
                 <Controller
+                  name={`members.${index}.institution`}
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        Member&apos;s Institution
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                        readOnly={index === 0}
+                        disabled
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+                <Controller
                   name={`members.${index}.role`}
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Member Role</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Member&apos;s Role
+                      </FieldLabel>
                       <Input
                         {...field}
                         id={field.name}
@@ -275,7 +322,12 @@ function TeamForm({ user }: { user: User }) {
                       type="button"
                       variant={"outline"}
                       onClick={() =>
-                        append({ name: "", email: "", role: "Member" })
+                        append({
+                          name: "",
+                          email: "",
+                          institution: "",
+                          role: "Member",
+                        })
                       }
                       className="cusor-pointer"
                     >

@@ -104,39 +104,41 @@ export async function TeamMembers() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-                {team.members.map(async (member) => {
-                  const user = await prisma.user.findUnique({
-                    where: { id: member.userId },
-                  });
+                {team.members
+                  .sort((a, b) => (a.role === "Leader" ? -1 : 1))
+                  .map(async (member) => {
+                    const user = await prisma.user.findUnique({
+                      where: { id: member.userId },
+                    });
 
-                  return (
-                    <div
-                      key={user?.id}
-                      className="glass-sm p-4 flex flex-col items-center text-center"
-                    >
-                      <UserAvatar
-                        src={user?.image as string}
-                        alt={user?.name as string}
-                        className="w-24 h-24 border-2 border-primary/50"
-                      />
-                      <h4 className="font-medium text-foreground text-sm mt-3">
-                        {user?.name}
-                      </h4>
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {user?.institution}
-                      </p>
-                      <Badge
-                        className={`mt-3 text-xs ${
-                          member.role === "Leader"
-                            ? "bg-primary/30 text-primary border-primary/50"
-                            : "bg-primary/15 text-foreground border-muted/50"
-                        } border`}
+                    return (
+                      <div
+                        key={user?.id}
+                        className="glass-sm p-4 flex flex-col items-center text-center"
                       >
-                        {member.role}
-                      </Badge>
-                    </div>
-                  );
-                })}
+                        <UserAvatar
+                          src={user?.image as string}
+                          alt={user?.name as string}
+                          className="w-24 h-24 border-2 border-primary/50"
+                        />
+                        <h4 className="font-medium text-foreground text-sm mt-3">
+                          {user?.name}
+                        </h4>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {user?.institution}
+                        </p>
+                        <Badge
+                          className={`mt-3 text-xs ${
+                            member.role === "Leader"
+                              ? "bg-primary/30 text-primary border-primary/50"
+                              : "bg-primary/15 text-foreground border-muted/50"
+                          } border`}
+                        >
+                          {member.role}
+                        </Badge>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </Fragment>

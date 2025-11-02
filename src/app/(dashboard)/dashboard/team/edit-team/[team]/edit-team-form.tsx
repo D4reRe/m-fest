@@ -11,45 +11,75 @@ import { toast } from "sonner";
 import { Team, User } from "@prisma/client";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
-const teamSchema = z
-  .object({
-    teamName: z.string().min(1),
-    members: z
-      .array(
-        z.object({
-          name: z.string().min(5, "Name must be member's fullname"),
-          email: z.string().email("Invalid email"),
-          role: z.enum(["Leader", "Member"]),
-        })
-      )
-      .min(3, "Minimum 3 members required")
-      .max(5, "Maximum 5 members allowed"),
-  })
-  .superRefine((data, context) => {
-    const emails = data.members.map((member) =>
-      member.email.toLowerCase().trim()
-    );
-    const duplicates = emails.filter(
-      (email, index) => emails.indexOf(email) !== index
-    );
-    if (duplicates.length > 0) {
-      toast.error(
-        `Duplicate emails detected: ${[...new Set(duplicates)].join(", ")}`
-      );
-      context.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: `Duplicate emails detected: ${[...new Set(duplicates)].join(
-          ", "
-        )}`,
-        path: ["members"],
-      });
-    }
-  });
-type teamSchema = z.infer<typeof teamSchema>;
+type Member = {
+  name: string;
+  email: string;
+  userId: string;
+  institution: string;
+  role: "Leader" | "Member";
+};
 
 function TeamForm({ user, team }: { user: User; team: Team }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const teamSchema = z
+    .object({
+      teamName: z.string().min(1),
+      members: z
+        .array(
+          z.object({
+            name: z.string().min(5, "Name must be member's fullname"),
+            email: z.string().email("Invalid email"),
+            institution: z.string().min(5, "Institution is required"),
+            role: z.enum(["Leader", "Member"]),
+          })
+        )
+        .min(3, "Minimum 3 members required")
+        .max(5, "Maximum 5 members allowed"),
+    })
+    .superRefine((data, context) => {
+      const emails = data.members.map((member) =>
+        member.email.toLowerCase().trim()
+      );
+      const members = data.members;
+      const duplicates = emails.filter(
+        (email, index) => emails.indexOf(email) !== index
+      );
+      const differentInstitutions = members
+        .filter((member) => member.institution !== user.institution)
+        .map((member) => member.name);
+      if (duplicates.length > 0) {
+        toast.error(
+          `Duplicate emails detected: ${[...new Set(duplicates)].join(", ")}`
+        );
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Duplicate emails detected: ${[...new Set(duplicates)].join(
+            ", "
+          )}`,
+          path: ["members"],
+        });
+      }
+      if (differentInstitutions.length > 0) {
+        toast.error(
+          `Members from different Institutions detected: ${[
+            ...new Set(differentInstitutions),
+          ].join(", ")}`,
+          {
+            description: "All members must be from the same institution.",
+          }
+        );
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Duplicate Institutions detected: ${[
+            ...new Set(duplicates),
+          ].join(", ")}`,
+          path: ["institutions"],
+        });
+      }
+    });
+
+  type teamSchema = z.infer<typeof teamSchema>;
   const {
     register,
     handleSubmit,
@@ -63,15 +93,18 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
       teamName: team.name as string,
       members: [
         // @ts-expect-error members is exist if include members when prisma calls within Team Type
-        ...team.members.map((member) => {
-          return {
-            name:
-              member.userId === user.id ? user.name : (member.name as string),
-            email: member.email as string,
-            userId: member.userId as string,
-            role: member.role as "Leader" | "Member",
-          };
-        }),
+        ...team.members
+          .sort((a: Member, b: Member) => (a.role === "Leader" ? -1 : 1))
+          .map((member: Member) => {
+            return {
+              name:
+                member.userId === user.id ? user.name : (member.name as string),
+              email: member.email as string,
+              institution: member.institution as string,
+              userId: member.userId as string,
+              role: member.role as "Leader" | "Member",
+            };
+          }),
       ],
     },
   });
@@ -98,11 +131,6 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
       toast.error("You cannot have more than 5 members!");
       return;
     }
-
-    // Debugging
-    // console.log({
-    //   ...formData,
-    // });
 
     try {
       const res = await fetch("/api/team/edit-team", {
@@ -178,7 +206,9 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Member Name</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Member&apos;s Name
+                      </FieldLabel>
                       <Input
                         {...field}
                         id={field.name}
@@ -197,7 +227,9 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Member Email</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Member&apos;s Email
+                      </FieldLabel>
                       <Input
                         {...field}
                         id={field.name}
@@ -215,7 +247,6 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
                                 `/api/user/by-email?email=${email}`
                               );
                               const user = await res.json();
-                              console.log("User: ", user);
 
                               if (res.ok && user) {
                                 toast.dismiss("checking-user");
@@ -224,9 +255,11 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
                                   `${userName} is a registered member with email ${email}`
                                 );
 
-                                // Update value of the userName
+                                // Update value of the members
                                 const values = getValues();
                                 values.members[index].name = userName;
+                                values.members[index].institution =
+                                  user.institution;
                                 reset(values);
                               } else {
                                 toast.dismiss("checking-user");
@@ -250,11 +283,34 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
                   )}
                 />
                 <Controller
+                  name={`members.${index}.institution`}
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor={field.name}>
+                        Member&apos;s Institution
+                      </FieldLabel>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                        readOnly={index === 0}
+                        disabled
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+                <Controller
                   name={`members.${index}.role`}
                   control={control}
                   render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor={field.name}>Member Role</FieldLabel>
+                      <FieldLabel htmlFor={field.name}>
+                        Member&apos;s Role
+                      </FieldLabel>
                       <Input
                         {...field}
                         id={field.name}
@@ -281,7 +337,12 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
                       type="button"
                       variant={"outline"}
                       onClick={() =>
-                        append({ name: "", email: "", role: "Member" })
+                        append({
+                          name: "",
+                          email: "",
+                          institution: "",
+                          role: "Member",
+                        })
                       }
                       className="cusor-pointer"
                     >

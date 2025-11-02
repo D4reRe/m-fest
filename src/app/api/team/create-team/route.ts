@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 type Member = {
   name: string;
   email: string;
+  institution: string;
   role: "Leader" | "Member";
 };
 
@@ -228,6 +229,7 @@ export async function POST(req: Request) {
       data: members.map((member: Member) => ({
         name: member.name,
         email: member.email,
+        institution: member.institution,
         teamId: team.id,
         role: member.role,
         userId:

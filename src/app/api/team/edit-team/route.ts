@@ -5,6 +5,7 @@ type Member = {
   name: string;
   email: string;
   userId: string;
+  institution: string;
   role: "Leader" | "Member";
 };
 
@@ -235,6 +236,7 @@ export async function POST(req: Request) {
             name: member.name,
             role: member.role,
             email: member.email,
+            institution: member.institution,
             userId:
               member.role === "Leader"
                 ? userId

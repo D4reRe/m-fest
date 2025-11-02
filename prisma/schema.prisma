@@ -137,6 +137,7 @@ model TeamMember {
 
   name        String?
   email       String? 
+  institution String?
   
   role        TeamRole?   // Leader or Member
   joinDate    DateTime?  @default(now())
