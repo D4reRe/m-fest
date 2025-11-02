@@ -9,15 +9,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Team, User } from "@prisma/client";
-import {
-  Field,
-  FieldGroup,
-  FieldLegend,
-  FieldDescription,
-  FieldContent,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 const teamSchema = z
   .object({

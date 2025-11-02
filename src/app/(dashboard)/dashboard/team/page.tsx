@@ -10,12 +10,25 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { prisma } from "@/lib/prisma";
 import { IconUsers } from "@tabler/icons-react";
-import { Edit, Users } from "lucide-react";
+import { Edit, Trash, Users } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
+import { redirect } from "next/navigation";
+import AlertDialogActionButton from "@/components/dashboard/deleteButton";
 
 export const metadata: Metadata = {
   title: "Team | Mechanical Festival 2026",
@@ -36,6 +49,15 @@ export default async function TeamsPage() {
       members: true,
     },
   });
+  async function deleteTeam(teamId: string) {
+    "use server";
+    await prisma.teamMember.deleteMany({
+      where: { teamId },
+    });
+    await prisma.team.delete({
+      where: { id: teamId },
+    });
+  }
   if (!teams.length) {
     return (
       <Empty>
@@ -83,19 +105,53 @@ export default async function TeamsPage() {
                           member.role === "Leader"
                       ) &&
                         !team.competition && (
-                          <Link
-                            href={`/dashboard/team/edit-team/${team?.name
-                              ?.split(" ")
-                              .join("-")}`}
-                          >
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="ml-2 cursor-pointer h-8 w-8"
+                          <div className="flex items-center">
+                            <Link
+                              href={`/dashboard/team/edit-team/${team?.name
+                                ?.split(" ")
+                                .join("-")}`}
                             >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                          </Link>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="ml-2 cursor-pointer h-8 w-8"
+                              >
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                            </Link>
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="ml-2 cursor-pointer h-8 w-8"
+                                >
+                                  <Trash className="w-4 h-4" />
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="bg-transparent backdrop-blur-lg">
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Are you absolutely sure?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action cannot be undone. This will
+                                    permanently delete {team.name} and remove
+                                    this team from our servers.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel className="cursor-pointer">
+                                    Cancel
+                                  </AlertDialogCancel>
+                                  <AlertDialogActionButton
+                                    teamId={team.id}
+                                    deleteTeam={deleteTeam}
+                                  />
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </div>
                         )}
                     </h3>
                     <h5 className="text-sm text-muted-foreground">
