@@ -14,13 +14,20 @@ export const metadata: Metadata = {
 async function EditTeamPage({ params }: { params: Promise<{ team: string }> }) {
   const user: User = (await getUserProfile()) as User;
   const { team: teamName } = await params;
-  const team = await prisma.team.findUnique({
+  let team = await prisma.team.findUnique({
     where: { name: teamName.split("-").join(" ") },
     include: { members: true },
   });
-  if (!team) redirect("/dashboard/team");
+  if (!team) {
+    const teamNameWithDash = teamName.split("-").join("-");
+    team = await prisma.team.findUnique({
+      where: { name: teamNameWithDash },
+      include: { members: true },
+    });
+    if (!teamNameWithDash) redirect("/dashboard/team");
+  }
   if (
-    !team.members.find(
+    !team?.members.find(
       (member) => member.userId === user.id && member.role === "Leader"
     )
   )
