@@ -73,7 +73,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // if all member is registered, add userId to members
+    // if all member is registered, add userId to submitted members
     const submittedMembers = members.map((member: Member) => {
       return {
         name: member.name,
@@ -130,36 +130,6 @@ export async function POST(req: Request) {
 
     // If there's any removal or addition of members, check if team already exists
     if (membersToAdd?.length !== 0 || membersToRemove?.length !== 0) {
-      const submmitedMemberNames = submittedMembers.map(
-        (member: Member) => member.name
-      );
-      const existingCurrentTeamMemberNames = existingCurrentTeam?.members.map(
-        (member) => member.name
-      );
-
-      const isSumbittedDataNotChange =
-        existingCurrentTeamMembersEmails.size ===
-          submittedMemberEmailsSet.size &&
-        [...existingCurrentTeamMembersEmails].every((email) =>
-          submittedMemberEmailsSet.has(email)
-        ) &&
-        existingCurrentTeamMemberNames?.every((name) =>
-          submmitedMemberNames.includes(name)
-        );
-
-      console.log("Is submitted data not change: ", isSumbittedDataNotChange);
-
-      if (isSumbittedDataNotChange) {
-        console.log("Submitted data is not changed!");
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Your team members is unchanged.",
-          },
-          { status: 400 }
-        );
-      }
-
       //  Check all team members
       const candidateTeams = await prisma.team.findMany({
         where: {
@@ -253,7 +223,7 @@ export async function POST(req: Request) {
     console.log("Members to update: ", membersToUpdate);
 
     const updatedUser = await Promise.all(
-      membersToUpdate.map((member) =>
+      membersToUpdate.map((member: Member) =>
         prisma.teamMember.update({
           where: {
             userId_teamId: {
