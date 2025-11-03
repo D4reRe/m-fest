@@ -11,7 +11,7 @@ It serves as the official system for participants to register, create teams, and
 
 | Category           | Technology                                      |
 | ------------------ | ----------------------------------------------- |
-| **Framework**      | [Next.js 15 (App Router)](https://nextjs.org)   |
+| **Framework**      | [Next.js 16 (App Router)](https://nextjs.org)   |
 | **Language**       | [TypeScript](https://www.typescriptlang.org/)   |
 | **Styling**        | [TailwindCSS](https://tailwindcss.com/)         |
 | **UI Components**  | [shadcn/ui](https://ui.shadcn.com/)             |
@@ -56,7 +56,6 @@ It serves as the official system for participants to register, create teams, and
 ### 🧾 Profile Management
 
 - Update user profile (name, email, institution, and profile picture).
-- Planned feature: institution auto-suggestion API.
 
 ### ⚙️ Additional Features
 

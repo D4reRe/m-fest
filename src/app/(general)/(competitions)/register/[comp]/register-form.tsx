@@ -27,6 +27,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { educations } from "@/lib/profile";
 
+const stemRegisterSchema = z.object({
+  name: z.string().min(5),
+  gender: z.enum(["Male", "Female"]),
+  school: z.string().min(5),
+  email: z.string().email("Invalid email").min(1, "Email is required"),
+  phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
+  education: z.enum(["SMA", "SMK", "D3", "S1"]),
+  mentor: z.string().min(5),
+  competitionName: z.enum(["STEM"]),
+});
+
+type stemRegisterSchema = z.infer<typeof stemRegisterSchema>;
+
 function RegisterForm({
   comp,
   user,
@@ -49,23 +62,6 @@ function RegisterForm({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const stemIsRegistered = userRegisteredCompetitions.some(
-    (competition) => competition.competitionName === "STEM"
-  );
-  if (stemIsRegistered && comp.toUpperCase() === "STEM") {
-    return (
-      <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
-        <div className="text-center">
-          <h1 className="mb-1 mt-2 text-xl font-semibold">
-            You have already registered for STEM Competition
-          </h1>
-          <p className="text-sm">
-            Please contact us if you want to change your registration
-          </p>
-        </div>
-      </div>
-    );
-  }
   const userRegisteredTeams = userRegisteredCompetitions.map(
     (competition) => competition.teamId
   );
@@ -79,44 +75,13 @@ function RegisterForm({
     });
   });
 
-  // console.log("Available teams: ", userAsLeaderTeams);
-
-  if (!userAsLeaderTeams.length && comp.toUpperCase() !== "STEM") {
-    return (
-      <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
-        <div className="text-center">
-          <h1 className="mb-1 mt-2 text-xl font-semibold">
-            You have already registered for all available teams or you are not a
-            leader of any team.
-          </h1>
-          <p className="text-sm">
-            Please contact us if you want to change your registration or create
-            a new team as a leader to register for a competition.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   const teamNames = userAsLeaderTeams.map((team) => team.name);
+
   const registerSchema = z.object({
     competitionName: z.enum(["BCC", "IPPC", "PDC"]),
     team: z.enum(teamNames as string[]),
   });
   type registerSchema = z.infer<typeof registerSchema>;
-
-  const stemRegisterSchema = z.object({
-    name: z.string().min(5),
-    gender: z.enum(["Male", "Female"]),
-    school: z.string().min(5),
-    email: z.string().email("Invalid email").min(1, "Email is required"),
-    phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
-    education: z.enum(["SMA", "SMK", "D3", "S1"]),
-    mentor: z.string().min(5),
-    competitionName: z.enum(["STEM"]),
-  });
-
-  type stemRegisterSchema = z.infer<typeof stemRegisterSchema>;
 
   const {
     control,
@@ -175,6 +140,43 @@ function RegisterForm({
       document.body.removeChild(script);
     };
   }, []);
+
+  const stemIsRegistered = userRegisteredCompetitions.some(
+    (competition) => competition.competitionName === "STEM"
+  );
+  if (stemIsRegistered && comp.toUpperCase() === "STEM") {
+    return (
+      <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
+        <div className="text-center">
+          <h1 className="mb-1 mt-2 text-xl font-semibold">
+            You have already registered for STEM Competition
+          </h1>
+          <p className="text-sm">
+            Please contact us if you want to change your registration
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // console.log("Available teams: ", userAsLeaderTeams);
+
+  if (!userAsLeaderTeams.length && comp.toUpperCase() !== "STEM") {
+    return (
+      <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
+        <div className="text-center">
+          <h1 className="mb-1 mt-2 text-xl font-semibold">
+            You have already registered for all available teams or you are not a
+            leader of any team.
+          </h1>
+          <p className="text-sm">
+            Please contact us if you want to change your registration or create
+            a new team as a leader to register for a competition.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   function generateFeeId(): string {
     const timestamp = Date.now().toString(36); // time in base36
@@ -396,7 +398,6 @@ function RegisterForm({
     setIsLoading(true);
     toast.loading("Registering team...", { id: "register-team" });
 
-    // TODO: Check if each team member have registered to same competition
     const selectedTeam = userTeams.find((team) => team.name === formData.team);
     console.log("Selected team: ", selectedTeam);
     if (!selectedTeam) {
