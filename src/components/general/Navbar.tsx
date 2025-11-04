@@ -15,6 +15,15 @@ import { UserAvatar } from "./UserProfile";
 const menuItems = [
   { name: "Events", href: "/events" },
   { name: "Competitions", href: "/competitions" },
+  { name: "Timeline", href: "/#timeline" },
+  {
+    name: "FAQ",
+    href: "/#faqs",
+  },
+  {
+    name: "Contact",
+    href: "/#contact",
+  },
 ];
 
 export const Navbar = ({ user }: { user: User }) => {

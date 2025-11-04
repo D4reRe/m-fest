@@ -6,6 +6,19 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function FAQs() {
   const faqItems = [
@@ -48,7 +61,7 @@ export default function FAQs() {
   ];
 
   return (
-    <section className="py-16 md:py-24">
+    <section className="py-16 md:py-24" id="faqs">
       <div className="mx-auto max-w-5xl px-4 md:px-6">
         <div className="mx-auto max-w-xl text-center">
           <h2 className="text-balance text-3xl font-bold md:text-4xl lg:text-5xl">
@@ -84,10 +97,58 @@ export default function FAQs() {
             ))}
           </Accordion>
 
-          <p className="text-muted-foreground mt-6 px-8">
-            Cannot find what you are looking for? Contact our contact person
-            below
-          </p>
+          <div className="text-muted-foreground mt-6 px-8">
+            Cannot find what you are looking for? please contact our
+            <Dialog>
+              <DialogTrigger
+                asChild
+                className="text-muted-foreground hover:text-primary block duration-150 cursor-pointer underline underline-offset-1"
+              >
+                <span>contact person</span>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md bg-transparent backdrop-blur-lg">
+                <DialogHeader>
+                  <DialogTitle>Need Help?</DialogTitle>
+                  <DialogDescription>
+                    Please kindly contact our contact person for any further
+                    questions.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex items-center gap-2">
+                  <div className="grid flex-1 gap-2">
+                    <h3 className="mb-1 ">
+                      Contact Person - Rahmat Handaru Prayoga
+                    </h3>
+                    <Label htmlFor="email" className="mb-1">
+                      Email
+                    </Label>
+                    <Input
+                      id="email"
+                      defaultValue="rahmathandaru.p@gmail.com"
+                      readOnly
+                    />
+                    <Label htmlFor="phoneNumber">Phone Number</Label>
+                    <Input
+                      id="phoneNumber"
+                      defaultValue="+62 85775132602"
+                      readOnly
+                    />
+                  </div>
+                </div>
+                <DialogFooter className="sm:justify-start">
+                  <DialogClose asChild>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      className="w-full cursor-pointer"
+                    >
+                      Close
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
       </div>
     </section>
