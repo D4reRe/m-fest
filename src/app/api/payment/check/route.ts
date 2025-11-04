@@ -1,73 +1,98 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+import crypto from "crypto";
 
 export async function POST(request: Request) {
   const { result } = await request.json();
 
   const response = await fetch(
-    `	https://api.sandbox.midtrans.com/v2/${result.order_id}/status`,
+    `	https://sandbox.duitku.com/webapi/api/merchant/transactionStatus`,
     {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Basic ${Buffer.from(
-          `${process.env.MIDTRANS_SECRET_KEY}:`
-        ).toString("base64")}`,
       },
+      body: JSON.stringify({
+        merchantCode: process.env.DUITKU_MERCHANT_ID,
+        merchantOrderId: result.merchantOrderId,
+        signature: crypto
+          .createHash("md5")
+          .update(
+            `${process.env.DUITKU_MERCHANT_ID}${result.merchantOrderId}${process.env.DUITKU_API_KEY}`
+          )
+          .digest("hex"),
+      }),
     }
   );
 
   if (!response.ok) {
+    // console.log("Failed to check transaction to Duitku", response.statusText);
     return NextResponse.json(
-      { error: "Failed to verify payment", message: response.statusText },
+      { message: "Failed to check transaction" },
       { status: 500 }
     );
   }
   const status = await response.json();
   if (!status) {
+    // console.log("Failed to check transaction from Duitku", status);
     return NextResponse.json({
-      error: "Failed to verify payment",
-      message: "No status returned",
+      message: "Failed to check transaction from Duitku",
     });
   }
 
-  if (status.transaction_status === "settlement") {
+  if (status.statusCode === "00") {
     await prisma.payment.update({
-      where: { orderId: result.order_id },
-      data: { status: "settlement" },
+      where: { orderId: result.merchantOrderId },
+      data: { status: "SUCCESS" },
     });
     await prisma.compRegistration.update({
-      where: { paymentId: result.order_id },
-      data: { statusOrder: "settlement" },
+      where: { paymentId: result.merchantOrderId },
+      data: { statusOrder: "SUCCESS" },
     });
-    await prisma.team.update({
-      where: {
-        paymentId: result.order_id,
-      },
-      data: {
-        status: "settlement",
-      },
-    });
+    if (result.competition !== "STEM Competition") {
+      await prisma.team.update({
+        where: {
+          paymentId: result.merchantOrderId,
+        },
+        data: {
+          status: "SUCCESS",
+        },
+      });
+    }
+    // console.log("Payment has successfully check transaction");
     return NextResponse.json(
-      { status: "success", message: "Payment Successful" },
+      { status: "success", message: "Your transaction status is successful" },
       { status: 200 }
     );
   } else {
     await prisma.payment.update({
-      where: { orderId: result.order_id },
-      data: { status: status.transaction_status, createdAt: new Date() },
+      where: { orderId: result.merchantOrderId },
+      data: { status: status.statusMessage, createdAt: new Date() },
     });
     await prisma.compRegistration.update({
-      where: { paymentId: result.order_id },
-      data: { statusOrder: status.transaction_status },
+      where: { paymentId: result.merchantOrderId },
+      data: { statusOrder: status.statusMessage },
     });
-    await prisma.team.update({
-      where: {
-        paymentId: result.order_id,
+    if (result.competition !== "STEM Competition") {
+      await prisma.team.update({
+        where: {
+          paymentId: result.merchantOrderId,
+        },
+        data: {
+          status: status.statusMessage,
+        },
+      });
+    }
+    // console.log("The transaction status is not successful", {
+    //   status: status.statusMessage,
+    // });
+    return NextResponse.json(
+      {
+        status: "failed",
+        message: `Transaction status is in ${status?.statusMessage?.toLowerCase()}`,
       },
-      data: {
-        status: status.transaction_status,
-      },
-    });
+      { status: 500 }
+    );
   }
 }

@@ -37,16 +37,16 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      console.log("Upload complete for user:", {
-        userId: metadata.userId,
-        name: metadata.name,
-        email: metadata.email,
-        imageUrl: metadata.imageUrl,
-      });
-      console.log("file url", {
-        ufsUrl: file.ufsUrl,
-        fileKey: file.key,
-      });
+      // console.log("Upload complete for user:", {
+      //   userId: metadata.userId,
+      //   name: metadata.name,
+      //   email: metadata.email,
+      //   imageUrl: metadata.imageUrl,
+      // });
+      // console.log("file url", {
+      //   ufsUrl: file.ufsUrl,
+      //   fileKey: file.key,
+      // });
       try {
         const previousImage = await prisma.user.findUnique({
           where: { email: metadata.email as string },

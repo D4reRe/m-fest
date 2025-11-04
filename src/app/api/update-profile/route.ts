@@ -36,10 +36,10 @@ export async function POST(req: Request) {
       },
     });
 
-    console.log(updatedUser);
+    // console.log(updatedUser);
     return NextResponse.json({ success: true, updatedUser }, { status: 200 });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return NextResponse.json(
       {
         success: false,

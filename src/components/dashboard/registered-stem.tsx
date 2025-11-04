@@ -76,7 +76,7 @@ export async function RegisteredStemCompetition() {
                 <Input
                   type="text"
                   defaultValue={
-                    (userStemComp?.statusOrder as string) === "settlement"
+                    (userStemComp?.statusOrder as string) === "SUCCESS"
                       ? "Paid"
                       : "Waiting for Payment"
                   }
@@ -88,7 +88,7 @@ export async function RegisteredStemCompetition() {
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" className="w-full">
-            {userStemComp?.statusOrder === "settlement"
+            {userStemComp?.statusOrder === "SUCCESS"
               ? "Stay Tuned!"
               : "Awaiting Payment"}
           </Button>

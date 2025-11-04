@@ -14,30 +14,65 @@ import { RefreshCcw } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function TableInvoices({ invoices }) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   async function refreshPayment(
-    invoiceId: string,
-    token: string,
-    redirectUrl: string
+    merchantOrderId: string,
+    referenceDuitku: string,
+    paymentUrl: string,
+    competition: string
   ) {
     setIsLoading(true);
-    const response = await fetch("/api/payment/check", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        result: {
-          order_id: invoiceId,
-          token: token,
-          redirect_url: redirectUrl,
-        },
-      }),
+    toast.loading("Checking payment status...", {
+      id: "check-status",
     });
-    if (response.ok) {
+    // console.log("Check from refresh payment", {
+    //   merchantOrderId,
+    //   referenceDuitku,
+    //   paymentUrl,
+    //   competition,
+    // });
+    try {
+      const response = await fetch("/api/payment/check", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          result: {
+            merchantOrderId,
+            referenceDuitku: referenceDuitku,
+            paymentUrl: paymentUrl,
+            competition: competition,
+          },
+        }),
+      });
+      const res = await response.json();
+      // console.log(res);
+      // console.log(res.message);
+      if (response.ok) {
+        toast.success(res.message, {
+          description: `Transaction ${merchantOrderId} for ${competition} is successfull`,
+        });
+        toast.dismiss("check-status");
+        setIsLoading(false);
+        router.refresh();
+      } else {
+        toast.dismiss("check-status");
+        toast.info(res.message, {
+          description: `Transaction ${merchantOrderId} for ${competition} is not paid yet`,
+        });
+        setIsLoading(false);
+        router.refresh();
+      }
+    } catch (error) {
+      toast.dismiss("check-status");
+      toast.error("Failed to check payment status", {
+        description: (error as Error).message,
+      });
       setIsLoading(false);
       router.refresh();
     }
@@ -70,13 +105,14 @@ export default function TableInvoices({ invoices }) {
               })}
             </TableCell>
             <TableCell>
-              {invoice.status === "settlement" ? (
+              {invoice.status === "SUCCESS" ? (
                 <span>Payment Successfull</span>
-              ) : invoice.status === "pending" ? (
+              ) : invoice.status === "PENDING" ? (
                 <div className="flex items-center justify-between gap-3">
                   <Link
-                    className="font-bold underline underline-offset-1"
-                    href={invoice.redirectUrl as string}
+                    className="font-bold underline underline-offset-1 cursor-pointer"
+                    href={invoice.paymentUrl as string}
+                    target="_blank"
                   >
                     Pay
                   </Link>
@@ -85,12 +121,42 @@ export default function TableInvoices({ invoices }) {
                     onClick={() =>
                       refreshPayment(
                         invoice.orderId,
-                        invoice.snapToken as string,
-                        invoice.redirectUrl as string
+                        invoice.referenceDuitku as string,
+                        invoice.paymentUrl as string,
+                        invoice.competition
                       )
                     }
                     disabled={isLoading}
-                    className="size-6 hover:scale-105 transition-all"
+                    className="size-6 hover:scale-105 transition-all cursor-pointer"
+                  >
+                    {isLoading ? (
+                      <IconRefresh className="animate-spin" />
+                    ) : (
+                      <RefreshCcw />
+                    )}
+                  </Button>
+                </div>
+              ) : invoice.status === "PROCESS" ? (
+                <div className="flex items-center justify-between gap-3">
+                  <Link
+                    className="font-bold underline underline-offset-1 cursor-pointer"
+                    href={invoice.paymentUrl as string}
+                    target="_blank"
+                  >
+                    Pay
+                  </Link>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() =>
+                      refreshPayment(
+                        invoice.orderId,
+                        invoice.referenceDuitku as string,
+                        invoice.paymentUrl as string,
+                        invoice.competition
+                      )
+                    }
+                    disabled={isLoading}
+                    className="size-6 hover:scale-105 transition-all cursor-pointer"
                   >
                     {isLoading ? (
                       <IconRefresh className="animate-spin" />
@@ -100,16 +166,18 @@ export default function TableInvoices({ invoices }) {
                   </Button>
                 </div>
               ) : (
-                <span>Payment Expired</span>
+                <span>Payment Cancelled</span>
               )}
             </TableCell>
             <TableCell>
-              {invoice.status === "settlement" ? (
-                <Chip color="success">Paid</Chip>
-              ) : invoice.status === "pending" ? (
-                <Chip color="warning">Pending</Chip>
+              {invoice.status === "SUCCESS" ? (
+                <Chip color="success">SUCCESS</Chip>
+              ) : invoice.status === "PENDING" ? (
+                <Chip color="warning">PENDING</Chip>
+              ) : invoice.status === "PROCESS" ? (
+                <Chip color="default">PROCESS</Chip>
               ) : (
-                <Chip color="danger">Expired</Chip>
+                <Chip color="danger">CANCELLED</Chip>
               )}
             </TableCell>
           </TableRow>

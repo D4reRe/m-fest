@@ -161,7 +161,7 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
         toast.error("Failed to edit team", {
           description: error,
         });
-        console.log(error);
+        // console.log(error);
       }
     } catch (error) {
       setIsLoading(false);

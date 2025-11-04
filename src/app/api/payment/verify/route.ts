@@ -1,5 +1,6 @@
 import { getUserProfile } from "@/action/user.action";
 import { prisma } from "@/lib/prisma";
+import crypto from "crypto";
 import { NextResponse } from "next/server";
 
 enum CompetitionName {
@@ -11,55 +12,66 @@ enum CompetitionName {
 
 export async function POST(request: Request) {
   const user = await getUserProfile();
-  const { result, submittedData, transactionData, checkOutData } =
+  const { result, submittedData, InvoiceData, checkOutData } =
     await request.json();
-  const { id, competitionName, price, quantity } = checkOutData;
+  const { merchantOrderId, productDetails, paymentAmount, quantity } =
+    checkOutData;
 
   const response = await fetch(
-    `	https://api.sandbox.midtrans.com/v2/${result.order_id}/status`,
+    `	https://sandbox.duitku.com/webapi/api/merchant/transactionStatus`,
     {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
-        Authorization: `Basic ${Buffer.from(
-          `${process.env.MIDTRANS_SECRET_KEY}:`
-        ).toString("base64")}`,
       },
+      body: JSON.stringify({
+        merchantCode: process.env.DUITKU_MERCHANT_ID,
+        merchantOrderId: result.merchantOrderId,
+        signature: crypto
+          .createHash("md5")
+          .update(
+            `${process.env.DUITKU_MERCHANT_ID}${result.merchantOrderId}${process.env.DUITKU_API_KEY}`
+          )
+          .digest("hex"),
+      }),
     }
   );
 
   if (!response.ok) {
     return NextResponse.json(
-      { error: "Failed to verify payment", message: response.statusText },
+      { error: "Failed to check transaction", message: response.statusText },
       { status: 500 }
     );
   }
   const status = await response.json();
+  // console.log("Status: ", status);
   if (!status) {
+    // console.log("Error while checking payment", status);
     return NextResponse.json({
       error: "Failed to verify payment",
       message: "No status returned",
     });
   }
 
-  if (status.transaction_status === "settlement") {
+  if (status.statusCode === "00") {
     // Create payment & Registration status
     if (submittedData.competitionName !== CompetitionName.STEM) {
       await prisma.payment.create({
         data: {
-          orderId: id,
+          orderId: merchantOrderId,
           userId: user?.id,
-          amount: price * quantity,
-          competition: competitionName,
-          redirectUrl: transactionData.redirect_url,
-          snapToken: transactionData.token,
-          status: "settlement",
+          amount: paymentAmount * quantity,
+          competition: productDetails,
+          paymentUrl: InvoiceData.paymentUrl,
+          referenceDuitku: InvoiceData.reference,
+          status: "SUCCESS",
         },
       });
 
       const thisTransaction = await prisma.payment.findUnique({
         where: {
-          orderId: id,
+          orderId: merchantOrderId,
         },
         select: {
           orderId: true,
@@ -73,7 +85,7 @@ export async function POST(request: Request) {
           userId: user?.id as string,
           teamId: submittedData.teamId as string,
           paymentId: thisTransaction?.orderId as string,
-          statusOrder: "settlement",
+          statusOrder: "SUCCESS",
         },
       });
       await prisma.team.update({
@@ -83,25 +95,25 @@ export async function POST(request: Request) {
         data: {
           paymentId: thisTransaction?.orderId as string,
           competition: submittedData.competitionName as CompetitionName,
-          status: "settlement",
+          status: "SUCCESS",
         },
       });
     }
     if (submittedData.competitionName === CompetitionName.STEM) {
       await prisma.payment.create({
         data: {
-          orderId: id,
+          orderId: merchantOrderId,
           userId: user?.id,
-          amount: price * quantity,
-          competition: competitionName,
-          redirectUrl: transactionData.redirect_url,
-          snapToken: transactionData.token,
-          status: "settlement",
+          amount: paymentAmount * quantity,
+          competition: productDetails,
+          paymentUrl: InvoiceData.paymentUrl,
+          referenceDuitku: InvoiceData.reference,
+          status: "SUCCESS",
         },
       });
       const thisTransaction = await prisma.payment.findUnique({
         where: {
-          orderId: id,
+          orderId: merchantOrderId,
         },
         select: {
           orderId: true,
@@ -119,7 +131,7 @@ export async function POST(request: Request) {
           education: submittedData.education,
           school: submittedData.school,
           mentor: submittedData.mentor,
-          statusOrder: "settlement",
+          statusOrder: "SUCCESS",
         },
       });
     }
@@ -127,24 +139,24 @@ export async function POST(request: Request) {
       { status: "success", message: "Payment Successful" },
       { status: 200 }
     );
-  } else if (status.transaction_status === "pending") {
+  } else if (status.statusCode === "01") {
     // Create payment & Registration status
     if (submittedData.competitionName !== CompetitionName.STEM) {
       await prisma.payment.create({
         data: {
-          orderId: id,
+          orderId: merchantOrderId,
           userId: user?.id,
-          amount: price * quantity,
-          competition: competitionName,
-          redirectUrl: transactionData.redirect_url,
-          snapToken: transactionData.token,
-          status: "pending",
+          amount: paymentAmount * quantity,
+          competition: productDetails,
+          paymentUrl: InvoiceData.paymentUrl,
+          referenceDuitku: InvoiceData.reference,
+          status: "PENDING",
         },
       });
 
       const thisTransaction = await prisma.payment.findUnique({
         where: {
-          orderId: id,
+          orderId: merchantOrderId,
         },
         select: {
           orderId: true,
@@ -158,7 +170,7 @@ export async function POST(request: Request) {
           userId: user?.id as string,
           teamId: submittedData.teamId as string,
           paymentId: thisTransaction?.orderId as string,
-          statusOrder: "pending",
+          statusOrder: "PENDING",
         },
       });
       await prisma.team.update({
@@ -168,25 +180,25 @@ export async function POST(request: Request) {
         data: {
           paymentId: thisTransaction?.orderId as string,
           competition: submittedData.competitionName as CompetitionName,
-          status: "pending",
+          status: "PENDING",
         },
       });
     }
     if (submittedData.competitionName === CompetitionName.STEM) {
       await prisma.payment.create({
         data: {
-          orderId: id,
+          orderId: merchantOrderId,
           userId: user?.id,
-          amount: price * quantity,
-          competition: competitionName,
-          redirectUrl: transactionData.redirect_url,
-          snapToken: transactionData.token,
-          status: "pending",
+          amount: paymentAmount * quantity,
+          competition: productDetails,
+          paymentUrl: InvoiceData.paymentUrl,
+          referenceDuitku: InvoiceData.reference,
+          status: "PENDING",
         },
       });
       const thisTransaction = await prisma.payment.findUnique({
         where: {
-          orderId: id,
+          orderId: merchantOrderId,
         },
         select: {
           orderId: true,
@@ -204,33 +216,35 @@ export async function POST(request: Request) {
           education: submittedData.education,
           school: submittedData.school,
           mentor: submittedData.mentor,
-          statusOrder: "pending",
+          statusOrder: "PENDING",
         },
       });
     }
     return NextResponse.json(
-      { status: "pending", message: "Payment is Pending" },
+      { status: "PENDING", message: "Payment is Pending" },
       { status: 200 }
     );
   } else {
     await prisma.payment.update({
-      where: { orderId: result.order_id },
-      data: { status: status.transaction_status, createdAt: new Date() },
+      where: { orderId: result.merchantOrderId },
+      data: { status: "CANCELLED", createdAt: new Date() },
     });
     await prisma.compRegistration.update({
-      where: { paymentId: result.order_id },
-      data: { statusOrder: status.transaction_status },
+      where: { paymentId: result.merchantOrderId },
+      data: { statusOrder: "CANCELLED" },
     });
-    await prisma.team.update({
-      where: {
-        paymentId: result.order_id,
-      },
-      data: {
-        status: status.transaction_status,
-      },
-    });
+    if (submittedData.competitionName !== CompetitionName.STEM) {
+      await prisma.team.update({
+        where: {
+          paymentId: result.merchantOrderId,
+        },
+        data: {
+          status: "CANCELLED",
+        },
+      });
+    }
     return NextResponse.json(
-      { status: "failed", message: "Payment Failed" },
+      { status: "CANCELLED", message: "Payment Canceled" },
       { status: 500 }
     );
   }

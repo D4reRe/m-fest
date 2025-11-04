@@ -29,12 +29,12 @@ export async function POST(req: Request) {
 
     // Check if all members are registered
     const submittedMemberEmails = members.map((member: Member) => member.email);
-    console.log("Submitted emails: ", submittedMemberEmails);
+    // console.log("Submitted emails: ", submittedMemberEmails);
 
     const existingUsers = await prisma.user.findMany({
       where: { email: { in: submittedMemberEmails } },
     });
-    console.log("Existing users based on submitted emails: ", existingUsers);
+    // console.log("Existing users based on submitted emails: ", existingUsers);
     if (existingUsers.length !== members.length) {
       return NextResponse.json(
         { success: false, error: "All members must be registered" },
@@ -160,28 +160,28 @@ export async function POST(req: Request) {
         members: true,
       },
     });
-    console.log("Candidate teams: ", candidateTeams);
-    console.log("Candidate teams total: ", candidateTeams.length);
+    // console.log("Candidate teams: ", candidateTeams);
+    // console.log("Candidate teams total: ", candidateTeams.length);
 
     const submittedMemberEmailsSet = new Set(submittedMemberEmails);
 
     const teamAlreadyExists = candidateTeams.some((team, index: number) => {
-      console.log("iteration: ", index);
-      console.log("Team: ", team);
-      console.log("Team Members: ", team.members);
-      console.log(
-        "Existing Team Members Emails: ",
-        team.members.map((member) => member.email)
-      );
-      console.log(
-        "Existing Team Members Emails Total: ",
-        team.members.map((member) => member.email).length
-      );
-      console.log("Submitted member emails: ", submittedMemberEmails);
-      console.log(
-        "Submitted member emails total: ",
-        submittedMemberEmails.length
-      );
+      // console.log("iteration: ", index);
+      // console.log("Team: ", team);
+      // console.log("Team Members: ", team.members);
+      // console.log(
+      //   "Existing Team Members Emails: ",
+      //   team.members.map((member) => member.email)
+      // );
+      // console.log(
+      //   "Existing Team Members Emails Total: ",
+      //   team.members.map((member) => member.email).length
+      // );
+      // console.log("Submitted member emails: ", submittedMemberEmails);
+      // console.log(
+      //   "Submitted member emails total: ",
+      //   submittedMemberEmails.length
+      // );
       const existingTeamMembersEmails = new Set(
         team.members.map((member) => member.email)
       );
@@ -193,10 +193,10 @@ export async function POST(req: Request) {
       return true;
     });
 
-    console.log("Team already exists or result of checks: ", teamAlreadyExists);
+    // console.log("Team already exists or result of checks: ", teamAlreadyExists);
 
     if (teamAlreadyExists) {
-      console.log("Team already exists");
+      // console.log("Team already exists");
       return NextResponse.json(
         {
           success: false,
@@ -206,7 +206,7 @@ export async function POST(req: Request) {
       );
     }
 
-    console.log("Team does not already exist, proceed to create team");
+    // console.log("Team does not already exist, proceed to create team");
 
     // Check if all members are unique
     const memberProfiles = existingUsers.map((user) => {
@@ -215,7 +215,7 @@ export async function POST(req: Request) {
         userId: user.id,
       };
     });
-    console.log("Member profiles: ", memberProfiles);
+    // console.log("Member profiles: ", memberProfiles);
 
     // Create team
     const team = await prisma.team.create({
@@ -243,16 +243,16 @@ export async function POST(req: Request) {
       })),
     });
 
-    console.log("Team created: ", team);
-    console.log("Team members created: ", teamMembers);
-    console.log("Team Successfully created!");
+    // console.log("Team created: ", team);
+    // console.log("Team members created: ", teamMembers);
+    // console.log("Team Successfully created!");
 
     return NextResponse.json(
       { success: true, teamId: team.id, teamMembers },
       { status: 200 }
     );
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return NextResponse.json(
       {
         success: false,

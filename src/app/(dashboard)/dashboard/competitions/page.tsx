@@ -35,15 +35,17 @@ async function CompPage() {
       teamId: {
         in: teamIds,
       },
-      statusOrder: "settlement",
+      statusOrder: "SUCCESS",
     },
   });
+
+  // console.log(registeredCompetitions);
 
   const stemComp = await prisma.compRegistration.findMany({
     where: {
       userId: session?.user.id,
       competitionName: "STEM",
-      statusOrder: "settlement",
+      statusOrder: "SUCCESS",
     },
   });
 

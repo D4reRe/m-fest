@@ -14,7 +14,7 @@ export async function RegisteredCompetitions() {
           userId: session?.user.id,
         },
       },
-      status: "settlement",
+      status: "SUCCESS",
     },
     include: {
       members: true,

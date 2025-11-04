@@ -174,6 +174,7 @@ export const Navbar = ({ user }: { user: User }) => {
                           await signOut({ redirect: false });
                           toast.success("Logged out successfully");
                           toast.dismiss("logging-out");
+                          router.refresh();
                           router.replace("/login");
                         } catch (error) {
                           toast.error("Failed to log out");
@@ -206,22 +207,13 @@ export const Navbar = ({ user }: { user: User }) => {
                         <span>Login</span>
                       </Link>
                     </Button>
-                    {/* <Button
-                      asChild
-                      size="sm"
-                      className={cn(isScrolled && "lg:hidden")}
-                    >
-                      <Link href="/sign-up">
-                        <span>Sign Up</span>
-                      </Link>
-                    </Button> */}
                     <Button
                       asChild
                       size="sm"
                       className={cn(isScrolled ? "lg:inline-flex" : "hidden")}
                     >
-                      <Link href="#">
-                        <span>Get Started</span>
+                      <Link href="/login">
+                        <span>Login</span>
                       </Link>
                     </Button>
                   </>

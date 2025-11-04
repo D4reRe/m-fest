@@ -1,49 +1,83 @@
 import { getUserProfile } from "@/action/user.action";
-import { Snap } from "midtrans-client";
 import { NextResponse } from "next/server";
-export async function POST(request: Request) {
-  const user = await getUserProfile();
+import crypto from "crypto";
 
-  const snap = new Snap({
-    isProduction: false,
-    serverKey: process.env.MIDTRANS_SECRET_KEY as string,
-    clientKey: process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY as string,
-  });
+export async function POST(request: Request) {
+  function generateDuitkuSignature(
+    merchantCode: string,
+    apiKey: string,
+    timestamp: string
+  ) {
+    const signature = crypto
+      .createHash("sha256")
+      .update(`${merchantCode}${timestamp}${apiKey}`)
+      .digest("hex");
+    return signature;
+  }
+
+  const merchantCode = process.env.DUITKU_MERCHANT_ID as string;
+  const apiKey = process.env.DUITKU_API_KEY as string;
+  const timestamp = Date.now().toString();
+  const signature = generateDuitkuSignature(merchantCode, apiKey, timestamp);
   const {
-    id,
-    competitionName,
-    price,
-    quantity,
-    brand,
-    category,
-    merchant_name,
+    paymentAmount,
+    merchantOrderId,
+    productDetails,
+    email,
+    callbackUrl,
+    returnUrl,
+    expiryPeriod,
+    customerVaName,
+    phoneNumber,
   } = await request.json();
 
-  const parameter = {
-    transaction_details: {
-      order_id: id,
-      gross_amount: price * quantity,
-    },
-    item_details: {
-      id: id,
-      name: competitionName,
-      price: price,
-      quantity: quantity,
-      brand: brand,
-      category: category,
-      merchant_name: merchant_name,
-    },
-    customer_details: {
-      name: user?.name,
-      email: user?.email,
-      phone: user?.phoneNumber,
-      city: user?.domicile,
-    },
+  // Create invoice
+  const body = {
+    paymentAmount: paymentAmount,
+    merchantOrderId: merchantOrderId,
+    productDetails: productDetails,
+    email: email,
+    customerVaName: customerVaName,
+    callbackUrl: callbackUrl,
+    phoneNumber: phoneNumber,
+    returnUrl: returnUrl,
+    expiryPeriod: expiryPeriod,
   };
 
-  const transactionData = await snap.createTransaction(parameter);
+  try {
+    const res = await fetch(
+      "https://api-sandbox.duitku.com/api/merchant/createInvoice",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "x-duitku-signature": signature,
+          "x-duitku-timestamp": timestamp,
+          "x-duitku-merchantcode": merchantCode,
+        },
+        body: JSON.stringify(body),
+      }
+    );
 
-  console.log(transactionData);
+    const data = await res.json();
+    // console.log("Response:", data);
 
-  return NextResponse.json({ transactionData }, { status: 200 });
+    if (!res.ok) {
+      console.error("Duitku error:", data);
+      return NextResponse.json(
+        { error: data },
+        { status: 500, statusText: "Failed" }
+      );
+    } else {
+      // console.log("Duitku success:", data);
+      return NextResponse.json(data, { status: 200, statusText: "OK" });
+    }
+  } catch (err: any) {
+    console.error("Error:", err);
+    return NextResponse.json(
+      { error: err.message },
+      { status: 500, statusText: "Failed" }
+    );
+  }
 }

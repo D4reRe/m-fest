@@ -145,7 +145,7 @@ function TeamForm({ user }: { user: User }) {
         toast.error("Failed to create team", {
           description: error,
         });
-        console.log(error);
+        // console.log(error);
       }
     } catch (error) {
       setIsLoading(false);

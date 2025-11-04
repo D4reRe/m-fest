@@ -93,7 +93,7 @@ export async function TeamMembers() {
                       )}
                   </h3>
                   <h5 className="text-sm text-muted-foreground">
-                    {team.competition && team.status === "settlement"
+                    {team.competition && team.status === "SUCCESS"
                       ? team.competition
                       : "No competition"}
                   </h5>

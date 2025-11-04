@@ -34,7 +34,7 @@ const stemRegisterSchema = z.object({
   email: z.string().email("Invalid email").min(1, "Email is required"),
   phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
   education: z.enum(["SMA", "SMK", "D3", "S1"]),
-  mentor: z.string().min(5),
+  mentor: z.string().min(1),
   competitionName: z.enum(["STEM"]),
 });
 
@@ -65,7 +65,7 @@ function RegisterForm({
   const userRegisteredTeams = userRegisteredCompetitions.map(
     (competition) => competition.teamId
   );
-  // console.log("Registered teams: ", userRegisteredTeams);
+  console.log("Registered teams: ", userRegisteredTeams);
   const userAvailableTeams = userTeams.filter(
     (team) => !userRegisteredTeams.includes(team.id)
   );
@@ -127,13 +127,11 @@ function RegisterForm({
   }, [reset, user, comp]);
 
   useEffect(() => {
-    const snapScript = "https://app.sandbox.midtrans.com/snap/snap.js";
-    const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY;
+    const duitkuPopScript = "https://app-sandbox.duitku.com/lib/js/duitku.js";
 
     const script = document.createElement("script");
-    script.src = snapScript;
+    script.src = duitkuPopScript;
     script.async = true;
-    script.setAttribute("data-client-key", clientKey as string);
     document.body.appendChild(script);
 
     return () => {
@@ -193,119 +191,31 @@ function RegisterForm({
     };
 
     const checkOutData = {
-      id: generateFeeId(),
-      competitionName: `${
+      paymentAmount: competitions.find(
+        (c) => c.abbreviation === comp.toUpperCase()
+      )?.fee1,
+      merchantOrderId: generateFeeId(),
+      productDetails: `${
         competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
       }`,
-      price: competitions.find((c) => c.abbreviation === comp.toUpperCase())
-        ?.fee1,
-      quantity: 1,
+      email: user.email,
+      callbackUrl:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/api/payment/callback"
+          : "https://m-fest-xi.vercel.app/api/payment/callback",
+
+      returnUrl:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/payment/status"
+          : "https://m-fest-xi.vercel.app/payment/status",
+      expiryPeriod: 60,
+      customerVaName: user.name,
+      phoneNumber: user.phoneNumber,
       brand: "Mechanical Festival 2026",
       category: "Competition Registration Fee",
       merchant_name: "Himpunan Mahasiswa Mesin ITB",
-    };
-
-    setIsLoading(true);
-    toast.loading("Checking out...", { id: "checking-out" });
-
-    const response = await fetch("/api/payment", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(checkOutData),
-    });
-    const { transactionData } = await response.json();
-    // console.log(transactionData);
-    // console.log(transactionData.token);
-
-    if (response.ok) {
-      // @ts-expect-error snap global object
-      window.snap.pay(transactionData.token, {
-        onSuccess: async function (result) {
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              result,
-              submittedData,
-              transactionData,
-              checkOutData,
-            }),
-          });
-          toast.dismiss("checking-out");
-          toast.success("Payment Successful!");
-          // console.log("Payment success:", result);
-          toast.dismiss("register-team");
-          toast.success("Team registered successfully!");
-          router.replace("/dashboard/competitions");
-        },
-        onPending: async (result: any) => {
-          toast.dismiss("checking-out");
-          toast.info("Payment Pending. Please complete the transaction.");
-          toast.dismiss("register-team");
-          toast.info(
-            "Please complete the transaction to complete the registration. "
-          );
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              result,
-              submittedData,
-              transactionData,
-              checkOutData,
-            }),
-          });
-          // console.log("Payment pending:", result);
-          router.replace("/dashboard/invoices");
-        },
-        onError: (result: any) => {
-          toast.dismiss("checking-out");
-          toast.dismiss("register-team");
-          toast.error("Payment Failed. Please try again.");
-          // console.log("Payment error:", result);
-        },
-        onClose: (result) => {
-          toast.dismiss("checking-out");
-          toast.warning("Payment window closed before completing transaction.");
-          toast.dismiss("register-team");
-          toast.warning("Your registration is not completed yet.");
-          // console.log("Payment popup closed.");
-        },
-      });
-    }
-    if (!response.ok) {
-      setIsLoading(false);
-      // console.log(transactionData);
-      toast.dismiss("checking-out");
-      toast.error("Failed to checkout");
-      const err = await response.json();
-      toast.error(err.error);
-      return;
-    }
-    setIsLoading(false);
-  };
-  const checkoutStem = async (formData: stemRegisterSchema, comp: string) => {
-    const submittedData = {
-      ...formData,
-    };
-
-    const checkOutData = {
-      id: generateFeeId(),
-      competitionName: `${
-        competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
-      }`,
-      price: competitions.find((c) => c.abbreviation === comp.toUpperCase())
-        ?.fee1,
+      submittedData: submittedData,
       quantity: 1,
-      brand: "Mechanical Festival 2026",
-      category: "Competition Registration Fee",
-      merchant_name: "Himpunan Mahasiswa Mesin ITB",
     };
 
     setIsLoading(true);
@@ -318,14 +228,13 @@ function RegisterForm({
       },
       body: JSON.stringify(checkOutData),
     });
-    const { transactionData } = await response.json();
-    // console.log(transactionData);
-    // console.log(transactionData.token);
+    const InvoiceData = await response.json();
 
     if (response.ok) {
       // @ts-expect-error snap global object
-      window.snap.pay(transactionData.token, {
-        onSuccess: async function (result) {
+      window.checkout.process(InvoiceData.reference, {
+        defaultLanguage: "en",
+        successEvent: async function (result) {
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
@@ -334,46 +243,167 @@ function RegisterForm({
             body: JSON.stringify({
               result,
               submittedData,
-              transactionData,
+              InvoiceData,
               checkOutData,
             }),
           });
           toast.dismiss("checking-out");
-          toast.success("Payment Successful!");
           // console.log("Payment success:", result);
+          toast.success("Payment Successful!");
+          toast.dismiss("register-team");
+          toast.success("Your team have registered successfully!");
+          router.replace("/dashboard/competitions");
+        },
+        pendingEvent: async (result: any) => {
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              result,
+              submittedData,
+              InvoiceData,
+              checkOutData,
+            }),
+          });
+          toast.dismiss("checking-out");
+          // console.log("Payment pending:", result);
+          toast.info("Payment Pending. Please complete the transaction.");
+          toast.dismiss("register-team");
+          toast.info(
+            "Please complete the transaction to complete the registration. "
+          );
+
+          // console.log("Payment pending:", result);
+          router.replace("/dashboard/invoices");
+        },
+        errorEvent: (result: any) => {
+          toast.dismiss("checking-out");
+          toast.dismiss("register-team");
+          toast.error("Payment Failed. Please try again.");
+          // console.log("Payment error:", result);
+        },
+        closeEvent: (result) => {
+          toast.dismiss("checking-out");
+          toast.warning("Payment window closed before completing transaction.");
+          toast.dismiss("register-team");
+          toast.warning("Your registration is not completed yet.");
+          // console.log("Payment popup closed.");
+        },
+      });
+    }
+    if (!response.ok) {
+      setIsLoading(false);
+      toast.dismiss("checking-out");
+      toast.error("Failed to checkout, please try again.");
+      const err = await response.json();
+      toast.error(err.error);
+      return;
+    }
+    toast.dismiss("checking-out");
+    setIsLoading(false);
+  };
+  const checkoutStem = async (formData: stemRegisterSchema, comp: string) => {
+    const submittedData = {
+      ...formData,
+    };
+
+    const checkOutData = {
+      paymentAmount: competitions.find(
+        (c) => c.abbreviation === comp.toUpperCase()
+      )?.fee1,
+      merchantOrderId: generateFeeId(),
+      productDetails: `${
+        competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
+      }`,
+      email: user.email,
+      callbackUrl:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/api/payment/callback"
+          : "https://m-fest-xi.vercel.app/api/payment/callback",
+
+      returnUrl:
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000/payment/status"
+          : "https://m-fest-xi.vercel.app/payment/status",
+      expiryPeriod: 60,
+      customerVaName: user.name,
+      phoneNumber: user.phoneNumber,
+      brand: "Mechanical Festival 2026",
+      category: "Competition Registration Fee",
+      merchant_name: "Himpunan Mahasiswa Mesin ITB",
+      submittedData: submittedData,
+      quantity: 1,
+    };
+
+    setIsLoading(true);
+    toast.loading("Checking out...", { id: "checking-out" });
+
+    const response = await fetch("/api/payment/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(checkOutData),
+    });
+    const InvoiceData = await response.json();
+
+    if (response.ok) {
+      // @ts-expect-error snap global object
+      window.checkout.process(InvoiceData.reference, {
+        defaultLanguage: "en",
+        successEvent: async function (result) {
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              result,
+              submittedData,
+              InvoiceData,
+              checkOutData,
+            }),
+          });
+          toast.dismiss("checking-out");
+          // console.log("Payment success:", result);
+          toast.success("Payment Successful!");
           toast.dismiss("register-stem");
           toast.success("You have registered successfully!");
           router.replace("/dashboard/competitions");
         },
-        onPending: async (result: any) => {
+        pendingEvent: async (result: any) => {
+          await fetch("/api/payment/verify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              result,
+              submittedData,
+              InvoiceData,
+              checkOutData,
+            }),
+          });
           toast.dismiss("checking-out");
+          // console.log("Payment pending:", result);
           toast.info("Payment Pending. Please complete the transaction.");
           toast.dismiss("register-stem");
           toast.info(
             "Please complete the transaction to complete the registration. "
           );
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              result,
-              submittedData,
-              transactionData,
-              checkOutData,
-            }),
-          });
+
           // console.log("Payment pending:", result);
           router.replace("/dashboard/invoices");
         },
-        onError: (result: any) => {
+        errorEvent: (result: any) => {
           toast.dismiss("checking-out");
           toast.dismiss("register-stem");
           toast.error("Payment Failed. Please try again.");
           // console.log("Payment error:", result);
         },
-        onClose: (result) => {
+        closeEvent: (result) => {
           toast.dismiss("checking-out");
           toast.warning("Payment window closed before completing transaction.");
           toast.dismiss("register-stem");
@@ -384,13 +414,13 @@ function RegisterForm({
     }
     if (!response.ok) {
       setIsLoading(false);
-      // console.log(transactionData);
       toast.dismiss("checking-out");
-      toast.error("Failed to checkout");
+      toast.error("Failed to checkout, please try again.");
       const err = await response.json();
       toast.error(err.error);
       return;
     }
+    toast.dismiss("checking-out");
     setIsLoading(false);
   };
 
@@ -399,7 +429,7 @@ function RegisterForm({
     toast.loading("Registering team...", { id: "register-team" });
 
     const selectedTeam = userTeams.find((team) => team.name === formData.team);
-    console.log("Selected team: ", selectedTeam);
+    // console.log("Selected team: ", selectedTeam);
     if (!selectedTeam) {
       toast.dismiss("register-team");
       toast.error("Team not found");
@@ -408,7 +438,7 @@ function RegisterForm({
     }
     // @ts-expect-error members is exist based on schema and prisma calls
     const selectedTeamMembers = selectedTeam.members;
-    console.log("Team members: ", selectedTeamMembers);
+    // console.log("Team members: ", selectedTeamMembers);
 
     const allRegisteredTeamIds = allRegisteredTeams.map(
       (competition) => competition.teamId
@@ -416,34 +446,34 @@ function RegisterForm({
 
     const allTeamsIds = allTeams.map((team) => team.id);
 
-    console.log("All registered competitions team Ids: ", allRegisteredTeamIds);
-    console.log("All teams Ids: ", allTeamsIds);
+    // console.log("All registered competitions team Ids: ", allRegisteredTeamIds);
+    // console.log("All teams Ids: ", allTeamsIds);
 
     const registeredTeamsOnThisComp = allTeams.filter(
       (team) =>
         allRegisteredTeamIds.includes(team.id) &&
         team.competition === comp.toUpperCase()
     );
-    console.log("Registered teams on this Comp: ", registeredTeamsOnThisComp);
+    // console.log("Registered teams on this Comp: ", registeredTeamsOnThisComp);
 
     const registeredTeamsMembersOnThisComp = allTeamMembers.filter((member) =>
       registeredTeamsOnThisComp.some((team) => team.id === member.teamId)
     );
-    console.log(
-      "Registered teams members on this Comp: ",
-      registeredTeamsMembersOnThisComp
-    );
+    // console.log(
+    //   "Registered teams members on this Comp: ",
+    //   registeredTeamsMembersOnThisComp
+    // );
 
     const selectedTeamMembersEmails = selectedTeamMembers.map(
       (member) => member.email
     );
-    console.log("Selected team members emails: ", selectedTeamMembersEmails);
+    // console.log("Selected team members emails: ", selectedTeamMembersEmails);
     const registeredTeamsMembersEmailsOnThisComp =
       registeredTeamsMembersOnThisComp.map((member) => member.email);
-    console.log(
-      `Registered teams members emails : `,
-      registeredTeamsMembersEmailsOnThisComp
-    );
+    // console.log(
+    //   `Registered teams members emails : `,
+    //   registeredTeamsMembersEmailsOnThisComp
+    // );
 
     const isTeamMemberRegisteredOnThisComp = selectedTeamMembers.some(
       (member) => {
@@ -453,10 +483,10 @@ function RegisterForm({
       }
     );
 
-    console.log(
-      `Is one or more team member registered on this ${comp.toUpperCase()} comp: `,
-      isTeamMemberRegisteredOnThisComp
-    );
+    // console.log(
+    //   `Is one or more team member registered on this ${comp.toUpperCase()} comp: `,
+    //   isTeamMemberRegisteredOnThisComp
+    // );
 
     if (isTeamMemberRegisteredOnThisComp) {
       toast.error(
