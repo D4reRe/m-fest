@@ -8,6 +8,7 @@ import {
   IconUser,
   IconConfetti,
   IconInvoice,
+  IconHelp,
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/dashboard/nav-main";
@@ -23,6 +24,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
+import { NavSecondary } from "./nav-secondary";
 
 const data = {
   navMain: [
@@ -55,6 +57,13 @@ const data = {
       title: "Invoices",
       url: "/dashboard/invoices",
       icon: IconInvoice,
+    },
+  ],
+  navSecondary: [
+    {
+      title: "Get Help",
+      url: "",
+      icon: IconHelp,
     },
   ],
 };
@@ -92,6 +101,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent className="bg-transparent backdrop-blur-3xl ">
         <NavMain items={data.navMain} />
+        <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

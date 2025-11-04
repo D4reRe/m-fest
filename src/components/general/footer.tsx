@@ -10,22 +10,20 @@ const links = [
     title: "Competitions",
     href: "/competitions",
   },
+  {
+    title: "Timeline",
+    href: "/#timeline",
+  },
+  {
+    title: "FAQ",
+    href: "/#faqs",
+  },
+  {
+    title: "Contact",
+    href: "/#contact",
+  },
 ];
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { getUserProfile } from "@/action/user.action";
 import { auth } from "@/auth";
 
 export default async function FooterSection() {
@@ -65,51 +63,6 @@ export default async function FooterSection() {
               <span>Login</span>
             </Link>
           )}
-          <Dialog>
-            <DialogTrigger
-              asChild
-              className="text-muted-foreground hover:text-primary block duration-150 cursor-pointer"
-            >
-              <span>Contact Us</span>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-md bg-transparent backdrop-blur-lg">
-              <DialogHeader>
-                <DialogTitle>Need Help?</DialogTitle>
-                <DialogDescription>
-                  Please kindly contact our contact person for any further
-                  questions.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="flex items-center gap-2">
-                <div className="grid flex-1 gap-2">
-                  <h3 className="mb-1 ">
-                    Contact Person - Rahmat Handaru Prayoga
-                  </h3>
-                  <Label htmlFor="email" className="mb-1">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    defaultValue="rahmathandaru.p@gmail.com"
-                    readOnly
-                  />
-                  <Label htmlFor="phoneNumber">Phone Number</Label>
-                  <Input
-                    id="phoneNumber"
-                    defaultValue="+62 857-7513-2602"
-                    readOnly
-                  />
-                </div>
-              </div>
-              <DialogFooter className="sm:justify-start">
-                <DialogClose asChild>
-                  <Button type="button" variant="secondary">
-                    Close
-                  </Button>
-                </DialogClose>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
         </div>
         <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
           <Link
