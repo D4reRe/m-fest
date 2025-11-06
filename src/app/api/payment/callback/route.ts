@@ -3,23 +3,35 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 
 export async function POST(req: Request) {
-  const payload = await req.json();
+  const body = await req.text();
+  console.log("Payload", body);
+  const params = new URLSearchParams(body);
+  console.log("URL Search Params", params);
 
-  const {
+  // console.log(payload);
+
+  const merchantOrderId = params.get("merchantOrderId") as string;
+  const merchantCode = params.get("merchantCode") as string;
+  const resultCode = params.get("resultCode") as string;
+  const amount = params.get("amount") as string;
+  const signature = params.get("signature") as string;
+
+  const payload = {
     merchantCode,
     merchantOrderId,
     amount,
-    productDetail,
     signature,
     resultCode,
-    reference,
-  } = payload;
+  };
 
   // For debugging
   console.log("Payload", payload);
   console.log("merchantOrderId: ", merchantOrderId);
-  console.log("resultCode: ", resultCode);
+  console.log("merchantCode: ", merchantCode);
   console.log("amount: ", amount);
+  console.log("resultCode: ", resultCode);
+  console.log("signature: ", signature);
+  console.log("process.env.DUITKU_API_KEY: ", process.env.DUITKU_API_KEY);
   const expectedSignature = crypto
     .createHash("md5")
     .update(

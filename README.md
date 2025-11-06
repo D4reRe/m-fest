@@ -2,26 +2,26 @@
 
 A modern web platform built for **Mechanical Festival 2026**, designed to handle team registrations, competition enrollments, and payment integrations with a smooth, secure, and user-friendly interface.
 
-This project was developed using **Next.js (App Router)**, with **TypeScript**, **Prisma**, **Auth.js**, and **Midtrans Snap API** for payments.  
+This project was developed using **Next.js (App Router)**, with **TypeScript**, **Prisma**, **Auth.js**, and **DuitKu POP** for payments.  
 It serves as the official system for participants to register, create teams, and manage competition payments online.
 
 ---
 
 ## 🚀 Tech Stack
 
-| Category           | Technology                                      |
-| ------------------ | ----------------------------------------------- |
-| **Framework**      | [Next.js 16 (App Router)](https://nextjs.org)   |
-| **Language**       | [TypeScript](https://www.typescriptlang.org/)   |
-| **Styling**        | [TailwindCSS](https://tailwindcss.com/)         |
-| **UI Components**  | [shadcn/ui](https://ui.shadcn.com/)             |
-| **Database ORM**   | [Prisma](https://www.prisma.io/)                |
-| **Database**       | [Neon PostgreSQL](https://neon.tech/)           |
-| **Authentication** | [Auth.js (NextAuth)](https://authjs.dev/)       |
-| **File Uploads**   | [UploadThing](https://uploadthing.com/)         |
-| **Payments**       | [Midtrans Snap API](https://docs.midtrans.com/) |
-| **Error Tracking** | [Sentry.js](https://sentry.io/)                 |
-| **Deployment**     | [Vercel](https://vercel.com/)                   |
+| Category           | Technology                                    |
+| ------------------ | --------------------------------------------- |
+| **Framework**      | [Next.js 16 (App Router)](https://nextjs.org) |
+| **Language**       | [TypeScript](https://www.typescriptlang.org/) |
+| **Styling**        | [TailwindCSS](https://tailwindcss.com/)       |
+| **UI Components**  | [shadcn/ui](https://ui.shadcn.com/)           |
+| **Database ORM**   | [Prisma](https://www.prisma.io/)              |
+| **Database**       | [Neon PostgreSQL](https://neon.tech/)         |
+| **Authentication** | [Auth.js (NextAuth)](https://authjs.dev/)     |
+| **File Uploads**   | [UploadThing](https://uploadthing.com/)       |
+| **Payments**       | [DuitKu POP](https://docs.duitku.com/)        |
+| **Error Tracking** | [Sentry.js](https://sentry.io/)               |
+| **Deployment**     | [Vercel](https://vercel.com/)                 |
 
 ---
 
@@ -43,13 +43,13 @@ It serves as the official system for participants to register, create teams, and
 ### 🏆 Competition Registration
 
 - Register teams to competitions.
-- Payment integration using **Midtrans Snap**.
+- Payment integration using **Duitku POP**.
 - Only team leaders can initiate payments.
 - Real-time payment status updates (settlement, pending, failed).
 
 ### 💳 Payment System
 
-- Fully integrated **Midtrans Snap** payment gateway.
+- Fully integrated **Duitku POP** payment gateway.
 - Handles success, pending, and error redirects.
 - Displays payment status and transaction details in dashboard.
 
@@ -85,6 +85,16 @@ bun install
 ```env
 # Database
 DATABASE_URL=""
+DIRECT_URL=""
+
+# NODENV
+NODE_ENV="development"
+
+# BASE URL Dev
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+
+# BASE_URL_PROD
+# NEXT_PUBLIC_BASE_URL=""
 
 # Auth.js
 AUTH_SECRET=""
@@ -92,20 +102,25 @@ AUTH_GITHUB_ID=""
 AUTH_GITHUB_SECRET=""
 AUTH_GOOGLE_ID=""
 AUTH_GOOGLE_SECRET=""
+AUTH_DISCORD_ID=""
+AUTH_DISCORD_SECRET=""
 
 # UploadThing
-UPLOADTHING_SECRET=""
+UPLOADTHING_TOKEN=''
+UPLOADTHING_API=""
 UPLOADTHING_APP_ID=""
 
-# Midtrans
-MIDTRANS_SERVER_KEY=""
-MIDTRANS_CLIENT_KEY=""
-MIDTRANS_API_URL="https://app.sandbox.midtrans.com/snap/v1/transactions"
-NEXT_PUBLIC_MIDTRANS_CLIENT_KEY=""
+# Duitku
+DUITKU_MERCHANT_ID=""
+DUITKU_API_KEY=""
 
 # Sentry
 SENTRY_AUTH_TOKEN=""
 ```
+
+# STORYBLOK
+
+STORYBLOK_CONTENT_API_ACCESS_TOKEN=""
 
 ### 4 Initialize Prisma
 
