@@ -57,7 +57,7 @@ model CompRegistration {
 
   user            User?       @relation(fields: [userId], references: [id])   // Leader
   team            Team?        @relation(fields: [teamId], references: [id])
-  payment         Payment     @relation(fields: [paymentId], references: [orderId])
+  payment         Payment     @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
   
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
