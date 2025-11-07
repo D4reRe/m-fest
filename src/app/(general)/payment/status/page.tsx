@@ -80,12 +80,14 @@ async function SuccessPage({
             <Button
               variant={"outline"}
               className="hover:scale-105 hover:bg-white/25 transition-all"
+              asChild
             >
               <Link href="/dashboard/invoices">Go to Invoices</Link>
             </Button>
             <Button
               variant={"default"}
               className="hover:scale-105 transition-all"
+              asChild
             >
               <Link
                 href={thisOrderIdData?.paymentUrl as string}
@@ -111,6 +113,7 @@ async function SuccessPage({
             <Button
               variant={"outline"}
               className="hover:scale-105 hover:bg-white/25 transition-all"
+              asChild
             >
               <Link href="/competitions">Competitions</Link>
             </Button>
@@ -132,12 +135,14 @@ async function SuccessPage({
           <Button
             variant={"outline"}
             className="hover:scale-105 hover:bg-white/25 transition-all"
+            asChild
           >
             <Link href="/dashboard/competitions">Go to Competitions</Link>
           </Button>
           <Button
             variant={"outline"}
             className="hover:scale-105 hover:bg-white/25 transition-all"
+            asChild
           >
             <Link href="/dashboard/invoices">Go to Invoices</Link>
           </Button>

@@ -73,7 +73,7 @@ async function CompPage() {
             </EmptyHeader>
             <EmptyContent>
               <div className="flex gap-2">
-                <Button className="cursor-pointer">
+                <Button className="cursor-pointer" asChild>
                   <Link href="/competitions">Register Competition</Link>
                 </Button>
               </div>
