@@ -45,9 +45,9 @@ export async function TeamMembers() {
         </EmptyHeader>
         <EmptyContent>
           <div className="flex gap-2">
-            <Link href="dashboard/team/create-team">
-              <Button className="cursor-pointer">Create team</Button>
-            </Link>
+            <Button className="cursor-pointer" asChild>
+              <Link href="dashboard/team/create-team">Create team</Link>
+            </Button>
           </div>
         </EmptyContent>
         <Button
@@ -77,19 +77,20 @@ export async function TeamMembers() {
                         member.role === "Leader"
                     ) &&
                       !team.competition && (
-                        <Link
-                          href={`/dashboard/team/edit-team/${team?.name
-                            ?.split(" ")
-                            .join("-")}`}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="ml-2 cursor-pointer h-8 w-8"
+                          asChild
                         >
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="ml-2 cursor-pointer h-8 w-8"
+                          <Link
+                            href={`/dashboard/team/edit-team/${team?.name
+                              ?.split(" ")
+                              .join("-")}`}
                           >
                             <Edit className="w-4 h-4" />
-                          </Button>
-                        </Link>
+                          </Link>
+                        </Button>
                       )}
                   </h3>
                   <h5 className="text-sm text-muted-foreground">

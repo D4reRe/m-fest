@@ -86,6 +86,17 @@ function ProfileUpdateForm({ user }: { user: User }) {
     formState: { errors, isSubmitting },
   } = useForm<profileSchema>({
     resolver: zodResolver(profileSchema),
+    defaultValues: {
+      fullName: "",
+      gender: undefined,
+      phoneNumber: "",
+      domicile: "",
+      institution: "",
+      major: "",
+      education: undefined,
+      semester: 1,
+      birthDate: "",
+    },
   });
   const router = useRouter();
 
@@ -193,7 +204,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
                           isLoading={isLoading as boolean}
                         />
                       </div>
-                      <DialogFooter className="">
+                      <DialogFooter>
                         <Button
                           className="cursor-pointer mr-auto"
                           disabled={!croppedImageUrl || isLoading}
@@ -231,11 +242,11 @@ function ProfileUpdateForm({ user }: { user: User }) {
                         >
                           Save changes
                         </Button>
-                        <DialogClose>
+                        <DialogClose asChild>
                           <Button
                             variant="outline"
-                            className="cursor-pointer"
                             disabled={isLoading}
+                            className="cursor-pointer"
                           >
                             Cancel
                           </Button>

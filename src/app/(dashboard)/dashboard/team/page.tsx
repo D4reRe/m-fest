@@ -73,9 +73,9 @@ export default async function TeamsPage() {
         </EmptyHeader>
         <EmptyContent>
           <div className="flex gap-2">
-            <Link href="team/create-team">
-              <Button className="cursor-pointer">Create team</Button>
-            </Link>
+            <Button className="cursor-pointer" asChild>
+              <Link href="team/create-team">Create team</Link>
+            </Button>
           </div>
         </EmptyContent>
       </Empty>
@@ -85,9 +85,9 @@ export default async function TeamsPage() {
     <section className="min-h-screen bg-transparent">
       <div className="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h3 className="text-3xl font-bold text-foreground">Your Teams</h3>
-        <Link href="team/create-team">
-          <Button className="cursor-pointer">Create team</Button>
-        </Link>
+        <Button className="cursor-pointer" asChild>
+          <Link href="team/create-team">Create team</Link>
+        </Button>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {teams.map((team) => {
@@ -106,19 +106,20 @@ export default async function TeamsPage() {
                       ) &&
                         !team.competition && (
                           <div className="flex items-center">
-                            <Link
-                              href={`/dashboard/team/edit-team/${team?.name
-                                ?.split(" ")
-                                .join("-")}`}
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="ml-2 cursor-pointer h-8 w-8"
+                              asChild
                             >
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="ml-2 cursor-pointer h-8 w-8"
+                              <Link
+                                href={`/dashboard/team/edit-team/${team?.name
+                                  ?.split(" ")
+                                  .join("-")}`}
                               >
                                 <Edit className="w-4 h-4" />
-                              </Button>
-                            </Link>
+                              </Link>
+                            </Button>
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button
