@@ -31,7 +31,6 @@ export async function POST(req: Request) {
   console.log("amount: ", amount);
   console.log("resultCode: ", resultCode);
   console.log("signature: ", signature);
-  console.log("process.env.DUITKU_API_KEY: ", process.env.DUITKU_API_KEY);
   const expectedSignature = crypto
     .createHash("md5")
     .update(

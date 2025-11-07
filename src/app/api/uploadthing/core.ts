@@ -15,7 +15,7 @@ export const ourFileRouter = {
        * For full list of options and defaults, see the File Route API reference
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
-      maxFileSize: "4MB",
+      maxFileSize: "16MB",
       maxFileCount: 1,
     },
   })
@@ -25,8 +25,10 @@ export const ourFileRouter = {
       // This code runs on your server before upload
 
       // If you throw, the user will not be able to upload
-      if (!session) throw new UploadThingError("Unauthorized");
-
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return {
         userId: session.user.id,
@@ -37,16 +39,16 @@ export const ourFileRouter = {
     })
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
-      // console.log("Upload complete for user:", {
-      //   userId: metadata.userId,
-      //   name: metadata.name,
-      //   email: metadata.email,
-      //   imageUrl: metadata.imageUrl,
-      // });
-      // console.log("file url", {
-      //   ufsUrl: file.ufsUrl,
-      //   fileKey: file.key,
-      // });
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+        imageUrl: metadata.imageUrl,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
       try {
         const previousImage = await prisma.user.findUnique({
           where: { email: metadata.email as string },

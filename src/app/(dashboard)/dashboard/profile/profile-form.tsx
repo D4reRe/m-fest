@@ -3,6 +3,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
   Select,
   SelectContent,
   SelectItem,
@@ -19,7 +29,7 @@ import { NumberInput, Input as HeroInput } from "@heroui/react";
 import { educations } from "@/lib/profile";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { UploadButton } from "@/utils/uploadthing";
+import { useUploadThing } from "@/utils/uploadthing";
 import { User } from "@prisma/client";
 import {
   Field,
@@ -28,6 +38,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { UserAvatar } from "@/components/general/UserProfile";
+import PencilIcon from "@/components/dashboard/profile/PencilIcon";
+import ImageCropper from "@/components/dashboard/profile/ImageCropper";
 
 const profileSchema = z.object({
   fullName: z.string().min(5),
@@ -50,6 +62,12 @@ function ProfileUpdateForm({ user }: { user: User }) {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
+  const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
+  const { startUpload } = useUploadThing("updateProfilePicture");
+
+  function updateAvatar(imgSrc: string) {
+    setCroppedImageUrl(imgSrc);
+  }
 
   useEffect(() => {
     const toastType = searchParams.get("notif");
@@ -145,44 +163,88 @@ function ProfileUpdateForm({ user }: { user: User }) {
           <div className="flex flex-col items-center justify-center gap-5">
             <div className="">
               {user.image && (
-                <UserAvatar
-                  src={user.image as string}
-                  alt={user.name as string}
-                  className="w-32 h-32 border-2 border-primary/50"
-                />
+                <div className="relative">
+                  <UserAvatar
+                    src={user.image as string}
+                    alt={user.name as string}
+                    className="w-32 h-32 border-2 border-primary/50"
+                  />
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button
+                        className="absolute -bottom-3 left-0 right-0 m-auto w-fit p-[.35rem] rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-600"
+                        title="Change photo"
+                      >
+                        <PencilIcon />
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-sm sm:max-w-xl ">
+                      <DialogHeader>
+                        <DialogTitle>Edit profile</DialogTitle>
+                        <DialogDescription>
+                          Make changes to your profile picture here. Click save
+                          when you&apos;re done.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4">
+                        <ImageCropper
+                          alt={user.name as string}
+                          updateAvatar={updateAvatar}
+                          isLoading={isLoading as boolean}
+                        />
+                      </div>
+                      <DialogFooter className="">
+                        <Button
+                          className="cursor-pointer mr-auto"
+                          disabled={!croppedImageUrl || isLoading}
+                          onClick={async () => {
+                            setIsLoading(true);
+                            toast.loading("Updating profile picture...", {
+                              id: "update-profile-picture",
+                            });
+                            const blob = await (
+                              await fetch(croppedImageUrl!)
+                            ).blob();
+                            const file = new File(
+                              [blob],
+                              `${user.name}-avatar.png`,
+                              { type: blob.type }
+                            );
+                            const utfileUrls = await startUpload([file]);
+                            if (!utfileUrls) {
+                              setIsLoading(false);
+                              toast.dismiss("update-profile-picture");
+                              toast.error("Failed to upload image");
+                              return;
+                            }
+                            toast.dismiss("update-profile-picture");
+                            setIsLoading(false);
+                            setTimeout(() => {
+                              router.refresh();
+                              window.location.reload();
+                            }, 500);
+                            toast.success("Profile picture updated", {
+                              description: `Your profile image have been updated successfully! `,
+                            });
+                            router.replace("/dashboard/profile");
+                          }}
+                        >
+                          Save changes
+                        </Button>
+                        <DialogClose>
+                          <Button
+                            variant="outline"
+                            className="cursor-pointer"
+                            disabled={isLoading}
+                          >
+                            Cancel
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               )}
-            </div>
-            <div>
-              <UploadButton
-                className="ut-button:bg-transparent ut-button:hover:bg-white/15 ut-uploading:cursor-not-allowed transition-all"
-                endpoint={"updateProfilePicture"}
-                onUploadBegin={() => {
-                  toast.loading("Waiting to upload...", {
-                    id: "uploading-wait",
-                  });
-                }}
-                onUploadProgress={() => {
-                  toast.dismiss("uploading-wait");
-                  toast.loading("Uploading image...", {
-                    id: "uploading-image",
-                  });
-                }}
-                onClientUploadComplete={async (res) => {
-                  console.log(res);
-                  toast.dismiss("uploading-image");
-                  setTimeout(() => {
-                    router.refresh();
-                    window.location.reload();
-                  }, 500);
-                  toast.success("Image uploaded");
-                  router.replace("/dashboard/profile");
-                }}
-                onUploadError={(error: Error) => {
-                  toast.error("Failed to upload image", {
-                    description: error.message,
-                  });
-                }}
-              />
             </div>
           </div>
         </div>
