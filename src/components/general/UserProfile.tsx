@@ -18,7 +18,7 @@ export function UserAvatar({
           "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
         }
         alt={alt ?? "User's Image"}
-        className="object-center"
+        className="object-center object-cover"
       />
       <AvatarFallback className="bg-gradient-accent text-foreground font-bold">
         {(alt as string)

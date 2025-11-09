@@ -15,7 +15,7 @@ export const ourFileRouter = {
        * For full list of options and defaults, see the File Route API reference
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
-      maxFileSize: "16MB",
+      maxFileSize: "1024MB",
       maxFileCount: 1,
     },
   })
@@ -68,6 +68,250 @@ export const ourFileRouter = {
         throw error;
       }
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
+    }),
+  uploadIdentityCard: f({
+    image: {
+      maxFileSize: "1024MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
+      const verification = await prisma.verification.findUnique({
+        where: { userId: session.user.id },
+      });
+      if (!verification) {
+        await prisma.verification.create({
+          data: {
+            userId: session.user.id,
+          },
+        });
+      }
+      return {
+        userId: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
+      try {
+        const previousImage = await prisma.verification.findUnique({
+          where: { userId: metadata.userId },
+          select: { IdentityCardImageKey: true },
+        });
+        if (previousImage?.IdentityCardImageKey) {
+          await deleteFiles(previousImage.IdentityCardImageKey);
+        }
+        await prisma.verification.update({
+          where: { userId: metadata.userId as string },
+          data: {
+            IdentityCardImageUrl: file.ufsUrl,
+            IdentityCardImageKey: file.key,
+            IdentityCardCreatedAt: new Date(),
+          },
+        });
+
+        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
+      } catch (error) {
+        console.error("Error in onUploadComplete:", error);
+        throw error;
+      }
+    }),
+  uploadTwibbon: f({
+    image: {
+      maxFileSize: "1024MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
+      const verification = await prisma.verification.findUnique({
+        where: { userId: session.user.id },
+      });
+      if (!verification) {
+        await prisma.verification.create({
+          data: {
+            userId: session.user.id,
+          },
+        });
+      }
+      return {
+        userId: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
+      try {
+        const previousImage = await prisma.verification.findUnique({
+          where: { userId: metadata.userId },
+          select: { twibbonImageKey: true },
+        });
+        if (previousImage?.twibbonImageKey) {
+          await deleteFiles(previousImage.twibbonImageKey);
+        }
+        await prisma.verification.update({
+          where: { userId: metadata.userId as string },
+          data: {
+            twibbonImageUrl: file.ufsUrl,
+            twibbonImageKey: file.key,
+            twibbonCreatedAt: new Date(),
+          },
+        });
+
+        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
+      } catch (error) {
+        console.error("Error in onUploadComplete:", error);
+        throw error;
+      }
+    }),
+  uploadFollowIg: f({
+    image: {
+      maxFileSize: "1024MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
+      const verification = await prisma.verification.findUnique({
+        where: { userId: session.user.id },
+      });
+      if (!verification) {
+        await prisma.verification.create({
+          data: {
+            userId: session.user.id,
+          },
+        });
+      }
+      return {
+        userId: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
+      try {
+        const previousImage = await prisma.verification.findUnique({
+          where: { userId: metadata.userId },
+          select: { followIgImageKey: true },
+        });
+        if (previousImage?.followIgImageKey) {
+          await deleteFiles(previousImage.followIgImageKey);
+        }
+        await prisma.verification.update({
+          where: { userId: metadata.userId as string },
+          data: {
+            followIgImageUrl: file.ufsUrl,
+            followIgImageKey: file.key,
+            followIgCreatedAt: new Date(),
+          },
+        });
+
+        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
+      } catch (error) {
+        console.error("Error in onUploadComplete:", error);
+        throw error;
+      }
+    }),
+  uploadPDDikti: f({
+    image: {
+      maxFileSize: "1024MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
+      const verification = await prisma.verification.findUnique({
+        where: { userId: session.user.id },
+      });
+      if (!verification) {
+        await prisma.verification.create({
+          data: {
+            userId: session.user.id,
+          },
+        });
+      }
+      return {
+        userId: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
+      try {
+        const previousImage = await prisma.verification.findUnique({
+          where: { userId: metadata.userId },
+          select: { pDDiktiImageKey: true },
+        });
+        if (previousImage?.pDDiktiImageKey) {
+          await deleteFiles(previousImage.pDDiktiImageKey);
+        }
+        await prisma.verification.update({
+          where: { userId: metadata.userId as string },
+          data: {
+            pDDiktiImageUrl: file.ufsUrl,
+            pDDiktiImageKey: file.key,
+            pDDiktiCreatedAt: new Date(),
+          },
+        });
+
+        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
+      } catch (error) {
+        console.error("Error in onUploadComplete:", error);
+        throw error;
+      }
     }),
 } satisfies FileRouter;
 

@@ -184,7 +184,7 @@ export default async function TeamsPage() {
                             alt={user?.name as string}
                             className="w-24 h-24 border-2 border-primary/50"
                           />
-                          <h4 className="font-medium text-foreground text-sm mt-3">
+                          <h4 className="font-medium text-foreground text-sm mt-3 line-clamp-1">
                             {user?.name}
                           </h4>
                           <p className="text-xs text-muted-foreground mt-1">

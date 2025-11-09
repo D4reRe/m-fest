@@ -9,6 +9,7 @@ import {
   IconConfetti,
   IconInvoice,
   IconHelp,
+  IconFileText,
 } from "@tabler/icons-react";
 
 import { NavMain } from "@/components/dashboard/nav-main";
@@ -25,6 +26,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { NavSecondary } from "./nav-secondary";
+import { NavDocuments } from "./nav-documents";
 
 const data = {
   navMain: [
@@ -66,6 +68,13 @@ const data = {
       icon: IconHelp,
     },
   ],
+  navDocuments: [
+    {
+      name: "Documents",
+      url: "/dashboard/documents",
+      icon: IconFileText,
+    },
+  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -101,6 +110,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent className="bg-transparent backdrop-blur-3xl ">
         <NavMain items={data.navMain} />
+        <NavDocuments items={data.navDocuments} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
