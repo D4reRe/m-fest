@@ -1,7 +1,7 @@
 "use client";
 import { toast } from "sonner";
-import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import { useRef, useState } from "react";
 import ReactCrop, {
   centerCrop,
@@ -10,18 +10,16 @@ import ReactCrop, {
   type Crop,
 } from "react-image-crop";
 import Image from "next/image";
-import { Button } from "../../ui/button";
+import { Button } from "../ui/button";
 import { setCanvasPreview, setCanvasUpload } from "./setCanvasPreview";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@prisma/client";
 
-export default function ImageCropper({
+export default function ImageCropperDocument({
   alt,
   updateImgUrl,
   updateImgFile,
   updateUploadCroppedFile,
   isLoading,
-  isUploading,
   title,
   isProfilePicture,
   user,
@@ -32,7 +30,6 @@ export default function ImageCropper({
   updateImgFile: (file: File) => void;
   updateUploadCroppedFile: (file: File) => void;
   isLoading: boolean;
-  isUploading: boolean;
   isProfilePicture?: boolean;
   user: User;
 }) {
@@ -43,9 +40,6 @@ export default function ImageCropper({
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const uploadCanvasRef = useRef<HTMLCanvasElement>(null);
   const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
-  const [uploadCroppedImageUrl, setUploadCroppedImageUrl] = useState<
-    string | null
-  >(null);
   const [croppedFile, setCroppedFile] = useState<File | null>(null);
   const [imageSrc, setImageSrc] = useState<string | null>("");
   const [naturalWidth, setNaturalWidth] = useState<number>(0);
@@ -60,7 +54,6 @@ export default function ImageCropper({
     setCroppedImageUrl(null);
     setCroppedFile(null);
     updateUploadCroppedFile(null as unknown as File);
-    setUploadCroppedImageUrl(null);
     updateImgUrl("");
     updateImgFile(null as unknown as File);
   }
@@ -132,11 +125,11 @@ export default function ImageCropper({
   }
   function onImageLoad(event: React.SyntheticEvent<HTMLImageElement>) {
     const { width, height } = event.currentTarget;
-    const cropWidthInPercent = (MIN_DIMENSION / width) * 100;
     const crop = makeAspectCrop(
+      // starting crop shape is at width / 2 for better user experience if the user has larger dimension
       {
-        unit: "%",
-        width: cropWidthInPercent,
+        unit: "px",
+        width: Math.max(MIN_DIMENSION, width / 2),
       },
       (ASPECT_RATIO as unknown as number) ?? 1,
       width,
@@ -145,21 +138,29 @@ export default function ImageCropper({
     const centeredCrop = centerCrop(crop, width, height);
     setCrop(centeredCrop);
   }
+  function handleCropChange(crop: Crop) {
+    if (!crop.width || !crop.height) return;
+
+    const min = MIN_DIMENSION;
+    // height = width / ASPECT_RATIO
+    const newCrop = {
+      ...crop,
+      width: Math.max(crop.width, min),
+      height: Math.max(crop.height, min / (ASPECT_RATIO ?? 1)),
+    };
+    setCrop(newCrop);
+  }
   return (
     <>
       <div className="grid w-full items-center gap-3">
-        {!isUploading && (
-          <>
-            <Label htmlFor="picture">{title}</Label>
-            <Input
-              id="picture"
-              type="file"
-              accept="image/*"
-              onChange={onSelectFile}
-              ref={inputFileRef}
-            />
-          </>
-        )}
+        <Label htmlFor="picture">{title}</Label>
+        <Input
+          id="picture"
+          type="file"
+          accept="image/*"
+          onChange={onSelectFile}
+          ref={inputFileRef}
+        />
         {error && <p className="text-destructive text-sm">{error}</p>}
 
         <div className="flex flex-col items-center ">
@@ -167,7 +168,7 @@ export default function ImageCropper({
             <>
               <ReactCrop
                 crop={crop}
-                onChange={(pixelCrop, percentCrop) => setCrop(percentCrop)}
+                onChange={handleCropChange}
                 circularCrop={isProfilePicture}
                 keepSelection
                 aspect={ASPECT_RATIO}
@@ -227,6 +228,7 @@ export default function ImageCropper({
                       );
                       return;
                     }
+
                     setCanvasPreview(
                       imgRef.current as HTMLImageElement,
                       previewCanvasRef.current as HTMLCanvasElement,
@@ -242,10 +244,10 @@ export default function ImageCropper({
                     previewCanvasRef.current?.toBlob(
                       (blob) => {
                         if (!blob) return;
-                        if (isProfilePicture) {
+                        if (!isProfilePicture) {
                           const file = new File(
                             [blob],
-                            `${user.name}-avatar.webp`,
+                            `document-${title}-${user.name}.webp`,
                             {
                               // blob.type ---> if don't specify type it defaults to png. choose either jpeg or webp for better compression
                               // type: blob.type,
@@ -267,17 +269,13 @@ export default function ImageCropper({
                       pixelCrop
                     );
 
-                    const uploadDataUrlPreview =
-                      uploadCanvasRef.current?.toDataURL();
-                    setUploadCroppedImageUrl(uploadDataUrlPreview as string);
-
                     uploadCanvasRef.current?.toBlob(
                       (blob) => {
                         if (!blob) return;
-                        if (isProfilePicture) {
+                        if (!isProfilePicture) {
                           const file = new File(
                             [blob],
-                            `${user.name}-avatar.webp`,
+                            `document-${title}-${user.name}.webp`,
                             {
                               // blob.type ---> if don't specify type it defaults to png. choose either jpeg or webp for better compression
                               // type: blob.type,
@@ -307,60 +305,40 @@ export default function ImageCropper({
               </div>
             </>
           )}
-          {crop && croppedImageUrl && isProfilePicture && (
+          {crop && croppedImageUrl && !isProfilePicture && (
             <>
-              <div className="flex gap-3">
-                <Avatar className="w-32 h-32 border-2 border-primary/50 mt-5">
-                  <AvatarImage
-                    src={croppedImageUrl as string}
-                    alt={alt ?? "User's Image"}
-                    className="object-center object-cover"
-                  />
-
-                  <AvatarFallback className="bg-gradient-accent text-foreground font-bold">
-                    {(alt as string)
-                      ? (alt as string)
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                      : ""}
-                  </AvatarFallback>
-                </Avatar>
-                {/* Debugging */}
-                {/* <Avatar className="w-32 h-32 border-2 border-primary/50 mt-5">
-                  <AvatarImage
-                    src={uploadCroppedImageUrl as string}
-                    alt={alt ?? "User's Image"}
-                    className="object-center object-cover"
-                  />
-
-                  <AvatarFallback className="bg-gradient-accent text-foreground font-bold">
-                    {(alt as string)
-                      ? (alt as string)
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                      : ""}
-                  </AvatarFallback>
-                </Avatar> */}
-              </div>
-              {!isUploading && (
-                <Button
-                  className="mt-4 cursor-pointer"
-                  onClick={() => {
-                    setCroppedImageUrl("");
-                    setUploadCroppedImageUrl(null);
-                    updateImgUrl("");
-                    setCroppedFile(null);
-                    updateUploadCroppedFile(null as unknown as File);
-                    updateImgFile(null as unknown as File);
-                  }}
-                  variant={"destructive"}
-                  disabled={isLoading}
-                >
-                  Cancel Crop
-                </Button>
+              {naturalHeight > naturalWidth && (
+                <Image
+                  src={croppedImageUrl as string}
+                  alt={alt ?? `${title} Image`}
+                  width={250}
+                  height={250}
+                  className="mt-5"
+                ></Image>
               )}
+              {naturalHeight < naturalWidth && (
+                <Image
+                  src={croppedImageUrl as string}
+                  alt={alt ?? `${title} Image`}
+                  width={750}
+                  height={750}
+                  className="mt-5"
+                ></Image>
+              )}
+              <Button
+                className="mt-4 cursor-pointer"
+                onClick={() => {
+                  setCroppedImageUrl("");
+                  updateImgUrl("");
+                  setCroppedFile(null);
+                  updateUploadCroppedFile(null as unknown as File);
+                  updateImgFile(null as unknown as File);
+                }}
+                variant={"destructive"}
+                disabled={isLoading}
+              >
+                Cancel Crop
+              </Button>
             </>
           )}
           <canvas

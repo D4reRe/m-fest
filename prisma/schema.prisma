@@ -93,10 +93,8 @@ model User {
   birthDate         String?
   role              Role            @default(USER)
 
-  twibbon           String?
-  ktm               String?
-  pDDikti           String?
-  followIg          String?
+  verified          Boolean  @default(false)
+  verification      Verification?
 
   team_member       TeamMember[]
   registration      CompRegistration[]
@@ -111,6 +109,35 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Verification {
+  id                        String   @id @default(cuid())
+  userId                    String   @unique
+  IdentityCardImageUrl      String?
+  twibbonImageUrl           String?
+  pDDiktiImageUrl           String?
+  followIgImageUrl          String?
+  IdentityCardImageKey      String?
+  twibbonImageKey           String?
+  pDDiktiImageKey           String?
+  followIgImageKey          String?
+  IdentityCardCreatedAt     DateTime? @default(now())
+  twibbonCreatedAt          DateTime? @default(now())
+  pDDiktiCreatedAt          DateTime? @default(now())
+  followIgCreatedAt         DateTime? @default(now())
+
+  IdentityCardVerified     Boolean? @default(false)
+  twibbonVerified          Boolean? @default(false)
+  pDDiktiVerified          Boolean? @default(false)
+  followIgVerified         Boolean? @default(false)
+
+
+
+  status                    String   @default("pending") // pending | verified | rejected
+  user                      User     @relation(fields: [userId], references: [id])
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
 }
 
 model Team {
@@ -159,7 +186,7 @@ model Payment {
   registration  CompRegistration?
   team          Team?
   amount        Int
-  paymentUrl   String?
+  paymentUrl      String?
   referenceDuitku     String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt

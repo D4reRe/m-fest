@@ -1,8 +1,8 @@
 import ProfileUpdateForm from "./profile-form";
-import React from "react";
 import { Metadata } from "next";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@prisma/client";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Profile | Mechanical Festival 2026",
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 
 async function ProfilePage() {
   const user: User = (await getUserProfile()) as User;
+
   return (
     <section className="flex min-h-screen bg-transparent px-4 py-4 md:py-8 dark:bg-transparent">
       <div className="bg-transparent m-auto h-fit w-full max-w-5xl overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
@@ -20,8 +21,18 @@ async function ProfilePage() {
               My Profile
             </h1>
             <p className="text-sm text-start">
-              Complete your profile below to able to register competitions and
-              events!
+              Please complete your profile below to able to register
+              competitions and events!
+            </p>
+            <p className="text-sm text-start">
+              Already complete your profile? You can upload your legal documents
+              and other required data by{" "}
+              <Link
+                href="/dashboard/profile/documents"
+                className="underline font-bold italic"
+              >
+                go to this page.
+              </Link>
             </p>
           </div>
           <ProfileUpdateForm user={user} />
