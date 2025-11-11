@@ -130,7 +130,7 @@ function DocumentsForm({
                   >
                     {type === "identityCard" &&
                     userDocuments?.IdentityCardImageUrl &&
-                    userDocuments.IdentityCardStatus !== "AWAITING_UPLOAD" ? (
+                    userDocuments.status === "PENDING" ? (
                       <p className="">
                         {userDocuments.IdentityCardVerified === false
                           ? "Pending"
@@ -138,7 +138,7 @@ function DocumentsForm({
                       </p>
                     ) : type === "twibbon" &&
                       userDocuments?.twibbonImageUrl &&
-                      userDocuments.twibbonStatus !== "AWAITING_UPLOAD" ? (
+                      userDocuments.status === "PENDING" ? (
                       <p className="">
                         {userDocuments.twibbonVerified === false
                           ? "Pending"
@@ -146,7 +146,7 @@ function DocumentsForm({
                       </p>
                     ) : type === "followIg" &&
                       userDocuments?.followIgImageUrl &&
-                      userDocuments.followIgStatus !== "AWAITING_UPLOAD" ? (
+                      userDocuments.status === "PENDING" ? (
                       <p className="">
                         {userDocuments.followIgVerified === false
                           ? "Pending"
@@ -154,7 +154,7 @@ function DocumentsForm({
                       </p>
                     ) : type === "pDDikti" &&
                       userDocuments?.pDDiktiImageUrl &&
-                      userDocuments.pDDiktiStatus !== "AWAITING_UPLOAD" ? (
+                      userDocuments.status === "PENDING" ? (
                       <p className="">
                         {userDocuments.pDDiktiVerified === false
                           ? "Pending"
@@ -171,8 +171,7 @@ function DocumentsForm({
                 </div>
               </div>
               <div className="grid grid-cols-1">
-                <div className="grid w-full max-w-sm items-center gap-3">
-                  <Label htmlFor={title}>Upload {title}</Label>
+                {!userDocuments?.status && (
                   <UploadDocumentDialog
                     isLoading={isLoading}
                     setIsLoading={setIsLoading}
@@ -183,15 +182,85 @@ function DocumentsForm({
                     type={type}
                     uploadThingRoute={type}
                     setValue={setValue}
-                  ></UploadDocumentDialog>
-                </div>
-
+                  />
+                )}
+                {userDocuments?.status === "NOT_SUBMITTED" && (
+                  <UploadDocumentDialog
+                    isLoading={isLoading}
+                    setIsLoading={setIsLoading}
+                    router={router}
+                    id={id}
+                    title={title}
+                    user={user}
+                    type={type}
+                    uploadThingRoute={type}
+                    setValue={setValue}
+                  />
+                )}
                 {userDocuments?.status === "PENDING" && (
                   <>
-                    <p className="text-sm text-muted-foreground">
-                      You have already submitted your document. Please wait for
-                      the verification process to complete.
-                    </p>
+                    {type === "identityCard" &&
+                    userDocuments?.IdentityCardImageUrl &&
+                    userDocuments.IdentityCardStatus === "AWAITING_UPLOAD" ? (
+                      <UploadDocumentDialog
+                        isLoading={isLoading}
+                        setIsLoading={setIsLoading}
+                        router={router}
+                        id={id}
+                        title={title}
+                        user={user}
+                        type={type}
+                        uploadThingRoute={type}
+                        setValue={setValue}
+                      />
+                    ) : type === "twibbon" &&
+                      userDocuments?.twibbonImageUrl &&
+                      userDocuments.twibbonStatus === "AWAITING_UPLOAD" ? (
+                      <UploadDocumentDialog
+                        isLoading={isLoading}
+                        setIsLoading={setIsLoading}
+                        router={router}
+                        id={id}
+                        title={title}
+                        user={user}
+                        type={type}
+                        uploadThingRoute={type}
+                        setValue={setValue}
+                      />
+                    ) : type === "followIg" &&
+                      userDocuments?.followIgImageUrl &&
+                      userDocuments.followIgStatus === "AWAITING_UPLOAD" ? (
+                      <UploadDocumentDialog
+                        isLoading={isLoading}
+                        setIsLoading={setIsLoading}
+                        router={router}
+                        id={id}
+                        title={title}
+                        user={user}
+                        type={type}
+                        uploadThingRoute={type}
+                        setValue={setValue}
+                      />
+                    ) : type === "pDDikti" &&
+                      userDocuments?.pDDiktiImageUrl &&
+                      userDocuments.pDDiktiStatus === "AWAITING_UPLOAD" ? (
+                      <UploadDocumentDialog
+                        isLoading={isLoading}
+                        setIsLoading={setIsLoading}
+                        router={router}
+                        id={id}
+                        title={title}
+                        user={user}
+                        type={type}
+                        uploadThingRoute={type}
+                        setValue={setValue}
+                      />
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        You have already submitted your document. Please wait
+                        for the verification process to complete.
+                      </p>
+                    )}
                   </>
                 )}
                 {userDocuments?.status === "ACCEPTED" && (
