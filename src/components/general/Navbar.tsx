@@ -85,6 +85,7 @@ export const Navbar = ({ user }: { user: User }) => {
                           ? "text-accent-foreground"
                           : "text-muted-foreground hover:text-accent-foreground"
                       )}
+                      prefetch
                     >
                       <span>{item.name}</span>
                     </Link>
@@ -99,6 +100,7 @@ export const Navbar = ({ user }: { user: User }) => {
                           ? "text-accent-foreground"
                           : "text-muted-foreground hover:text-accent-foreground"
                       )}
+                      prefetch
                     >
                       <span>Dashboard</span>
                     </Link>
@@ -115,6 +117,7 @@ export const Navbar = ({ user }: { user: User }) => {
                       <Link
                         href={item.href}
                         className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                        prefetch
                       >
                         <span>{item.name}</span>
                       </Link>
@@ -129,6 +132,7 @@ export const Navbar = ({ user }: { user: User }) => {
                             ? "text-accent-foreground"
                             : "text-muted-foreground hover:text-accent-foreground"
                         )}
+                        prefetch
                       >
                         <span>Dashboard</span>
                       </Link>

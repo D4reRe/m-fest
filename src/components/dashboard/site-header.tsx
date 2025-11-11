@@ -45,7 +45,7 @@ export function SiteHeader() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
                   {menus.map((menu) => (
-                    <Link key={menu.title} href={menu.url}>
+                    <Link key={menu.title} href={menu.url} prefetch>
                       <DropdownMenuItem className="hover:cursor-pointer hover:text-foreground">
                         {menu.title}
                       </DropdownMenuItem>
@@ -80,7 +80,9 @@ export function SiteHeader() {
                       <span className="text-foreground">{title}</span>
                     ) : (
                       <BreadcrumbLink asChild>
-                        <Link href={href}>{title}</Link>
+                        <Link href={href} prefetch>
+                          {title}
+                        </Link>
                       </BreadcrumbLink>
                     )}
                   </BreadcrumbItem>

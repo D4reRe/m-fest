@@ -52,6 +52,7 @@ export default function CompetitionsDesc() {
                 >
                   <Link
                     href={`/register/${competition.abbreviation.toLowerCase()}`}
+                    prefetch
                   >
                     <span>Register</span>
                     <ChevronRight className="size-2" />
