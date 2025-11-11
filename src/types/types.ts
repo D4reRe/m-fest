@@ -183,6 +183,13 @@ export type UploadDocumentProps = {
   }>;
 };
 
+export type UploadDialogProps = {
+  user: User;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  router: AppRouterInstance;
+};
+
 export type SuccessPageProps = {
   searchParams: Promise<{
     merchantOrderId: string;

@@ -11,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import UploadDocument from "@/components/document/UploadDocument";
+import UploadDocumentDialog from "@/components/document/UploadDocumentDialog";
 import { User, Verification, Documents } from "@/types/types";
 
 // all field should be filled of that type image Url
@@ -173,7 +173,7 @@ function DocumentsForm({
               <div className="grid grid-cols-1">
                 <div className="grid w-full max-w-sm items-center gap-3">
                   <Label htmlFor={title}>Upload {title}</Label>
-                  <UploadDocument
+                  <UploadDocumentDialog
                     isLoading={isLoading}
                     setIsLoading={setIsLoading}
                     router={router}
@@ -183,7 +183,7 @@ function DocumentsForm({
                     type={type}
                     uploadThingRoute={type}
                     setValue={setValue}
-                  ></UploadDocument>
+                  ></UploadDocumentDialog>
                 </div>
 
                 {userDocuments?.status === "PENDING" && (
