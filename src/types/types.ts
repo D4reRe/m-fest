@@ -161,3 +161,26 @@ export type UploadDocumentProps = {
     pDDikti: string;
   }>;
 };
+
+export type ImageCropperDocumentProps = {
+  title: string;
+  alt: string;
+  updateImgUrl: (imgSrc: string) => void;
+  updateImgFile: (file: File) => void;
+  updateUploadCroppedFile: (file: File) => void;
+  isLoading: boolean;
+  isProfilePicture?: boolean;
+  user: User;
+};
+
+export type ImageCropperProps = {
+  title: string;
+  alt: string;
+  updateImgUrl: (imgSrc: string) => void;
+  updateImgFile: (file: File) => void;
+  updateUploadCroppedFile: (file: File) => void;
+  isLoading: boolean;
+  isUploading: boolean;
+  isProfilePicture?: boolean;
+  user: User;
+};

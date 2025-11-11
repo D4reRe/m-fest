@@ -58,13 +58,12 @@ export function setCanvasUpload(
 
   const cropX = crop.x * scaleX;
   const cropY = crop.y * scaleY;
-  ctx.translate(-cropX, -cropY);
 
   // Draw only the cropped region, not the entire image
   ctx.drawImage(
     image,
-    crop.x * scaleX,
-    crop.y * scaleY,
+    cropX,
+    cropY,
     crop.width * scaleX,
     crop.height * scaleY,
     0,

@@ -1,4 +1,3 @@
-import React from "react";
 import TableInvoices from "./TableInvoices";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
