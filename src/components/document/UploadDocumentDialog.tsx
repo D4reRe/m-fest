@@ -17,11 +17,10 @@ import { useDropzone } from "@uploadthing/react";
 import { useUploadThing } from "@/utils/uploadthing";
 import { UploadThingError } from "uploadthing/server";
 import { Json } from "@uploadthing/shared";
-import { ClientUploadedFileData } from "uploadthing/types";
 import { Progress } from "@heroui/react";
 import { UploadDocumentProps, UploadThingRoute, User } from "@/types/types";
 
-export default function UploadDocument({
+export default function UploadDocumentDialog({
   isLoading,
   setIsLoading,
   router,
@@ -69,6 +68,13 @@ export default function UploadDocument({
       });
     },
     onUploadProgress(p) {
+      if (p === 0) {
+        setProgress(p);
+        toast.loading(`Uploading image...`, {
+          id: "upload-document",
+          description: `Starting upload...`,
+        });
+      }
       if (p < 100) {
         setProgress(p);
         toast.loading(`Uploading image...`, {
