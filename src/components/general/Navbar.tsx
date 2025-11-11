@@ -11,20 +11,7 @@ import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
 import { User } from "@/types/types";
 import { UserAvatar } from "./UserProfile";
-
-const menuItems = [
-  { name: "Events", href: "/events" },
-  { name: "Competitions", href: "/competitions" },
-  { name: "Timeline", href: "/#timeline" },
-  {
-    name: "FAQ",
-    href: "/#faqs",
-  },
-  {
-    name: "Contact",
-    href: "/#contact",
-  },
-];
+import { menuItems } from "@/constants/constants";
 
 export const Navbar = ({ user }: { user: User }) => {
   const [menuState, setMenuState] = useState(false);

@@ -1,17 +1,4 @@
 "use client";
-
-import * as React from "react";
-import {
-  IconDashboard,
-  IconListDetails,
-  IconUsers,
-  IconUser,
-  IconConfetti,
-  IconInvoice,
-  IconHelp,
-  IconFileText,
-} from "@tabler/icons-react";
-
 import { NavMain } from "@/components/dashboard/nav-main";
 import { NavUser } from "@/components/dashboard/nav-user";
 import {
@@ -27,55 +14,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { NavSecondary } from "./nav-secondary";
 import { NavDocuments } from "./nav-documents";
-
-const data = {
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: IconDashboard,
-    },
-    {
-      title: "Profile",
-      url: "/dashboard/profile",
-      icon: IconUser,
-    },
-    {
-      title: "Events",
-      url: "/dashboard/events",
-      icon: IconConfetti,
-    },
-    {
-      title: "Competitions",
-      url: "/dashboard/competitions",
-      icon: IconListDetails,
-    },
-    {
-      title: "Team",
-      url: "/dashboard/team",
-      icon: IconUsers,
-    },
-    {
-      title: "Invoices",
-      url: "/dashboard/invoices",
-      icon: IconInvoice,
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Get Help",
-      url: "",
-      icon: IconHelp,
-    },
-  ],
-  navDocuments: [
-    {
-      name: "Documents",
-      url: "/dashboard/documents",
-      icon: IconFileText,
-    },
-  ],
-};
+import { dataNavSidebar } from "@/constants/constants";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -109,9 +48,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent className="bg-transparent backdrop-blur-3xl ">
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.navDocuments} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavMain items={dataNavSidebar.navMain} />
+        <NavDocuments items={dataNavSidebar.navDocuments} />
+        <NavSecondary items={dataNavSidebar.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

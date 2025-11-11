@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { competitions } from "@/lib/competition";
-import { CompRegistration, Team, TeamMember, User } from "@/types/types";
+import { RegisterFormProps } from "@/types/types";
 import {
   Field,
   FieldContent,
@@ -49,16 +49,7 @@ function RegisterForm({
   allTeams,
   allRegisteredTeams,
   allTeamMembers,
-}: {
-  comp: string;
-  user: User;
-  teams: Team[];
-  allTeams: Team[];
-  registeredCompetitions: CompRegistration[];
-  teamMembers: TeamMember[];
-  allRegisteredTeams: CompRegistration[];
-  allTeamMembers: TeamMember[];
-}) {
+}: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 

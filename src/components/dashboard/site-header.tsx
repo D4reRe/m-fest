@@ -10,33 +10,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 
-const menus = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-  },
-  {
-    title: "Profile",
-    url: "/dashboard/profile",
-  },
-  {
-    title: "Events",
-    url: "/dashboard/events",
-  },
-  {
-    title: "Competitions",
-    url: "/dashboard/competitions",
-  },
-  {
-    title: "Team",
-    url: "/dashboard/team",
-  },
-  {
-    title: "Invoices",
-    url: "/dashboard/invoices",
-  },
-];
-
 import { usePathname } from "next/navigation";
 import {
   DropdownMenu,
@@ -46,6 +19,7 @@ import {
 } from "../ui/dropdown-menu";
 import { SlashIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
+import { menus } from "@/constants/constants";
 export function SiteHeader() {
   const pathname = usePathname();
   const [currentPathname, setCurrentPathname] = useState<string[]>([""]);

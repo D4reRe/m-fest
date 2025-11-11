@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/empty";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -27,7 +26,6 @@ import { Edit, Trash, Users } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
-import { redirect } from "next/navigation";
 import AlertDialogActionButton from "@/components/dashboard/deleteButton";
 
 export const metadata: Metadata = {

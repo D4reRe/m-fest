@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getUserProfile } from "@/action/user.action";
 import { prisma } from "@/lib/prisma";
 import { Team, User, CompRegistration, TeamMember } from "@/types/types";
+import { competitionsName } from "@/constants/constants";
 
 export async function generateMetadata({
   params,
@@ -16,8 +17,6 @@ export async function generateMetadata({
     description: `Register for ${comp.toUpperCase()} Competition`,
   };
 }
-
-const competitionsName = ["BCC", "IPPC", "PDC", "STEM"];
 
 async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
   const session = await auth();
