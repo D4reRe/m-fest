@@ -6,7 +6,6 @@ import { UserInfo } from "@/components/dashboard/user-info";
 import { UserProfile } from "@/components/dashboard/user-profile";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import React from "react";
 
 export const metadata: Metadata = {
   title: "Dashboard | Mechanical Festival 2026",

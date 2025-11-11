@@ -8,16 +8,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Team, User } from "@/types/types";
+import { Member, Team, User } from "@/types/types";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-
-type Member = {
-  name: string;
-  email: string;
-  userId: string;
-  institution: string;
-  role: "Leader" | "Member";
-};
 
 function TeamForm({ user, team }: { user: User; team: Team }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -1,17 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
+import { SuccessPageProps } from "@/types/types";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-async function SuccessPage({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    merchantOrderId: string;
-    reference: string;
-    resultCode: string;
-  }>;
-}) {
+async function SuccessPage({ searchParams }: SuccessPageProps) {
   const { reference, merchantOrderId, resultCode } = await searchParams;
   if (!reference || !merchantOrderId || !resultCode) {
     redirect("/");

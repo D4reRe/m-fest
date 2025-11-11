@@ -102,6 +102,27 @@ export type TeamMember = {
   joinDate: Date | null;
 };
 
+export type Member = {
+  name: string;
+  email: string;
+  userId: string;
+  institution: string;
+  role: "Leader" | "Member";
+};
+
+export type Invoices = {
+  id: string;
+  userId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  orderId: string;
+  status: string | null;
+  competition: string | null;
+  amount: number;
+  paymentUrl: string | null;
+  referenceDuitku: string | null;
+}[];
+
 export type Verification = {
   id: string;
   userId: string;
@@ -162,6 +183,14 @@ export type UploadDocumentProps = {
   }>;
 };
 
+export type SuccessPageProps = {
+  searchParams: Promise<{
+    merchantOrderId: string;
+    reference: string;
+    resultCode: string;
+  }>;
+};
+
 export type ImageCropperDocumentProps = {
   title: string;
   alt: string;
@@ -183,4 +212,15 @@ export type ImageCropperProps = {
   isUploading: boolean;
   isProfilePicture?: boolean;
   user: User;
+};
+
+export type RegisterFormProps = {
+  comp: string;
+  user: User;
+  teams: Team[];
+  allTeams: Team[];
+  registeredCompetitions: CompRegistration[];
+  teamMembers: TeamMember[];
+  allRegisteredTeams: CompRegistration[];
+  allTeamMembers: TeamMember[];
 };

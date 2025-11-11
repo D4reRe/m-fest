@@ -1,30 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-
-const links = [
-  {
-    title: "Events",
-    href: "/events",
-  },
-  {
-    title: "Competitions",
-    href: "/competitions",
-  },
-  {
-    title: "Timeline",
-    href: "/#timeline",
-  },
-  {
-    title: "FAQ",
-    href: "/#faqs",
-  },
-  {
-    title: "Contact",
-    href: "/#contact",
-  },
-];
-
 import { auth } from "@/auth";
+import { links } from "@/constants/constants";
 
 export default async function FooterSection() {
   const session = await auth();

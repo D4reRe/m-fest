@@ -1,5 +1,5 @@
-import HeroSection from "@/app/(general)/_components/hero-section";
-import FAQs from "./_components/faqs";
+import HeroSection from "@/components/general/hero-section";
+import FAQs from "../../components/general/faqs";
 import Timeline from "@/components/timeline/timeline";
 import Sponsors from "@/components/sponsors";
 import ContactSection from "@/components/contact/ContactSection";

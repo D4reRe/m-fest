@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import EventForm from "./event-form";
 import { redirect } from "next/navigation";
+import { EventsName } from "@/constants/constants";
 
 export async function generateMetadata({
   params,
@@ -13,15 +14,6 @@ export async function generateMetadata({
     description: `Register for ${event.toUpperCase()} Event`,
   };
 }
-
-const EventsName = [
-  "m-care",
-  "m-run",
-  "engine-tune-up",
-  "m-talks",
-  "m-expo",
-  "ceremony",
-];
 
 async function CompPage({ params }: { params: Promise<{ event: string }> }) {
   const session = await auth();
