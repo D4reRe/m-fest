@@ -9,7 +9,7 @@ import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
-import { User } from "@prisma/client";
+import { User } from "@/types/types";
 import { UserAvatar } from "./UserProfile";
 
 const menuItems = [
@@ -66,8 +66,15 @@ export const Navbar = ({ user }: { user: User }) => {
                   alt="Mechanical Festival 2025"
                   width={80}
                   height={80}
+                  loading="lazy"
                 />
-                <Image src="/hmm.png" alt="HMM ITB" width={45} height={45} />
+                <Image
+                  src="/hmm.png"
+                  alt="HMM ITB"
+                  width={45}
+                  height={45}
+                  loading="lazy"
+                />
               </Link>
 
               <button

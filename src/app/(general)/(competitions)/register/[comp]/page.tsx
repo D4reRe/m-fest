@@ -3,7 +3,7 @@ import RegisterForm from "./register-form";
 import { redirect } from "next/navigation";
 import { getUserProfile } from "@/action/user.action";
 import { prisma } from "@/lib/prisma";
-import { Team, User, CompRegistration, TeamMember } from "@prisma/client";
+import { Team, User, CompRegistration, TeamMember } from "@/types/types";
 
 export async function generateMetadata({
   params,

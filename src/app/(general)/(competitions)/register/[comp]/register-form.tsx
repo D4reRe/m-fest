@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { competitions } from "@/lib/competition";
-import { CompRegistration, Team, TeamMember, User } from "@prisma/client";
+import { CompRegistration, Team, TeamMember, User } from "@/types/types";
 import {
   Field,
   FieldContent,
@@ -521,6 +521,7 @@ function RegisterForm({
             alt="Mechanical Festival 2026"
             width={150}
             height={150}
+            loading="lazy"
           />
         </Link>
         <h1 className="mb-1 mt-4 text-xl font-semibold">

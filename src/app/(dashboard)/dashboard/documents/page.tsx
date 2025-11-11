@@ -1,34 +1,34 @@
 import { Metadata } from "next";
 import { getUserProfile } from "@/action/user.action";
-import { User, Verification } from "@prisma/client";
 import DocumentsForm from "./document-form";
 import { documents } from "@/lib/documents";
 import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+import { User, Verification } from "@/types/types";
 
 export const metadata: Metadata = {
-  title: "Profile | Mechanical Festival 2026",
-  description: "Profile to Mechanical Festival 2026",
+  title: "Documents | Mechanical Festival 2026",
+  description: "Documents to Mechanical Festival 2026",
 };
 
 async function DocumentsPage() {
   const user: User = (await getUserProfile()) as User;
+  if (
+    !user.gender ||
+    !user.phoneNumber ||
+    !user.domicile ||
+    !user.birthDate ||
+    !user.major ||
+    !user.institution ||
+    !user.education ||
+    !user.major ||
+    !user.semester
+  ) {
+    redirect("/dashboard/profile?notif=incomplete_profile");
+  }
   const userDocuments = await prisma.verification.findUnique({
     where: {
       userId: user.id,
-    },
-    select: {
-      pDDiktiImageKey: true,
-      followIgImageKey: true,
-      IdentityCardImageKey: true,
-      twibbonImageKey: true,
-      pDDiktiImageUrl: true,
-      followIgImageUrl: true,
-      IdentityCardImageUrl: true,
-      twibbonImageUrl: true,
-      IdentityCardCreatedAt: true,
-      twibbonCreatedAt: true,
-      pDDiktiCreatedAt: true,
-      followIgCreatedAt: true,
     },
   });
   return (
@@ -48,31 +48,16 @@ async function DocumentsPage() {
               legal documents and other required data before registering to any
               competitions.
             </p>
+            <p className="text-lg text-start">
+              Do not forget to upload all the required files before submitting!
+            </p>
           </div>
-          <div className="flex flex-col gap-5 mt-5">
-            {documents?.map(
-              (
-                document: {
-                  title: string;
-                  submissionDetail: string;
-                  acceptedFiles: string[];
-                  uploadThingRoute: string;
-                },
-                index: number
-              ) => {
-                return (
-                  <DocumentsForm
-                    key={index}
-                    user={user as User}
-                    title={document.title}
-                    documents={userDocuments as Verification}
-                    submissionDetail={document.submissionDetail}
-                    acceptedFiles={document.acceptedFiles}
-                    uploadThingRoute={document.uploadThingRoute}
-                  />
-                );
-              }
-            )}
+          <div>
+            <DocumentsForm
+              user={user as User}
+              userDocuments={userDocuments as Verification}
+              documents={documents}
+            />
           </div>
         </div>
       </div>

@@ -12,7 +12,7 @@ import ReactCrop, {
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { setCanvasPreview, setCanvasUpload } from "./setCanvasPreview";
-import { User } from "@prisma/client";
+import { User } from "@/types/types";
 
 export default function ImageCropperDocument({
   alt,
@@ -182,6 +182,7 @@ export default function ImageCropperDocument({
                     width={750}
                     height={750}
                     onLoad={onImageLoad}
+                    loading="lazy"
                   />
                 )}
                 {naturalWidth < naturalHeight && (
@@ -192,6 +193,7 @@ export default function ImageCropperDocument({
                     width={250}
                     height={250}
                     onLoad={onImageLoad}
+                    loading="lazy"
                   />
                 )}
                 {naturalWidth === naturalHeight && (
@@ -202,6 +204,7 @@ export default function ImageCropperDocument({
                     width={250}
                     height={250}
                     onLoad={onImageLoad}
+                    loading="lazy"
                   />
                 )}
               </ReactCrop>
@@ -313,6 +316,17 @@ export default function ImageCropperDocument({
                   alt={alt ?? `${title} Image`}
                   width={250}
                   height={250}
+                  loading="lazy"
+                  className="mt-5"
+                ></Image>
+              )}
+              {naturalHeight === naturalWidth && (
+                <Image
+                  src={croppedImageUrl as string}
+                  alt={alt ?? `${title} Image`}
+                  width={350}
+                  height={350}
+                  loading="lazy"
                   className="mt-5"
                 ></Image>
               )}
@@ -320,11 +334,13 @@ export default function ImageCropperDocument({
                 <Image
                   src={croppedImageUrl as string}
                   alt={alt ?? `${title} Image`}
-                  width={750}
-                  height={750}
+                  width={500}
+                  height={500}
+                  loading="lazy"
                   className="mt-5"
                 ></Image>
               )}
+
               <Button
                 className="mt-4 cursor-pointer"
                 onClick={() => {

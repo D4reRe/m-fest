@@ -30,7 +30,7 @@ import { educations } from "@/lib/profile";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import { useUploadThing } from "@/utils/uploadthing";
-import { User } from "@prisma/client";
+import { User } from "@/types/types";
 import {
   Field,
   FieldContent,
@@ -151,7 +151,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
     const toastType = searchParams.get("notif");
     if (toastType === "incomplete_profile") {
       toast.info(
-        "Please complete your profile before registering for a competition."
+        "Please complete your profile first before uploading documents & register to any competitions."
       );
     }
   }, [searchParams]);

@@ -13,7 +13,7 @@ import Image from "next/image";
 import { Button } from "../../ui/button";
 import { setCanvasPreview, setCanvasUpload } from "./setCanvasPreview";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "@prisma/client";
+import { User } from "@/types/types";
 
 export default function ImageCropper({
   alt,
@@ -181,6 +181,7 @@ export default function ImageCropper({
                     width={750}
                     height={750}
                     onLoad={onImageLoad}
+                    loading="lazy"
                   />
                 )}
                 {naturalWidth < naturalHeight && (
@@ -191,6 +192,7 @@ export default function ImageCropper({
                     width={250}
                     height={250}
                     onLoad={onImageLoad}
+                    loading="lazy"
                   />
                 )}
                 {naturalWidth === naturalHeight && (
@@ -201,6 +203,7 @@ export default function ImageCropper({
                     width={250}
                     height={250}
                     onLoad={onImageLoad}
+                    loading="lazy"
                   />
                 )}
               </ReactCrop>
@@ -315,6 +318,7 @@ export default function ImageCropper({
                     src={croppedImageUrl as string}
                     alt={alt ?? "User's Image"}
                     className="object-center object-cover"
+                    loading="lazy"
                   />
 
                   <AvatarFallback className="bg-gradient-accent text-foreground font-bold">

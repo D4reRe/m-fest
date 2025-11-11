@@ -1,7 +1,7 @@
 import ProfileUpdateForm from "./profile-form";
 import { Metadata } from "next";
 import { getUserProfile } from "@/action/user.action";
-import { User } from "@prisma/client";
+import { User } from "@/types/types";
 import Link from "next/link";
 
 export const metadata: Metadata = {

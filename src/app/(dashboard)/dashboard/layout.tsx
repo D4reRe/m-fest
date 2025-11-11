@@ -20,7 +20,7 @@ export default async function Layout({
           "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }
-      className={`min-h-screen bg-[url("/landing.png")] bg-cover bg-center bg-fixed bg-repeat`}
+      className={`min-h-screen bg-[url("/landing.webp")] bg-cover bg-center bg-fixed bg-repeat`}
     >
       <AppSidebar variant="inset" />
       <SidebarInset className="bg-transparent backdrop-blur-lg">

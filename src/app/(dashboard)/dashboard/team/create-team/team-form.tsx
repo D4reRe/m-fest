@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { User } from "@prisma/client";
+import { User } from "@/types/types";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 
 function TeamForm({ user }: { user: User }) {
