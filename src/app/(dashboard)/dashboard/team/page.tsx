@@ -72,7 +72,9 @@ export default async function TeamsPage() {
         <EmptyContent>
           <div className="flex gap-2">
             <Button className="cursor-pointer" asChild>
-              <Link href="team/create-team">Create team</Link>
+              <Link href="team/create-team" prefetch>
+                Create team
+              </Link>
             </Button>
           </div>
         </EmptyContent>
@@ -84,7 +86,9 @@ export default async function TeamsPage() {
       <div className="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h3 className="text-3xl font-bold text-foreground">Your Teams</h3>
         <Button className="cursor-pointer" asChild>
-          <Link href="team/create-team">Create team</Link>
+          <Link href="team/create-team" prefetch>
+            Create team
+          </Link>
         </Button>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -114,6 +118,7 @@ export default async function TeamsPage() {
                                 href={`/dashboard/team/edit-team/${team?.name
                                   ?.split(" ")
                                   .join("-")}`}
+                                prefetch
                               >
                                 <Edit className="w-4 h-4" />
                               </Link>
