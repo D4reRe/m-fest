@@ -74,7 +74,9 @@ async function CompPage() {
             <EmptyContent>
               <div className="flex gap-2">
                 <Button className="cursor-pointer" asChild>
-                  <Link href="/competitions">Register Competition</Link>
+                  <Link href="/competitions" prefetch>
+                    Register Competition
+                  </Link>
                 </Button>
               </div>
             </EmptyContent>

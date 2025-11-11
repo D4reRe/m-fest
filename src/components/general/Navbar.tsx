@@ -47,6 +47,7 @@ export const Navbar = ({ user }: { user: User }) => {
                 href="/"
                 aria-label="home"
                 className="flex items-center gap-4 space-x-2"
+                prefetch
               >
                 <Image
                   src="/logo.svg"

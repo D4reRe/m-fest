@@ -43,7 +43,7 @@ function EventsPage() {
         className="text-muted-foreground"
         size="sm"
       >
-        <Link href="/events">
+        <Link href="/events" prefetch>
           Learn More <ArrowUpRightIcon />
         </Link>
       </Button>

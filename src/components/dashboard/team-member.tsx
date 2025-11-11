@@ -46,7 +46,9 @@ export async function TeamMembers() {
         <EmptyContent>
           <div className="flex gap-2">
             <Button className="cursor-pointer" asChild>
-              <Link href="dashboard/team/create-team">Create team</Link>
+              <Link href="dashboard/team/create-team" prefetch>
+                Create team
+              </Link>
             </Button>
           </div>
         </EmptyContent>
@@ -87,6 +89,7 @@ export async function TeamMembers() {
                             href={`/dashboard/team/edit-team/${team?.name
                               ?.split(" ")
                               .join("-")}`}
+                            prefetch
                           >
                             <Edit className="w-4 h-4" />
                           </Link>
