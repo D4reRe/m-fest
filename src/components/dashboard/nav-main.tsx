@@ -28,7 +28,7 @@ export function NavMain({
         <SidebarMenu></SidebarMenu>
         <SidebarMenu>
           {items.map((item) => (
-            <Link href={item.url} key={item.title}>
+            <Link href={item.url} key={item.title} prefetch>
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   tooltip={item.title}

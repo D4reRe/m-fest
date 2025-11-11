@@ -11,6 +11,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export function NavDocuments({
   items,
@@ -36,10 +37,10 @@ export function NavDocuments({
                 pathname === item.url ? "bg-white/15" : ""
               }`}
             >
-              <a href={item.url}>
+              <Link href={item.url} prefetch>
                 <item.icon />
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
