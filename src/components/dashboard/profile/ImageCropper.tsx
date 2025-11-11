@@ -12,13 +12,13 @@ import ReactCrop, {
 import Image from "next/image";
 import { Button } from "../../ui/button";
 import { setCanvasPreview, setCanvasUpload } from "./setCanvasPreview";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ImageCropperProps } from "@/types/types";
 import {
   maxFileSize,
   MIN_DIMENSION,
   validExtensions,
 } from "@/constants/constants";
+import { UserAvatar } from "@/components/general/UserProfile";
 
 export default function ImageCropper({
   alt,
@@ -292,40 +292,17 @@ export default function ImageCropper({
           {crop && croppedImageUrl && isProfilePicture && (
             <>
               <div className="flex gap-3">
-                <Avatar className="w-32 h-32 border-2 border-primary/50 mt-5">
-                  <AvatarImage
-                    src={croppedImageUrl as string}
-                    alt={alt ?? "User's Image"}
-                    className="object-center object-cover"
-                    loading="lazy"
-                  />
-
-                  <AvatarFallback className="bg-gradient-accent text-foreground font-bold">
-                    {(alt as string)
-                      ? (alt as string)
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                      : ""}
-                  </AvatarFallback>
-                </Avatar>
+                <UserAvatar
+                  className="w-32 h-32 border-2 border-primary/50 mt-5"
+                  src={croppedImageUrl as string}
+                  alt={alt ?? "User's preview cropped Image"}
+                />
                 {/* Debugging */}
-                {/* <Avatar className="w-32 h-32 border-2 border-primary/50 mt-5">
-                  <AvatarImage
-                    src={uploadCroppedImageUrl as string}
-                    alt={alt ?? "User's Image"}
-                    className="object-center object-cover"
-                  />
-
-                  <AvatarFallback className="bg-gradient-accent text-foreground font-bold">
-                    {(alt as string)
-                      ? (alt as string)
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                      : ""}
-                  </AvatarFallback>
-                </Avatar> */}
+                {/* <UserAvatar
+                  className="w-32 h-32 border-2 border-primary/50 mt-5"
+                  src={uploadCroppedImageUrl as string}
+                  alt={alt ?? "User's cropped uploaded Image"}
+                /> */}
               </div>
               {!isUploading && (
                 <Button

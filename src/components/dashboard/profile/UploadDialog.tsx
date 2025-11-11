@@ -19,6 +19,7 @@ import { UploadDialogProps, User } from "@/types/types";
 import { UploadThingError } from "uploadthing/server";
 import { Json } from "@uploadthing/shared";
 import { useDropzone } from "@uploadthing/react";
+import { UserAvatar } from "@/components/general/UserProfile";
 
 export default function UploadDialog({
   user,
@@ -198,7 +199,12 @@ export default function UploadDialog({
             </div>
           )}
           {isLoading && isUploading && (
-            <div>
+            <>
+              <UserAvatar
+                className="w-32 h-32 border-2 border-primary/50 mx-auto mt-5 mb-5"
+                src={croppedImageUrl as string}
+                alt={"User's preview cropped Image"}
+              />
               <Progress
                 classNames={{
                   base: "w-full",
@@ -221,7 +227,7 @@ export default function UploadDialog({
                 value={progress as number}
                 isIndeterminate={progress === 100}
               />
-            </div>
+            </>
           )}
         </div>
         {cropping && !isUploading && (
@@ -285,11 +291,11 @@ export default function UploadDialog({
           </DialogFooter>
         )}
         {!cropping && !isUploading && (
-          <DialogFooter className="flex! justify-between! items-center!">
+          <DialogFooter className="">
             {files.length > 0 && (
               <Button
                 variant={"default"}
-                className="cursor-pointer justify-self-center"
+                className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
                 disabled={isLoading || isUploading}
                 onClick={() => startUpload(files)}
               >
@@ -299,7 +305,7 @@ export default function UploadDialog({
             {files.length === 0 && (
               <Button
                 variant={"default"}
-                className="cursor-pointer justify-self-center"
+                className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
                 onClick={() => startUpload(files)}
                 disabled={true}
               >
