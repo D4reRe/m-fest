@@ -212,7 +212,13 @@ export default function UploadDocumentDialog({
                   label: "tracking-wider font-medium text-default-600",
                   value: "text-foreground/60",
                 }}
-                label="Uploading..."
+                label={
+                  progress === 0
+                    ? "Starting upload..."
+                    : progress === 100
+                    ? "Finalizing upload..."
+                    : "Uploading..."
+                }
                 radius="sm"
                 showValueLabel={true}
                 size="sm"
