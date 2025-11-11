@@ -39,6 +39,7 @@ export default async function HeroSection() {
                   <Link
                     href="/competitions"
                     className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-zinc-950/5 transition-colors duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
+                    prefetch
                   >
                     <span className="text-foreground text-sm">
                       Explore Competitions
@@ -110,7 +111,11 @@ export default async function HeroSection() {
                       size="lg"
                       className="rounded-xl px-5 text-base"
                     >
-                      <Link href="/events" className="flex items-center gap-3 ">
+                      <Link
+                        href="/events"
+                        className="flex items-center gap-3"
+                        prefetch
+                      >
                         <Rocket className="relative size-4" />
                         <span className="text-nowrap">Explore Events</span>
                       </Link>

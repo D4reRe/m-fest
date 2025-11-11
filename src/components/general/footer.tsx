@@ -12,6 +12,7 @@ export default async function FooterSection() {
           href="/"
           aria-label="go home"
           className="flex items-center gap-4 justify-center"
+          prefetch
         >
           <Image
             src="/logo.svg"
@@ -35,6 +36,7 @@ export default async function FooterSection() {
               key={index}
               href={link.href}
               className="text-muted-foreground hover:text-primary block duration-150"
+              prefetch
             >
               <span>{link.title}</span>
             </Link>
@@ -43,6 +45,7 @@ export default async function FooterSection() {
             <Link
               href="/login"
               className="text-muted-foreground hover:text-primary block duration-150"
+              prefetch
             >
               <span>Login</span>
             </Link>

@@ -19,6 +19,7 @@ import { UploadThingError } from "uploadthing/server";
 import { Json } from "@uploadthing/shared";
 import { Progress } from "@heroui/react";
 import { UploadDocumentProps, UploadThingRoute, User } from "@/types/types";
+import { Label } from "../ui/label";
 
 export default function UploadDocumentDialog({
   isLoading,
@@ -143,178 +144,182 @@ export default function UploadDocumentDialog({
     onDrop,
   });
   return (
-    <Dialog
-      open={activeDialog === id}
-      onOpenChange={(open: boolean) => {
-        if (isUploading || isLoading) return;
-        if (open) setActiveDialog(id);
-        else setActiveDialog(null);
-      }}
-    >
-      <DialogTrigger asChild>
-        <Button
-          className=""
-          variant={"outline"}
-          onClick={() => {
-            setUploadThingRouteUpload(uploadThingRoute as UploadThingRoute);
-            if (!isLoading) setActiveDialog(id);
-            if (isLoading) return;
-          }}
-        >
-          <Upload className="w-4 h-4"></Upload>
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="max-w-sm sm:max-w-xl ">
-        <DialogHeader>
-          <DialogTitle>Upload {title}</DialogTitle>
-          <DialogDescription>
-            Click save when you&apos;re done.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4">
-          {!cropping && !isUploading && (
-            <div {...getRootProps()}>
-              <input {...getInputProps()} />
-              <div className="w-full h-50 l rounded-lg bg-slate-700/45 flex justify-center items-center ">
-                <div className="flex flex-col items-center">
-                  <Upload className="w-6 h-6" />
-                  <h1 className="text-xl">Choose files or drag and drop</h1>
-                  <p className="text-lg">Image up to 4MB, max 1 file</p>
-                  <p className="text-sm">
-                    Supported types: jpg, jpeg, png, & webp
-                  </p>
-                  {files[0]?.name && (
-                    <p className="text-sm text-center line-clamp-1">
-                      Selected: {files[0].name}
+    <div className="grid w-full max-w-sm items-center gap-3">
+      <Label htmlFor={title}>Upload {title}</Label>
+
+      <Dialog
+        open={activeDialog === id}
+        onOpenChange={(open: boolean) => {
+          if (isUploading || isLoading) return;
+          if (open) setActiveDialog(id);
+          else setActiveDialog(null);
+        }}
+      >
+        <DialogTrigger asChild>
+          <Button
+            className=""
+            variant={"outline"}
+            onClick={() => {
+              setUploadThingRouteUpload(uploadThingRoute as UploadThingRoute);
+              if (!isLoading) setActiveDialog(id);
+              if (isLoading) return;
+            }}
+          >
+            <Upload className="w-4 h-4"></Upload>
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="max-w-sm sm:max-w-xl ">
+          <DialogHeader>
+            <DialogTitle>Upload {title}</DialogTitle>
+            <DialogDescription>
+              Click save when you&apos;re done.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4">
+            {!cropping && !isUploading && (
+              <div {...getRootProps()}>
+                <input {...getInputProps()} />
+                <div className="w-full h-50 l rounded-lg bg-slate-700/45 flex justify-center items-center ">
+                  <div className="flex flex-col items-center">
+                    <Upload className="w-6 h-6" />
+                    <h1 className="text-xl">Choose files or drag and drop</h1>
+                    <p className="text-lg">Image up to 4MB, max 1 file</p>
+                    <p className="text-sm">
+                      Supported types: jpg, jpeg, png, & webp
                     </p>
-                  )}
+                    {files[0]?.name && (
+                      <p className="text-sm text-center line-clamp-1">
+                        Selected: {files[0].name}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {cropping && !isUploading && (
-            <ImageCropperDocument
-              title={title}
-              user={user as User}
-              alt={user.name as string}
-              updateImgUrl={updateImgUrl}
-              updateImgFile={updateImgFile}
-              updateUploadCroppedFile={updateUploadCroppedFile}
-              isLoading={isLoading as boolean}
-              isProfilePicture={false}
-            />
-          )}
-          {isLoading && isUploading && activeDialog === id && (
-            <>
-              <Progress
-                classNames={{
-                  base: "w-full",
-                  track: "drop-shadow-md border border-default",
-                  // indicator: "bg-linear-to-r from-pink-500 to-yellow-500",
-                  indicator: "bg-white",
-                  label: "tracking-wider font-medium text-default-600",
-                  value: "text-foreground/60",
-                }}
-                label={
-                  progress === 0
-                    ? "Starting upload..."
-                    : progress === 100
-                    ? "Finalizing upload..."
-                    : "Uploading..."
-                }
-                radius="sm"
-                showValueLabel={true}
-                size="sm"
-                value={progress as number}
-                isIndeterminate={progress === 100}
+            )}
+            {cropping && !isUploading && (
+              <ImageCropperDocument
+                title={title}
+                user={user as User}
+                alt={user.name as string}
+                updateImgUrl={updateImgUrl}
+                updateImgFile={updateImgFile}
+                updateUploadCroppedFile={updateUploadCroppedFile}
+                isLoading={isLoading as boolean}
+                isProfilePicture={false}
               />
-            </>
-          )}
-        </div>
-        {cropping && !isUploading && (
-          <DialogFooter>
-            <Button
-              className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
-              disabled={!croppedImageUrl || isLoading || isUploading}
-              onClick={async () => {
-                setIsLoading(true);
-                const file = uploadCroppedFile as File;
-                const utfileUrls = await startUpload([file]);
-                if (!utfileUrls) {
-                  setIsLoading(false);
-                  toast.dismiss("presigning-url");
-                  toast.dismiss("upload-document");
-                  return;
-                }
-                if (utfileUrls[0].ufsUrl) {
-                  setValue(type, utfileUrls[0].ufsUrl, {
-                    shouldValidate: true,
-                  });
-                }
-                setTimeout(() => {
-                  router.refresh();
-                  window.location.reload();
-                }, 500);
-              }}
-            >
-              {isLoading ? (
-                <Loader2 className="animate-spin w-4 h-4" />
-              ) : (
-                "Save changes"
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              disabled={isLoading || isUploading}
-              className="cursor-pointer"
-              onClick={() => {
-                setCroppedImageUrl("");
-                setCroppedFile(null);
-                updateImgFile(null as unknown as File);
-                setUploadCroppedFile(null);
-                updateImgUrl("");
-                setIsCropping(false);
-              }}
-            >
-              Back to upload directly
-            </Button>
-          </DialogFooter>
-        )}
-        {!cropping && !isUploading && (
-          <DialogFooter>
-            {files.length > 0 && (
+            )}
+            {isLoading && isUploading && activeDialog === id && (
+              <>
+                <Progress
+                  classNames={{
+                    base: "w-full",
+                    track: "drop-shadow-md border border-default",
+                    // indicator: "bg-linear-to-r from-pink-500 to-yellow-500",
+                    indicator: "bg-white",
+                    label: "tracking-wider font-medium text-default-600",
+                    value: "text-foreground/60",
+                  }}
+                  label={
+                    progress === 0
+                      ? "Starting upload..."
+                      : progress === 100
+                      ? "Finalizing upload..."
+                      : "Uploading..."
+                  }
+                  radius="sm"
+                  showValueLabel={true}
+                  size="sm"
+                  value={progress as number}
+                  isIndeterminate={progress === 100}
+                />
+              </>
+            )}
+          </div>
+          {cropping && !isUploading && (
+            <DialogFooter>
               <Button
-                variant={"default"}
                 className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
+                disabled={!croppedImageUrl || isLoading || isUploading}
+                onClick={async () => {
+                  setIsLoading(true);
+                  const file = uploadCroppedFile as File;
+                  const utfileUrls = await startUpload([file]);
+                  if (!utfileUrls) {
+                    setIsLoading(false);
+                    toast.dismiss("presigning-url");
+                    toast.dismiss("upload-document");
+                    return;
+                  }
+                  if (utfileUrls[0].ufsUrl) {
+                    setValue(type, utfileUrls[0].ufsUrl, {
+                      shouldValidate: true,
+                    });
+                  }
+                  setTimeout(() => {
+                    router.refresh();
+                    window.location.reload();
+                  }, 500);
+                }}
+              >
+                {isLoading ? (
+                  <Loader2 className="animate-spin w-4 h-4" />
+                ) : (
+                  "Save changes"
+                )}
+              </Button>
+              <Button
+                variant="outline"
                 disabled={isLoading || isUploading}
-                onClick={() => startUpload(files)}
+                className="cursor-pointer"
+                onClick={() => {
+                  setCroppedImageUrl("");
+                  setCroppedFile(null);
+                  updateImgFile(null as unknown as File);
+                  setUploadCroppedFile(null);
+                  updateImgUrl("");
+                  setIsCropping(false);
+                }}
               >
-                Upload {files.length} file
+                Back to upload directly
               </Button>
-            )}
-            {files.length === 0 && (
+            </DialogFooter>
+          )}
+          {!cropping && !isUploading && (
+            <DialogFooter>
+              {files.length > 0 && (
+                <Button
+                  variant={"default"}
+                  className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
+                  disabled={isLoading || isUploading}
+                  onClick={() => startUpload(files)}
+                >
+                  Upload {files.length} file
+                </Button>
+              )}
+              {files.length === 0 && (
+                <Button
+                  variant={"default"}
+                  className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
+                  onClick={() => startUpload(files)}
+                  disabled={true}
+                >
+                  Upload
+                </Button>
+              )}
               <Button
-                variant={"default"}
-                className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
-                onClick={() => startUpload(files)}
-                disabled={true}
+                variant="outline"
+                disabled={isLoading || isUploading}
+                className="cursor-pointer"
+                onClick={() => {
+                  setIsCropping(true);
+                }}
               >
-                Upload
+                Crop before upload
               </Button>
-            )}
-            <Button
-              variant="outline"
-              disabled={isLoading || isUploading}
-              className="cursor-pointer"
-              onClick={() => {
-                setIsCropping(true);
-              }}
-            >
-              Crop before upload
-            </Button>
-          </DialogFooter>
-        )}
-      </DialogContent>
-    </Dialog>
+            </DialogFooter>
+          )}
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
