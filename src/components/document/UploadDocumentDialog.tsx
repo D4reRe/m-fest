@@ -180,6 +180,9 @@ export default function UploadDocumentDialog({
                   <Upload className="w-6 h-6" />
                   <h1 className="text-xl">Choose files or drag and drop</h1>
                   <p className="text-lg">Image up to 4MB, max 1 file</p>
+                  <p className="text-sm">
+                    Supported types: jpg, jpeg, png, & webp
+                  </p>
                   {files[0]?.name && (
                     <p className="text-sm text-center line-clamp-1">
                       Selected: {files[0].name}
@@ -278,11 +281,11 @@ export default function UploadDocumentDialog({
           </DialogFooter>
         )}
         {!cropping && !isUploading && (
-          <DialogFooter className="flex! justify-between! items-center!">
+          <DialogFooter>
             {files.length > 0 && (
               <Button
                 variant={"default"}
-                className="cursor-pointer justify-self-center"
+                className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
                 disabled={isLoading || isUploading}
                 onClick={() => startUpload(files)}
               >
@@ -292,7 +295,7 @@ export default function UploadDocumentDialog({
             {files.length === 0 && (
               <Button
                 variant={"default"}
-                className="cursor-pointer justify-self-center"
+                className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
                 onClick={() => startUpload(files)}
                 disabled={true}
               >
