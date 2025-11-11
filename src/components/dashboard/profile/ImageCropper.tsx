@@ -13,7 +13,12 @@ import Image from "next/image";
 import { Button } from "../../ui/button";
 import { setCanvasPreview, setCanvasUpload } from "./setCanvasPreview";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "@/types/types";
+import { ImageCropperProps } from "@/types/types";
+import {
+  maxFileSize,
+  MIN_DIMENSION,
+  validExtensions,
+} from "@/constants/constants";
 
 export default function ImageCropper({
   alt,
@@ -25,19 +30,8 @@ export default function ImageCropper({
   title,
   isProfilePicture,
   user,
-}: {
-  title: string;
-  alt: string;
-  updateImgUrl: (imgSrc: string) => void;
-  updateImgFile: (file: File) => void;
-  updateUploadCroppedFile: (file: File) => void;
-  isLoading: boolean;
-  isUploading: boolean;
-  isProfilePicture?: boolean;
-  user: User;
-}) {
+}: ImageCropperProps) {
   const ASPECT_RATIO: number | undefined = isProfilePicture ? 1 : undefined;
-  const MIN_DIMENSION = 150;
   const imgRef = useRef<HTMLImageElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -78,8 +72,6 @@ export default function ImageCropper({
       event.target.value = ""; // Reset input
       return;
     }
-
-    const validExtensions = ["png", "jpeg", "jpg", "webp"];
     const fileExtension = file.type.split("/").pop()?.toLowerCase();
     if (!validExtensions.includes(fileExtension as string) || !fileExtension) {
       toast.error("Invalid file extension", {
@@ -91,7 +83,7 @@ export default function ImageCropper({
     }
 
     // 4 MB
-    if (file.size > 4 * 1024 * 1024) {
+    if (file.size > maxFileSize) {
       toast.error("File too large", {
         description: "Maximum allowed size is 4 MB.",
       });
@@ -217,19 +209,6 @@ export default function ImageCropper({
                       imgRef.current?.width as number,
                       imgRef.current?.height as number
                     );
-
-                    if (
-                      pixelCrop.width < MIN_DIMENSION ||
-                      pixelCrop.height < MIN_DIMENSION
-                    ) {
-                      toast.error("Cropped area too small", {
-                        description: `Crop must be at least ${MIN_DIMENSION}x${MIN_DIMENSION}px`,
-                      });
-                      setError(
-                        `Crop must be at least ${MIN_DIMENSION}x${MIN_DIMENSION}px`
-                      );
-                      return;
-                    }
                     setCanvasPreview(
                       imgRef.current as HTMLImageElement,
                       previewCanvasRef.current as HTMLCanvasElement,

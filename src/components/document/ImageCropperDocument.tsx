@@ -12,7 +12,12 @@ import ReactCrop, {
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { setCanvasPreview, setCanvasUpload } from "./setCanvasPreview";
-import { User } from "@/types/types";
+import { ImageCropperDocumentProps } from "@/types/types";
+import {
+  maxFileSize,
+  MIN_DIMENSION,
+  validExtensions,
+} from "@/constants/constants";
 
 export default function ImageCropperDocument({
   alt,
@@ -23,18 +28,8 @@ export default function ImageCropperDocument({
   title,
   isProfilePicture,
   user,
-}: {
-  title: string;
-  alt: string;
-  updateImgUrl: (imgSrc: string) => void;
-  updateImgFile: (file: File) => void;
-  updateUploadCroppedFile: (file: File) => void;
-  isLoading: boolean;
-  isProfilePicture?: boolean;
-  user: User;
-}) {
+}: ImageCropperDocumentProps) {
   const ASPECT_RATIO: number | undefined = isProfilePicture ? 1 : undefined;
-  const MIN_DIMENSION = 150;
   const imgRef = useRef<HTMLImageElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -72,7 +67,6 @@ export default function ImageCropperDocument({
       return;
     }
 
-    const validExtensions = ["png", "jpeg", "jpg", "webp"];
     const fileExtension = file.type.split("/").pop()?.toLowerCase();
     if (!validExtensions.includes(fileExtension as string) || !fileExtension) {
       toast.error("Invalid file extension", {
@@ -84,7 +78,7 @@ export default function ImageCropperDocument({
     }
 
     // 4 MB
-    if (file.size > 4 * 1024 * 1024) {
+    if (file.size > maxFileSize) {
       toast.error("File too large", {
         description: "Maximum allowed size is 4 MB.",
       });
