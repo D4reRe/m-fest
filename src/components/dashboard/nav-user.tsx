@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@heroui/react";
 import { getUserProfile } from "@/action/user.action";
-import { User } from "@prisma/client";
+import { User } from "@/types/types";
 import { UserAvatar } from "../general/UserProfile";
 
 export function NavUser() {
@@ -30,7 +30,7 @@ export function NavUser() {
   useEffect(() => {
     (async () => {
       const data = await getUserProfile();
-      setUser(data);
+      setUser(data as User);
     })();
   }, []);
   const router = useRouter();

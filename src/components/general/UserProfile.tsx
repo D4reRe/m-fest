@@ -19,6 +19,7 @@ export function UserAvatar({
         }
         alt={alt ?? "User's Image"}
         className="object-center object-cover"
+        loading="lazy"
       />
       <AvatarFallback className="bg-gradient-accent text-foreground font-bold">
         {(alt as string)

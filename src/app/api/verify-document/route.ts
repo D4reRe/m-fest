@@ -1,0 +1,9 @@
+import { NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+
+export async function POST(req: Request) {
+  const payload = await req.json();
+  console.log(payload);
+
+  return NextResponse.json({ message: "OK" }, { status: 200 });
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import { Metadata } from "next";
 import { getUserProfile } from "@/action/user.action";
-import { User } from "@prisma/client";
+import { User } from "@/types/types";
 import TeamForm from "./team-form";
 
 export const metadata: Metadata = {

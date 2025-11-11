@@ -37,6 +37,18 @@ enum Gender {
   Female
 }
 
+enum DocumentStatus{
+  AWAITING_UPLOAD
+  UPLOADED
+  VERIFIED
+}
+
+enum VerificationStatus{
+  NOT_SUBMITTED
+  PENDING
+  ACCEPTED
+}
+
 model CompRegistration {
   id              String      @id @default(uuid())
   userId          String                                                      // Id User Leader
@@ -109,35 +121,45 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([id,email])
 }
 
 model Verification {
   id                        String   @id @default(cuid())
   userId                    String   @unique
+  userEmail                 String   @unique
   IdentityCardImageUrl      String?
   twibbonImageUrl           String?
   pDDiktiImageUrl           String?
   followIgImageUrl          String?
+
   IdentityCardImageKey      String?
   twibbonImageKey           String?
   pDDiktiImageKey           String?
   followIgImageKey          String?
+
   IdentityCardCreatedAt     DateTime? @default(now())
   twibbonCreatedAt          DateTime? @default(now())
   pDDiktiCreatedAt          DateTime? @default(now())
   followIgCreatedAt         DateTime? @default(now())
+
+  IdentityCardStatus        DocumentStatus?   @default(AWAITING_UPLOAD)
+  twibbonStatus             DocumentStatus?   @default(AWAITING_UPLOAD)
+  followIgStatus            DocumentStatus?   @default(AWAITING_UPLOAD)
+  pDDiktiStatus             DocumentStatus?   @default(AWAITING_UPLOAD)
 
   IdentityCardVerified     Boolean? @default(false)
   twibbonVerified          Boolean? @default(false)
   pDDiktiVerified          Boolean? @default(false)
   followIgVerified         Boolean? @default(false)
 
-
-
-  status                    String   @default("pending") // pending | verified | rejected
-  user                      User     @relation(fields: [userId], references: [id])
+  status                    VerificationStatus   @default(NOT_SUBMITTED) 
+  user                      User     @relation(fields: [userId, userEmail], references: [id, email])
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
+
+  @@unique([userId, userEmail])
 }
 
 model Team {

@@ -15,7 +15,7 @@ export const ourFileRouter = {
        * For full list of options and defaults, see the File Route API reference
        * @see https://docs.uploadthing.com/file-routes#route-config
        */
-      maxFileSize: "1024MB",
+      maxFileSize: "16MB",
       maxFileCount: 1,
     },
   })
@@ -69,9 +69,9 @@ export const ourFileRouter = {
       }
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
     }),
-  uploadIdentityCard: f({
+  identityCard: f({
     image: {
-      maxFileSize: "1024MB",
+      maxFileSize: "16MB",
       maxFileCount: 1,
     },
   })
@@ -88,6 +88,7 @@ export const ourFileRouter = {
         await prisma.verification.create({
           data: {
             userId: session.user.id,
+            userEmail: session.user.email as string,
           },
         });
       }
@@ -130,9 +131,9 @@ export const ourFileRouter = {
         throw error;
       }
     }),
-  uploadTwibbon: f({
+  twibbon: f({
     image: {
-      maxFileSize: "1024MB",
+      maxFileSize: "16MB",
       maxFileCount: 1,
     },
   })
@@ -149,6 +150,7 @@ export const ourFileRouter = {
         await prisma.verification.create({
           data: {
             userId: session.user.id,
+            userEmail: session.user.email as string,
           },
         });
       }
@@ -191,9 +193,9 @@ export const ourFileRouter = {
         throw error;
       }
     }),
-  uploadFollowIg: f({
+  followIg: f({
     image: {
-      maxFileSize: "1024MB",
+      maxFileSize: "16MB",
       maxFileCount: 1,
     },
   })
@@ -210,6 +212,7 @@ export const ourFileRouter = {
         await prisma.verification.create({
           data: {
             userId: session.user.id,
+            userEmail: session.user.email as string,
           },
         });
       }
@@ -252,9 +255,9 @@ export const ourFileRouter = {
         throw error;
       }
     }),
-  uploadPDDikti: f({
+  pDDikti: f({
     image: {
-      maxFileSize: "1024MB",
+      maxFileSize: "16MB",
       maxFileCount: 1,
     },
   })
@@ -271,6 +274,7 @@ export const ourFileRouter = {
         await prisma.verification.create({
           data: {
             userId: session.user.id,
+            userEmail: session.user.email as string,
           },
         });
       }

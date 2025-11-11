@@ -41,8 +41,15 @@ export default async function FooterSection() {
             alt="Mechanical Festival 2025"
             width={60}
             height={60}
+            loading="lazy"
           />
-          <Image src="/hmm.png" alt="HMM ITB" width={45} height={45} />
+          <Image
+            src="/hmm.png"
+            alt="HMM ITB"
+            width={45}
+            height={45}
+            loading="lazy"
+          />
         </Link>
 
         <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">

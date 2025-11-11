@@ -25,6 +25,7 @@ export default function CompetitionsSection() {
                   alt="payments illustration dark"
                   width={2797}
                   height={1137}
+                  loading="lazy"
                 />
               </div>
             </div>
