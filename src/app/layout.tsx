@@ -7,8 +7,6 @@ import { Toaster } from "@/components/ui/sonner";
 import { HeroUIProvider } from "@heroui/react";
 // import StoryblokProvider from "@/components/StoryblokProvider";
 import NextTopLoader from "nextjs-toploader";
-import RouteLoader from "@/components/general/RouteLoader";
-import { Suspense } from "react";
 
 export default function RootLayout({
   children,
@@ -33,9 +31,7 @@ export default function RootLayout({
                 height={10}
                 showSpinner={true}
               />
-              <Suspense>
-                <RouteLoader />
-              </Suspense>
+
               {children}
 
               <Toaster />
