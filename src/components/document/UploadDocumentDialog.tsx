@@ -17,9 +17,9 @@ import { useDropzone } from "@uploadthing/react";
 import { useUploadThing } from "@/utils/uploadthing";
 import { UploadThingError } from "uploadthing/server";
 import { Json } from "@uploadthing/shared";
-import { Progress } from "@heroui/react";
 import { UploadDocumentProps, UploadThingRoute, User } from "@/types/types";
 import { Label } from "../ui/label";
+import { Progress } from "../ui/progress";
 
 export default function UploadDocumentDialog({
   isLoading,
@@ -210,28 +210,17 @@ export default function UploadDocumentDialog({
             )}
             {isLoading && isUploading && activeDialog === id && (
               <>
-                <Progress
-                  classNames={{
-                    base: "w-full",
-                    track: "drop-shadow-md border border-default",
-                    // indicator: "bg-linear-to-r from-pink-500 to-yellow-500",
-                    indicator: "bg-white",
-                    label: "tracking-wider font-medium text-default-600",
-                    value: "text-foreground/60",
-                  }}
-                  label={
-                    progress === 0
+                <div className="flex justify-between">
+                  <p>
+                    {progress === 0
                       ? "Starting upload..."
                       : progress === 100
                       ? "Finalizing upload..."
-                      : "Uploading..."
-                  }
-                  radius="sm"
-                  showValueLabel={true}
-                  size="sm"
-                  value={progress as number}
-                  isIndeterminate={progress === 100}
-                />
+                      : "Uploading..."}
+                  </p>
+                  <p>{progress === 100 ? `` : `${progress}%`}</p>
+                </div>
+                <Progress value={progress as number} className="w-full" />
               </>
             )}
           </div>

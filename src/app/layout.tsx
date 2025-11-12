@@ -1,10 +1,8 @@
-"use client";
 import { montserrat, onest, roboto } from "@/styles/font";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import SessionProviders from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { HeroUIProvider } from "@heroui/react";
 // import StoryblokProvider from "@/components/StoryblokProvider";
 import NextTopLoader from "nextjs-toploader";
 
@@ -19,24 +17,22 @@ export default function RootLayout({
         className={`${montserrat.variable} ${roboto.variable} ${onest.className} antialiased`}
       >
         <SessionProviders>
-          <HeroUIProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <NextTopLoader
-                color="hsl(var(--primary))"
-                height={10}
-                showSpinner={true}
-              />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NextTopLoader
+              color="hsl(var(--primary))"
+              height={10}
+              showSpinner={true}
+            />
 
-              {children}
+            {children}
 
-              <Toaster />
-            </ThemeProvider>
-          </HeroUIProvider>
+            <Toaster />
+          </ThemeProvider>
         </SessionProviders>
       </body>
     </html>

@@ -6,7 +6,6 @@ import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import Link from "next/link";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";

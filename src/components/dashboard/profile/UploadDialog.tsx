@@ -6,10 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { DialogClose, DialogTrigger } from "@radix-ui/react-dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
 import PencilIcon from "./PencilIcon";
 import ImageCropper from "./ImageCropper";
-import { Progress } from "@heroui/react";
 import { Button } from "@/components/ui/button";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
@@ -20,6 +19,7 @@ import { UploadThingError } from "uploadthing/server";
 import { Json } from "@uploadthing/shared";
 import { useDropzone } from "@uploadthing/react";
 import { UserAvatar } from "@/components/general/UserProfile";
+import { Progress } from "@/components/ui/progress";
 
 export default function UploadDialog({
   user,
@@ -205,28 +205,17 @@ export default function UploadDialog({
                 src={croppedImageUrl as string}
                 alt={"User's preview cropped Image"}
               />
-              <Progress
-                classNames={{
-                  base: "w-full",
-                  track: "drop-shadow-md border border-default",
-                  // indicator: "bg-linear-to-r from-pink-500 to-yellow-500",
-                  indicator: "bg-white",
-                  label: "tracking-wider font-medium text-default-600",
-                  value: "text-foreground/60",
-                }}
-                label={
-                  progress === 0
+              <div className="flex justify-between">
+                <p>
+                  {progress === 0
                     ? "Starting upload..."
                     : progress === 100
                     ? "Finalizing upload..."
-                    : "Uploading..."
-                }
-                radius="sm"
-                showValueLabel={true}
-                size="sm"
-                value={progress as number}
-                isIndeterminate={progress === 100}
-              />
+                    : "Uploading..."}
+                </p>
+                <p>{progress === 100 ? `` : `${progress}%`}</p>
+              </div>
+              <Progress value={progress as number} className="w-full" />
             </>
           )}
         </div>

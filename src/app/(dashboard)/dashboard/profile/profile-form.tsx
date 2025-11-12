@@ -15,7 +15,6 @@ import * as z from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { NumberInput, Input as HeroInput } from "@heroui/react";
 import { educations } from "@/lib/profile";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
@@ -383,18 +382,24 @@ function ProfileUpdateForm({ user }: { user: User }) {
             <Controller
               name="semester"
               control={control}
-              render={({ field }) => (
-                <NumberInput
+              rules={{ required: true }}
+              render={({ field: { value, onChange, onBlur, name, ref } }) => (
+                <Input
                   className="w-full"
-                  variant="bordered"
-                  label="Semester"
                   placeholder="1"
-                  {...field}
-                  minValue={1}
-                  maxValue={8}
+                  value={value}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    const regex = /^(|[1-8])$/;
+                    if (regex.test(newValue)) {
+                      onChange(newValue);
+                    }
+                  }}
+                  onBlur={onBlur}
+                  name={name}
+                  ref={ref}
                 />
               )}
-              rules={{ required: true }}
             />
             {errors.semester && (
               <p className="text-destructive text-sm">
@@ -411,16 +416,9 @@ function ProfileUpdateForm({ user }: { user: User }) {
             <Controller
               name="birthDate"
               control={control}
-              render={({ field, fieldState: { invalid, error } }) => (
+              render={({ field }) => (
                 <div className="flex w-full flex-col md:flex-nowrap gap-4">
-                  <HeroInput
-                    label="Your Birth Date"
-                    placeholder="June 2 2005"
-                    {...field}
-                    isInvalid={invalid}
-                    errorMessage={error?.message}
-                    variant="bordered"
-                  />
+                  <Input placeholder="June 2 2005" {...field} />
                 </div>
               )}
               rules={{ required: true }}
