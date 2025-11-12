@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import EventForm from "./event-form";
 import { redirect } from "next/navigation";
 import { EventsName } from "@/constants/constants";
@@ -16,9 +15,7 @@ export async function generateMetadata({
 }
 
 async function CompPage({ params }: { params: Promise<{ event: string }> }) {
-  const session = await auth();
   const { event } = await params;
-  if (!session) redirect("/login");
   if (!EventsName.includes(event)) {
     redirect("/events");
   }

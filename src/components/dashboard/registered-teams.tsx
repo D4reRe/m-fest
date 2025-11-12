@@ -1,17 +1,18 @@
-import { auth } from "@/auth";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import { Users } from "lucide-react";
 import { Fragment } from "react";
 import { UserAvatar } from "../general/UserProfile";
+import { getUserProfile } from "@/action/user.action";
+import { User } from "@/types/types";
 
 export async function RegisteredCompetitions() {
-  const session = await auth();
+  const user = (await getUserProfile()) as User;
   const teams = await prisma.team.findMany({
     where: {
       members: {
         some: {
-          userId: session?.user.id,
+          userId: user.id,
         },
       },
       status: "SUCCESS",

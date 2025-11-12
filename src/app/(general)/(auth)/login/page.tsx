@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import AuthButtons from "@/components/auth/auth-buttons";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
 import LoginErrorHandler from "./LoginErrorHandler";
 
 export const metadata: Metadata = {
@@ -11,11 +10,7 @@ export const metadata: Metadata = {
   description: "Login to Mechanical Festival 2026",
 };
 
-async function LoginPage() {
-  const session = await auth();
-  if (session?.user) {
-    redirect("/");
-  }
+function LoginPage() {
   return (
     <section className="flex min-h-screen bg-zinc-50 px-4 py-16 md:py-32 dark:bg-transparent">
       <div className="bg-muted m-auto h-fit w-full max-w-sm overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">

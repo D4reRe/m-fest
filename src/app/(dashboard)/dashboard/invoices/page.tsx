@@ -1,6 +1,7 @@
+import { getUserProfile } from "@/action/user.action";
 import TableInvoices from "./TableInvoices";
 import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
+import { User } from "@/types/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -9,10 +10,10 @@ export const metadata: Metadata = {
 };
 
 async function InvoicePage() {
-  const session = await auth();
+  const user = (await getUserProfile()) as User;
   const invoices = await prisma.payment.findMany({
     where: {
-      userId: session?.user.id,
+      userId: user.id,
     },
     orderBy: {
       createdAt: "desc",

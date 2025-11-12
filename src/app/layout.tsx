@@ -1,4 +1,5 @@
 import { montserrat, onest, roboto } from "@/styles/font";
+// @ts-expect-error global.css exist
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import SessionProviders from "@/components/providers/session-provider";

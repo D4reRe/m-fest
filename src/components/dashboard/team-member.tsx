@@ -15,14 +15,16 @@ import {
 import { IconUsers } from "@tabler/icons-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { getUserProfile } from "@/action/user.action";
+import { User } from "@/types/types";
 
 export async function TeamMembers() {
-  const session = await auth();
+  const user = (await getUserProfile()) as User;
   const teams = await prisma.team.findMany({
     where: {
       members: {
         some: {
-          userId: session?.user.id,
+          userId: user?.id,
         },
       },
     },
@@ -75,8 +77,7 @@ export async function TeamMembers() {
                     <span>{team.name}</span>
                     {team.members.some(
                       (member) =>
-                        member.userId === session?.user.id &&
-                        member.role === "Leader"
+                        member.userId === user?.id && member.role === "Leader"
                     ) &&
                       !team.competition && (
                         <Button

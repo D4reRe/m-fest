@@ -1,10 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "@/auth";
 import { links } from "@/constants/constants";
 
-export default async function FooterSection() {
-  const session = await auth();
+export default function FooterSection() {
   return (
     <footer className="py-16 md:py-32">
       <div className="mx-auto max-w-5xl px-6">
@@ -41,15 +39,6 @@ export default async function FooterSection() {
               <span>{link.title}</span>
             </Link>
           ))}
-          {session ? null : (
-            <Link
-              href="/login"
-              className="text-muted-foreground hover:text-primary block duration-150"
-              prefetch
-            >
-              <span>Login</span>
-            </Link>
-          )}
         </div>
         <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
           <Link

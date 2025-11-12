@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import RegisterForm from "./register-form";
 import { redirect } from "next/navigation";
 import { getUserProfile } from "@/action/user.action";
@@ -19,15 +18,13 @@ export async function generateMetadata({
 }
 
 async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
-  const session = await auth();
+  const user = (await getUserProfile()) as User;
   const { comp } = await params;
-  if (!session) redirect("/login");
   if (comp) {
     if (!competitionsName.includes(comp.toUpperCase())) {
       redirect("/competitions");
     }
   }
-  const user = await getUserProfile();
   if (
     !user?.institution ||
     !user?.major ||
@@ -44,7 +41,7 @@ async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
     where: {
       members: {
         some: {
-          userId: session?.user.id,
+          userId: user.id,
         },
       },
     },
@@ -54,7 +51,7 @@ async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
   });
   const teamMembers = await prisma.teamMember.findMany({
     where: {
-      userId: session?.user.id,
+      userId: user.id,
     },
     include: {
       team: true,
@@ -63,7 +60,7 @@ async function CompPage({ params }: { params: Promise<{ comp: string }> }) {
   });
   const registeredCompetitions = await prisma.compRegistration.findMany({
     where: {
-      userId: session?.user.id,
+      userId: user.id,
     },
     include: {
       team: true,

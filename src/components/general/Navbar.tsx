@@ -13,13 +13,22 @@ import { User } from "@/types/types";
 import { UserAvatar } from "./UserProfile";
 import { menuItems } from "@/constants/constants";
 
-export const Navbar = ({ user }: { user: User }) => {
+export const Navbar = () => {
   const [menuState, setMenuState] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: session, status } = useSession();
   const currentPath = usePathname();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      fetchUser().then((data) => {
+        setUser(data);
+      });
+    }
+  }, [status]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -234,3 +243,17 @@ export const Navbar = ({ user }: { user: User }) => {
     </header>
   );
 };
+
+async function fetchUser() {
+  try {
+    const res = await fetch("api/user");
+    if (!res.ok) {
+      throw new Error("Failed to fetch user");
+    }
+    const data = await res.json();
+    return data as User;
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    return null;
+  }
+}

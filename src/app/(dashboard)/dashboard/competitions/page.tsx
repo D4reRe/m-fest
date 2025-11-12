@@ -17,16 +17,17 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import Link from "next/link";
-import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { RegisteredCompetitions } from "@/components/dashboard/registered-teams";
 import { RegisteredStemCompetition } from "@/components/dashboard/registered-stem";
+import { User } from "@/types/types";
+import { getUserProfile } from "@/action/user.action";
 
 async function CompPage() {
-  const session = await auth();
+  const user = (await getUserProfile()) as User;
   const teamMembers = await prisma.teamMember.findMany({
     where: {
-      userId: session?.user.id,
+      userId: user.id,
     },
   });
   const teamIds = teamMembers.map((member) => member.teamId);
@@ -43,7 +44,7 @@ async function CompPage() {
 
   const stemComp = await prisma.compRegistration.findMany({
     where: {
-      userId: session?.user.id,
+      userId: user.id,
       competitionName: "STEM",
       statusOrder: "SUCCESS",
     },

@@ -19,7 +19,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
 import { UserAvatar } from "../general/UserProfile";
 
@@ -29,7 +28,8 @@ export function NavUser() {
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     (async () => {
-      const data = await getUserProfile();
+      const res = await fetch("/api/user");
+      const data = await res.json();
       setUser(data as User);
     })();
   }, []);

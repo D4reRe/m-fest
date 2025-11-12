@@ -1,8 +1,7 @@
-import { auth } from "@/auth";
 import { AppSidebar } from "@/components/dashboard/app-sidebar";
 import { SiteHeader } from "@/components/dashboard/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { redirect } from "next/navigation";
+// @ts-expect-error ReactDrop.css exist
 import "react-image-crop/dist/ReactCrop.css";
 
 export default async function Layout({
@@ -10,8 +9,6 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  if (!session?.user) redirect("/login");
   return (
     <SidebarProvider
       style={

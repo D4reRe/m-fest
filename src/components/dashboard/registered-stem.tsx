@@ -13,12 +13,14 @@ import {
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { getUserProfile } from "@/action/user.action";
+import { User } from "@/types/types";
 
 export async function RegisteredStemCompetition() {
-  const session = await auth();
+  const user = (await getUserProfile()) as User;
   const stemComp = await prisma.compRegistration.findMany({
     where: {
-      userId: session?.user.id,
+      userId: user.id,
       competitionName: "STEM",
     },
   });

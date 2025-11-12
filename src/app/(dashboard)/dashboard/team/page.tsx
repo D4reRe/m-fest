@@ -27,6 +27,8 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { Fragment } from "react";
 import AlertDialogActionButton from "@/components/dashboard/deleteButton";
+import { getUserProfile } from "@/action/user.action";
+import { User } from "@/types/types";
 
 export const metadata: Metadata = {
   title: "Team | Mechanical Festival 2026",
@@ -34,12 +36,12 @@ export const metadata: Metadata = {
 };
 
 export default async function TeamsPage() {
-  const session = await auth();
+  const user = (await getUserProfile()) as User;
   const teams = await prisma.team.findMany({
     where: {
       members: {
         some: {
-          userId: session?.user.id,
+          userId: user.id,
         },
       },
     },
@@ -103,8 +105,7 @@ export default async function TeamsPage() {
                       <span>{team.name}</span>
                       {team.members.some(
                         (member) =>
-                          member.userId === session?.user.id &&
-                          member.role === "Leader"
+                          member.userId === user.id && member.role === "Leader"
                       ) &&
                         !team.competition && (
                           <div className="flex items-center">

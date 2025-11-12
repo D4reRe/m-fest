@@ -170,7 +170,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
         <div className="mt-12 mb-12">
           <div className="flex flex-col items-center justify-center gap-5">
             <div>
-              {user.image && (
+              {user?.image && (
                 <div className="relative mb-5">
                   <UserAvatar
                     src={user.image as string}

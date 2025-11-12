@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
-import { getUserProfile } from "@/action/user.action";
 
 const transitionVariants = {
   item: {
@@ -26,8 +25,7 @@ const transitionVariants = {
   },
 };
 
-export default async function HeroSection() {
-  const user = await getUserProfile();
+export default function HeroSection() {
   return (
     <>
       <main className="overflow-hidden">
@@ -67,7 +65,7 @@ export default async function HeroSection() {
                   as="p"
                   className="mx-auto mt-8 max-w-2xl text-balance text-3xl [font-family:var(--font-next-montserrat)] font-semibold"
                 >
-                  {user?.name ? `Welcome, ${user.name}` : "Welcome to"}
+                  Welcome to
                 </TextEffect>
                 <TextEffect
                   preset="fade-in-blur"

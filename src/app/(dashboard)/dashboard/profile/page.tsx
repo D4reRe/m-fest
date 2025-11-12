@@ -30,6 +30,7 @@ async function ProfilePage() {
               <Link
                 href="/dashboard/profile/documents"
                 className="underline font-bold italic"
+                prefetch
               >
                 go to this page.
               </Link>
