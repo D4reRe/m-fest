@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
-export default function PaymentErrorPage() {
+function PaymentErrorContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  // Extract Midtrans query parameters
   const orderId = searchParams.get("order_id");
   const statusCode = searchParams.get("status_code");
   const transactionStatus = searchParams.get("transaction_status");
@@ -16,10 +16,10 @@ export default function PaymentErrorPage() {
   const grossAmount = searchParams.get("gross_amount");
 
   if (!orderId || !statusCode || !transactionStatus) {
-    return router.replace("/dashboard/invoices");
+    router.replace("/dashboard/invoices");
+    return null;
   }
 
-  // Optional: create a human-readable message
   const message =
     transactionStatus === "deny"
       ? "Your payment was denied by the bank or payment gateway."
@@ -72,5 +72,15 @@ export default function PaymentErrorPage() {
         Back to Dashboard
       </Link>
     </main>
+  );
+}
+
+export default function PaymentErrorPage() {
+  return (
+    <Suspense
+      fallback={<div className="flex justify-center p-10">Loading...</div>}
+    >
+      <PaymentErrorContent />
+    </Suspense>
   );
 }
