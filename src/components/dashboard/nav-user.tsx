@@ -18,7 +18,7 @@ import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@heroui/react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
 import { UserAvatar } from "../general/UserProfile";

@@ -2,13 +2,14 @@
 import { Button } from "@/components/ui/button";
 import {
   Table,
-  TableHeader,
-  TableColumn,
   TableBody,
-  TableRow,
+  TableCaption,
   TableCell,
-  Chip,
-} from "@heroui/react";
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
 import { IconRefresh } from "@tabler/icons-react";
 import { RefreshCcw } from "lucide-react";
 import Link from "next/link";
@@ -78,17 +79,20 @@ export default function TableInvoices({ invoices }) {
     }
   }
   return (
-    <Table isStriped aria-label="" className="w-full bg-transparent mt-5">
+    <Table aria-label="" className="w-full bg-transparent mt-5">
+      <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
-        <TableColumn>INVOICE ID</TableColumn>
-        <TableColumn>AMOUNT</TableColumn>
-        <TableColumn>COMPETITION</TableColumn>
-        <TableColumn>TEAM</TableColumn>
-        <TableColumn>INVOKED AT</TableColumn>
-        <TableColumn>ACTION</TableColumn>
-        <TableColumn>STATUS</TableColumn>
+        <TableRow>
+          <TableHead>INVOICE ID</TableHead>
+          <TableHead>AMOUNT</TableHead>
+          <TableHead>COMPETITION</TableHead>
+          <TableHead>TEAM</TableHead>
+          <TableHead>INVOKED AT</TableHead>
+          <TableHead>ACTION</TableHead>
+          <TableHead>STATUS</TableHead>
+        </TableRow>
       </TableHeader>
-      <TableBody emptyContent={<span>No invoices found</span>}>
+      <TableBody>
         {invoices.map((invoice) => (
           <TableRow key={invoice.id}>
             <TableCell>{invoice.orderId}</TableCell>
@@ -171,13 +175,18 @@ export default function TableInvoices({ invoices }) {
             </TableCell>
             <TableCell>
               {invoice.status === "SUCCESS" ? (
-                <Chip color="success">SUCCESS</Chip>
+                <Badge
+                  variant={"secondary"}
+                  className="bg-green-700 text-white"
+                >
+                  SUCCESS
+                </Badge>
               ) : invoice.status === "PENDING" ? (
-                <Chip color="warning">PENDING</Chip>
+                <Badge className="text-white bg-yellow-500">PENDING</Badge>
               ) : invoice.status === "PROCESS" ? (
-                <Chip color="default">PROCESS</Chip>
+                <Badge className="text-white bg-blue-600">PROCESS</Badge>
               ) : (
-                <Chip color="danger">CANCELLED</Chip>
+                <Badge variant={"destructive"}>CANCELLED</Badge>
               )}
             </TableCell>
           </TableRow>
