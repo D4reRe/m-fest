@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
-export default function LoginErrorHandler() {
+import { Suspense } from "react";
+function LoginErrorHandler() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
 
@@ -26,4 +27,12 @@ export default function LoginErrorHandler() {
   }, [error]);
 
   return null;
+}
+
+export default function LoginErrorHandlerPage() {
+  return (
+    <Suspense fallback={<div className="hidden">Loading...</div>}>
+      <LoginErrorHandler />
+    </Suspense>
+  );
 }
