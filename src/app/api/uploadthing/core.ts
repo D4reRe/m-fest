@@ -88,7 +88,6 @@ export const ourFileRouter = {
         await prisma.verification.create({
           data: {
             userId: session.user.id,
-            userEmail: session.user.email as string,
           },
         });
       }
@@ -150,7 +149,6 @@ export const ourFileRouter = {
         await prisma.verification.create({
           data: {
             userId: session.user.id,
-            userEmail: session.user.email as string,
           },
         });
       }
@@ -212,7 +210,6 @@ export const ourFileRouter = {
         await prisma.verification.create({
           data: {
             userId: session.user.id,
-            userEmail: session.user.email as string,
           },
         });
       }
@@ -274,7 +271,6 @@ export const ourFileRouter = {
         await prisma.verification.create({
           data: {
             userId: session.user.id,
-            userEmail: session.user.email as string,
           },
         });
       }
