@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { AlertDialogAction } from "../ui/alert-dialog";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";

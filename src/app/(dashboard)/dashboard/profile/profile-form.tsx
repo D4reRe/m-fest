@@ -165,7 +165,7 @@ function ProfileUpdateForm({ user }: { user: User }) {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <section>
         <div className="mt-12 mb-12">
           <div className="flex flex-col items-center justify-center gap-5">

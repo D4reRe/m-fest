@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Loader2, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, fetchUser } from "@/lib/utils";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
@@ -45,9 +45,8 @@ export const Navbar = () => {
       >
         <div
           className={cn(
-            "mx-auto w-full mt-2 px-6 transition-all duration-300 lg:px-12",
-            isScrolled &&
-              "bg-background/50 max-w-6xl rounded-2xl border backdrop-blur-lg lg:px-5"
+            "mx-auto w-full px-6 transition-all duration-300 lg:px-12 bg-background/50 backdrop-blur-lg",
+            isScrolled && "mt-2 max-w-6xl rounded-2xl border lg:px-5"
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
@@ -243,17 +242,3 @@ export const Navbar = () => {
     </header>
   );
 };
-
-async function fetchUser() {
-  try {
-    const res = await fetch("api/user");
-    if (!res.ok) {
-      throw new Error("Failed to fetch user");
-    }
-    const data = await res.json();
-    return data as User;
-  } catch (err) {
-    console.error("Error fetching user:", err);
-    return null;
-  }
-}

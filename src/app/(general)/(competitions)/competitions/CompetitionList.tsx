@@ -4,7 +4,7 @@ import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function CompetitionsDesc() {
+export default function CompetitionsList() {
   return (
     <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-12">
       <h1 className="text-center text-6xl font-bold">Competitions</h1>

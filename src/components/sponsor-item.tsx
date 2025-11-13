@@ -1,5 +1,3 @@
-import React from "react";
-
 interface SponsorItemProps {
   icon: string;
   iconName: string;

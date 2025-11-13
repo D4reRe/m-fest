@@ -1,8 +1,7 @@
-import { auth } from "@/auth";
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import { Edit, Users } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../general/UserProfile";
 import {
   Empty,
@@ -17,8 +16,20 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
+import TeamFallback from "./TeamFallback";
 
-export async function TeamMembers() {
+export function TeamMembers() {
+  return (
+    <section className="glass p-6">
+      <h3 className="text-3xl font-bold text-foreground mb-6">Teams</h3>
+      <Suspense fallback={<TeamFallback />}>
+        <FetchUserTeams />
+      </Suspense>
+    </section>
+  );
+}
+
+async function FetchUserTeams() {
   const user = (await getUserProfile()) as User;
   const teams = await prisma.team.findMany({
     where: {
@@ -63,9 +74,9 @@ export async function TeamMembers() {
       </Empty>
     );
   }
+
   return (
-    <section className="glass p-6">
-      <h3 className="text-3xl font-bold text-foreground mb-6">Teams</h3>
+    <>
       {teams.map((team) => {
         return (
           <Fragment key={team.id}>
@@ -149,6 +160,6 @@ export async function TeamMembers() {
           </Fragment>
         );
       })}
-    </section>
+    </>
   );
 }

@@ -5,32 +5,15 @@ import { documents } from "@/lib/documents";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { User, Verification } from "@/types/types";
+import { Suspense } from "react";
+import DocumentFormSkeleton from "@/components/document/DocumentFormSkeleton";
 
 export const metadata: Metadata = {
   title: "Documents | Mechanical Festival 2026",
   description: "Documents to Mechanical Festival 2026",
 };
 
-async function DocumentsPage() {
-  const user: User = (await getUserProfile()) as User;
-  if (
-    !user.gender ||
-    !user.phoneNumber ||
-    !user.domicile ||
-    !user.birthDate ||
-    !user.major ||
-    !user.institution ||
-    !user.education ||
-    !user.major ||
-    !user.semester
-  ) {
-    redirect("/dashboard/profile?notif=incomplete_profile");
-  }
-  const userDocuments = await prisma.verification.findUnique({
-    where: {
-      userId: user.id,
-    },
-  });
+export default function DocumentsPage() {
   return (
     <section className="flex min-h-screen bg-transparent px-4 py-4 md:py-8 dark:bg-transparent">
       <div className="bg-transparent mx-auto h-fit w-full max-w-5xl overflow-hidden rounded-[calc(var(--radius)+.125rem)]  shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
@@ -52,12 +35,11 @@ async function DocumentsPage() {
               Do not forget to upload all the required files before submitting!
             </p>
           </div>
+
           <div>
-            <DocumentsForm
-              user={user as User}
-              userDocuments={userDocuments as Verification}
-              documents={documents}
-            />
+            <Suspense fallback={<DocumentFormSkeleton />}>
+              <FetchUserDocuments />
+            </Suspense>
           </div>
         </div>
       </div>
@@ -65,4 +47,32 @@ async function DocumentsPage() {
   );
 }
 
-export default DocumentsPage;
+async function FetchUserDocuments() {
+  const user: User = (await getUserProfile()) as User;
+  if (
+    !user.gender ||
+    !user.phoneNumber ||
+    !user.domicile ||
+    !user.birthDate ||
+    !user.major ||
+    !user.institution ||
+    !user.education ||
+    !user.major ||
+    !user.semester
+  ) {
+    redirect("/dashboard/profile?notif=incomplete_profile");
+  }
+  const userDocuments = await prisma.verification.findUnique({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  return (
+    <DocumentsForm
+      user={user as User}
+      userDocuments={userDocuments as Verification}
+      documents={documents}
+    />
+  );
+}
