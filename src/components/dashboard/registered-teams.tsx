@@ -1,12 +1,36 @@
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import { Users } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../general/UserProfile";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
+import { IconListDetails } from "@tabler/icons-react";
+import { ArrowUpRightIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import Link from "next/link";
+import TeamFallback from "./TeamFallback";
 
-export async function RegisteredCompetitions() {
+export function RegisteredCompetitions() {
+  return (
+    <section className="glass p-6">
+      <h3 className="text-lg font-semibold text-foreground mb-6">Teams</h3>
+      <Suspense fallback={<TeamFallback />}>
+        <RegisteredTeams />
+      </Suspense>
+    </section>
+  );
+}
+
+async function RegisteredTeams() {
   const user = (await getUserProfile()) as User;
   const teams = await prisma.team.findMany({
     where: {
@@ -21,10 +45,58 @@ export async function RegisteredCompetitions() {
       members: true,
     },
   });
+  const teamMembers = await prisma.teamMember.findMany({
+    where: {
+      userId: user.id,
+    },
+  });
+  const teamIds = teamMembers.map((member) => member.teamId);
+  const registeredCompetitions = await prisma.compRegistration.findMany({
+    where: {
+      teamId: {
+        in: teamIds,
+      },
+      statusOrder: "SUCCESS",
+    },
+  });
 
+  if (!registeredCompetitions.length) {
+    return (
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <IconListDetails />
+          </EmptyMedia>
+          <EmptyTitle>No Competitions Yet</EmptyTitle>
+          <EmptyDescription>
+            You haven&apos;t registered any competitions yet. Get registered by
+            clicking the button below.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <div className="flex gap-2">
+            <Button className="cursor-pointer" asChild>
+              <Link href="/competitions" prefetch>
+                Register Competition
+              </Link>
+            </Button>
+          </div>
+        </EmptyContent>
+        <Button
+          variant="link"
+          asChild
+          className="text-muted-foreground"
+          size="sm"
+        >
+          <Link href="/competitions">
+            Learn More <ArrowUpRightIcon />
+          </Link>
+        </Button>
+      </Empty>
+    );
+  }
   return (
-    <section className="glass p-6">
-      <h3 className="text-lg font-semibold text-foreground mb-6">Teams</h3>
+    <>
       {teams.map((team) => {
         return (
           <Fragment key={team.id}>
@@ -81,6 +153,6 @@ export async function RegisteredCompetitions() {
           </Fragment>
         );
       })}
-    </section>
+    </>
   );
 }

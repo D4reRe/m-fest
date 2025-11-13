@@ -3,15 +3,15 @@ import { Metadata } from "next";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
 import Link from "next/link";
+import { Suspense } from "react";
+import ProfileFormSkeleton from "@/components/dashboard/profile/ProfileFormSkeleton";
 
 export const metadata: Metadata = {
   title: "Profile | Mechanical Festival 2026",
   description: "Profile to Mechanical Festival 2026",
 };
 
-async function ProfilePage() {
-  const user: User = (await getUserProfile()) as User;
-
+export default function ProfilePage() {
   return (
     <section className="flex min-h-screen bg-transparent px-4 py-4 md:py-8 dark:bg-transparent">
       <div className="bg-transparent m-auto h-fit w-full max-w-5xl overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
@@ -36,11 +36,17 @@ async function ProfilePage() {
               </Link>
             </p>
           </div>
-          <ProfileUpdateForm user={user} />
+          <Suspense fallback={<ProfileFormSkeleton />}>
+            <FetchUserProfileData />
+          </Suspense>
         </div>
       </div>
     </section>
   );
 }
 
-export default ProfilePage;
+async function FetchUserProfileData() {
+  const user: User = (await getUserProfile()) as User;
+
+  return <ProfileUpdateForm user={user} />;
+}
