@@ -225,9 +225,9 @@ export type RegisterFormProps = {
   comp: string;
   user: User;
   teams: Team[];
-  allTeams: Team[];
+  allTeamsDatas: Team[];
   registeredCompetitions: CompRegistration[];
   teamMembers: TeamMember[];
-  allRegisteredTeams: CompRegistration[];
-  allTeamMembers: TeamMember[];
+  allRegisteredTeamDatas: CompRegistration[];
+  allTeamMembersDatas: TeamMember[];
 };
