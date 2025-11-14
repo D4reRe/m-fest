@@ -8,6 +8,7 @@ import {
   IconUser,
   IconUsers,
 } from "@tabler/icons-react";
+import { Key } from "lucide-react";
 
 export const validExtensions = ["png", "jpeg", "jpg", "webp"];
 export const maxFileSize = 4 * 1024 * 1024; // 4 MB
@@ -126,6 +127,90 @@ export const dataNavSidebar = {
     },
   ],
 };
+export const dataNavSidebarAdmin = {
+  navMain: [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+      icon: IconDashboard,
+    },
+    {
+      title: "Admin Dashboard",
+      url: "/admin",
+      icon: Key,
+    },
+    {
+      title: "Verify Documents",
+      url: "/admin/verify-documents",
+      icon: IconFileText,
+    },
+    {
+      title: "User",
+      url: "/admin/users",
+      icon: IconUsers,
+    },
+    {
+      title: "Competitions",
+      url: "/admin/competitions",
+      icon: IconListDetails,
+    },
+    {
+      title: "Events",
+      url: "/admin/events",
+      icon: IconConfetti,
+    },
+    {
+      title: "Payments & Invoices",
+      url: "/admin/payments",
+      icon: IconInvoice,
+    },
+  ],
+  // navSecondary: [
+  //   {
+  //     title: "Get Help",
+  //     url: "",
+  //     icon: IconHelp,
+  //   },
+  // ],
+  // navDocuments: [
+  //   {
+  //     name: "Documents",
+  //     url: "/dashboard/documents",
+  //     icon: IconFileText,
+  //   },
+  // ],
+};
+
+export const adminMenus = [
+  {
+    title: "Dashboard",
+    url: "/dashboard",
+  },
+  {
+    title: "Admin Dashboard",
+    url: "/admin",
+  },
+  {
+    title: "Verify Documents",
+    url: "/admin/verify-documents",
+  },
+  {
+    title: "User",
+    url: "/admin/users",
+  },
+  {
+    title: "Competitions",
+    url: "/admin/competitions",
+  },
+  {
+    title: "Events",
+    url: "/admin/events",
+  },
+  {
+    title: "Payments & Invoices",
+    url: "/admin/payments",
+  },
+];
 
 export const EventsName = [
   "m-care",

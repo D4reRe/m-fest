@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 export async function getUserProfile() {
   const session = await auth();
 
-  if (!session?.user?.email && !session?.user?.id) {
+  if (!session) {
     console.warn("⚠️ No valid user session found");
     return null;
   }

@@ -6,7 +6,7 @@ export default async function proxy(request: NextRequest) {
   const session = await auth();
   const { pathname } = request.nextUrl;
 
-  const protectedPaths = ["/dashboard", "/register"];
+  const protectedPaths = ["/dashboard", "/register", "/admin"];
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
 
   if (isProtected && !session) {
@@ -23,5 +23,5 @@ export default async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/register/:path*", "/login"],
+  matcher: ["/dashboard/:path*", "/register/:path*", "/login", "/admin/:path*"],
 };

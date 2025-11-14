@@ -19,7 +19,7 @@ import {
 } from "../ui/dropdown-menu";
 import { SlashIcon } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
-import { menus } from "@/constants/constants";
+import { adminMenus } from "@/constants/constants";
 export function SiteHeader() {
   const pathname = usePathname();
   const [currentPathname, setCurrentPathname] = useState<string[]>([""]);
@@ -41,10 +41,10 @@ export function SiteHeader() {
             <BreadcrumbItem>
               <DropdownMenu>
                 <DropdownMenuTrigger className="hover:cursor-pointer hover:text-foreground">
-                  Dashboard
+                  Admin Dashboard
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                  {menus.map((menu) => (
+                  {adminMenus.map((menu) => (
                     <Link key={menu.title} href={menu.url} prefetch>
                       <DropdownMenuItem className="hover:cursor-pointer hover:text-foreground">
                         {menu.title}
