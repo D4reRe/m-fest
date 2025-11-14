@@ -80,7 +80,6 @@ function DocumentsForm({
         },
         body: JSON.stringify({
           ...formData,
-          userEmail: user.email,
           userId: user.id,
         }),
       });

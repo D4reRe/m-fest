@@ -23,12 +23,12 @@ export const Navbar = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    if (status === "authenticated") {
-      fetchUser().then((data) => {
-        setUser(data);
-      });
-    }
-  }, [status]);
+    (async () => {
+      const res = await fetch("/api/user");
+      const data = await res.json();
+      setUser(data as User);
+    })();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

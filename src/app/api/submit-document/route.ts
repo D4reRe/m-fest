@@ -4,13 +4,13 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const payload = await req.json();
   console.log(payload);
-  const { userEmail } = payload;
+  const { userId } = payload;
   const requestedUser = await prisma.user.findUnique({
-    where: { email: userEmail },
+    where: { id: userId },
   });
 
   const isSubmitted = await prisma.verification.findUnique({
-    where: { userEmail: userEmail },
+    where: { userId },
     select: { status: true },
   });
 
