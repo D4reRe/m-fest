@@ -53,6 +53,19 @@ function RegisterForm({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
+  if (
+    !user?.institution ||
+    !user?.major ||
+    !user?.education ||
+    !user?.semester ||
+    !user?.phoneNumber ||
+    !user?.domicile ||
+    !user?.birthDate ||
+    !user?.gender
+  ) {
+    router.push("/dashboard/profile?notif=incomplete_profile");
+  }
+
   const userRegisteredTeams = userRegisteredCompetitions.map(
     (competition) => competition.teamId
   );
@@ -89,7 +102,7 @@ function RegisterForm({
   } = useForm<stemRegisterSchema>({
     resolver: zodResolver(stemRegisterSchema),
     defaultValues: {
-      name: user?.name as string,
+      name: (user?.name as string) ?? "",
       gender: user?.gender ?? undefined,
       email: user?.email as string,
       phoneNumber: user?.phoneNumber ?? "",
@@ -513,42 +526,7 @@ function RegisterForm({
   }
 
   return (
-    <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
-      <div className="text-center">
-        <Link
-          href="/"
-          aria-label="go home"
-          className="flex items-center gap-4 justify-center"
-        >
-          <Image
-            src={`/competitions/logo/${comp}.png`}
-            alt="Mechanical Festival 2026"
-            width={150}
-            height={150}
-            loading="lazy"
-          />
-        </Link>
-        <h1 className="mb-1 mt-4 text-xl font-semibold">
-          Register{" "}
-          {
-            competitions.find((c) => c.abbreviation === comp.toUpperCase())
-              ?.title
-          }
-        </h1>
-        <p className="text-sm">
-          Please fill in the form below to register for {comp.toUpperCase()}
-        </p>
-        <h2 className="text-lg text-center mt-2">
-          Fee:{" "}
-          <span className="font-bold italic">
-            Rp. {""}
-            {
-              competitions.find((c) => c.abbreviation === comp.toUpperCase())
-                ?.fee1
-            }
-          </span>
-        </h2>
-      </div>
+    <>
       {comp === "stem" ? (
         <form
           onSubmit={stemHandleSubmit(stemOnSubmit)}
@@ -566,7 +544,6 @@ function RegisterForm({
                       {...field}
                       id={field.name}
                       aria-invalid={fieldState.invalid}
-                      defaultValue={(user.name as string) ?? ""}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -594,7 +571,6 @@ function RegisterForm({
                     name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={(user.gender as string) ?? ""}
                   >
                     <SelectTrigger
                       id="form-rhf-select-language"
@@ -646,7 +622,6 @@ function RegisterForm({
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
-                    defaultValue={(user.phoneNumber as string) ?? ""}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -673,7 +648,6 @@ function RegisterForm({
                     name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
-                    defaultValue={(user.education as string) ?? "SMA"}
                   >
                     <SelectTrigger
                       id="form-rhf-select-language"
@@ -708,7 +682,6 @@ function RegisterForm({
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
-                    defaultValue={"STEM"}
                     disabled
                   />
                   {fieldState.invalid && (
@@ -729,7 +702,6 @@ function RegisterForm({
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
-                    defaultValue={(user.institution as string) ?? ""}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -879,7 +851,7 @@ function RegisterForm({
           </Button>
         </form>
       )}
-    </div>
+    </>
   );
 }
 

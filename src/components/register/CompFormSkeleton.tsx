@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function CompRegisterFormSkeleton() {
   return (
-    <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
+    <>
       {/* Header */}
       <div className="text-center flex flex-col items-center">
         <Skeleton className="h-32 w-32 rounded-full mb-4" />
@@ -64,6 +64,6 @@ export function CompRegisterFormSkeleton() {
         {/* Button */}
         <Skeleton className="h-10 w-full rounded-md" />
       </div>
-    </div>
+    </>
   );
 }

@@ -10,7 +10,9 @@ export async function fetchUser() {
   try {
     const res = await fetch("api/user");
     if (!res.ok) {
-      throw new Error("Failed to fetch user");
+      const message = await res.json();
+      console.error(message);
+      throw new Error("Failed to fetch user", { cause: message });
     }
     const data = await res.json();
     return data as User;
