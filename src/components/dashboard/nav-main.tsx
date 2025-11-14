@@ -10,7 +10,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Key } from "lucide-react";
+import { useEffect, useState } from "react";
+import { User } from "@/types/types";
 
 export function NavMain({
   items,
@@ -22,17 +25,51 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    (async () => {
+      const res = await fetch("/api/user");
+      const data = await res.json();
+      setUser(data as User);
+    })();
+  }, []);
   return (
     <SidebarGroup className="bg-transparent backdrop-blur-lg">
       <SidebarGroupContent className="flex flex-col gap-2 bg-transparent backdrop-blur-lg ">
         <SidebarMenu></SidebarMenu>
         <SidebarMenu>
+          {user?.role === "SUPERADMIN" && (
+            <Link href={"/admin"} prefetch>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip="Admin Area"
+                  className={`hover:bg-white/30 cursor-pointer`}
+                >
+                  <Key className="w-4 h-4" />
+                  <span>Admin Area</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </Link>
+          )}
+          {user?.role === "ADMIN" && (
+            <Link href={"/admin"} prefetch>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip="Admin Area"
+                  className={`hover:bg-white/30 cursor-pointer`}
+                >
+                  <Key className="w-4 h-4" />
+                  <span>Admin Area</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </Link>
+          )}
           {items.map((item) => (
             <Link href={item.url} key={item.title} prefetch>
-              <SidebarMenuItem key={item.title}>
+              <SidebarMenuItem>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  className={`hover:bg-white/30 ${
+                  className={`hover:bg-white/30 cursor-pointer ${
                     pathname === item.url ? "bg-white/15" : ""
                   }`}
                 >

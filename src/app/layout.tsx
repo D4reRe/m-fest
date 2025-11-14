@@ -6,7 +6,6 @@ import "lenis/dist/lenis.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import SessionProviders from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/sonner";
-// import StoryblokProvider from "@/components/StoryblokProvider";
 import NextTopLoader from "nextjs-toploader";
 import { ReactLenis } from "lenis/react";
 

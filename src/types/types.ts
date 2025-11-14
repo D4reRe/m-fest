@@ -1,9 +1,13 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetValue } from "react-hook-form";
+import { IconProps, type Icon } from "@tabler/icons-react";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
+import { LucideProps } from "lucide-react";
 
 enum Role {
   USER = "USER",
   ADMIN = "ADMIN",
+  SUPERADMIN = "SUPERADMIN",
 }
 enum Gender {
   Male = "Male",
@@ -230,4 +234,21 @@ export type RegisterFormProps = {
   teamMembers: TeamMember[];
   allRegisteredTeamDatas: CompRegistration[];
   allTeamMembersDatas: TeamMember[];
+};
+
+export type NavMainProps = {
+  items: (
+    | {
+        title: string;
+        url: string;
+        icon: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
+      }
+    | {
+        title: string;
+        url: string;
+        icon: ForwardRefExoticComponent<
+          Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+        >;
+      }
+  )[];
 };

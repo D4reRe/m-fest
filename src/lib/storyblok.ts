@@ -1,9 +1,9 @@
-// import { apiPlugin, storyblokInit } from "@storyblok/react/rsc";
+import { apiPlugin, storyblokInit } from "@storyblok/react/rsc";
 
-// export const getStoryblokApi = storyblokInit({
-//   accessToken: process.env.STORYBLOK_CONTENT_API_ACCESS_TOKEN,
-//   use: [apiPlugin],
-//   apiOptions: {
-//     region: "eu",
-//   },
-// });
+export const getStoryblokApi = storyblokInit({
+  accessToken: "https://api.storyblok.com/v2/cdn",
+  use: [apiPlugin],
+  apiOptions: {
+    region: "eu",
+  },
+});
