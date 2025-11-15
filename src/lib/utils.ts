@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export async function fetchUser() {
   try {
-    const res = await fetch("api/user");
+    const res = await fetch("/api/user");
     if (!res.ok) {
       const message = await res.json();
       console.error(message);

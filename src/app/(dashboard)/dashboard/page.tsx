@@ -1,8 +1,10 @@
+import { getUserProfile } from "@/action/user.action";
 import { Competitions } from "@/components/dashboard/competition";
 import { Events } from "@/components/dashboard/events";
 import { TeamMembers } from "@/components/dashboard/team-member";
 import { UserInfo } from "@/components/dashboard/user-info";
 import { UserProfile } from "@/components/dashboard/user-profile";
+import { User } from "@/types/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,11 +12,10 @@ export const metadata: Metadata = {
   description: "Mechanical Festival 2026",
 };
 
-function DashboardHomePage() {
+async function DashboardHomePage() {
+  const user = (await getUserProfile()) as User;
   return (
     <div className="min-h-screen bg-transparent">
-      {/* Background gradient effect */}
-
       <main className="relative z-10">
         {/* Header */}
         <div className="border-b border-border/20 backdrop-blur-sm">
@@ -30,10 +31,10 @@ function DashboardHomePage() {
             {/* Profile Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-1">
-                <UserProfile />
+                <UserProfile user={user} />
               </div>
               <div className="lg:col-span-2">
-                <UserInfo />
+                <UserInfo user={user} />
               </div>
             </div>
 
@@ -44,7 +45,7 @@ function DashboardHomePage() {
             </div>
 
             {/* Team Members */}
-            <TeamMembers />
+            <TeamMembers user={user} />
           </div>
         </div>
       </main>

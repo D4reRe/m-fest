@@ -78,5 +78,5 @@ async function FetchTeamForm({
   )
     redirect("/dashboard/team");
 
-  return <TeamForm user={user} team={team as Team} />;
+  return <TeamForm team={team as Team} />;
 }

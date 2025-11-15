@@ -8,12 +8,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { User } from "@/types/types";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "@/lib/utils";
 
-function TeamForm({ user }: { user: User }) {
+function TeamForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
   const teamSchema = z
     .object({
       teamName: z.string().min(1),
@@ -38,7 +43,7 @@ function TeamForm({ user }: { user: User }) {
         (email, index) => emails.indexOf(email) !== index
       );
       const differentInstitutions = members
-        .filter((member) => member.institution !== user.institution)
+        .filter((member) => member.institution !== user?.institution)
         .map((member) => member.name);
       if (duplicates.length > 0) {
         toast.error(

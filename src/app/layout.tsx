@@ -8,6 +8,7 @@ import SessionProviders from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/sonner";
 import NextTopLoader from "nextjs-toploader";
 import { ReactLenis } from "lenis/react";
+import QueryTanstackProvider from "@/components/providers/query-provider";
 
 export default function RootLayout({
   children,
@@ -20,24 +21,26 @@ export default function RootLayout({
         className={`${montserrat.variable} ${roboto.variable} ${onest.className} antialiased`}
       >
         <ReactLenis root>
-          <SessionProviders>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <NextTopLoader
-                color="hsl(var(--primary))"
-                height={10}
-                showSpinner={true}
-              />
+          <QueryTanstackProvider>
+            <SessionProviders>
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
+              >
+                <NextTopLoader
+                  color="hsl(var(--primary))"
+                  height={10}
+                  showSpinner={true}
+                />
 
-              {children}
+                {children}
 
-              <Toaster />
-            </ThemeProvider>
-          </SessionProviders>
+                <Toaster />
+              </ThemeProvider>
+            </SessionProviders>
+          </QueryTanstackProvider>
         </ReactLenis>
       </body>
     </html>

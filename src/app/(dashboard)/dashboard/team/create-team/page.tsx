@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { getUserProfile } from "@/action/user.action";
-import { User } from "@/types/types";
 import TeamForm from "./team-form";
 
 export const metadata: Metadata = {
@@ -9,7 +7,6 @@ export const metadata: Metadata = {
 };
 
 async function CreateTeamPage() {
-  const user: User = (await getUserProfile()) as User;
   return (
     <section className="flex min-h-screen bg-transparent px-4 py-4 md:py-8 dark:bg-transparent">
       <div className="bg-transparent m-auto h-fit w-full max-w-5xl overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
@@ -33,7 +30,7 @@ async function CreateTeamPage() {
               team.
             </p>
           </div>
-          <TeamForm user={user} />
+          <TeamForm />
         </div>
       </div>
     </section>

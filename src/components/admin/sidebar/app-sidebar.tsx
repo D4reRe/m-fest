@@ -1,6 +1,6 @@
 "use client";
-import { NavMain } from "@/components/dashboard/nav-main";
-import { NavUser } from "@/components/dashboard/nav-user";
+import { NavMain } from "@/components/admin/sidebar/nav-main";
+import { NavUser } from "@/components/admin/sidebar/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -12,9 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
-import { NavSecondary } from "./nav-secondary";
-import { NavDocuments } from "./nav-documents";
-import { dataNavSidebar } from "@/constants/constants";
+import { dataNavSidebarAdmin as dataNavSidebar } from "@/constants/constants";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -50,8 +48,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent className="bg-transparent backdrop-blur-3xl ">
         <NavMain items={dataNavSidebar.navMain} />
-        <NavDocuments items={dataNavSidebar.navDocuments} />
-        <NavSecondary items={dataNavSidebar.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

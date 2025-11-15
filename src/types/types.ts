@@ -227,7 +227,6 @@ export type ImageCropperProps = {
 
 export type RegisterFormProps = {
   comp: string;
-  user: User;
   teams: Team[];
   allTeamsDatas: Team[];
   registeredCompetitions: CompRegistration[];

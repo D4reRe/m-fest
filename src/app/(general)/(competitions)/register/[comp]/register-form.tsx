@@ -26,6 +26,8 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { educations } from "@/lib/profile";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "@/lib/utils";
 
 const stemRegisterSchema = z.object({
   name: z.string().min(5),
@@ -42,7 +44,6 @@ type stemRegisterSchema = z.infer<typeof stemRegisterSchema>;
 
 function RegisterForm({
   comp,
-  user,
   teams: userTeams,
   registeredCompetitions: userRegisteredCompetitions,
   teamMembers: userTeamMembers,
@@ -52,6 +53,10 @@ function RegisterForm({
 }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
 
   if (
     !user?.institution ||

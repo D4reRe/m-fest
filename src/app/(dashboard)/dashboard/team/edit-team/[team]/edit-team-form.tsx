@@ -8,12 +8,18 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Member, Team, User } from "@/types/types";
+import { Member, Team } from "@/types/types";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "@/lib/utils";
 
-function TeamForm({ user, team }: { user: User; team: Team }) {
+function TeamForm({ team }: { team: Team }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
   const teamSchema = z
     .object({
       teamName: z.string().min(1),
@@ -38,7 +44,7 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
         (email, index) => emails.indexOf(email) !== index
       );
       const differentInstitutions = members
-        .filter((member) => member.institution !== user.institution)
+        .filter((member) => member.institution !== user?.institution)
         .map((member) => member.name);
       if (duplicates.length > 0) {
         toast.error(
@@ -90,7 +96,9 @@ function TeamForm({ user, team }: { user: User; team: Team }) {
           .map((member: Member) => {
             return {
               name:
-                member.userId === user.id ? user.name : (member.name as string),
+                member.userId === user?.id
+                  ? user?.name
+                  : (member.name as string),
               email: member.email as string,
               institution: member.institution as string,
               userId: member.userId as string,

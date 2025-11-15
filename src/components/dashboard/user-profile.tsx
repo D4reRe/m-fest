@@ -1,11 +1,11 @@
-import { getUserProfile } from "@/action/user.action";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { UserAvatar } from "../general/UserProfile";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { User } from "@/types/types";
 
-export function UserProfile() {
+export function UserProfile({ user }: { user: User }) {
   return (
     <div className="glass p-6 space-y-6">
       <div className="flex flex-col items-center">
@@ -18,7 +18,7 @@ export function UserProfile() {
             </>
           }
         >
-          <FetchUserAvatar />
+          <FetchUserAvatar user={user} />
         </Suspense>
       </div>
 
@@ -43,15 +43,14 @@ export function UserProfile() {
             </>
           }
         >
-          <FetchUserInfo />
+          <FetchUserInfo user={user} />
         </Suspense>
       </div>
     </div>
   );
 }
 
-async function FetchUserAvatar() {
-  const user = await getUserProfile();
+async function FetchUserAvatar({ user }: { user: User }) {
   return (
     <>
       {user?.image && (
@@ -73,8 +72,7 @@ async function FetchUserAvatar() {
   );
 }
 
-async function FetchUserInfo() {
-  const user = await getUserProfile();
+async function FetchUserInfo({ user }: { user: User }) {
   return (
     <>
       <div>

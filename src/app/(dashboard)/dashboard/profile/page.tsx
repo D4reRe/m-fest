@@ -1,10 +1,6 @@
 import ProfileUpdateForm from "./profile-form";
 import { Metadata } from "next";
-import { getUserProfile } from "@/action/user.action";
-import { User } from "@/types/types";
 import Link from "next/link";
-import { Suspense } from "react";
-import ProfileFormSkeleton from "@/components/dashboard/profile/ProfileFormSkeleton";
 
 export const metadata: Metadata = {
   title: "Profile | Mechanical Festival 2026",
@@ -36,17 +32,9 @@ export default function ProfilePage() {
               </Link>
             </p>
           </div>
-          <Suspense fallback={<ProfileFormSkeleton />}>
-            <FetchUserProfileData />
-          </Suspense>
+          <ProfileUpdateForm />
         </div>
       </div>
     </section>
   );
-}
-
-async function FetchUserProfileData() {
-  const user: User = (await getUserProfile()) as User;
-
-  return <ProfileUpdateForm user={user} />;
 }

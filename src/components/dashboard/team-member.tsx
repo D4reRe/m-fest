@@ -14,23 +14,21 @@ import {
 import { IconUsers } from "@tabler/icons-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
 import TeamFallback from "./TeamFallback";
 
-export function TeamMembers() {
+export function TeamMembers({ user }: { user: User }) {
   return (
     <section className="glass p-6">
       <h3 className="text-3xl font-bold text-foreground mb-6">Teams</h3>
       <Suspense fallback={<TeamFallback />}>
-        <FetchUserTeams />
+        <FetchUserTeams user={user} />
       </Suspense>
     </section>
   );
 }
 
-async function FetchUserTeams() {
-  const user = (await getUserProfile()) as User;
+async function FetchUserTeams({ user }: { user: User }) {
   const teams = await prisma.team.findMany({
     where: {
       members: {
