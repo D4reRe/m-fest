@@ -1,9 +1,9 @@
-import { getUserProfile } from "@/action/user.action";
 import { Mail, Phone, MapPin, Calendar } from "lucide-react";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { User } from "@/types/types";
 
-export function UserInfo() {
+export function UserInfo({ user }: { user: User }) {
   return (
     <div className="glass p-6">
       <h3 className="text-lg font-semibold text-foreground mb-6">
@@ -44,16 +44,14 @@ export function UserInfo() {
             </>
           }
         >
-          <FetchUserInfo />
+          <FetchUserInfo user={user} />
         </Suspense>
       </div>
     </div>
   );
 }
 
-async function FetchUserInfo() {
-  const user = await getUserProfile();
-
+async function FetchUserInfo({ user }: { user: User }) {
   const infoItems = [
     {
       icon: Mail,

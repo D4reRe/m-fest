@@ -17,23 +17,19 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { User } from "@/types/types";
-import { UserAvatar } from "../general/UserProfile";
-import { cn } from "@/lib/utils";
+import { UserAvatar } from "../../general/UserProfile";
+import { cn, fetchUser } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { status } = useSession();
-  const [user, setUser] = useState<User | null>(null);
-  useEffect(() => {
-    (async () => {
-      const res = await fetch("/api/user");
-      const data = await res.json();
-      setUser(data as User);
-    })();
-  }, []);
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   return (

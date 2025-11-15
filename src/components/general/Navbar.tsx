@@ -9,9 +9,9 @@ import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
-import { User } from "@/types/types";
 import { UserAvatar } from "./UserProfile";
 import { menuItems } from "@/constants/constants";
+import { useQuery } from "@tanstack/react-query";
 
 export const Navbar = () => {
   const [menuState, setMenuState] = useState(false);
@@ -20,15 +20,11 @@ export const Navbar = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const currentPath = usePathname();
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      const res = await fetch("/api/user");
-      const data = await res.json();
-      setUser(data as User);
-    })();
-  }, []);
+  const { data } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+    enabled: status === "authenticated",
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -158,10 +154,10 @@ export const Navbar = () => {
                 )}
                 {status === "authenticated" && session?.user && (
                   <div className="flex gap-5 items-center">
-                    {user?.image ? (
+                    {data?.image ? (
                       <UserAvatar
-                        src={user?.image as string}
-                        alt={user?.name as string}
+                        src={data?.image as string}
+                        alt={data?.name as string}
                         className="w-15 h-15 border-2 border-primary/50"
                       />
                     ) : (
@@ -171,7 +167,7 @@ export const Navbar = () => {
                       </div>
                     )}
                     <p className={cn(isScrolled ? "lg:hidden" : "text-sm")}>
-                      {user?.name}
+                      {data?.name}
                     </p>
                     <Button
                       variant="destructive"

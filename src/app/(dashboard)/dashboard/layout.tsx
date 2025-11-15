@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/dashboard/app-sidebar";
-import { SiteHeader } from "@/components/dashboard/site-header";
+import { AppSidebar } from "@/components/dashboard/sidebar/app-sidebar";
+import { SiteHeader } from "@/components/dashboard/sidebar/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 // @ts-expect-error ReactDrop.css exist
 import "react-image-crop/dist/ReactCrop.css";

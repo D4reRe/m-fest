@@ -27,6 +27,8 @@ import {
 } from "@/components/ui/field";
 import { UserAvatar } from "@/components/general/UserProfile";
 import UploadDialog from "@/components/dashboard/profile/UploadDialog";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "@/lib/utils";
 
 const profileSchema = z.object({
   fullName: z.string().min(5),
@@ -59,10 +61,14 @@ function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   }, [isLoading]);
 }
 
-function ProfileUpdateForm({ user }: { user: User }) {
+function ProfileUpdateForm() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
 
   usePreventRefreshUserDuringUpload(isLoading);
 

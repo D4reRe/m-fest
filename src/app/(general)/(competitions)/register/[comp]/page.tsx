@@ -129,7 +129,6 @@ async function FetchCompForm({
       </div>
       <RegisterForm
         comp={comp}
-        user={user as User}
         teams={teams as Team[]}
         registeredCompetitions={registeredCompetitions as CompRegistration[]}
         teamMembers={teamMembers as TeamMember[]}
