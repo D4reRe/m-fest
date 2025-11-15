@@ -1,6 +1,8 @@
+import ProfileFormSkeleton from "@/components/dashboard/profile/ProfileFormSkeleton";
 import ProfileUpdateForm from "./profile-form";
 import { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Profile | Mechanical Festival 2026",
@@ -32,7 +34,9 @@ export default function ProfilePage() {
               </Link>
             </p>
           </div>
-          <ProfileUpdateForm />
+          <Suspense fallback={<ProfileFormSkeleton />}>
+            <ProfileUpdateForm />
+          </Suspense>
         </div>
       </div>
     </section>
