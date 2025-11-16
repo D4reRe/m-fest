@@ -21,6 +21,7 @@ import { useDropzone } from "@uploadthing/react";
 import { UserAvatar } from "@/components/general/UserProfile";
 import { Progress } from "@/components/ui/progress";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export default function UploadDialog({
   isLoading,
@@ -41,6 +42,7 @@ export default function UploadDialog({
   const [files, setFiles] = useState<File[]>([]);
   // Upload cropped image
   const [uploadCroppedFile, setUploadCroppedFile] = useState<File | null>(null);
+  const router = useRouter();
   const queryClient = useQueryClient();
   const { startUpload } = useUploadThing("updateProfilePicture", {
     onBeforeUploadBegin(files) {
@@ -87,6 +89,7 @@ export default function UploadDialog({
       toast.success(`Profile image uploaded successfully!`);
       setIsDialogOpen(false);
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      router.refresh();
       setCroppedImageUrl(null);
       setCroppedFile(null);
       setUploadCroppedFile(null);
@@ -275,6 +278,8 @@ export default function UploadDialog({
                   return;
                 }
                 queryClient.invalidateQueries({ queryKey: ["user"] });
+                router.refresh();
+
                 setIsDialogOpen(false);
               }}
             >
