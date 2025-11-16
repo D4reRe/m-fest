@@ -22,6 +22,7 @@ import { UserAvatar } from "@/components/general/UserProfile";
 import { Progress } from "@/components/ui/progress";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { MAX_PROFILEIMAGE_SIZE } from "@/constants/constants";
 
 export default function UploadDialog({
   isLoading,
@@ -93,6 +94,7 @@ export default function UploadDialog({
       setCroppedImageUrl(null);
       setCroppedFile(null);
       setUploadCroppedFile(null);
+      setShowImageOnDropPreview(false);
       setOnDropPreviewImageUrl(null);
       setFiles([]);
     },
@@ -139,8 +141,39 @@ export default function UploadDialog({
       toast.error("File size must be less than 4MB");
       return;
     }
-    setOnDropPreviewImageUrl(URL.createObjectURL(acceptedFiles[0]));
-    setFiles(acceptedFiles);
+    const currentFile = acceptedFiles[0];
+    const imageElement = document.createElement("img");
+    imageElement.src = URL.createObjectURL(currentFile);
+    imageElement.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("No 2D context");
+      const scale = Math.min(
+        MAX_PROFILEIMAGE_SIZE / imageElement.width,
+        MAX_PROFILEIMAGE_SIZE / imageElement.height
+      );
+      canvas.width = Math.floor(imageElement.width * scale);
+      canvas.height = Math.floor(imageElement.height * scale);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(imageElement, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return;
+          const file = new File([blob], currentFile.name, {
+            // blob.type ---> if don't specify type it defaults to png. choose either jpeg or webp for better compression
+            // type: blob.type,
+            type: "image/webp",
+          });
+          const files = [file];
+          setOnDropPreviewImageUrl(URL.createObjectURL(file));
+          setFiles(files as File[]);
+        },
+        "image/webp",
+        1
+      );
+    };
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -230,7 +263,10 @@ export default function UploadDialog({
             <>
               <UserAvatar
                 className="w-32 h-32 border-2 border-primary/50 mx-auto mt-5 mb-5"
-                src={croppedImageUrl as string}
+                src={
+                  (croppedImageUrl as string) ||
+                  (onDropPreviewImageUrl as string)
+                }
                 alt={"User's preview cropped Image"}
               />
               <div className="flex justify-between">
