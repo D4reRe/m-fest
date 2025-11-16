@@ -12,7 +12,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { educations } from "@/lib/profile";
@@ -64,6 +64,7 @@ function usePreventRefreshUserDuringUpload(isLoading: boolean) {
 
 function ProfileUpdateForm() {
   const { data: session } = useSession();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -111,6 +112,8 @@ function ProfileUpdateForm() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["user"] });
+      router.replace("/dashboard/profile");
+      router.refresh();
     },
   });
 
@@ -469,7 +472,7 @@ function ProfileUpdateForm() {
             <Controller
               name="birthDate"
               control={control}
-              render={({ field }) => (
+              render={({ field, fieldState: { error } }) => (
                 <div className="flex w-full flex-col md:flex-nowrap gap-4">
                   <Input
                     placeholder="June 2 2005"
@@ -480,6 +483,11 @@ function ProfileUpdateForm() {
               )}
               rules={{ required: true }}
             />
+            {errors.birthDate && (
+              <p className="text-destructive text-sm">
+                {errors.birthDate.message}
+              </p>
+            )}
           </div>
         </div>
         <div className="w-full flex justify-center items-center">

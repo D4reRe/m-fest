@@ -5,7 +5,7 @@ import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
@@ -14,12 +14,33 @@ import { fetchUser } from "@/lib/utils";
 import TeamFormSkeleton from "@/components/dashboard/edit-team/TeamFormSkeleton";
 
 function TeamForm() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
-  const { data: user, isLoading: isLoadingUser } = useQuery({
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    isFetched: isFetchedUser,
+  } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
   });
+  const router = useRouter();
+  useEffect(() => {
+    if (isFetchedUser) {
+      if (
+        !user?.gender ||
+        !user?.phoneNumber ||
+        !user?.domicile ||
+        !user?.birthDate ||
+        !user?.major ||
+        !user?.institution ||
+        !user?.education ||
+        !user?.major ||
+        !user?.semester
+      ) {
+        router.push("/dashboard/profile?notif=incomplete_profile");
+      }
+    }
+  }, [isFetchedUser, user, router]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const teamSchema = z
     .object({
       teamName: z.string().min(1),

@@ -48,21 +48,23 @@ function DocumentsForm() {
     queryFn: fetchUser,
   });
 
-  if (isFetchedUser) {
-    if (
-      !user?.gender ||
-      !user?.phoneNumber ||
-      !user?.domicile ||
-      !user?.birthDate ||
-      !user?.major ||
-      !user?.institution ||
-      !user?.education ||
-      !user?.major ||
-      !user?.semester
-    ) {
-      router.push("/dashboard/profile?notif=incomplete_profile");
+  useEffect(() => {
+    if (isFetchedUser) {
+      if (
+        !user?.gender ||
+        !user?.phoneNumber ||
+        !user?.domicile ||
+        !user?.birthDate ||
+        !user?.major ||
+        !user?.institution ||
+        !user?.education ||
+        !user?.major ||
+        !user?.semester
+      ) {
+        router.push("/dashboard/profile?notif=incomplete_profile");
+      }
     }
-  }
+  }, [isFetchedUser, user, router]);
 
   const {
     data,
@@ -121,6 +123,7 @@ function DocumentsForm() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
+      router.refresh();
     },
   });
   const { handleSubmit, control, setValue } = useForm<documentsSchema>({

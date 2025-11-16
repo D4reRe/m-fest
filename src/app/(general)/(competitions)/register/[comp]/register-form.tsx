@@ -7,8 +7,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import Link from "next/link";
-import Image from "next/image";
 import { competitions } from "@/lib/competition";
 import { RegisterFormProps, TeamMember } from "@/types/types";
 import {
@@ -58,21 +56,23 @@ function RegisterForm({
     queryFn: fetchUser,
   });
 
-  if (isFetchedUser) {
-    if (
-      !user?.gender ||
-      !user?.phoneNumber ||
-      !user?.domicile ||
-      !user?.birthDate ||
-      !user?.major ||
-      !user?.institution ||
-      !user?.education ||
-      !user?.major ||
-      !user?.semester
-    ) {
-      router.push("/dashboard/profile?notif=incomplete_profile");
+  useEffect(() => {
+    if (isFetchedUser) {
+      if (
+        !user?.gender ||
+        !user?.phoneNumber ||
+        !user?.domicile ||
+        !user?.birthDate ||
+        !user?.major ||
+        !user?.institution ||
+        !user?.education ||
+        !user?.major ||
+        !user?.semester
+      ) {
+        router.push("/dashboard/profile?notif=incomplete_profile");
+      }
     }
-  }
+  }, [isFetchedUser, user, router]);
 
   const userRegisteredTeams = userRegisteredCompetitions.map(
     (competition) => competition.teamId
@@ -208,7 +208,7 @@ function RegisterForm({
     const submittedData = {
       competitionName: formData.competitionName,
       team: formData.team,
-      userId: user.id,
+      userId: user?.id,
       teamId: userTeams.find((team) => team.name === formData.team)?.id,
     };
 
@@ -220,7 +220,7 @@ function RegisterForm({
       productDetails: `${
         competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
       }`,
-      email: user.email,
+      email: user?.email,
       callbackUrl:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/api/payment/callback"
@@ -231,8 +231,8 @@ function RegisterForm({
           ? "http://localhost:3000/payment/status"
           : "https://m-fest-xi.vercel.app/payment/status",
       expiryPeriod: 60,
-      customerVaName: user.name,
-      phoneNumber: user.phoneNumber,
+      customerVaName: user?.name,
+      phoneNumber: user?.phoneNumber,
       brand: "Mechanical Festival 2026",
       category: "Competition Registration Fee",
       merchant_name: "Himpunan Mahasiswa Mesin ITB",
@@ -339,7 +339,7 @@ function RegisterForm({
       productDetails: `${
         competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
       }`,
-      email: user.email,
+      email: user?.email,
       callbackUrl:
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000/api/payment/callback"
@@ -350,8 +350,8 @@ function RegisterForm({
           ? "http://localhost:3000/payment/status"
           : "https://m-fest-xi.vercel.app/payment/status",
       expiryPeriod: 60,
-      customerVaName: user.name,
-      phoneNumber: user.phoneNumber,
+      customerVaName: user?.name,
+      phoneNumber: user?.phoneNumber,
       brand: "Mechanical Festival 2026",
       category: "Competition Registration Fee",
       merchant_name: "Himpunan Mahasiswa Mesin ITB",
