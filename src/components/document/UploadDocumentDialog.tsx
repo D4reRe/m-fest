@@ -17,17 +17,16 @@ import { useDropzone } from "@uploadthing/react";
 import { useUploadThing } from "@/utils/uploadthing";
 import { UploadThingError } from "uploadthing/server";
 import { Json } from "@uploadthing/shared";
-import { UploadDocumentProps, UploadThingRoute, User } from "@/types/types";
+import { UploadDocumentProps, UploadThingRoute } from "@/types/types";
 import { Label } from "../ui/label";
 import { Progress } from "../ui/progress";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function UploadDocumentDialog({
   isLoading,
   setIsLoading,
-  router,
   id,
   title,
-  user,
   type,
   uploadThingRoute,
   setValue,
@@ -40,6 +39,7 @@ export default function UploadDocumentDialog({
   const [croppedFile, setCroppedFile] = useState<File | null>(null);
   const [uploadCroppedFile, setUploadCroppedFile] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
+  const queryClient = useQueryClient();
   const [uploadThingRouteUpload, setUploadThingRouteUpload] =
     useState<UploadThingRoute | null>(null);
 
@@ -99,10 +99,8 @@ export default function UploadDocumentDialog({
       setValue(uploadThingRouteUpload as UploadThingRoute, res[0].ufsUrl, {
         shouldValidate: true,
       });
-      setTimeout(() => {
-        router.refresh();
-        window.location.reload();
-      }, 500);
+      queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
+      setActiveDialog(null);
     },
     onUploadError: (e: UploadThingError<Json>) => {
       setIsUploading(false);
@@ -199,8 +197,6 @@ export default function UploadDocumentDialog({
             {cropping && !isUploading && (
               <ImageCropperDocument
                 title={title}
-                user={user as User}
-                alt={user.name as string}
                 updateImgUrl={updateImgUrl}
                 updateImgFile={updateImgFile}
                 updateUploadCroppedFile={updateUploadCroppedFile}
@@ -215,8 +211,8 @@ export default function UploadDocumentDialog({
                     {progress === 0
                       ? "Starting upload..."
                       : progress === 100
-                      ? "Finalizing upload..."
-                      : "Uploading..."}
+                        ? "Finalizing upload..."
+                        : "Uploading..."}
                   </p>
                   <p>{progress === 100 ? `` : `${progress}%`}</p>
                 </div>
@@ -244,10 +240,10 @@ export default function UploadDocumentDialog({
                       shouldValidate: true,
                     });
                   }
-                  setTimeout(() => {
-                    router.refresh();
-                    window.location.reload();
-                  }, 500);
+                  queryClient.invalidateQueries({
+                    queryKey: ["userDocuments"],
+                  });
+                  setActiveDialog(null);
                 }}
               >
                 {isLoading ? (

@@ -81,16 +81,6 @@ export const ourFileRouter = {
         console.log("Unauthorized user tried to upload");
         throw new UploadThingError("Unauthorized");
       }
-      const verification = await prisma.verification.findUnique({
-        where: { userId: session.user.id },
-      });
-      if (!verification) {
-        await prisma.verification.create({
-          data: {
-            userId: session.user.id,
-          },
-        });
-      }
       return {
         userId: session.user.id,
         name: session.user.name,
@@ -110,17 +100,17 @@ export const ourFileRouter = {
       try {
         const previousImage = await prisma.verification.findUnique({
           where: { userId: metadata.userId },
-          select: { IdentityCardImageKey: true },
+          select: { identityCardImageKey: true },
         });
-        if (previousImage?.IdentityCardImageKey) {
-          await deleteFiles(previousImage.IdentityCardImageKey);
+        if (previousImage?.identityCardImageKey) {
+          await deleteFiles(previousImage.identityCardImageKey);
         }
         await prisma.verification.update({
           where: { userId: metadata.userId as string },
           data: {
-            IdentityCardImageUrl: file.ufsUrl,
-            IdentityCardImageKey: file.key,
-            IdentityCardCreatedAt: new Date(),
+            identityCardImageUrl: file.ufsUrl,
+            identityCardImageKey: file.key,
+            identityCardCreatedAt: new Date(),
           },
         });
 
@@ -141,16 +131,6 @@ export const ourFileRouter = {
       if (!session) {
         console.log("Unauthorized user tried to upload");
         throw new UploadThingError("Unauthorized");
-      }
-      const verification = await prisma.verification.findUnique({
-        where: { userId: session.user.id },
-      });
-      if (!verification) {
-        await prisma.verification.create({
-          data: {
-            userId: session.user.id,
-          },
-        });
       }
       return {
         userId: session.user.id,
@@ -203,16 +183,6 @@ export const ourFileRouter = {
         console.log("Unauthorized user tried to upload");
         throw new UploadThingError("Unauthorized");
       }
-      const verification = await prisma.verification.findUnique({
-        where: { userId: session.user.id },
-      });
-      if (!verification) {
-        await prisma.verification.create({
-          data: {
-            userId: session.user.id,
-          },
-        });
-      }
       return {
         userId: session.user.id,
         name: session.user.name,
@@ -263,16 +233,6 @@ export const ourFileRouter = {
       if (!session) {
         console.log("Unauthorized user tried to upload");
         throw new UploadThingError("Unauthorized");
-      }
-      const verification = await prisma.verification.findUnique({
-        where: { userId: session.user.id },
-      });
-      if (!verification) {
-        await prisma.verification.create({
-          data: {
-            userId: session.user.id,
-          },
-        });
       }
       return {
         userId: session.user.id,

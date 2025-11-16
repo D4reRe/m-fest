@@ -16,10 +16,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUserInvoices } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
-export default function TableInvoices({ invoices }) {
+export default function TableInvoices() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { data: invoices, isLoading: isLoadingInvoices } = useQuery({
+    queryKey: ["invoices"],
+    queryFn: fetchUserInvoices,
+  });
   async function refreshPayment(
     merchantOrderId: string,
     referenceDuitku: string,
@@ -78,6 +85,10 @@ export default function TableInvoices({ invoices }) {
       router.refresh();
     }
   }
+
+  if (isLoadingInvoices)
+    return <Skeleton className="h-60 w-screen max-w-6xl mt-3 rounded-lg" />;
+
   return (
     <Table aria-label="" className="w-full bg-transparent mt-5">
       <TableCaption>A list of your recent invoices.</TableCaption>
@@ -93,11 +104,12 @@ export default function TableInvoices({ invoices }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
+        {invoices?.map((invoice) => (
           <TableRow key={invoice.id}>
             <TableCell>{invoice.orderId}</TableCell>
             <TableCell>{invoice.amount}</TableCell>
             <TableCell>{invoice.competition}</TableCell>
+            {/* @ts-expect-error team is exist */}
             <TableCell>{invoice.team?.name ?? "Individual"}</TableCell>
             <TableCell>
               {new Date(invoice.createdAt).toLocaleDateString("en-US", {
@@ -127,7 +139,7 @@ export default function TableInvoices({ invoices }) {
                         invoice.orderId,
                         invoice.referenceDuitku as string,
                         invoice.paymentUrl as string,
-                        invoice.competition
+                        invoice.competition as string
                       )
                     }
                     disabled={isLoading}
@@ -156,7 +168,7 @@ export default function TableInvoices({ invoices }) {
                         invoice.orderId,
                         invoice.referenceDuitku as string,
                         invoice.paymentUrl as string,
-                        invoice.competition
+                        invoice.competition as string
                       )
                     }
                     disabled={isLoading}

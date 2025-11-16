@@ -10,10 +10,10 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Key } from "lucide-react";
-import { useEffect, useState } from "react";
-import { User } from "@/types/types";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "@/lib/utils";
 
 export function NavMain({
   items,
@@ -25,14 +25,10 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
-  const [user, setUser] = useState<User | null>(null);
-  useEffect(() => {
-    (async () => {
-      const res = await fetch("/api/user");
-      const data = await res.json();
-      setUser(data as User);
-    })();
-  }, []);
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
   return (
     <SidebarGroup className="bg-transparent backdrop-blur-lg">
       <SidebarGroupContent className="flex flex-col gap-2 bg-transparent backdrop-blur-lg ">

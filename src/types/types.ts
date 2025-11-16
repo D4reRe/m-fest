@@ -1,4 +1,3 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetValue } from "react-hook-form";
 import { IconProps, type Icon } from "@tabler/icons-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
@@ -35,7 +34,7 @@ enum TeamRole {
 
 enum DocumentStatus {
   AWAITING_UPLOAD = "AWAITING_UPLOAD",
-  UPLOADED = "UPLOADED",
+  PENDING = "PENDING",
   VERIFIED = "VERIFIED",
 }
 
@@ -44,6 +43,8 @@ enum VerificationStatus {
   PENDING = "PENDING",
   ACCEPTED = "ACCEPTED",
 }
+
+export type DocumentType = "identityCard" | "twibbon" | "followIg" | "pDDikti";
 
 export type User = {
   image: string | null;
@@ -156,14 +157,23 @@ export type Verification = {
   updatedAt: Date;
 };
 
-export type Documents = {
+export type Document = {
   id: number;
   title: string;
-  type: "identityCard" | "twibbon" | "followIg" | "pDDikti";
+  type: DocumentType;
   submissionDetail: string;
   acceptedFiles: string[];
   uploadThingRoute: string;
-}[];
+  imageUrl: string | null;
+  imageKey: string | null;
+  createdAt: Date | null;
+  status: "AWAITING_UPLOAD" | "PENDING" | "VERIFIED" | null;
+  verified: boolean | null;
+};
+
+export type Documents = {
+  [K in DocumentType]: Document;
+};
 
 export type UploadThingRoute =
   | "identityCard"
@@ -173,10 +183,8 @@ export type UploadThingRoute =
 export type UploadDocumentProps = {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  router: AppRouterInstance;
   id: number;
   title: string;
-  user: User;
   type: UploadThingRoute;
   uploadThingRoute: UploadThingRoute;
   setValue: UseFormSetValue<{
@@ -188,10 +196,8 @@ export type UploadDocumentProps = {
 };
 
 export type UploadDialogProps = {
-  user: User;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  router: AppRouterInstance;
 };
 
 export type SuccessPageProps = {
@@ -204,25 +210,21 @@ export type SuccessPageProps = {
 
 export type ImageCropperDocumentProps = {
   title: string;
-  alt: string;
   updateImgUrl: (imgSrc: string) => void;
   updateImgFile: (file: File) => void;
   updateUploadCroppedFile: (file: File) => void;
   isLoading: boolean;
   isProfilePicture?: boolean;
-  user: User;
 };
 
 export type ImageCropperProps = {
   title: string;
-  alt: string;
   updateImgUrl: (imgSrc: string) => void;
   updateImgFile: (file: File) => void;
   updateUploadCroppedFile: (file: File) => void;
   isLoading: boolean;
   isUploading: boolean;
   isProfilePicture?: boolean;
-  user: User;
 };
 
 export type RegisterFormProps = {

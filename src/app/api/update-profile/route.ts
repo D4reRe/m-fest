@@ -13,6 +13,7 @@ export async function POST(req: Request) {
     education,
     semester,
     birthDate,
+    imageUrl,
   } = await req.json();
   try {
     const authUser = await prisma.user.findUnique({
@@ -33,6 +34,7 @@ export async function POST(req: Request) {
         education,
         semester,
         birthDate,
+        image: imageUrl,
       },
     });
 

@@ -29,12 +29,7 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-                <NextTopLoader
-                  color="hsl(var(--primary))"
-                  height={10}
-                  showSpinner={true}
-                />
-
+                <NextTopLoader showSpinner={false} height={3} />
                 {children}
 
                 <Toaster />

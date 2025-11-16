@@ -53,22 +53,25 @@ function RegisterForm({
 }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const { data: user } = useQuery({
+  const { data: user, isFetched: isFetchedUser } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
   });
 
-  if (
-    !user?.institution ||
-    !user?.major ||
-    !user?.education ||
-    !user?.semester ||
-    !user?.phoneNumber ||
-    !user?.domicile ||
-    !user?.birthDate ||
-    !user?.gender
-  ) {
-    router.push("/dashboard/profile?notif=incomplete_profile");
+  if (isFetchedUser) {
+    if (
+      !user?.gender ||
+      !user?.phoneNumber ||
+      !user?.domicile ||
+      !user?.birthDate ||
+      !user?.major ||
+      !user?.institution ||
+      !user?.education ||
+      !user?.major ||
+      !user?.semester
+    ) {
+      router.push("/dashboard/profile?notif=incomplete_profile");
+    }
   }
 
   const userRegisteredTeams = userRegisteredCompetitions.map(

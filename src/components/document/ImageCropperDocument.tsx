@@ -18,16 +18,16 @@ import {
   MIN_DIMENSION,
   validExtensions,
 } from "@/constants/constants";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "@/lib/utils";
 
 export default function ImageCropperDocument({
-  alt,
   updateImgUrl,
   updateImgFile,
   updateUploadCroppedFile,
   isLoading,
   title,
   isProfilePicture,
-  user,
 }: ImageCropperDocumentProps) {
   const ASPECT_RATIO: number | undefined = isProfilePicture ? 1 : undefined;
   const imgRef = useRef<HTMLImageElement>(null);
@@ -41,6 +41,10 @@ export default function ImageCropperDocument({
   const [naturalHeight, setNaturalHeight] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>();
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
   function resetFileInput() {
     if (inputFileRef.current) {
       inputFileRef.current.value = "";
@@ -244,7 +248,7 @@ export default function ImageCropperDocument({
                         if (!isProfilePicture) {
                           const file = new File(
                             [blob],
-                            `document-${title}-${user.name}.webp`,
+                            `document-${title}-${user?.name}.webp`,
                             {
                               // blob.type ---> if don't specify type it defaults to png. choose either jpeg or webp for better compression
                               // type: blob.type,
@@ -272,7 +276,7 @@ export default function ImageCropperDocument({
                         if (!isProfilePicture) {
                           const file = new File(
                             [blob],
-                            `document-${title}-${user.name}.webp`,
+                            `document-${title}-${user?.name}.webp`,
                             {
                               // blob.type ---> if don't specify type it defaults to png. choose either jpeg or webp for better compression
                               // type: blob.type,
@@ -307,7 +311,7 @@ export default function ImageCropperDocument({
               {naturalHeight > naturalWidth && (
                 <Image
                   src={croppedImageUrl as string}
-                  alt={alt ?? `${title} Image`}
+                  alt={`${title} Image`}
                   width={250}
                   height={250}
                   loading="lazy"
@@ -317,7 +321,7 @@ export default function ImageCropperDocument({
               {naturalHeight === naturalWidth && (
                 <Image
                   src={croppedImageUrl as string}
-                  alt={alt ?? `${title} Image`}
+                  alt={`${title} Image`}
                   width={350}
                   height={350}
                   loading="lazy"
@@ -327,7 +331,7 @@ export default function ImageCropperDocument({
               {naturalHeight < naturalWidth && (
                 <Image
                   src={croppedImageUrl as string}
-                  alt={alt ?? `${title} Image`}
+                  alt={`${title} Image`}
                   width={500}
                   height={500}
                   loading="lazy"

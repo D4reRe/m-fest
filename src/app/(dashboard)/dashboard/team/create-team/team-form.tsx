@@ -11,11 +11,12 @@ import { toast } from "sonner";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "@/lib/utils";
+import TeamFormSkeleton from "@/components/dashboard/edit-team/TeamFormSkeleton";
 
 function TeamForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const { data: user } = useQuery({
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
   });
@@ -103,6 +104,10 @@ function TeamForm() {
     control,
     name: "members",
   });
+
+  if (isLoadingUser) {
+    return <TeamFormSkeleton />;
+  }
 
   async function onSubmit(formData: teamSchema) {
     setIsLoading(true);
