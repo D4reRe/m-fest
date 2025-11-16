@@ -1,5 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -11,7 +10,11 @@ import Link from "next/link";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import UploadDocumentDialog from "@/components/document/UploadDocumentDialog";
-import { User, Verification, Documents } from "@/types/types";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { fetchUser, fetchUserDocuments } from "@/lib/utils";
+import DocumentFormSkeleton from "@/components/document/DocumentFormSkeleton";
+import { UploadThingRoute } from "@/types/types";
+import { useRouter } from "next/navigation";
 
 // all field should be filled of that type image Url
 const documentsSchema = z.object({
@@ -37,87 +40,154 @@ function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   }, [isLoading]);
 }
 
-function DocumentsForm({
-  user,
-  documents,
-  userDocuments,
-}: {
-  user: User;
-  documents: Documents;
-  userDocuments: Verification;
-}) {
+function DocumentsForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {
-    handleSubmit,
-    control,
-    setValue,
-    formState: { isSubmitting },
-  } = useForm<documentsSchema>({
-    resolver: zodResolver(documentsSchema),
-    defaultValues: {
-      identityCard: userDocuments?.IdentityCardImageUrl ?? "",
-      twibbon: userDocuments?.twibbonImageUrl ?? "",
-      followIg: userDocuments?.followIgImageUrl ?? "",
-      pDDikti: userDocuments?.pDDiktiImageUrl ?? "",
-    },
-  });
   const router = useRouter();
+  const { data: user, isFetched: isFetchedUser } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
 
-  usePreventRefreshUserDuringUpload(isLoading);
+  if (isFetchedUser) {
+    if (
+      !user?.gender ||
+      !user?.phoneNumber ||
+      !user?.domicile ||
+      !user?.birthDate ||
+      !user?.major ||
+      !user?.institution ||
+      !user?.education ||
+      !user?.major ||
+      !user?.semester
+    ) {
+      router.push("/dashboard/profile?notif=incomplete_profile");
+    }
+  }
 
-  async function onSubmit(formData: documentsSchema) {
-    console.log(formData);
-    setIsLoading(true);
-    toast.loading("Submitting file...", {
-      id: "submitting-file",
-    });
-    // Send datas that contained image URLs uploadthing
-    try {
+  const {
+    data,
+    isLoading: isLoadingUserDocuments,
+    isFetched: isFetchedUserDocuments,
+  } = useQuery({
+    queryKey: ["userDocuments"],
+    queryFn: fetchUserDocuments,
+  });
+  const queryClient = useQueryClient();
+
+  const documents = data?.documents;
+  const userVerificationStatus = data?.status;
+
+  const updateUserDocuments = useMutation({
+    mutationFn: async (data: documentsSchema) => {
+      // Send datas that contained image URLs uploadthing
       const res = await fetch("/api/submit-document", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          ...formData,
-          userId: user.id,
+          ...data,
+          userId: user?.id,
         }),
       });
 
-      setIsLoading(false);
-
-      if (res.ok) {
-        toast.dismiss("submitting-file");
-        toast.success("File submitted successfully!");
-        setTimeout(() => {
-          router.refresh();
-        }, 500);
-        // setTimeout(() => {
-        //   router.refresh();
-        //   window.location.reload();
-        // }, 500);
-      } else {
-        toast.dismiss("submitting-file");
+      if (!res.ok) {
+        setIsLoading(false);
         const err = await res.json();
-        toast.error("Failed to submit file", {
-          description: err.message,
-        });
-        console.log(err.message);
+        throw new Error(err.message || "Failed to submit documents");
       }
-    } catch (error) {
+
+      return res.json();
+    },
+    onMutate: () => {
+      setIsLoading(true);
+      toast.loading("Submitting file...", {
+        id: "submitting-file",
+      });
+    },
+    onSuccess: (data) => {
+      setIsLoading(false);
+      toast.dismiss("submitting-file");
+      toast.success("File submitted successfully!", {
+        description: data.message,
+      });
+    },
+    onError(error) {
       setIsLoading(false);
       toast.dismiss("submitting-file");
       toast.error("Failed to submit file", {
         description: (error as Error).message,
       });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
+    },
+  });
+  const { handleSubmit, control, setValue } = useForm<documentsSchema>({
+    resolver: zodResolver(documentsSchema),
+    defaultValues: {
+      identityCard:
+        documents?.find((document) => document.type === "identityCard")
+          ?.imageUrl ?? "",
+      twibbon:
+        documents?.find((document) => document.type === "twibbon")?.imageUrl ??
+        "",
+      followIg:
+        documents?.find((document) => document.type === "followIg")?.imageUrl ??
+        "",
+      pDDikti:
+        documents?.find((document) => document.type === "pDDikti")?.imageUrl ??
+        "",
+    },
+  });
+
+  useEffect(() => {
+    if (documents) {
+      setValue(
+        "identityCard",
+        documents?.find((document) => document.type === "identityCard")
+          ?.imageUrl ?? ""
+      );
+      setValue(
+        "twibbon",
+        documents?.find((document) => document.type === "twibbon")?.imageUrl ??
+          ""
+      );
+      setValue(
+        "followIg",
+        documents?.find((document) => document.type === "followIg")?.imageUrl ??
+          ""
+      );
+      setValue(
+        "pDDikti",
+        documents?.find((document) => document.type === "pDDikti")?.imageUrl ??
+          ""
+      );
     }
+  }, [documents, setValue]);
+
+  usePreventRefreshUserDuringUpload(isLoading);
+
+  if (isFetchedUserDocuments)
+    queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
+  if (isLoadingUserDocuments) return <DocumentFormSkeleton />;
+
+  async function onSubmit(formData: documentsSchema) {
+    updateUserDocuments.mutate(formData);
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-5 mt-5">
-        {documents.map((document) => {
-          const { title, type, submissionDetail, id, acceptedFiles } = document;
+        {documents?.map((document) => {
+          const {
+            title,
+            type,
+            submissionDetail,
+            id,
+            acceptedFiles,
+            uploadThingRoute,
+          } = document;
           return (
             <main key={id} className="border rounded-lg p-5">
               <div className="mb-6">
@@ -126,40 +196,14 @@ function DocumentsForm({
                   <div
                     className={`px-4 py-2 rounded-full border bg-accent-foreground/10`}
                   >
-                    {type === "identityCard" &&
-                    userDocuments?.IdentityCardImageUrl &&
-                    userDocuments.status === "PENDING" ? (
-                      <p className="">
-                        {userDocuments.IdentityCardVerified === false
-                          ? "Pending"
-                          : "Verified"}
+                    {document.status === "AWAITING_UPLOAD" ? (
+                      <p className="text-sm text-muted-foreground">
+                        Not Submitted
                       </p>
-                    ) : type === "twibbon" &&
-                      userDocuments?.twibbonImageUrl &&
-                      userDocuments.status === "PENDING" ? (
-                      <p className="">
-                        {userDocuments.twibbonVerified === false
-                          ? "Pending"
-                          : "Verified"}
-                      </p>
-                    ) : type === "followIg" &&
-                      userDocuments?.followIgImageUrl &&
-                      userDocuments.status === "PENDING" ? (
-                      <p className="">
-                        {userDocuments.followIgVerified === false
-                          ? "Pending"
-                          : "Verified"}
-                      </p>
-                    ) : type === "pDDikti" &&
-                      userDocuments?.pDDiktiImageUrl &&
-                      userDocuments.status === "PENDING" ? (
-                      <p className="">
-                        {userDocuments.pDDiktiVerified === false
-                          ? "Pending"
-                          : "Verified"}
-                      </p>
+                    ) : document.status === "PENDING" ? (
+                      <p className="text-sm text-yellow-500">Pending</p>
                     ) : (
-                      <p className="">Not Submitted</p>
+                      <p className="text-sm text-green-500">Verified</p>
                     )}
                   </div>
                 </div>
@@ -169,105 +213,45 @@ function DocumentsForm({
                 </div>
               </div>
               <div className="grid grid-cols-1">
-                {!userDocuments?.status && (
+                {document.status === "AWAITING_UPLOAD" ? (
                   <UploadDocumentDialog
                     isLoading={isLoading}
                     setIsLoading={setIsLoading}
-                    router={router}
                     id={id}
                     title={title}
-                    user={user}
                     type={type}
-                    uploadThingRoute={type}
+                    uploadThingRoute={uploadThingRoute as UploadThingRoute}
                     setValue={setValue}
                   />
-                )}
-                {userDocuments?.status === "NOT_SUBMITTED" && (
-                  <UploadDocumentDialog
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                    router={router}
-                    id={id}
-                    title={title}
-                    user={user}
-                    type={type}
-                    uploadThingRoute={type}
-                    setValue={setValue}
-                  />
-                )}
-                {userDocuments?.status === "PENDING" && (
-                  <>
-                    {type === "identityCard" &&
-                    userDocuments?.IdentityCardImageUrl &&
-                    userDocuments.IdentityCardStatus === "AWAITING_UPLOAD" ? (
-                      <UploadDocumentDialog
-                        isLoading={isLoading}
-                        setIsLoading={setIsLoading}
-                        router={router}
-                        id={id}
-                        title={title}
-                        user={user}
-                        type={type}
-                        uploadThingRoute={type}
-                        setValue={setValue}
-                      />
-                    ) : type === "twibbon" &&
-                      userDocuments?.twibbonImageUrl &&
-                      userDocuments.twibbonStatus === "AWAITING_UPLOAD" ? (
-                      <UploadDocumentDialog
-                        isLoading={isLoading}
-                        setIsLoading={setIsLoading}
-                        router={router}
-                        id={id}
-                        title={title}
-                        user={user}
-                        type={type}
-                        uploadThingRoute={type}
-                        setValue={setValue}
-                      />
-                    ) : type === "followIg" &&
-                      userDocuments?.followIgImageUrl &&
-                      userDocuments.followIgStatus === "AWAITING_UPLOAD" ? (
-                      <UploadDocumentDialog
-                        isLoading={isLoading}
-                        setIsLoading={setIsLoading}
-                        router={router}
-                        id={id}
-                        title={title}
-                        user={user}
-                        type={type}
-                        uploadThingRoute={type}
-                        setValue={setValue}
-                      />
-                    ) : type === "pDDikti" &&
-                      userDocuments?.pDDiktiImageUrl &&
-                      userDocuments.pDDiktiStatus === "AWAITING_UPLOAD" ? (
-                      <UploadDocumentDialog
-                        isLoading={isLoading}
-                        setIsLoading={setIsLoading}
-                        router={router}
-                        id={id}
-                        title={title}
-                        user={user}
-                        type={type}
-                        uploadThingRoute={type}
-                        setValue={setValue}
-                      />
-                    ) : (
-                      <p className="text-sm text-muted-foreground">
-                        You have already submitted your document. Please wait
-                        for the verification process to complete.
-                      </p>
-                    )}
-                  </>
-                )}
-                {userDocuments?.status === "ACCEPTED" && (
-                  <p className="text-sm text-muted-foreground">
+                ) : document.status === "PENDING" ? (
+                  <p className="text-sm text-yellow-500">
+                    You have already submitted your document. Please wait for
+                    the verification process to complete.
+                  </p>
+                ) : (
+                  <p className="text-sm text-green-500">
                     Your document have been verified. You can now register for
                     competitions.
                   </p>
                 )}
-                <div>
+
+                <div className="mt-5">
+                  {document.imageUrl && (
+                    <>
+                      <h1 className="mb-2 text-muted-foreground">
+                        Preview uploaded image:
+                      </h1>
+                      <Image
+                        src={document.imageUrl}
+                        alt={title}
+                        width={500}
+                        height={500}
+                        loading="lazy"
+                      />
+                    </>
+                  )}
+                </div>
+                <div className="mt-3">
                   <Controller
                     name={type}
                     control={control}
@@ -280,7 +264,9 @@ function DocumentsForm({
                           {...field}
                           id={field.name}
                           aria-invalid={fieldState.invalid}
-                          type="hidden"
+                          disabled
+                          readOnly
+                          // type="hidden"
                         />
                         {fieldState.invalid && (
                           <FieldError
@@ -292,138 +278,37 @@ function DocumentsForm({
                     )}
                   />
                 </div>
-                <div className="mt-5">
-                  {title === "Identity Card" &&
-                    userDocuments?.IdentityCardImageUrl && (
-                      <>
-                        <h1 className="mb-2 text-muted-foreground">
-                          Preview uploaded image:
-                        </h1>
-                        <Image
-                          src={userDocuments.IdentityCardImageUrl}
-                          alt={title}
-                          width={500}
-                          height={500}
-                          loading="lazy"
-                        />
-                      </>
-                    )}
-                  {title === "Twibbon" && userDocuments?.twibbonImageUrl && (
-                    <>
-                      <h1 className="mb-2 text-muted-foreground">
-                        Preview uploaded image:
-                      </h1>
-                      <Image
-                        src={userDocuments.twibbonImageUrl}
-                        alt={title}
-                        width={500}
-                        height={500}
-                        loading="lazy"
-                      />
-                    </>
-                  )}
-                  {title === "Follow Ig" && userDocuments?.followIgImageUrl && (
-                    <>
-                      <h1 className="mb-2 text-muted-foreground">
-                        Preview uploaded image:
-                      </h1>
-                      <Image
-                        src={userDocuments.followIgImageUrl}
-                        alt={title}
-                        width={500}
-                        height={500}
-                        loading="lazy"
-                      />
-                    </>
-                  )}
-                  {title === "PDDikti" && userDocuments?.pDDiktiImageUrl && (
-                    <>
-                      <h1 className="mb-2 text-muted-foreground">
-                        Preview uploaded image:
-                      </h1>
-                      <Image
-                        src={userDocuments.pDDiktiImageUrl}
-                        alt={title}
-                        width={500}
-                        height={500}
-                        loading="lazy"
-                      />
-                    </>
-                  )}
-                </div>
-
                 <h3 className="mt-6 text-muted-foreground">
                   Accepted File Types (Max 4MB):
                 </h3>
                 <p className="mt-2">{acceptedFiles.join(", ")}</p>
 
                 <div className="flex justify-between items-center">
-                  {userDocuments?.IdentityCardImageUrl &&
-                    title === "Identity Card" && (
-                      <div>
-                        <h1 className="mt-5 text-muted-foreground">
-                          Uploaded file:
-                        </h1>
-                        <p className="text-sm">
-                          Last uploaded:{" "}
-                          {`${userDocuments.IdentityCardCreatedAt?.toDateString()} at ${userDocuments.IdentityCardCreatedAt?.toLocaleTimeString()}`}
-                        </p>
-                        <Link
-                          href={userDocuments.IdentityCardImageUrl}
-                          className="underline italic text-blue-400"
-                          target="_blank"
-                        >
-                          View Uploaded File
-                        </Link>
-                      </div>
-                    )}
-                  {userDocuments?.twibbonImageUrl && title === "Twibbon" && (
+                  {document.imageUrl && (
                     <div>
                       <h1 className="mt-5 text-muted-foreground">
                         Uploaded file:
                       </h1>
                       <p className="text-sm">
                         Last uploaded:{" "}
-                        {`${userDocuments.twibbonCreatedAt?.toDateString()} at ${userDocuments.twibbonCreatedAt?.toLocaleTimeString()}`}
+                        <span>
+                          {`${
+                            document.createdAt
+                              ? new Date(
+                                  document.createdAt
+                                ).toLocaleDateString()
+                              : ""
+                          } at ${
+                            document.createdAt
+                              ? new Date(
+                                  document.createdAt
+                                ).toLocaleTimeString()
+                              : ""
+                          }`}
+                        </span>
                       </p>
                       <Link
-                        href={userDocuments.twibbonImageUrl}
-                        className="underline italic text-blue-400"
-                        target="_blank"
-                      >
-                        View Uploaded File
-                      </Link>
-                    </div>
-                  )}
-                  {userDocuments?.followIgImageUrl && title === "Follow Ig" && (
-                    <div>
-                      <h1 className="mt-5 text-muted-foreground">
-                        Uploaded file:
-                      </h1>
-                      <p className="text-sm">
-                        Last uploaded:{" "}
-                        {`${userDocuments.followIgCreatedAt?.toDateString()} at ${userDocuments.followIgCreatedAt?.toLocaleTimeString()}`}
-                      </p>
-                      <Link
-                        href={userDocuments.followIgImageUrl}
-                        className="underline italic text-blue-400"
-                        target="_blank"
-                      >
-                        View Uploaded File
-                      </Link>
-                    </div>
-                  )}
-                  {userDocuments?.pDDiktiImageUrl && title === "PDDikti" && (
-                    <div>
-                      <h1 className="mt-5 text-muted-foreground">
-                        Uploaded file:
-                      </h1>
-                      <p className="text-sm">
-                        Last uploaded:{" "}
-                        {`${userDocuments.pDDiktiCreatedAt?.toDateString()} at ${userDocuments.pDDiktiCreatedAt?.toLocaleTimeString()}`}
-                      </p>
-                      <Link
-                        href={userDocuments.pDDiktiImageUrl}
+                        href={document.imageUrl}
                         className="underline italic text-blue-400"
                         target="_blank"
                       >
@@ -440,11 +325,15 @@ function DocumentsForm({
       </div>
       <Button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isLoading || userVerificationStatus === "ACCEPTED"}
         className="cursor-pointer w-full mt-5"
         variant={"outline"}
       >
-        {isSubmitting ? "Submitting..." : "Submit"}
+        {userVerificationStatus === "NOT_SUBMITTED"
+          ? "Submit Documents"
+          : userVerificationStatus === "PENDING"
+            ? "Update Documents"
+            : "Documents Verified"}
       </Button>
     </form>
   );

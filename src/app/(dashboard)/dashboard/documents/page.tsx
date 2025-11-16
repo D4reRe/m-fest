@@ -1,10 +1,5 @@
 import { Metadata } from "next";
-import { getUserProfile } from "@/action/user.action";
 import DocumentsForm from "./document-form";
-import { documents } from "@/lib/documents";
-import { prisma } from "@/lib/prisma";
-import { redirect } from "next/navigation";
-import { User, Verification } from "@/types/types";
 import { Suspense } from "react";
 import DocumentFormSkeleton from "@/components/document/DocumentFormSkeleton";
 
@@ -38,41 +33,11 @@ export default function DocumentsPage() {
 
           <div>
             <Suspense fallback={<DocumentFormSkeleton />}>
-              <FetchUserDocuments />
+              <DocumentsForm />
             </Suspense>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-async function FetchUserDocuments() {
-  const user: User = (await getUserProfile()) as User;
-  if (
-    !user.gender ||
-    !user.phoneNumber ||
-    !user.domicile ||
-    !user.birthDate ||
-    !user.major ||
-    !user.institution ||
-    !user.education ||
-    !user.major ||
-    !user.semester
-  ) {
-    redirect("/dashboard/profile?notif=incomplete_profile");
-  }
-  const userDocuments = await prisma.verification.findUnique({
-    where: {
-      userId: user.id,
-    },
-  });
-
-  return (
-    <DocumentsForm
-      user={user as User}
-      userDocuments={userDocuments as Verification}
-      documents={documents}
-    />
   );
 }

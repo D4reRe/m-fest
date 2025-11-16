@@ -8,7 +8,6 @@ export function UserAvatar({
   src: string;
   alt: string;
   className?: string;
-  classNameGoogleImage?: string;
 }) {
   return (
     <Avatar className={className}>
@@ -18,7 +17,7 @@ export function UserAvatar({
           "https://api.iconify.design/healthicons/ui-user-profile-outline.svg?color=%23fff"
         }
         alt={alt ?? "User's Image"}
-        className="object-center object-cover"
+        className="object-cover object-center"
         loading="lazy"
       />
       <AvatarFallback className="bg-gradient-accent text-foreground font-bold">

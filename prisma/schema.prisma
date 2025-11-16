@@ -2,6 +2,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// generator zod {
+//   provider = "prisma-zod-generator"
+  // optional output = "./prisma/generated" (JSON config can supply if omitted)
+  // optional config = "./zod-generator.config.json" (relative to schema file)
+// }
+
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
@@ -40,7 +46,7 @@ enum Gender {
 
 enum DocumentStatus{
   AWAITING_UPLOAD
-  UPLOADED
+  PENDING
   VERIFIED
 }
 
@@ -127,27 +133,27 @@ model User {
 model Verification {
   id                        String   @id @default(cuid())
   userId                    String   @unique
-  IdentityCardImageUrl      String?
+  identityCardImageUrl      String?
   twibbonImageUrl           String?
   pDDiktiImageUrl           String?
   followIgImageUrl          String?
 
-  IdentityCardImageKey      String?
+  identityCardImageKey      String?
   twibbonImageKey           String?
   pDDiktiImageKey           String?
   followIgImageKey          String?
 
-  IdentityCardCreatedAt     DateTime? @default(now())
+  identityCardCreatedAt     DateTime? @default(now())
   twibbonCreatedAt          DateTime? @default(now())
   pDDiktiCreatedAt          DateTime? @default(now())
   followIgCreatedAt         DateTime? @default(now())
 
-  IdentityCardStatus        DocumentStatus?   @default(AWAITING_UPLOAD)
+  identityCardStatus        DocumentStatus?   @default(AWAITING_UPLOAD)
   twibbonStatus             DocumentStatus?   @default(AWAITING_UPLOAD)
   followIgStatus            DocumentStatus?   @default(AWAITING_UPLOAD)
   pDDiktiStatus             DocumentStatus?   @default(AWAITING_UPLOAD)
 
-  IdentityCardVerified     Boolean? @default(false)
+  identityCardVerified     Boolean? @default(false)
   twibbonVerified          Boolean? @default(false)
   pDDiktiVerified          Boolean? @default(false)
   followIgVerified         Boolean? @default(false)

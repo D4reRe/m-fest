@@ -14,29 +14,34 @@ import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { useUploadThing } from "@/utils/uploadthing";
 import { Loader2, Upload } from "lucide-react";
-import { UploadDialogProps, User } from "@/types/types";
+import { UploadDialogProps } from "@/types/types";
 import { UploadThingError } from "uploadthing/server";
 import { Json } from "@uploadthing/shared";
 import { useDropzone } from "@uploadthing/react";
 import { UserAvatar } from "@/components/general/UserProfile";
 import { Progress } from "@/components/ui/progress";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function UploadDialog({
-  user,
   isLoading,
   setIsLoading,
-  router,
 }: UploadDialogProps) {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [progress, setProgress] = useState<number | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   // Preview cropped image
   const [croppedImageUrl, setCroppedImageUrl] = useState<string | null>(null);
+  const [onDropPreviewImageUrl, setOnDropPreviewImageUrl] = useState<
+    string | null
+  >(null);
   const [croppedFile, setCroppedFile] = useState<File | null>(null);
+  const [showImageOnDropPreview, setShowImageOnDropPreview] =
+    useState<boolean>(false);
   const [cropping, setIsCropping] = useState<boolean>(true);
   const [files, setFiles] = useState<File[]>([]);
   // Upload cropped image
   const [uploadCroppedFile, setUploadCroppedFile] = useState<File | null>(null);
+  const queryClient = useQueryClient();
   const { startUpload } = useUploadThing("updateProfilePicture", {
     onBeforeUploadBegin(files) {
       toast.loading(`Presigning URL for profile image...`, {
@@ -80,10 +85,13 @@ export default function UploadDialog({
       setIsLoading(false);
       toast.dismiss("upload-profile-image");
       toast.success(`Profile image uploaded successfully!`);
-      setTimeout(() => {
-        router.refresh();
-        window.location.reload();
-      }, 500);
+      setIsDialogOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+      setCroppedImageUrl(null);
+      setCroppedFile(null);
+      setUploadCroppedFile(null);
+      setOnDropPreviewImageUrl(null);
+      setFiles([]);
     },
     onUploadError: (e: UploadThingError<Json>) => {
       setIsUploading(false);
@@ -128,6 +136,7 @@ export default function UploadDialog({
       toast.error("File size must be less than 4MB");
       return;
     }
+    setOnDropPreviewImageUrl(URL.createObjectURL(acceptedFiles[0]));
     setFiles(acceptedFiles);
   }, []);
 
@@ -141,11 +150,19 @@ export default function UploadDialog({
       onOpenChange={(open: boolean) => {
         if (isLoading || isUploading) return;
         setIsDialogOpen(open);
+        if (!open) {
+          setCroppedImageUrl(null);
+          setCroppedFile(null);
+          setUploadCroppedFile(null);
+          setOnDropPreviewImageUrl(null);
+          setShowImageOnDropPreview(false);
+          setFiles([]);
+        }
       }}
     >
       <DialogTrigger asChild>
         <button
-          className="absolute -bottom-3 left-0 right-0 m-auto w-fit p-[.35rem] rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-600"
+          className="absolute -bottom-3 left-0 right-0 m-auto w-fit p-[.35rem] rounded-full bg-gray-800 hover:bg-gray-700 border border-gray-600 cursor-pointer"
           title="Change photo"
           onClick={() => {
             if (!isLoading) setIsDialogOpen(true);
@@ -168,8 +185,6 @@ export default function UploadDialog({
           {cropping && !isUploading && (
             <ImageCropper
               title="Profile Picture"
-              user={user as User}
-              alt={user.name as string}
               updateImgUrl={updateImgUrl}
               updateImgFile={updateImgFile}
               updateUploadCroppedFile={updateUploadCroppedFile}
@@ -181,20 +196,30 @@ export default function UploadDialog({
           {!cropping && !isUploading && (
             <div {...getRootProps()}>
               <input {...getInputProps()} />
-              <div className="w-full h-50 l rounded-lg bg-slate-700/45 flex justify-center items-center ">
-                <div className="flex flex-col items-center">
-                  <Upload className="w-6 h-6" />
-                  <h1 className="text-xl">Choose files or drag and drop</h1>
-                  <p className="text-lg">Image up to 4MB, max 1 file</p>
-                  <p className="text-sm">
-                    Supported types: jpg, jpeg, png, & webp
-                  </p>
-                  {files[0]?.name && (
-                    <p className="text-sm text-center line-clamp-1">
-                      Selected: {files[0].name}
+              <div className="w-full h-50 l rounded-lg bg-slate-500/45 flex justify-center items-center cursor-pointer ">
+                {showImageOnDropPreview ? (
+                  <UserAvatar
+                    className="w-32 h-32 border-2 border-primary/50 mx-auto mt-5 mb-5"
+                    src={onDropPreviewImageUrl as string}
+                    alt={"User's preview cropped Image"}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center text-wrap">
+                    <Upload className="w-6 h-6" />
+                    <h1 className="text-xl">Choose files or drag and drop</h1>
+                    <p className="text-lg">Image up to 4MB, max 1 file</p>
+                    <p className="text-sm">
+                      Supported types: jpg, jpeg, png, & webp
                     </p>
-                  )}
-                </div>
+                    {files[0]?.name && (
+                      <>
+                        <p className="text-sm text-center line-clamp-1">
+                          Selected: {files[0].name}
+                        </p>
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -210,8 +235,8 @@ export default function UploadDialog({
                   {progress === 0
                     ? "Starting upload..."
                     : progress === 100
-                    ? "Finalizing upload..."
-                    : "Uploading..."}
+                      ? "Finalizing upload..."
+                      : "Uploading..."}
                 </p>
                 <p>{progress === 100 ? `` : `${progress}%`}</p>
               </div>
@@ -249,11 +274,8 @@ export default function UploadDialog({
                   toast.dismiss("update-profile-picture");
                   return;
                 }
-                setTimeout(() => {
-                  router.refresh();
-                  window.location.reload();
-                }, 500);
-                router.replace("/dashboard/profile");
+                queryClient.invalidateQueries({ queryKey: ["user"] });
+                setIsDialogOpen(false);
               }}
             >
               {isLoading ? (
@@ -273,6 +295,7 @@ export default function UploadDialog({
                 updateImgFile(null as unknown as File);
                 updateImgUrl("");
                 setIsCropping(false);
+                setCroppedImageUrl(null);
               }}
             >
               Upload without crop
@@ -280,7 +303,7 @@ export default function UploadDialog({
           </DialogFooter>
         )}
         {!cropping && !isUploading && (
-          <DialogFooter className="">
+          <DialogFooter className="flex justify-evenly items-center">
             {files.length > 0 && (
               <Button
                 variant={"default"}
@@ -289,6 +312,15 @@ export default function UploadDialog({
                 onClick={() => startUpload(files)}
               >
                 Upload {files.length} file
+              </Button>
+            )}
+            {files.length > 0 && (
+              <Button
+                variant={"default"}
+                className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto bg-blue-600 hover:bg-blue-800 text-white transition-all"
+                onClick={() => setShowImageOnDropPreview((prev) => !prev)}
+              >
+                {showImageOnDropPreview ? "Hide preview" : "See preview"}
               </Button>
             )}
             {files.length === 0 && (
@@ -307,9 +339,12 @@ export default function UploadDialog({
               className="cursor-pointer"
               onClick={() => {
                 setIsCropping(true);
+                setShowImageOnDropPreview(false);
+                setOnDropPreviewImageUrl(null);
+                setFiles([]);
               }}
             >
-              Crop before upload
+              Crop & upload
             </Button>
           </DialogFooter>
         )}

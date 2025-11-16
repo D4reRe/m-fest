@@ -12,13 +12,12 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { educations } from "@/lib/profile";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { User } from "@/types/types";
 import {
   Field,
   FieldContent,
@@ -27,8 +26,9 @@ import {
 } from "@/components/ui/field";
 import { UserAvatar } from "@/components/general/UserProfile";
 import UploadDialog from "@/components/dashboard/profile/UploadDialog";
-import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/lib/utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { cn, fetchUser } from "@/lib/utils";
+import ProfileFormSkeleton from "@/components/dashboard/profile/ProfileFormSkeleton";
 
 const profileSchema = z.object({
   fullName: z.string().min(5),
@@ -43,6 +43,7 @@ const profileSchema = z.object({
     .min(1, "Minimum semester is 1")
     .max(8, "Maximum semester is 8"),
   birthDate: z.string().min(5, "Birth date is required"),
+  imageUrl: z.string(),
 });
 
 type profileSchema = z.infer<typeof profileSchema>;
@@ -65,9 +66,52 @@ function ProfileUpdateForm() {
   const { data: session } = useSession();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { data: user } = useQuery({
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
+  });
+  const queryClient = useQueryClient();
+
+  const updateUserMutation = useMutation({
+    mutationFn: async (data: profileSchema) => {
+      const res = await fetch("/api/update-profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || "Failed to update profile");
+      }
+
+      return res.json();
+    },
+    onMutate: () => {
+      setIsLoading(true);
+      toast.loading("Updating profile...", {
+        id: "update-profile",
+      });
+    },
+    onSuccess: () => {
+      setIsLoading(false);
+      toast.dismiss("update-profile");
+      toast.success("Profile updated");
+      setIsEditing(false);
+    },
+    onError: (error: Error) => {
+      setIsLoading(false);
+      toast.dismiss("update-profile");
+      toast.error("Failed to update profile", {
+        description: (error as Error).message,
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
   });
 
   usePreventRefreshUserDuringUpload(isLoading);
@@ -99,9 +143,9 @@ function ProfileUpdateForm() {
       education: undefined,
       semester: 1,
       birthDate: "",
+      imageUrl: "",
     },
   });
-  const router = useRouter();
 
   useEffect(() => {
     if (session?.user) {
@@ -116,58 +160,22 @@ function ProfileUpdateForm() {
           education: user?.education ?? undefined,
           semester: (user?.semester as unknown as number) ?? 1,
           birthDate: user?.birthDate ?? "",
+          imageUrl: user?.image ?? "",
         });
       }, 500);
     }
   }, [session?.user, reset, user]);
 
+  if (isLoadingUser) return <ProfileFormSkeleton />;
+
   async function onSubmit(formData: profileSchema) {
-    setIsLoading(true);
-    toast.loading("Updating profile...", {
-      id: "update-profile",
-    });
-    try {
-      const res = await fetch("/api/update-profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          name: formData.fullName,
-          email: session?.user?.email,
-        }),
-      });
+    const data = {
+      ...formData,
+      name: formData.fullName,
+      email: session?.user?.email,
+    };
 
-      setIsLoading(false);
-
-      if (res.ok) {
-        toast.dismiss("update-profile");
-        toast.success("Profile updated");
-        setTimeout(() => {
-          router.refresh();
-          window.location.reload();
-        }, 500);
-      } else {
-        const err = await res.json();
-        toast.error("Failed to update profile", {
-          description: err.message,
-        });
-        console.log(err.message);
-      }
-
-      // Debugging
-      // console.log({
-      //   ...formData,
-      //   birthDate: formData.birthDate?.toISOString(),
-      // });
-    } catch (error) {
-      setIsLoading(false);
-      toast.dismiss("update-profile");
-      toast.error("Failed to update profile", {
-        description: (error as Error).message,
-      });
-    }
+    updateUserMutation.mutate(data);
   }
 
   return (
@@ -183,18 +191,49 @@ function ProfileUpdateForm() {
                     alt={user.name as string}
                     className="w-32 h-32 border-2 border-primary/50"
                   />
-                  <UploadDialog
-                    user={user as User}
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                    router={router}
-                  />
+                  <div className={cn("", !isEditing ? "hidden" : "")}>
+                    <UploadDialog
+                      isLoading={isLoading}
+                      setIsLoading={setIsLoading}
+                    />
+                  </div>
                 </div>
               )}
+            </div>
+            <div>
+              <Button
+                variant="outline"
+                type="button"
+                className="cursor-pointer"
+                onClick={() => setIsEditing((prev) => !prev)}
+              >
+                {isEditing ? "Cancel" : "Edit Profile"}
+              </Button>
             </div>
           </div>
         </div>
         <div className="mt-6 space-y-6 grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
+          <div className="space-y-2 hidden">
+            <Controller
+              name="imageUrl"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor={field.name}>Image Url</FieldLabel>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    disabled
+                    readOnly
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
           <div className="grid grid-cols-1 gap-3">
             <div className="space-y-2">
               <Controller
@@ -207,6 +246,7 @@ function ProfileUpdateForm() {
                       {...field}
                       id={field.name}
                       aria-invalid={fieldState.invalid}
+                      disabled={!isEditing}
                     />
                     {fieldState.invalid && (
                       <FieldError errors={[fieldState.error]} />
@@ -234,6 +274,7 @@ function ProfileUpdateForm() {
                     name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
+                    disabled={!isEditing}
                   >
                     <SelectTrigger
                       id="form-rhf-select-language"
@@ -271,6 +312,7 @@ function ProfileUpdateForm() {
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    disabled={!isEditing}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -290,6 +332,7 @@ function ProfileUpdateForm() {
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    disabled={!isEditing}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -311,6 +354,7 @@ function ProfileUpdateForm() {
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    disabled={!isEditing}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -330,6 +374,7 @@ function ProfileUpdateForm() {
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    disabled={!isEditing}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -356,6 +401,7 @@ function ProfileUpdateForm() {
                     name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
+                    disabled={!isEditing}
                   >
                     <SelectTrigger
                       id="form-rhf-select-language"
@@ -404,6 +450,7 @@ function ProfileUpdateForm() {
                   onBlur={onBlur}
                   name={name}
                   ref={ref}
+                  disabled={!isEditing}
                 />
               )}
             />
@@ -424,7 +471,11 @@ function ProfileUpdateForm() {
               control={control}
               render={({ field }) => (
                 <div className="flex w-full flex-col md:flex-nowrap gap-4">
-                  <Input placeholder="June 2 2005" {...field} />
+                  <Input
+                    placeholder="June 2 2005"
+                    {...field}
+                    disabled={!isEditing}
+                  />
                 </div>
               )}
               rules={{ required: true }}
@@ -436,7 +487,7 @@ function ProfileUpdateForm() {
             className={`w-full max-w-lg mt-12 border text-white bg-white/10 hover:bg-white/25 ${
               isLoading ? "cursor-not-allowed" : "cursor-pointer"
             }`}
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isEditing}
             type="submit"
           >
             {isSubmitting ? (

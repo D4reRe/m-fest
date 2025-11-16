@@ -19,9 +19,10 @@ import {
   validExtensions,
 } from "@/constants/constants";
 import { UserAvatar } from "@/components/general/UserProfile";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUser } from "@/lib/utils";
 
 export default function ImageCropper({
-  alt,
   updateImgUrl,
   updateImgFile,
   updateUploadCroppedFile,
@@ -29,8 +30,11 @@ export default function ImageCropper({
   isUploading,
   title,
   isProfilePicture,
-  user,
 }: ImageCropperProps) {
+  const { data: user } = useQuery({
+    queryKey: ["user"],
+    queryFn: fetchUser,
+  });
   const ASPECT_RATIO: number | undefined = isProfilePicture ? 1 : undefined;
   const imgRef = useRef<HTMLImageElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -149,6 +153,7 @@ export default function ImageCropper({
               accept="image/*"
               onChange={onSelectFile}
               ref={inputFileRef}
+              className="cursor-pointer"
             />
           </>
         )}
@@ -201,7 +206,7 @@ export default function ImageCropper({
               </ReactCrop>
               <div className="flex gap-3">
                 <Button
-                  className="mt-4"
+                  className="mt-4 cursor-pointer"
                   disabled={isLoading}
                   onClick={() => {
                     const pixelCrop = convertToPixelCrop(
@@ -227,7 +232,7 @@ export default function ImageCropper({
                         if (isProfilePicture) {
                           const file = new File(
                             [blob],
-                            `${user.name}-avatar.webp`,
+                            `${user?.name}-avatar.webp`,
                             {
                               // blob.type ---> if don't specify type it defaults to png. choose either jpeg or webp for better compression
                               // type: blob.type,
@@ -259,7 +264,7 @@ export default function ImageCropper({
                         if (isProfilePicture) {
                           const file = new File(
                             [blob],
-                            `${user.name}-avatar.webp`,
+                            `${user?.name}-avatar.webp`,
                             {
                               // blob.type ---> if don't specify type it defaults to png. choose either jpeg or webp for better compression
                               // type: blob.type,
@@ -295,7 +300,7 @@ export default function ImageCropper({
                 <UserAvatar
                   className="w-32 h-32 border-2 border-primary/50 mt-5"
                   src={croppedImageUrl as string}
-                  alt={alt ?? "User's preview cropped Image"}
+                  alt={user?.name ?? "User's preview cropped Image"}
                 />
                 {/* Debugging */}
                 {/* <UserAvatar
