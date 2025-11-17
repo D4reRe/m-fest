@@ -222,57 +222,6 @@ export const ourFileRouter = {
         throw error;
       }
     }),
-  pDDikti: f({
-    image: {
-      maxFileSize: "16MB",
-      maxFileCount: 1,
-    },
-  })
-    .middleware(async () => {
-      const session = await auth();
-      if (!session) {
-        console.log("Unauthorized user tried to upload");
-        throw new UploadThingError("Unauthorized");
-      }
-      return {
-        userId: session.user.id,
-        name: session.user.name,
-        email: session.user.email,
-      };
-    })
-    .onUploadComplete(async ({ metadata, file }) => {
-      console.log("Upload complete for user:", {
-        userId: metadata.userId,
-        name: metadata.name,
-        email: metadata.email,
-      });
-      console.log("file url", {
-        ufsUrl: file.ufsUrl,
-        fileKey: file.key,
-      });
-      try {
-        const previousImage = await prisma.verification.findUnique({
-          where: { userId: metadata.userId },
-          select: { pDDiktiImageKey: true },
-        });
-        if (previousImage?.pDDiktiImageKey) {
-          await deleteFiles(previousImage.pDDiktiImageKey);
-        }
-        await prisma.verification.update({
-          where: { userId: metadata.userId as string },
-          data: {
-            pDDiktiImageUrl: file.ufsUrl,
-            pDDiktiImageKey: file.key,
-            pDDiktiCreatedAt: new Date(),
-          },
-        });
-
-        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
-      } catch (error) {
-        console.error("Error in onUploadComplete:", error);
-        throw error;
-      }
-    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

@@ -109,7 +109,7 @@ model User {
   major             String?
   education         Education?
   semester          Int?
-  birthDate         String?
+  birthDate         DateTime?
   role              Role            @default(USER)
 
   verified          Boolean  @default(false)
@@ -135,27 +135,22 @@ model Verification {
   userId                    String   @unique
   identityCardImageUrl      String?
   twibbonImageUrl           String?
-  pDDiktiImageUrl           String?
   followIgImageUrl          String?
 
   identityCardImageKey      String?
   twibbonImageKey           String?
-  pDDiktiImageKey           String?
   followIgImageKey          String?
 
   identityCardCreatedAt     DateTime? @default(now())
   twibbonCreatedAt          DateTime? @default(now())
-  pDDiktiCreatedAt          DateTime? @default(now())
   followIgCreatedAt         DateTime? @default(now())
 
   identityCardStatus        DocumentStatus?   @default(AWAITING_UPLOAD)
   twibbonStatus             DocumentStatus?   @default(AWAITING_UPLOAD)
   followIgStatus            DocumentStatus?   @default(AWAITING_UPLOAD)
-  pDDiktiStatus             DocumentStatus?   @default(AWAITING_UPLOAD)
 
   identityCardVerified     Boolean? @default(false)
   twibbonVerified          Boolean? @default(false)
-  pDDiktiVerified          Boolean? @default(false)
   followIgVerified         Boolean? @default(false)
 
   status                    VerificationStatus   @default(NOT_SUBMITTED) 

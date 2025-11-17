@@ -44,7 +44,7 @@ enum VerificationStatus {
   ACCEPTED = "ACCEPTED",
 }
 
-export type DocumentType = "identityCard" | "twibbon" | "followIg" | "pDDikti";
+export type DocumentType = "identityCard" | "twibbon" | "followIg";
 
 export type User = {
   image: string | null;
@@ -62,7 +62,7 @@ export type User = {
   major: string | null;
   education: Education | null;
   semester: number | null;
-  birthDate: string | null;
+  birthDate: Date | null;
   verified: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -134,23 +134,18 @@ export type Verification = {
   userEmail: string;
   IdentityCardImageUrl: string | null;
   twibbonImageUrl: string | null;
-  pDDiktiImageUrl: string | null;
   followIgImageUrl: string | null;
   IdentityCardImageKey: string | null;
   twibbonImageKey: string | null;
-  pDDiktiImageKey: string | null;
   followIgImageKey: string | null;
   IdentityCardCreatedAt: Date | null;
   twibbonCreatedAt: Date | null;
-  pDDiktiCreatedAt: Date | null;
   followIgCreatedAt: Date | null;
   IdentityCardStatus: DocumentStatus | null;
   twibbonStatus: DocumentStatus | null;
   followIgStatus: DocumentStatus | null;
-  pDDiktiStatus: DocumentStatus | null;
   IdentityCardVerified: boolean | null;
   twibbonVerified: boolean | null;
-  pDDiktiVerified: boolean | null;
   followIgVerified: boolean | null;
   status: VerificationStatus;
   createdAt: Date;
@@ -175,11 +170,7 @@ export type Documents = {
   [K in DocumentType]: Document;
 };
 
-export type UploadThingRoute =
-  | "identityCard"
-  | "twibbon"
-  | "followIg"
-  | "pDDikti";
+export type UploadThingRoute = "identityCard" | "twibbon" | "followIg";
 export type UploadDocumentProps = {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -191,13 +182,18 @@ export type UploadDocumentProps = {
     identityCard: string;
     twibbon: string;
     followIg: string;
-    pDDikti: string;
   }>;
 };
 
 export type UploadDialogProps = {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type ResultTransaction = {
+  resultCode: string;
+  merchantOrderId: string;
+  reference: string;
 };
 
 export type SuccessPageProps = {

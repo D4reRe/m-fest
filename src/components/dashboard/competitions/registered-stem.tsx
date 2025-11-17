@@ -9,9 +9,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Button } from "../../ui/button";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
 import {
@@ -21,17 +21,17 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "../ui/empty";
+} from "../../ui/empty";
 import { IconListDetails } from "@tabler/icons-react";
 import { ArrowUpRightIcon } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../../ui/skeleton";
 
 export function RegisteredStemCompetition() {
   return (
     <>
-      <div className="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="flex justify-between ">
         <h3 className="text-3xl font-bold text-foreground">STEM Competition</h3>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -65,24 +65,17 @@ async function FetchUserRegisteredStem() {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <div className="flex gap-2">
-            <Button className="cursor-pointer" asChild>
-              <Link href="/register/stem" prefetch>
-                Register Now
-              </Link>
-            </Button>
-          </div>
+          <Button
+            variant="link"
+            asChild
+            className="text-muted-foreground"
+            size="sm"
+          >
+            <Link href="/competitions">
+              Learn More <ArrowUpRightIcon />
+            </Link>
+          </Button>
         </EmptyContent>
-        <Button
-          variant="link"
-          asChild
-          className="text-muted-foreground"
-          size="sm"
-        >
-          <Link href="/competitions">
-            Learn More <ArrowUpRightIcon />
-          </Link>
-        </Button>
       </Empty>
     );
   const userStemComp = stemComp[0];

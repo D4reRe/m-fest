@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import { Users } from "lucide-react";
 import { Fragment, Suspense } from "react";
-import { UserAvatar } from "../general/UserProfile";
+import { UserAvatar } from "../../general/UserProfile";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
 import { IconListDetails } from "@tabler/icons-react";
@@ -17,12 +17,12 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import Link from "next/link";
-import TeamFallback from "./TeamFallback";
+import TeamFallback from "./../TeamFallback";
 
 export function RegisteredCompetitions() {
   return (
-    <section className="glass p-6">
-      <h3 className="text-lg font-semibold text-foreground mb-6">Teams</h3>
+    <section className="glass my-2">
+      <h3 className="text-3xl font-semibold text-foreground mb-6">Teams</h3>
       <Suspense fallback={<TeamFallback />}>
         <RegisteredTeams />
       </Suspense>
@@ -74,24 +74,17 @@ async function RegisteredTeams() {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <div className="flex gap-2">
-            <Button className="cursor-pointer" asChild>
-              <Link href="/competitions" prefetch>
-                Register Competition
-              </Link>
-            </Button>
-          </div>
+          <Button
+            variant="link"
+            asChild
+            className="text-muted-foreground"
+            size="sm"
+          >
+            <Link href="/competitions">
+              Learn More <ArrowUpRightIcon />
+            </Link>
+          </Button>
         </EmptyContent>
-        <Button
-          variant="link"
-          asChild
-          className="text-muted-foreground"
-          size="sm"
-        >
-          <Link href="/competitions">
-            Learn More <ArrowUpRightIcon />
-          </Link>
-        </Button>
       </Empty>
     );
   }
