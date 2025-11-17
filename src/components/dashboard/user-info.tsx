@@ -71,7 +71,9 @@ async function FetchUserInfo({ user }: { user: User }) {
     {
       icon: Calendar,
       label: "Birth Date",
-      value: user?.birthDate || "Not set",
+      value: user?.birthDate
+        ? new Date(user.birthDate).toDateString()
+        : "Not set",
     },
   ];
   return (

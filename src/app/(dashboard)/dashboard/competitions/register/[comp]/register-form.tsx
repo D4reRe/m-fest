@@ -8,7 +8,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { competitions } from "@/lib/competition";
-import { RegisterFormProps, TeamMember } from "@/types/types";
+import {
+  RegisterFormProps,
+  ResultTransaction,
+  TeamMember,
+} from "@/types/types";
 import {
   Field,
   FieldContent,
@@ -256,7 +260,7 @@ function RegisterForm({
       // @ts-expect-error snap global object
       window.checkout.process(InvoiceData.reference, {
         defaultLanguage: "en",
-        successEvent: async function (result) {
+        successEvent: async function (result: ResultTransaction) {
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
@@ -276,7 +280,7 @@ function RegisterForm({
           toast.success("Your team have registered successfully!");
           router.replace("/dashboard/competitions");
         },
-        pendingEvent: async (result: any) => {
+        pendingEvent: async (result: ResultTransaction) => {
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
@@ -300,13 +304,13 @@ function RegisterForm({
           // console.log("Payment pending:", result);
           router.replace("/dashboard/invoices");
         },
-        errorEvent: (result: any) => {
+        errorEvent: () => {
           toast.dismiss("checking-out");
           toast.dismiss("register-team");
           toast.error("Payment Failed. Please try again.");
           // console.log("Payment error:", result);
         },
-        closeEvent: (result) => {
+        closeEvent: () => {
           toast.dismiss("checking-out");
           toast.warning("Payment window closed before completing transaction.");
           toast.dismiss("register-team");
@@ -375,7 +379,7 @@ function RegisterForm({
       // @ts-expect-error snap global object
       window.checkout.process(InvoiceData.reference, {
         defaultLanguage: "en",
-        successEvent: async function (result) {
+        successEvent: async function (result: ResultTransaction) {
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
@@ -389,13 +393,13 @@ function RegisterForm({
             }),
           });
           toast.dismiss("checking-out");
-          // console.log("Payment success:", result);
+          console.log("Payment success:", result);
           toast.success("Payment Successful!");
           toast.dismiss("register-stem");
           toast.success("You have registered successfully!");
           router.replace("/dashboard/competitions");
         },
-        pendingEvent: async (result: any) => {
+        pendingEvent: async (result: ResultTransaction) => {
           await fetch("/api/payment/verify", {
             method: "POST",
             headers: {
@@ -409,7 +413,7 @@ function RegisterForm({
             }),
           });
           toast.dismiss("checking-out");
-          // console.log("Payment pending:", result);
+          console.log("Payment pending:", result);
           toast.info("Payment Pending. Please complete the transaction.");
           toast.dismiss("register-stem");
           toast.info(
@@ -419,13 +423,12 @@ function RegisterForm({
           // console.log("Payment pending:", result);
           router.replace("/dashboard/invoices");
         },
-        errorEvent: (result: any) => {
+        errorEvent: () => {
           toast.dismiss("checking-out");
           toast.dismiss("register-stem");
           toast.error("Payment Failed. Please try again.");
-          // console.log("Payment error:", result);
         },
-        closeEvent: (result) => {
+        closeEvent: () => {
           toast.dismiss("checking-out");
           toast.warning("Payment window closed before completing transaction.");
           toast.dismiss("register-stem");

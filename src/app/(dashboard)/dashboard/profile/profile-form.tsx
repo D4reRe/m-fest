@@ -9,12 +9,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { ChevronDownIcon, Loader2 } from "lucide-react";
 import { educations } from "@/lib/profile";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
@@ -42,7 +48,7 @@ const profileSchema = z.object({
     .number<number>()
     .min(1, "Minimum semester is 1")
     .max(8, "Maximum semester is 8"),
-  birthDate: z.string().min(5, "Birth date is required"),
+  birthDate: z.date({ error: "Invalid date" }),
   imageUrl: z.string(),
 });
 
@@ -68,6 +74,7 @@ function ProfileUpdateForm() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
   const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ["user"],
     queryFn: fetchUser,
@@ -145,7 +152,7 @@ function ProfileUpdateForm() {
       major: "",
       education: undefined,
       semester: 1,
-      birthDate: "",
+      birthDate: user?.birthDate ? new Date(user.birthDate) : undefined,
       imageUrl: "",
     },
   });
@@ -162,12 +169,30 @@ function ProfileUpdateForm() {
           major: user?.major ?? "",
           education: user?.education ?? undefined,
           semester: (user?.semester as unknown as number) ?? 1,
-          birthDate: user?.birthDate ?? "",
+          birthDate: user?.birthDate ? new Date(user.birthDate) : undefined,
           imageUrl: user?.image ?? "",
         });
       }, 500);
     }
   }, [session?.user, reset, user]);
+  useEffect(() => {
+    if (!isEditing) {
+      setTimeout(() => {
+        reset({
+          fullName: user?.name as string,
+          phoneNumber: user?.phoneNumber ?? "",
+          gender: user?.gender ?? undefined,
+          domicile: user?.domicile ?? "",
+          institution: user?.institution ?? "",
+          major: user?.major ?? "",
+          education: user?.education ?? undefined,
+          semester: (user?.semester as unknown as number) ?? 1,
+          birthDate: user?.birthDate ? new Date(user.birthDate) : undefined,
+          imageUrl: user?.image ?? "",
+        });
+      }, 500);
+    }
+  }, [isEditing, reset, user]);
 
   if (isLoadingUser) return <ProfileFormSkeleton />;
 
@@ -177,7 +202,7 @@ function ProfileUpdateForm() {
       name: formData.fullName,
       email: session?.user?.email,
     };
-
+    console.log("Form data: ", data);
     updateUserMutation.mutate(data);
   }
 
@@ -473,21 +498,43 @@ function ProfileUpdateForm() {
               name="birthDate"
               control={control}
               render={({ field, fieldState: { error } }) => (
-                <div className="flex w-full flex-col md:flex-nowrap gap-4">
-                  <Input
-                    placeholder="June 2 2005"
-                    {...field}
-                    disabled={!isEditing}
-                  />
+                <div className="flex flex-col gap-3 ">
+                  <Popover open={open} onOpenChange={setOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        id="date"
+                        className="w-full justify-between font-normal"
+                        disabled={!isEditing}
+                      >
+                        {field.value
+                          ? new Date(field.value).toLocaleDateString()
+                          : "Select date"}
+                        <ChevronDownIcon />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      className="w-auto overflow-hidden p-0"
+                      align="start"
+                    >
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        captionLayout="dropdown"
+                        onSelect={(date) => {
+                          field.onChange(date);
+                          setOpen(false);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  {error && (
+                    <p className="text-destructive text-sm">{error.message}</p>
+                  )}
                 </div>
               )}
               rules={{ required: true }}
             />
-            {errors.birthDate && (
-              <p className="text-destructive text-sm">
-                {errors.birthDate.message}
-              </p>
-            )}
           </div>
         </div>
         <div className="w-full flex justify-center items-center">

@@ -16,7 +16,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchUserInvoices } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -27,6 +27,7 @@ export default function TableInvoices() {
     queryKey: ["invoices"],
     queryFn: fetchUserInvoices,
   });
+  const queryClient = useQueryClient();
   async function refreshPayment(
     merchantOrderId: string,
     referenceDuitku: string,
@@ -67,6 +68,7 @@ export default function TableInvoices() {
         });
         toast.dismiss("check-status");
         setIsLoading(false);
+        queryClient.invalidateQueries({ queryKey: ["invoices"] });
         router.refresh();
       } else {
         toast.dismiss("check-status");
@@ -74,6 +76,7 @@ export default function TableInvoices() {
           description: `Transaction ${merchantOrderId} for ${competition} is not paid yet`,
         });
         setIsLoading(false);
+        queryClient.invalidateQueries({ queryKey: ["invoices"] });
         router.refresh();
       }
     } catch (error) {

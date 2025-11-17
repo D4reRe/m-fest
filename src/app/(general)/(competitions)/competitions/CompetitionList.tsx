@@ -50,11 +50,8 @@ export default function CompetitionsList() {
                   size="sm"
                   className="gap-1 pr-1.5"
                 >
-                  <Link
-                    href={`/register/${competition.abbreviation.toLowerCase()}`}
-                    prefetch
-                  >
-                    <span>Register</span>
+                  <Link href={`/dashboard/competitions`} prefetch>
+                    <span>Register Now</span>
                     <ChevronRight className="size-2" />
                   </Link>
                 </Button>

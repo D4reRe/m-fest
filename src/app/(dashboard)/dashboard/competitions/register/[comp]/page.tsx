@@ -46,12 +46,14 @@ async function FetchCompForm({
   params: Promise<{ comp: string }>;
 }) {
   const user = (await getUserProfile()) as User;
-  const { comp } = await params;
+  let { comp } = await params;
   if (comp) {
     if (!competitionsName.includes(comp.toUpperCase())) {
       redirect("/competitions");
     }
   }
+  comp = comp.toLowerCase();
+
   const [
     teams,
     teamMembers,

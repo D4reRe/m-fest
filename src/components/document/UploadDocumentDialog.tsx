@@ -101,6 +101,7 @@ export default function UploadDocumentDialog({
       });
       queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
       setActiveDialog(null);
+      setFiles([]);
     },
     onUploadError: (e: UploadThingError<Json>) => {
       setIsUploading(false);
@@ -150,7 +151,10 @@ export default function UploadDocumentDialog({
         onOpenChange={(open: boolean) => {
           if (isUploading || isLoading) return;
           if (open) setActiveDialog(id);
-          else setActiveDialog(null);
+          else {
+            setFiles([]);
+            setActiveDialog(null);
+          }
         }}
       >
         <DialogTrigger asChild>
@@ -297,9 +301,10 @@ export default function UploadDocumentDialog({
                 className="cursor-pointer"
                 onClick={() => {
                   setIsCropping(true);
+                  setFiles([]);
                 }}
               >
-                Crop before upload
+                Crop & upload
               </Button>
             </DialogFooter>
           )}

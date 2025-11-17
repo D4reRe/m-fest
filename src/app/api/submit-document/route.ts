@@ -68,21 +68,6 @@ export async function POST(req: Request) {
       status: userDocuments?.followIgStatus ?? null,
       verified: userDocuments?.followIgVerified ?? null,
     },
-    {
-      id: 3,
-      type: "pDDikti",
-      title: "PDDikti",
-      submissionDetail:
-        "Participants are required to take a screenshot of their data as an active college student in PDDikti and upload it on the registration form provided for IPPC, BCC, and PDC competitions.",
-      acceptedFiles: [".png", ".jpeg", ".jpg", ".webp"],
-      uploadThingRoute: "pDDikti",
-      imageUrl: userDocuments?.pDDiktiImageUrl ?? null,
-      imageKey: userDocuments?.pDDiktiImageKey ?? null,
-      createdAt: userDocuments?.pDDiktiCreatedAt ?? null,
-
-      status: userDocuments?.pDDiktiStatus ?? null,
-      verified: userDocuments?.pDDiktiVerified ?? null,
-    },
   ];
 
   console.log("Documents: ", documents);
@@ -176,7 +161,6 @@ export async function POST(req: Request) {
       identityCardStatus: "PENDING",
       twibbonStatus: "PENDING",
       followIgStatus: "PENDING",
-      pDDiktiStatus: "PENDING",
       status: "PENDING",
     },
   });

@@ -21,7 +21,6 @@ const documentsSchema = z.object({
   identityCard: z.string().min(1, "Identity Card photo is required to upload"),
   twibbon: z.string().min(1, "Twibbon photo is required to upload"),
   followIg: z.string().min(1, "Follow IG screenshot proof is required"),
-  pDDikti: z.string().min(1, "PDDikti screeenshot proof is required to upload"),
 });
 
 type documentsSchema = z.infer<typeof documentsSchema>;
@@ -138,9 +137,6 @@ function DocumentsForm() {
       followIg:
         documents?.find((document) => document.type === "followIg")?.imageUrl ??
         "",
-      pDDikti:
-        documents?.find((document) => document.type === "pDDikti")?.imageUrl ??
-        "",
     },
   });
 
@@ -159,11 +155,6 @@ function DocumentsForm() {
       setValue(
         "followIg",
         documents?.find((document) => document.type === "followIg")?.imageUrl ??
-          ""
-      );
-      setValue(
-        "pDDikti",
-        documents?.find((document) => document.type === "pDDikti")?.imageUrl ??
           ""
       );
     }
