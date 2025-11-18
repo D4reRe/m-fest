@@ -206,7 +206,7 @@ model TeamMember {
   role        TeamRole?   // Leader or Member
   joinDate    DateTime?  @default(now())
 
-  verified          Boolean  @default(false)
+  verified     Boolean  @default(false)
 
   user         User?  @relation(fields: [userId], references: [id])
   team         Team?  @relation(fields: [teamId], references: [id], onDelete: Cascade)

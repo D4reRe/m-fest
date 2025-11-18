@@ -83,7 +83,7 @@ function RegisterForm({
   const userRegisteredTeams = userRegisteredCompetitions.map(
     (competition) => competition.teamId
   );
-  console.log("Registered teams: ", userRegisteredTeams);
+  // console.log("Registered teams: ", userRegisteredTeams);
   const userAvailableTeams = userTeams.filter(
     (team) => !userRegisteredTeams.includes(team.id)
   );
@@ -509,7 +509,7 @@ function RegisterForm({
     }
     // @ts-expect-error members is exist based on schema and prisma calls
     const selectedTeamMembers = selectedTeam.members;
-    console.log("Team members: ", selectedTeamMembers);
+    // console.log("Team members: ", selectedTeamMembers);
 
     const allRegisteredTeamIds = allRegisteredTeamDatas.map(
       (competition) => competition.teamId
@@ -517,37 +517,37 @@ function RegisterForm({
 
     const allTeamsIds = allTeamsDatas.map((team) => team.id);
 
-    console.log("All registered competitions team Ids: ", allRegisteredTeamIds);
-    console.log("All teams Ids: ", allTeamsIds);
+    // console.log("All registered competitions team Ids: ", allRegisteredTeamIds);
+    // console.log("All teams Ids: ", allTeamsIds);
 
     const registeredTeamsOnThisComp = allTeamsDatas.filter(
       (team) =>
         allRegisteredTeamIds.includes(team.id) &&
         team.competition === comp.toUpperCase()
     );
-    console.log("Registered teams on this Comp: ", registeredTeamsOnThisComp);
+    // console.log("Registered teams on this Comp: ", registeredTeamsOnThisComp);
 
     const registeredTeamsMembersOnThisComp = allTeamMembersDatas.filter(
       (member) =>
         registeredTeamsOnThisComp.some((team) => team.id === member.teamId)
     );
-    console.log(
-      "Registered teams members on this Comp: ",
-      registeredTeamsMembersOnThisComp
-    );
+    // console.log(
+    //   "Registered teams members on this Comp: ",
+    //   registeredTeamsMembersOnThisComp
+    // );
 
     const selectedTeamMembersEmails = selectedTeamMembers.map(
       (member: TeamMember) => member.email
     );
-    console.log("Selected team members emails: ", selectedTeamMembersEmails);
+    // console.log("Selected team members emails: ", selectedTeamMembersEmails);
 
     const registeredTeamsMembersEmailsOnThisComp =
       registeredTeamsMembersOnThisComp.map((member) => member.email);
 
-    console.log(
-      `Registered teams members emails : `,
-      registeredTeamsMembersEmailsOnThisComp
-    );
+    // console.log(
+    //   `Registered teams members emails : `,
+    //   registeredTeamsMembersEmailsOnThisComp
+    // );
 
     const isTeamMemberRegisteredOnThisComp = selectedTeamMembers.some(
       (member: TeamMember) => {
@@ -566,7 +566,19 @@ function RegisterForm({
       toast.dismiss("register-team");
       setIsLoading(false);
       toast.error(
-        `One or more team members have already registered for ${comp.toUpperCase()}`
+        `One or more team members have already registered for ${comp.toUpperCase()}`,
+        {
+          description: `Member ${selectedTeamMembersEmails
+            .filter((email: string) =>
+              registeredTeamsMembersEmailsOnThisComp.includes(email)
+            )
+            .join(", ")} (${selectedTeamMembers
+            .filter((member: TeamMember) =>
+              registeredTeamsMembersEmailsOnThisComp.includes(member.email)
+            )
+            .map((member: TeamMember) => member.name)
+            .join(", ")})`,
+        }
       );
       return;
     }

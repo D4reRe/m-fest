@@ -288,9 +288,7 @@ function DocumentsForm() {
                         <span>
                           {`${
                             document.createdAt
-                              ? new Date(
-                                  document.createdAt
-                                ).toLocaleDateString()
+                              ? new Date(document.createdAt).toDateString()
                               : ""
                           } at ${
                             document.createdAt

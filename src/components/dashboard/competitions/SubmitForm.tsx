@@ -17,6 +17,7 @@ import { competitions } from "@/lib/competition";
 import { Loader2, Upload } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
+import { SubmitFormSkeleton } from "./SubmitFormSkeleton";
 
 const submitFileSchema = z.object({
   fileUrl: z.string().min(1, "File is required"),
@@ -53,10 +54,11 @@ export default function SubmitForm({ comp }: { comp: string }) {
     queryKey: ["user"],
     queryFn: fetchUser,
   });
-  const { data: userRegisteredComp } = useQuery({
-    queryKey: ["userRegisteredComp", comp],
-    queryFn: async () => await fetchUserRegisteredComp({ comp }),
-  });
+  const { data: userRegisteredComp, isLoading: isLoadingUserRegisteredComp } =
+    useQuery({
+      queryKey: ["userRegisteredComp", comp],
+      queryFn: async () => await fetchUserRegisteredComp({ comp }),
+    });
   const {
     register,
     reset,
@@ -221,6 +223,8 @@ export default function SubmitForm({ comp }: { comp: string }) {
     onDrop,
   });
 
+  if (isLoadingUserRegisteredComp) return <SubmitFormSkeleton />;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h3 className="text-xl font-semibold mb-3">Your Work</h3>
@@ -358,6 +362,23 @@ export default function SubmitForm({ comp }: { comp: string }) {
               "Submit"
             )}
           </Button>
+        )}
+        {userRegisteredComp?.submissionFileSubmitted && (
+          <p className="text-sm text-green-500 mt-2 text-center">
+            {`Submitted on ${
+              userRegisteredComp.submissionFileCreatedAt
+                ? new Date(
+                    userRegisteredComp.submissionFileCreatedAt
+                  ).toDateString()
+                : ""
+            } at ${
+              userRegisteredComp.submissionFileCreatedAt
+                ? new Date(
+                    userRegisteredComp.submissionFileCreatedAt
+                  ).toLocaleTimeString()
+                : ""
+            }`}
+          </p>
         )}
         <p className="text-xs text-gray-500 mt-2 text-center">
           Work cannot be turned in after the due date
