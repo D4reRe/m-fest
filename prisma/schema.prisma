@@ -57,12 +57,16 @@ enum VerificationStatus{
 }
 
 model CompRegistration {
-  id              String      @id @default(uuid())
-  userId          String                                                      // Id User Leader
-  teamName        String?
-  teamId          String?      @unique                                         // Specific Team to register
-  paymentId       String      @unique                                         // Specific Payment to register
-  statusOrder     String?     @default("PENDING")
+  id                String      @id @default(uuid())
+  userId            String                                                      // Id User Leader
+  leaderEmail       String?
+  leaderName        String?
+  leaderPhoneNumber String?
+  teamInstitution   String?
+  teamName          String?
+  teamId            String?      @unique                                         // Specific Team to register
+  paymentId         String       @unique                                         // Specific Payment to register
+  statusOrder       String?      @default("PENDING")
   competitionName CompetitionName
 
   // STEM
@@ -162,6 +166,7 @@ model Verification {
 model Team {
   id            String    @id @default(cuid())
   name          String?   @unique
+  institution   String?
   competition   CompetitionName?
   paymentId     String?   @unique
   members       TeamMember[]

@@ -7,6 +7,7 @@ import {
   IconListDetails,
   IconUser,
   IconUsers,
+  IconUsersGroup,
 } from "@tabler/icons-react";
 import { Key } from "lucide-react";
 
@@ -16,6 +17,10 @@ export const MAX_PROFILEIMAGE_SIZE = 512; // px
 export const MIN_DIMENSION = 150;
 export const competitionsName = ["BCC", "IPPC", "PDC", "STEM"];
 export const acceptedFiles = [".png", ".jpeg", ".jpg", ".webp"];
+export const submissionOpenDate = "Ferbuary 1st 2026";
+export const submissionDeadlinePDC = "March 6th 2026";
+export const submissionDeadlineBCC = "March 7th 2026";
+export const submissionDeadlineIPPC = "March 8th 2026";
 export const links = [
   {
     title: "Events",
@@ -71,7 +76,7 @@ export const menus = [
     url: "/dashboard/competitions",
   },
   {
-    title: "Team",
+    title: "Team & Register",
     url: "/dashboard/team",
   },
   {
@@ -103,9 +108,9 @@ export const dataNavSidebar = {
       icon: IconListDetails,
     },
     {
-      title: "Team",
+      title: "Team & Register",
       url: "/dashboard/team",
-      icon: IconUsers,
+      icon: IconUsersGroup,
     },
     {
       title: "Invoices",

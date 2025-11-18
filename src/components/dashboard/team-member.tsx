@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
-import { Edit, Users } from "lucide-react";
+import { Edit } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../general/UserProfile";
 import {
@@ -11,7 +11,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "../ui/empty";
-import { IconUsers } from "@tabler/icons-react";
+import { IconUsersGroup } from "@tabler/icons-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { User } from "@/types/types";
@@ -46,7 +46,7 @@ async function FetchUserTeams({ user }: { user: User }) {
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <IconUsers />
+            <IconUsersGroup />
           </EmptyMedia>
           <EmptyTitle>No Teams Yet</EmptyTitle>
           <EmptyDescription>
@@ -80,7 +80,7 @@ async function FetchUserTeams({ user }: { user: User }) {
           <Fragment key={team.id}>
             <div className="p-6 border-2 rounded-lg my-12 ">
               <div className="flex items-center gap-3 mb-6">
-                <Users className="w-6 h-6 text-primary" />
+                <IconUsersGroup className="w-6 h-6 text-primary" />
                 <div className="flex flex-col ">
                   <h3 className="text-lg font-semibold text-foreground flex items-center gap-1">
                     <span>{team.name}</span>

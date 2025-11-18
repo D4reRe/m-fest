@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ProfilePage() {
   return (
-    <section className="flex min-h-screen bg-transparent px-4 py-4 md:py-8 dark:bg-transparent">
+    <section className="flex min-h-screen bg-transparent w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 dark:bg-transparent">
       <div className="bg-transparent m-auto h-fit w-full max-w-7xl overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
         <div className="bg-transparent -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
           <div className="text-center">

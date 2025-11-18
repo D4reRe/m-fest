@@ -54,6 +54,8 @@ function RegisterForm({
   allTeamMembersDatas,
 }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [teamInstitution, setTeamInstitution] = useState<string>("");
+  const [teamName, setTeamName] = useState<string>("");
   const router = useRouter();
   const { data: user, isFetched: isFetchedUser } = useQuery({
     queryKey: ["user"],
@@ -95,7 +97,16 @@ function RegisterForm({
 
   const registerSchema = z.object({
     competitionName: z.enum(["BCC", "IPPC", "PDC"]),
-    team: z.enum(teamNames as string[]),
+    leaderName: z.string().min(5, "Name must be leader's fullname"),
+    leaderEmail: z
+      .string()
+      .email("Invalid email")
+      .min(1, "Leader's email is required"),
+    leaderPhoneNumber: z
+      .string()
+      .regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
+    teamName: z.enum(teamNames as string[]),
+    teamInstitution: z.string().min(5, "Team's institution is required"),
   });
   type registerSchema = z.infer<typeof registerSchema>;
 
@@ -104,7 +115,24 @@ function RegisterForm({
     handleSubmit,
     reset,
     formState: { isSubmitting },
-  } = useForm<registerSchema>({ resolver: zodResolver(registerSchema) });
+  } = useForm<registerSchema>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      competitionName:
+        comp.toUpperCase() === "BCC"
+          ? "BCC"
+          : comp.toUpperCase() === "IPPC"
+            ? "IPPC"
+            : comp.toUpperCase() === "PDC"
+              ? "PDC"
+              : undefined,
+      leaderName: user?.name as string,
+      leaderEmail: user?.email as string,
+      leaderPhoneNumber: user?.phoneNumber ?? "",
+      teamInstitution: teamInstitution ?? "",
+      teamName: teamName ?? "",
+    },
+  });
 
   const {
     control: stemControl,
@@ -144,13 +172,24 @@ function RegisterForm({
   useEffect(() => {
     if (user && comp.toUpperCase() !== "STEM") {
       setTimeout(() => {
-        // @ts-expect-error comp is string
         reset({
-          competitionName: comp.toUpperCase(),
+          competitionName:
+            comp.toUpperCase() === "BCC"
+              ? "BCC"
+              : comp.toUpperCase() === "IPPC"
+                ? "IPPC"
+                : comp.toUpperCase() === "PDC"
+                  ? "PDC"
+                  : undefined,
+          leaderName: user?.name as string,
+          leaderEmail: user?.email as string,
+          leaderPhoneNumber: user?.phoneNumber ?? "",
+          teamInstitution: teamInstitution ?? "",
+          teamName: teamName ?? "",
         });
       }, 500);
     }
-  }, [reset, user, comp]);
+  }, [reset, user, comp, teamInstitution, teamName]);
 
   useEffect(() => {
     const duitkuPopScript = "https://app-sandbox.duitku.com/lib/js/duitku.js";
@@ -211,9 +250,9 @@ function RegisterForm({
   const checkout = async (formData: registerSchema, comp: string) => {
     const submittedData = {
       competitionName: formData.competitionName,
-      team: formData.team,
+      team: formData.teamName,
       userId: user?.id,
-      teamId: userTeams.find((team) => team.name === formData.team)?.id,
+      teamId: userTeams.find((team) => team.name === formData.teamName)?.id,
     };
 
     const checkOutData = {
@@ -453,7 +492,9 @@ function RegisterForm({
     setIsLoading(true);
     toast.loading("Registering team...", { id: "register-team" });
 
-    const selectedTeam = userTeams.find((team) => team.name === formData.team);
+    const selectedTeam = userTeams.find(
+      (team) => team.name === formData.teamName
+    );
     console.log("Selected team: ", selectedTeam);
     if (!selectedTeam) {
       toast.dismiss("register-team");
@@ -762,7 +803,7 @@ function RegisterForm({
           <div className="grid grid-cols-1 gap-3">
             <div className="space-y-2">
               <Controller
-                name="team"
+                name="teamName"
                 control={control}
                 render={({ field, fieldState }) => (
                   <Field
@@ -771,13 +812,20 @@ function RegisterForm({
                   >
                     <FieldContent>
                       <FieldLabel htmlFor="form-rhf-select-language">
-                        Team
+                        Team Name
                       </FieldLabel>
                     </FieldContent>
                     <Select
                       name={field.name}
                       value={field.value}
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setTeamName(value);
+                        setTeamInstitution(
+                          userTeams.find((team) => team.name === value)
+                            ?.institution ?? ""
+                        );
+                      }}
                     >
                       <SelectTrigger
                         id="form-rhf-select-language"
@@ -786,7 +834,7 @@ function RegisterForm({
                       >
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
-                      <SelectContent position="item-aligned">
+                      <SelectContent position="popper">
                         {userAsLeaderTeams.map((team) => (
                           <SelectItem key={team.id} value={team.name as string}>
                             {team.name}
@@ -799,7 +847,7 @@ function RegisterForm({
                     )}
                   </Field>
                 )}
-              ></Controller>
+              />
             </div>
           </div>
           <div className="space-y-2">
@@ -842,7 +890,113 @@ function RegisterForm({
                   )}
                 </Field>
               )}
-            ></Controller>
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="leaderName"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">Leader Name</FieldLabel>
+                  </FieldContent>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    disabled
+                    readOnly
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="leaderEmail"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">Leader Email</FieldLabel>
+                  </FieldContent>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    disabled
+                    readOnly
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="leaderPhoneNumber"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">
+                      Leader Phone Number
+                    </FieldLabel>
+                  </FieldContent>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    disabled
+                    readOnly
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="teamInstitution"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">Team Institution</FieldLabel>
+                  </FieldContent>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    disabled
+                    readOnly
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
           </div>
           <Button
             className={`w-full ${

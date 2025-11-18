@@ -1,11 +1,11 @@
-import { Users } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
+import { IconUsersGroup } from "@tabler/icons-react";
 
 export default function TeamFallback() {
   return (
     <div className="p-6 border-2 rounded-lg my-12 ">
       <div className="flex items-center gap-3 mb-6">
-        <Users className="w-6 h-6 text-primary" />
+        <IconUsersGroup className="w-6 h-6 text-primary" />
         <div className="flex flex-col ">
           <div className="flex items-center gap-1">
             <Skeleton className="h-4 w-32" />

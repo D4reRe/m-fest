@@ -91,6 +91,7 @@ export type Team = {
   id: string;
   status: string | null;
   name: string | null;
+  institution: string | null;
   paymentId: string | null;
   createdAt: Date;
   updatedAt: Date;

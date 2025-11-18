@@ -5,7 +5,7 @@ import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../../general/UserProfile";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
-import { IconListDetails } from "@tabler/icons-react";
+import { IconUsersGroup } from "@tabler/icons-react";
 import { ArrowUpRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,7 +19,7 @@ import {
 import Link from "next/link";
 import TeamFallback from "./../TeamFallback";
 
-export function RegisteredCompetitions() {
+export function RegisteredCompetitionsTeams() {
   return (
     <section className="glass my-2">
       <h3 className="text-3xl font-semibold text-foreground mb-6">Teams</h3>
@@ -65,9 +65,9 @@ async function RegisteredTeams() {
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <IconListDetails />
+            <IconUsersGroup />
           </EmptyMedia>
-          <EmptyTitle>No Competitions Yet</EmptyTitle>
+          <EmptyTitle>No Registered Teams Yet</EmptyTitle>
           <EmptyDescription>
             You haven&apos;t registered any competitions yet. Get registered by
             clicking the button below.
