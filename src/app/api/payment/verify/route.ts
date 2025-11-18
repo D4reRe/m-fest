@@ -85,6 +85,11 @@ export async function POST(request: Request) {
           userId: user?.id as string,
           teamId: submittedData.teamId as string,
           paymentId: thisTransaction?.orderId as string,
+          leaderUserId: submittedData.leaderUserId as string,
+          leaderName: submittedData.leaderName as string,
+          leaderEmail: submittedData.leaderEmail as string,
+          leaderPhoneNumber: submittedData.leaderPhoneNumber as string,
+          teamInstitution: submittedData.teamInstitution as string,
           statusOrder: "SUCCESS",
         },
       });
@@ -170,6 +175,11 @@ export async function POST(request: Request) {
           userId: user?.id as string,
           teamId: submittedData.teamId as string,
           paymentId: thisTransaction?.orderId as string,
+          leaderUserId: submittedData.leaderUserId as string,
+          leaderName: submittedData.leaderName as string,
+          leaderEmail: submittedData.leaderEmail as string,
+          leaderPhoneNumber: submittedData.leaderPhoneNumber as string,
+          teamInstitution: submittedData.teamInstitution as string,
           statusOrder: "PENDING",
         },
       });

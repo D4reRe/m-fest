@@ -16,6 +16,10 @@ export async function POST(req: Request) {
     email,
     members,
     teamId: submittedTeamId,
+    leaderName,
+    leaderEmail,
+    leaderPhoneNumber,
+    teamInstitution,
   } = await req.json();
   try {
     const authUser = await prisma.user.findUnique({
@@ -109,6 +113,11 @@ export async function POST(req: Request) {
       where: { id: submittedTeamId },
       data: {
         name: submittedTeamName,
+        leaderUserId: userId,
+        leaderName,
+        leaderEmail,
+        leaderPhoneNumber,
+        teamInstitution,
       },
     });
 
@@ -213,10 +222,10 @@ export async function POST(req: Request) {
           member.role === "Leader"
             ? userId
             : member.role === "Member"
-            ? submittedMemberProfiles.find(
-                (memberProfile) => memberProfile.email === member.email
-              )?.userId
-            : undefined,
+              ? submittedMemberProfiles.find(
+                  (memberProfile) => memberProfile.email === member.email
+                )?.userId
+              : undefined,
       })),
     });
     // console.log("Add members: ", addMembers);
@@ -241,10 +250,10 @@ export async function POST(req: Request) {
               member.role === "Leader"
                 ? userId
                 : member.role === "Member"
-                ? submittedMemberProfiles.find(
-                    (memberProfile) => memberProfile.email === member.email
-                  )?.userId
-                : undefined,
+                  ? submittedMemberProfiles.find(
+                      (memberProfile) => memberProfile.email === member.email
+                    )?.userId
+                  : undefined,
           },
         })
       )

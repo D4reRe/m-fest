@@ -72,6 +72,7 @@ export type CompRegistration = {
   name: string | null;
   id: string;
   userId: string;
+  leaderUserId: string;
   teamName: string | null;
   teamId: string | null;
   paymentId: string;
@@ -85,12 +86,22 @@ export type CompRegistration = {
   mentor: string | null;
   createdAt: Date;
   updatedAt: Date;
+  submissionFileUrl: string | null;
+  submissionFileKey: string | null;
+  submissionFileCreatedAt: Date | null;
+  submissionFileUploaded: boolean | null;
+  submissionFileSubmitted: boolean | null;
 };
 
 export type Team = {
   id: string;
   status: string | null;
   name: string | null;
+  leaderUserId: string | null;
+  leaderEmail: string | null;
+  leaderName: string | null;
+  leaderPhoneNumber: string | null;
+  teamInstitution: string | null;
   institution: string | null;
   paymentId: string | null;
   createdAt: Date;
@@ -106,6 +117,7 @@ export type TeamMember = {
   institution: string | null;
   role: TeamRole | null;
   joinDate: Date | null;
+  verified: boolean | null;
 };
 
 export type Member = {

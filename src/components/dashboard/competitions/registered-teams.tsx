@@ -1,12 +1,11 @@
 import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
-import { Users } from "lucide-react";
+import { ArrowRight, Users } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../../general/UserProfile";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
 import { IconUsersGroup } from "@tabler/icons-react";
-import { ArrowUpRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -74,14 +73,9 @@ async function RegisteredTeams() {
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <Button
-            variant="link"
-            asChild
-            className="text-muted-foreground"
-            size="sm"
-          >
-            <Link href="/competitions">
-              Learn More <ArrowUpRightIcon />
+          <Button variant="default" asChild className="text-black" size="sm">
+            <Link href="/dashboard/team">
+              Register <ArrowRight />
             </Link>
           </Button>
         </EmptyContent>

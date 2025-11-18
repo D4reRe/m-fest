@@ -12,6 +12,7 @@ import {
 import { Key } from "lucide-react";
 
 export const validExtensions = ["png", "jpeg", "jpg", "webp"];
+export const validSubmissionExtensions = ["pdf", "zip"];
 export const maxFileSize = 4 * 1024 * 1024; // 4 MB
 export const MAX_PROFILEIMAGE_SIZE = 512; // px
 export const MIN_DIMENSION = 150;

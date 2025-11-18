@@ -20,6 +20,7 @@ export const competitions: {
   fee2: number;
   guideBook: string;
   icon: string;
+  uploadThingRoute: string;
 }[] = [
   {
     title: "Business Case Competition",
@@ -37,6 +38,7 @@ export const competitions: {
     guideBook:
       "https://drive.google.com/file/d/1kjCYe7Q95CqQ0ZO-syeZsC_XyJrcApno/view?usp=drive_link",
     icon: "Zap",
+    uploadThingRoute: "submitFileBCC",
   },
 
   {
@@ -55,6 +57,7 @@ export const competitions: {
       "https://drive.google.com/file/d/12hsX_V4bllC3blk3ik0Gt0klKA5crVCK/view?usp=drive_link",
     isOpen: true,
     icon: "Cpu",
+    uploadThingRoute: "submitFileIPPC",
   },
   {
     title: "Pipeline Design Competition",
@@ -72,6 +75,7 @@ export const competitions: {
       "https://drive.google.com/file/d/1vQ6Ma1mNfp4tS0FmsVo6trVgbe_XvADw/view?usp=drive_link",
     isOpen: true,
     icon: "Lock",
+    uploadThingRoute: "submitFilePDC",
   },
   {
     title: "STEM Competition",
@@ -88,5 +92,6 @@ export const competitions: {
     guideBook:
       "https://drive.google.com/file/d/1eGfmRZPEVHapgrbBgmbjFBPR5EOneAaI/view?usp=drive_link",
     icon: "Sparkles",
+    uploadThingRoute: "submitFileSTEM",
   },
 ];

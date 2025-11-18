@@ -21,6 +21,7 @@ import { UploadDocumentProps, UploadThingRoute } from "@/types/types";
 import { Label } from "../ui/label";
 import { Progress } from "../ui/progress";
 import { useQueryClient } from "@tanstack/react-query";
+import { validExtensions } from "@/constants/constants";
 
 export default function UploadDocumentDialog({
   isLoading,
@@ -123,7 +124,6 @@ export default function UploadDocumentDialog({
       toast.error("Only image files are allowed");
       return;
     }
-    const validExtensions = ["png", "jpeg", "jpg", "webp"];
     if (
       !validExtensions.includes(
         acceptedFiles[0].type.split("/").pop()?.toLowerCase() as string
@@ -181,12 +181,16 @@ export default function UploadDocumentDialog({
             {!cropping && !isUploading && (
               <div {...getRootProps()}>
                 <input {...getInputProps()} />
-                <div className="w-full h-50 l rounded-lg bg-slate-700/45 flex justify-center items-center ">
+                <div className="w-full h-50 rounded-lg bg-slate-700/45 flex justify-center items-center cursor-pointer">
                   <div className="flex flex-col items-center">
                     <Upload className="w-6 h-6" />
-                    <h1 className="text-xl">Choose files or drag and drop</h1>
-                    <p className="text-lg">Image up to 4MB, max 1 file</p>
-                    <p className="text-sm">
+                    <h1 className="text-xl text-center">
+                      Choose files or drag and drop
+                    </h1>
+                    <p className="text-lg text-center">
+                      Image up to 4MB, max 1 file
+                    </p>
+                    <p className="text-sm text-center">
                       Supported types: jpg, jpeg, png, & webp
                     </p>
                     {files[0]?.name && (

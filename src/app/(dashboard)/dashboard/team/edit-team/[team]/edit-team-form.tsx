@@ -9,7 +9,12 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { Member, Team } from "@/types/types";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "@/lib/utils";
 
@@ -22,6 +27,15 @@ function TeamForm({ team }: { team: Team }) {
   });
   const teamSchema = z
     .object({
+      leaderName: z.string().min(5, "Name must be leader's fullname"),
+      leaderEmail: z
+        .string()
+        .email("Invalid email")
+        .min(1, "Leader's email is required"),
+      leaderPhoneNumber: z
+        .string()
+        .regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
+      teamInstitution: z.string().min(5, "Team's institution is required"),
       teamName: z.string().min(1),
       members: z
         .array(
@@ -88,7 +102,11 @@ function TeamForm({ team }: { team: Team }) {
   } = useForm<teamSchema>({
     resolver: zodResolver(teamSchema),
     defaultValues: {
-      teamName: team.name as string,
+      leaderName: (user?.name as string) ?? "",
+      leaderEmail: (user?.email as string) ?? "",
+      leaderPhoneNumber: (user?.phoneNumber as string) ?? "",
+      teamInstitution: (user?.institution as string) ?? "",
+      teamName: (team.name as string) ?? "",
       members: [
         // @ts-expect-error members is exist if include members when prisma calls within Team Type
         ...team.members
@@ -194,6 +212,114 @@ function TeamForm({ team }: { team: Team }) {
                 </Field>
               )}
             />
+          </div>
+          <div className="space-y-2">
+            <div className="space-y-2">
+              <Controller
+                name="leaderName"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf">Leader Name</FieldLabel>
+                    </FieldContent>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      disabled
+                      readOnly
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Controller
+                name="leaderEmail"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf">Leader Email</FieldLabel>
+                    </FieldContent>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      disabled
+                      readOnly
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Controller
+                name="leaderPhoneNumber"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf">
+                        Leader Phone Number
+                      </FieldLabel>
+                    </FieldContent>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                      disabled
+                      readOnly
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Controller
+                name="teamInstitution"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf">
+                        Team Institution
+                      </FieldLabel>
+                    </FieldContent>
+                    <Input
+                      {...field}
+                      id={field.name}
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
           </div>
           <div className="space-y-4">
             <h3 className="text-sm font-medium">Team Members</h3>

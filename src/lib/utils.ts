@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Document, Invoices, User } from "@/types/types";
+import { CompRegistration, Document, Invoices, User } from "@/types/types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -54,6 +54,33 @@ export async function fetchUserDocuments() {
     };
   } catch (err) {
     console.error("Error fetching user's documents:", err);
+    return null;
+  }
+}
+
+export async function fetchUserRegisteredComp({ comp }: { comp: string }) {
+  try {
+    const res = await fetch(`/api/user/registered-comp`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        comp,
+      }),
+    });
+    if (!res.ok) {
+      const message = await res.json();
+      console.error(message);
+      throw new Error("Failed to fetch registered competitions", {
+        cause: message,
+      });
+    }
+    const data: CompRegistration = await res.json();
+
+    return data;
+  } catch (err) {
+    console.error("Error fetching user's registered competitions:", err);
     return null;
   }
 }
