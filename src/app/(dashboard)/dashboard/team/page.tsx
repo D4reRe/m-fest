@@ -20,8 +20,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { prisma } from "@/lib/prisma";
-import { IconUsers } from "@tabler/icons-react";
-import { Edit, Trash, Users } from "lucide-react";
+import { IconUsersGroup } from "@tabler/icons-react";
+import { Edit, Trash } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { Fragment, Suspense } from "react";
@@ -29,6 +29,7 @@ import AlertDialogActionButton from "@/components/dashboard/deleteButton";
 import { getUserProfile } from "@/action/user.action";
 import { User } from "@/types/types";
 import TeamFallback from "@/components/dashboard/TeamFallback";
+import CompetitionListDashboard from "@/components/dashboard/team/CompetitionListDashboard";
 
 export const metadata: Metadata = {
   title: "Team | Mechanical Festival 2026",
@@ -37,8 +38,12 @@ export const metadata: Metadata = {
 
 export default function TeamsPage() {
   return (
-    <section className="min-h-screen bg-transparent">
-      <div className="flex justify-between max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <section className="min-h-screen bg-transparent w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <h1 className="text-3xl font-bold text-foreground">
+        Register Competition
+      </h1>
+      <CompetitionListDashboard />
+      <div className="flex justify-between mt-4">
         <h3 className="text-3xl font-bold text-foreground">Your Teams</h3>
         <Button className="cursor-pointer" asChild>
           <Link href="team/create-team" prefetch>
@@ -74,7 +79,7 @@ async function FetchTeams() {
       <Empty>
         <EmptyHeader>
           <EmptyMedia variant="icon">
-            <IconUsers />
+            <IconUsersGroup />
           </EmptyMedia>
           <EmptyTitle>No Teams Yet</EmptyTitle>
           <EmptyDescription>
@@ -102,7 +107,7 @@ async function FetchTeams() {
           <Fragment key={team.id}>
             <div className="p-6 border-2 rounded-lg my-12 ">
               <div className="flex items-center gap-3 mb-6">
-                <Users className="w-6 h-6 text-primary" />
+                <IconUsersGroup className="w-6 h-6 text-primary" />
                 <div className="flex flex-col ">
                   <h3 className="text-lg font-semibold text-foreground flex items-center gap-1">
                     <span>{team.name}</span>
