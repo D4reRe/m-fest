@@ -8,7 +8,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "@/lib/utils";
 import TeamFormSkeleton from "@/components/dashboard/edit-team/TeamFormSkeleton";
@@ -43,6 +48,15 @@ function TeamForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const teamSchema = z
     .object({
+      leaderName: z.string().min(5, "Name must be leader's fullname"),
+      leaderEmail: z
+        .string()
+        .email("Invalid email")
+        .min(1, "Leader's email is required"),
+      leaderPhoneNumber: z
+        .string()
+        .regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
+      teamInstitution: z.string().min(5, "Team's institution is required"),
       teamName: z.string().min(1),
       members: z
         .array(
@@ -109,17 +123,41 @@ function TeamForm() {
   } = useForm<teamSchema>({
     resolver: zodResolver(teamSchema),
     defaultValues: {
+      leaderName: (user?.name as string) ?? "",
+      leaderEmail: (user?.email as string) ?? "",
+      leaderPhoneNumber: (user?.phoneNumber as string) ?? "",
+      teamInstitution: (user?.institution as string) ?? "",
       teamName: "",
       members: [
         {
-          name: user?.name as string,
-          email: user?.email as string,
-          institution: user?.institution as string,
+          name: (user?.name as string) ?? "",
+          email: (user?.email as string) ?? "",
+          institution: (user?.institution as string) ?? "",
           role: "Leader",
         },
       ],
     },
   });
+
+  useEffect(() => {
+    if (user) {
+      reset({
+        leaderName: (user?.name as string) ?? "",
+        leaderEmail: (user?.email as string) ?? "",
+        leaderPhoneNumber: user?.phoneNumber ?? "",
+        teamInstitution: user?.institution ?? "",
+        teamName: "",
+        members: [
+          {
+            name: (user?.name as string) ?? "",
+            email: (user?.email as string) ?? "",
+            institution: (user?.institution as string) ?? "",
+            role: "Leader",
+          },
+        ],
+      });
+    }
+  }, [user, reset]);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -209,6 +247,114 @@ function TeamForm() {
                 </Field>
               )}
             />
+            <div className="space-y-2">
+              <div className="space-y-2">
+                <Controller
+                  name="leaderName"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      orientation="responsive"
+                      data-invalid={fieldState.invalid}
+                    >
+                      <FieldContent>
+                        <FieldLabel htmlFor="form-rhf">Leader Name</FieldLabel>
+                      </FieldContent>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                        disabled
+                        readOnly
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <Controller
+                  name="leaderEmail"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      orientation="responsive"
+                      data-invalid={fieldState.invalid}
+                    >
+                      <FieldContent>
+                        <FieldLabel htmlFor="form-rhf">Leader Email</FieldLabel>
+                      </FieldContent>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                        disabled
+                        readOnly
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <Controller
+                  name="leaderPhoneNumber"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      orientation="responsive"
+                      data-invalid={fieldState.invalid}
+                    >
+                      <FieldContent>
+                        <FieldLabel htmlFor="form-rhf">
+                          Leader Phone Number
+                        </FieldLabel>
+                      </FieldContent>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                        disabled
+                        readOnly
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
+              <div className="space-y-2">
+                <Controller
+                  name="teamInstitution"
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      orientation="responsive"
+                      data-invalid={fieldState.invalid}
+                    >
+                      <FieldContent>
+                        <FieldLabel htmlFor="form-rhf">
+                          Team Institution
+                        </FieldLabel>
+                      </FieldContent>
+                      <Input
+                        {...field}
+                        id={field.name}
+                        aria-invalid={fieldState.invalid}
+                      />
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
+            </div>
           </div>
           <div className="space-y-4">
             <h3 className="text-sm font-medium">Team Members</h3>

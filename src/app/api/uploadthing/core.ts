@@ -69,6 +69,7 @@ export const ourFileRouter = {
       }
       // !!! Whatever is returned here is sent to the clientside `onClientUploadComplete` callback
     }),
+
   identityCard: f({
     image: {
       maxFileSize: "16MB",
@@ -216,6 +217,190 @@ export const ourFileRouter = {
           },
         });
 
+        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
+      } catch (error) {
+        console.error("Error in onUploadComplete:", error);
+        throw error;
+      }
+    }),
+  submitFileBCC: f({
+    "application/zip": {
+      maxFileSize: "16MB",
+      maxFileCount: 1,
+    },
+    "application/pdf": {
+      maxFileSize: "16MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
+      return {
+        userId: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
+      try {
+        const comp = "BCC";
+        const thisRegisteredCompUser = await prisma.compRegistration.findFirst({
+          where: {
+            leaderUserId: metadata.userId,
+            competitionName: comp,
+            statusOrder: "SUCCESS",
+          },
+        });
+
+        console.log(thisRegisteredCompUser);
+
+        await prisma.compRegistration.update({
+          where: {
+            teamId: thisRegisteredCompUser?.teamId as string,
+          },
+          data: {
+            submissionFileUrl: file.ufsUrl,
+            submissionFileKey: file.key,
+            submissionFileCreatedAt: new Date(),
+            submissionFileUploaded: true,
+          },
+        });
+
+        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
+      } catch (error) {
+        console.error("Error in onUploadComplete:", error);
+        throw error;
+      }
+    }),
+  submitFileIPPC: f({
+    "application/zip": {
+      maxFileSize: "16MB",
+      maxFileCount: 1,
+    },
+    "application/pdf": {
+      maxFileSize: "16MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
+      return {
+        userId: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
+      try {
+        const comp = "IPPC";
+        const thisRegisteredCompUser = await prisma.compRegistration.findFirst({
+          where: {
+            leaderUserId: metadata.userId,
+            competitionName: comp,
+            statusOrder: "SUCCESS",
+          },
+        });
+
+        console.log(thisRegisteredCompUser);
+
+        await prisma.compRegistration.update({
+          where: {
+            teamId: thisRegisteredCompUser?.teamId as string,
+          },
+          data: {
+            submissionFileUrl: file.ufsUrl,
+            submissionFileKey: file.key,
+            submissionFileCreatedAt: new Date(),
+            submissionFileUploaded: true,
+          },
+        });
+        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
+      } catch (error) {
+        console.error("Error in onUploadComplete:", error);
+        throw error;
+      }
+    }),
+  submitFilePDC: f({
+    "application/zip": {
+      maxFileSize: "16MB",
+      maxFileCount: 1,
+    },
+    "application/pdf": {
+      maxFileSize: "16MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth();
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
+      return {
+        userId: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
+      try {
+        const comp = "PDC";
+        const thisRegisteredCompUser = await prisma.compRegistration.findFirst({
+          where: {
+            leaderUserId: metadata.userId,
+            competitionName: comp,
+            statusOrder: "SUCCESS",
+          },
+        });
+
+        console.log(thisRegisteredCompUser);
+
+        await prisma.compRegistration.update({
+          where: {
+            teamId: thisRegisteredCompUser?.teamId as string,
+          },
+          data: {
+            submissionFileUrl: file.ufsUrl,
+            submissionFileKey: file.key,
+            submissionFileCreatedAt: new Date(),
+            submissionFileUploaded: true,
+          },
+        });
         return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
       } catch (error) {
         console.error("Error in onUploadComplete:", error);

@@ -59,6 +59,7 @@ enum VerificationStatus{
 model CompRegistration {
   id                String      @id @default(uuid())
   userId            String                                                      // Id User Leader
+  leaderUserId      String?
   leaderEmail       String?
   leaderName        String?
   leaderPhoneNumber String?
@@ -68,6 +69,12 @@ model CompRegistration {
   paymentId         String       @unique                                         // Specific Payment to register
   statusOrder       String?      @default("PENDING")
   competitionName CompetitionName
+
+  submissionFileUrl String?
+  submissionFileKey String?
+  submissionFileCreatedAt DateTime @default(now())
+  submissionFileUploaded Boolean @default(false)
+  submissionFileSubmitted Boolean @default(false)
 
   // STEM
   name            String?
@@ -171,6 +178,12 @@ model Team {
   paymentId     String?   @unique
   members       TeamMember[]
 
+  leaderUserId      String?
+  leaderEmail       String?
+  leaderName        String?
+  leaderPhoneNumber String?
+  teamInstitution   String?
+
   status        String?   @default("PENDING")
   payment       Payment?     @relation(fields: [paymentId], references: [orderId])
 
@@ -192,6 +205,8 @@ model TeamMember {
   
   role        TeamRole?   // Leader or Member
   joinDate    DateTime?  @default(now())
+
+  verified          Boolean  @default(false)
 
   user         User?  @relation(fields: [userId], references: [id])
   team         Team?  @relation(fields: [teamId], references: [id], onDelete: Cascade)

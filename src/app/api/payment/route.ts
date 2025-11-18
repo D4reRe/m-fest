@@ -1,4 +1,3 @@
-import { getUserProfile } from "@/action/user.action";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 

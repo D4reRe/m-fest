@@ -253,6 +253,11 @@ function RegisterForm({
       team: formData.teamName,
       userId: user?.id,
       teamId: userTeams.find((team) => team.name === formData.teamName)?.id,
+      leaderUserId: user?.id,
+      leaderName: formData.leaderName,
+      leaderEmail: formData.leaderEmail,
+      leaderPhoneNumber: formData.leaderPhoneNumber,
+      teamInstitution: formData.teamInstitution,
     };
 
     const checkOutData = {
@@ -823,7 +828,7 @@ function RegisterForm({
                         setTeamName(value);
                         setTeamInstitution(
                           userTeams.find((team) => team.name === value)
-                            ?.institution ?? ""
+                            ?.teamInstitution ?? ""
                         );
                       }}
                     >
