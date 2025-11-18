@@ -42,7 +42,7 @@ async function FetchUserRegisteredCompetitions() {
       statusOrder: "SUCCESS",
     },
   });
-  console.log("Registered competitions: ", registeredCompetitions);
+  // console.log("Registered competitions: ", registeredCompetitions);
   const registeredCompetitionNames = registeredCompetitions.map(
     (competition) => competition.competitionName
   );
@@ -71,11 +71,11 @@ async function FetchUserRegisteredCompetitions() {
       </div>
     );
   }
-  console.log("Registered competition names: ", registeredCompetitionNames);
+  // console.log("Registered competition names: ", registeredCompetitionNames);
   const registeredCompetitionsList = competitions.filter((comp) =>
     registeredCompetitionNames.includes(comp.abbreviation)
   );
-  console.log("Registered competitions: ", registeredCompetitionsList);
+  // console.log("Registered competitions: ", registeredCompetitionsList);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4 items-stretch my-2">
       {registeredCompetitionsList.map((comp) => (

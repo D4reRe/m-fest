@@ -35,11 +35,11 @@ export async function POST(req: Request) {
       include: { members: true },
     });
 
-    // console.log("Current team: ", existingCurrentTeam);
+    console.log("Current team: ", existingCurrentTeam);
 
     // Check if edited team name is already taken
-    // console.log("Current existing team name: ", existingCurrentTeam?.name);
-    // console.log("Submitted team name: ", submittedTeamName);
+    console.log("Current existing team name: ", existingCurrentTeam?.name);
+    console.log("Submitted team name: ", submittedTeamName);
 
     if (existingCurrentTeam?.name !== submittedTeamName) {
       const existingTeamName = await prisma.team.findUnique({
@@ -49,13 +49,13 @@ export async function POST(req: Request) {
       });
 
       if (existingTeamName) {
-        // console.log("Team name is already taken");
+        console.log("Team name is already taken");
         return NextResponse.json(
           { success: false, error: "This team name is already taken." },
           { status: 400 }
         );
       } else {
-        // console.log("Team name is available");
+        console.log("Team name is available");
       }
     }
 
@@ -65,12 +65,12 @@ export async function POST(req: Request) {
     });
 
     const submittedMemberEmails = members.map((member: Member) => member.email);
-    // console.log("Submitted emails: ", submittedMemberEmails);
+    console.log("Submitted emails: ", submittedMemberEmails);
 
-    // console.log(
-    //   "Existing users based on submitted emails: ",
-    //   existingSubmittedUsers
-    // );
+    console.log(
+      "Existing users based on submitted emails: ",
+      existingSubmittedUsers
+    );
     if (existingSubmittedUsers.length !== submittedMemberEmails.length) {
       return NextResponse.json(
         { success: false, error: "All members must be registered" },
@@ -87,10 +87,11 @@ export async function POST(req: Request) {
           (user) => user.email === member.email
         )?.id,
         role: member.role,
+        institution: member.institution,
       };
     });
 
-    // console.log("Submitted members: ", submittedMembers);
+    console.log("Submitted members: ", submittedMembers);
 
     const submittedMemberEmailsSet = new Set(submittedMemberEmails);
     const existingCurrentTeamMembersEmails = new Set(
@@ -104,9 +105,10 @@ export async function POST(req: Request) {
         email: user.email,
         userId: user.id,
         role: user.role,
+        institution: user.institution,
       };
     });
-    // console.log("Member profiles: ", submittedMemberProfiles);
+    console.log("Member profiles: ", submittedMemberProfiles);
 
     // Update team
     const team = await prisma.team.update({
@@ -121,18 +123,18 @@ export async function POST(req: Request) {
       },
     });
 
-    // console.log("Team updated: ", team);
+    console.log("Team updated: ", team);
 
     // Determined what's changed
     const membersToAdd = submittedMembers.filter(
       (member: Member) => !existingCurrentTeamMembersEmails.has(member.email)
     );
-    // console.log("Members to add: ", membersToAdd);
+    console.log("Members to add: ", membersToAdd);
 
     const membersToRemove = existingCurrentTeam?.members.filter(
       (member) => !submittedMemberEmailsSet.has(member.email)
     );
-    // console.log("Members to remove: ", membersToRemove);
+    console.log("Members to remove: ", membersToRemove);
 
     const membersToUpdate = submittedMembers.filter((member: Member) =>
       existingCurrentTeamMembersEmails.has(member.email)
@@ -184,12 +186,12 @@ export async function POST(req: Request) {
         }
         return true;
       });
-      // console.log(
-      //   "Team already exists or result of checks: ",
-      //   teamAlreadyExists
-      // );
+      console.log(
+        "Team already exists or result of checks: ",
+        teamAlreadyExists
+      );
       if (teamAlreadyExists) {
-        // console.log("Team already exists");
+        console.log("Team already exists");
         return NextResponse.json(
           {
             success: false,
@@ -198,7 +200,7 @@ export async function POST(req: Request) {
           { status: 400 }
         );
       }
-      // console.log("Team does not already exist, proceed to edit team");
+      console.log("Team does not already exist, proceed to edit team");
     }
 
     // Remove old members
@@ -210,7 +212,7 @@ export async function POST(req: Request) {
         },
       },
     });
-    // console.log("Remove members: ", removeMembers);
+    console.log("Remove members: ", removeMembers);
     // Add new members
     const addMembers = await prisma.teamMember.createMany({
       data: membersToAdd.map((member: Member) => ({
@@ -218,6 +220,7 @@ export async function POST(req: Request) {
         email: member.email,
         teamId: submittedTeamId,
         role: member.role,
+        institution: member.institution,
         userId:
           member.role === "Leader"
             ? userId
@@ -228,9 +231,9 @@ export async function POST(req: Request) {
               : undefined,
       })),
     });
-    // console.log("Add members: ", addMembers);
+    console.log("Add members: ", addMembers);
 
-    // console.log("Members to update: ", membersToUpdate);
+    console.log("Members to update: ", membersToUpdate);
 
     const updatedUser = await Promise.all(
       membersToUpdate.map((member: Member) =>
@@ -259,7 +262,7 @@ export async function POST(req: Request) {
       )
     );
 
-    // console.log("Updated user: ", updatedUser);
+    console.log("Updated user: ", updatedUser);
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {

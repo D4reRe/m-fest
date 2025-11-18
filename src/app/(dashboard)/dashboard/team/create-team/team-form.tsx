@@ -346,6 +346,8 @@ function TeamForm() {
                         {...field}
                         id={field.name}
                         aria-invalid={fieldState.invalid}
+                        disabled
+                        readOnly
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />

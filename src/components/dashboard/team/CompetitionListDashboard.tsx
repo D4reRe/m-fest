@@ -42,11 +42,11 @@ async function FetchUserAvailableCompetitions() {
       statusOrder: "SUCCESS",
     },
   });
-  console.log("Registered competitions: ", registeredCompetitions);
+  // console.log("Registered competitions: ", registeredCompetitions);
   const registeredCompetitionNames = registeredCompetitions.map(
     (competition) => competition.competitionName
   );
-  console.log("Registered competition names: ", registeredCompetitionNames);
+  // console.log("Registered competition names: ", registeredCompetitionNames);
   const competitionsList = competitions.filter(
     (comp) => !registeredCompetitionNames.includes(comp.abbreviation)
   );
@@ -75,7 +75,7 @@ async function FetchUserAvailableCompetitions() {
     );
   }
 
-  console.log("Registered competitions: ", competitionsList);
+  // console.log("Registered competitions: ", competitionsList);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4 items-stretch my-2">
       {competitionsList.map((comp) => (

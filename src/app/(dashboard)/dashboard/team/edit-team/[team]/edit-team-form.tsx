@@ -117,9 +117,9 @@ function TeamForm({ team }: { team: Team }) {
                 member.userId === user?.id
                   ? user?.name
                   : (member.name as string),
-              email: member.email as string,
-              institution: member.institution as string,
-              userId: member.userId as string,
+              email: (member.email as string) ?? "",
+              institution: (member.institution as string) ?? "",
+              userId: (member.userId as string) ?? "",
               role: member.role as "Leader" | "Member",
             };
           }),
