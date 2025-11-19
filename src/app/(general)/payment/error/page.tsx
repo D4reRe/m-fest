@@ -17,7 +17,6 @@ function PaymentErrorContent() {
 
   if (!orderId || !statusCode || !transactionStatus) {
     router.replace("/dashboard/invoices");
-    return null;
   }
 
   const message =
