@@ -15,10 +15,6 @@ function PaymentErrorContent() {
   const paymentType = searchParams.get("payment_type");
   const grossAmount = searchParams.get("gross_amount");
 
-  if (!orderId || !statusCode || !transactionStatus) {
-    router.replace("/dashboard/invoices");
-  }
-
   const message =
     transactionStatus === "deny"
       ? "Your payment was denied by the bank or payment gateway."
