@@ -1,3 +1,5 @@
+'use client';
+
 import type { Metadata } from "next";
 import { Navbar } from "@/components/general/Navbar";
 import FooterSection from "@/components/general/footer";
@@ -7,7 +9,7 @@ export const metadata: Metadata = {
   description: "Official website of M-Fest for events and competitions",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
