@@ -6,7 +6,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 // @ts-expect-error ReactDrop.css exist
 import "react-image-crop/dist/ReactCrop.css";
 
-export default async function Layout({
+export default function Layout({
   children,
 }: {
   children: React.ReactNode;
