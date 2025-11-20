@@ -1,4 +1,5 @@
 import { Timeline } from "@/components/ui/timeline";
+import { BlurFade } from "../ui/blur-fade";
 
 export function TimelineTest() {
   const timelineData = [
@@ -64,7 +65,9 @@ export function TimelineTest() {
 
   return (
     <div className="relative w-full max-w-5xl mx-auto overflow-clip">
-      <Timeline data={timelineData} />
+      <BlurFade inView delay={0.1}>
+        <Timeline data={timelineData} />
+      </BlurFade>
     </div>
   );
 }

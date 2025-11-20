@@ -9,7 +9,6 @@ import {
   submissionOpenDate,
 } from "@/constants/constants";
 import { competitions } from "@/lib/competition";
-import Link from "next/link";
 
 export default function CompPage({
   params,
@@ -122,7 +121,7 @@ async function FetchCompForm({
   return (
     <section className="min-h-screen bg-transparent w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div className="p-6 flex flex-col sm:flex-row">
-        <div className="border-r">
+        <div className="border-r-0 sm:border-r p-4">
           <h1 className="text-3xl font-bold text-foreground">
             SUBMISSION DETAILS FOR {comp.toUpperCase()}
           </h1>

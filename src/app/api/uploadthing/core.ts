@@ -267,6 +267,17 @@ export const ourFileRouter = {
 
         console.log(thisRegisteredCompUser);
 
+        const previousFile = await prisma.compRegistration.findFirst({
+          where: {
+            leaderUserId: thisRegisteredCompUser?.leaderUserId as string,
+            competitionName: comp,
+          },
+          select: { submissionFileKey: true },
+        });
+        if (previousFile?.submissionFileKey) {
+          await deleteFiles(previousFile?.submissionFileKey);
+        }
+
         await prisma.compRegistration.update({
           where: {
             teamId: thisRegisteredCompUser?.teamId as string,
@@ -329,6 +340,17 @@ export const ourFileRouter = {
 
         console.log(thisRegisteredCompUser);
 
+        const previousFile = await prisma.compRegistration.findFirst({
+          where: {
+            leaderUserId: thisRegisteredCompUser?.leaderUserId as string,
+            competitionName: comp,
+          },
+          select: { submissionFileKey: true },
+        });
+        if (previousFile?.submissionFileKey) {
+          await deleteFiles(previousFile?.submissionFileKey);
+        }
+
         await prisma.compRegistration.update({
           where: {
             teamId: thisRegisteredCompUser?.teamId as string,
@@ -389,6 +411,17 @@ export const ourFileRouter = {
         });
 
         console.log(thisRegisteredCompUser);
+
+        const previousFile = await prisma.compRegistration.findFirst({
+          where: {
+            leaderUserId: thisRegisteredCompUser?.leaderUserId as string,
+            competitionName: comp,
+          },
+          select: { submissionFileKey: true },
+        });
+        if (previousFile?.submissionFileKey) {
+          await deleteFiles(previousFile?.submissionFileKey);
+        }
 
         await prisma.compRegistration.update({
           where: {

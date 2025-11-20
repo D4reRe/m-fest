@@ -17,14 +17,15 @@ function PaymentErrorContent() {
 
   if (!orderId || !statusCode || !transactionStatus) {
     router.replace("/dashboard/invoices");
+    return null;
   }
 
   const message =
     transactionStatus === "deny"
       ? "Your payment was denied by the bank or payment gateway."
       : transactionStatus === "cancel"
-      ? "You canceled the payment or it was not completed."
-      : "An unexpected error occurred during your payment process.";
+        ? "You canceled the payment or it was not completed."
+        : "An unexpected error occurred during your payment process.";
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen px-6 py-12 text-center">
