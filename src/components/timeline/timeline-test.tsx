@@ -64,10 +64,13 @@ export function TimelineTest() {
   ];
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto overflow-clip">
-      <BlurFade inView delay={0.1}>
+    <section
+      className="relative w-full max-w-5xl mx-auto overflow-clip"
+      id="timeline"
+    >
+      <BlurFade inView delay={0.2}>
         <Timeline data={timelineData} />
       </BlurFade>
-    </div>
+    </section>
   );
 }

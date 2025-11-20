@@ -32,8 +32,9 @@ import TeamFallback from "@/components/dashboard/TeamFallback";
 import CompetitionListDashboard from "@/components/dashboard/team/CompetitionListDashboard";
 
 export const metadata: Metadata = {
-  title: "Team | Mechanical Festival 2026",
-  description: "Mechanical Festival 2026",
+  title: "Team & Register | Mechanical Festival 2026",
+  description:
+    "Create and register your team to particiapte in Mechanical Festival 2026",
 };
 
 export default function TeamsPage() {

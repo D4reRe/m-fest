@@ -60,13 +60,13 @@ async function FetchTeamForm({
   const user: User = (await getUserProfile()) as User;
   const { team: teamName } = await params;
   let team = await prisma.team.findUnique({
-    where: { name: teamName.split("-").join(" ") },
+    where: { name: teamName.split("-").join(" "), leaderUserId: user.id },
     include: { members: true },
   });
   if (!team) {
     const teamNameWithDash = teamName.split("-").join("-");
     team = await prisma.team.findUnique({
-      where: { name: teamNameWithDash },
+      where: { name: teamNameWithDash, leaderUserId: user.id },
       include: { members: true },
     });
     if (!teamNameWithDash) redirect("/dashboard/team");

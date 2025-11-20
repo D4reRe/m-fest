@@ -10,6 +10,18 @@ import {
 } from "@/constants/constants";
 import { competitions } from "@/lib/competition";
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ comp: string }>;
+}) {
+  const comp = (await params).comp;
+  return {
+    title: `${comp.toUpperCase()} Submission | Mechanical Festival 2026`,
+    description: `Dashboard ${comp.toUpperCase()} Competition`,
+  };
+}
+
 export default function CompPage({
   params,
 }: {
