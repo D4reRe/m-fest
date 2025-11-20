@@ -1,5 +1,6 @@
 import SubmitForm from "@/components/dashboard/competitions/SubmitForm";
 import { Button } from "@/components/ui/button";
+import { LinkPreview } from "@/components/ui/link-preview";
 import { Separator } from "@/components/ui/separator";
 import {
   submissionDeadlineBCC,
@@ -95,18 +96,17 @@ async function FetchCompForm({
               <p className="mt-3">Guidelines and Information:</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 mt-2">
                 <Button asChild>
-                  <Link
-                    href={
+                  <LinkPreview
+                    url={
                       competitions.find(
                         (competition) =>
                           competition.abbreviation === comp.toUpperCase()
                       )?.guideBook as string
                     }
-                    className="font-bold"
-                    target="_blank"
+                    className="font-bold bg-transparent border-3 hover:bg-white/20"
                   >
                     Guidebook
-                  </Link>
+                  </LinkPreview>
                 </Button>
               </div>
               <p className="mt-3">
@@ -184,18 +184,17 @@ async function FetchCompForm({
             <p className="mt-3">Guidelines and Information:</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 mt-2">
               <Button asChild>
-                <Link
-                  href={
+                <LinkPreview
+                  url={
                     competitions.find(
                       (competition) =>
                         competition.abbreviation === comp.toUpperCase()
                     )?.guideBook as string
                   }
-                  className="font-bold"
-                  target="_blank"
+                  className="font-bold bg-transparent border-3 hover:bg-white/20"
                 >
                   Guidebook
-                </Link>
+                </LinkPreview>
               </Button>
             </div>
           </div>
