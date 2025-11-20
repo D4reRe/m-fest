@@ -44,6 +44,15 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "assets.aceternity.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+    domains: [
+      "api.microlink.io", // Microlink Image Preview
     ],
   },
 };
