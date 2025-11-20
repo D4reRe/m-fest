@@ -1,6 +1,6 @@
 "use client";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn, fetchUser, fetchUserRegisteredComp } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
@@ -18,6 +18,7 @@ import { Loader2, Upload } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { SubmitFormSkeleton } from "./SubmitFormSkeleton";
+import { ConfettiButton } from "@/components/ui/confetti";
 
 const submitFileSchema = z.object({
   fileUrl: z.string().min(1, "File is required"),
@@ -347,9 +348,11 @@ export default function SubmitForm({ comp }: { comp: string }) {
           </Button>
         )}
         {!userRegisteredComp?.submissionFileSubmitted && (
-          <Button
-            variant={"outline"}
-            className="cursor-pointer mt-2 w-full"
+          <ConfettiButton
+            className={cn(
+              "cursor-pointer mt-2 w-full",
+              buttonVariants({ variant: "default" })
+            )}
             disabled={isLoading}
             type="submit"
           >
@@ -361,7 +364,7 @@ export default function SubmitForm({ comp }: { comp: string }) {
             ) : (
               "Submit"
             )}
-          </Button>
+          </ConfettiButton>
         )}
         {userRegisteredComp?.submissionFileSubmitted && (
           <p className="text-sm text-green-500 mt-2 text-center">
