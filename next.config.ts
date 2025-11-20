@@ -50,9 +50,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
-    ],
-    domains: [
-      "api.microlink.io", // Microlink Image Preview
+      {
+        protocol: "https",
+        hostname: "api.microlink.io",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
