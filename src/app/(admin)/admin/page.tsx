@@ -1,4 +1,5 @@
 import { getUserProfile } from "@/action/user.action";
+import DataOverview from "@/components/admin/data-overview/DataOverview";
 import { User } from "@/types/types";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
@@ -22,6 +23,7 @@ export default function AdminPage() {
               <FetchDatas />
             </Suspense>
           </div>
+          <DataOverview />
         </div>
       </main>
     </div>
@@ -34,5 +36,5 @@ async function FetchDatas() {
     redirect("/dashboard");
   }
 
-  return <div>AdminPage</div>;
+  return <div className="hidden">AdminPage</div>;
 }
