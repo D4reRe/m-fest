@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { getUserProfile } from "@/action/user.action";
 import { Team, User } from "@/types/types";
 import TeamForm from "./edit-team-form";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import TeamFormSkeleton from "@/components/dashboard/edit-team/TeamFormSkeleton";
@@ -59,13 +59,13 @@ async function FetchTeamForm({
 }) {
   const user: User = (await getUserProfile()) as User;
   const { team: teamName } = await params;
-  let team = await prisma.team.findUnique({
+  let team = await db.team.findUnique({
     where: { name: teamName.split("-").join(" "), leaderUserId: user.id },
     include: { members: true },
   });
   if (!team) {
     const teamNameWithDash = teamName.split("-").join("-");
-    team = await prisma.team.findUnique({
+    team = await db.team.findUnique({
       where: { name: teamNameWithDash, leaderUserId: user.id },
       include: { members: true },
     });

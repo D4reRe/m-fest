@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/server/auth/auth";
 import Image from "next/image";
 import Link from "next/link";
 import AuthButtons from "@/components/auth/auth-buttons";

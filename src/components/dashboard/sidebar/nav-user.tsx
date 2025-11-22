@@ -20,18 +20,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "../../general/UserProfile";
-import { cn, fetchUser } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/utils/trpc";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { status } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  const trpc = useTRPC();
+  const { data: user } = useQuery(trpc.dashboard.getUser.queryOptions());
   return (
     <SidebarMenu className="bg-transparent backdrop-blur-lg">
       <SidebarMenuItem>
@@ -46,7 +45,6 @@ export function NavUser() {
                   src={user?.image as string}
                   alt={user?.name as string}
                   className="h-8 w-8 rounded-lg"
-                  classNameGoogleImage="rounded-lg object-cover w-full h-full"
                 />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <div className="flex items-center gap-2 w-full">
@@ -56,8 +54,8 @@ export function NavUser() {
                         user?.role === "SUPERADMIN"
                           ? "max-w-20"
                           : user?.role === "ADMIN"
-                          ? "max-w-25"
-                          : "w-full"
+                            ? "max-w-25"
+                            : "w-full"
                       )}
                     >
                       {user?.name as string}

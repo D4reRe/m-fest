@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { useState, ReactNode } from "react";
 import { AppRouter } from "@/server/api/root";
-import { trpc } from "@/utils/trpc";
+import { TRPCProvider } from "@/utils/trpc";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -53,10 +53,10 @@ export default function QueryTanstackProvider({
 
   return (
     <QueryClientProvider client={queryClient}>
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
         {children}
         <ReactQueryDevtools />
-      </trpc.Provider>
+      </TRPCProvider>
     </QueryClientProvider>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
-import * as z from "zod";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { cn, fetchUser, fetchUserRegisteredComp } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,12 +18,8 @@ import { Progress } from "@/components/ui/progress";
 import { Input } from "@/components/ui/input";
 import { SubmitFormSkeleton } from "./SubmitFormSkeleton";
 import { ConfettiButton } from "@/components/ui/confetti";
-
-const submitFileSchema = z.object({
-  fileUrl: z.string().min(1, "File is required"),
-});
-
-type submitFileSchema = z.infer<typeof submitFileSchema>;
+import { useTRPC } from "@/utils/trpc";
+import { submitFileSchema } from "@/lib/schema";
 
 function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   useEffect(() => {
@@ -48,18 +43,13 @@ export default function SubmitForm({ comp }: { comp: string }) {
   const uploadThingRoute = competitions.find(
     (competition) => competition.abbreviation === comp.toUpperCase()
   )?.uploadThingRoute;
+  const trpc = useTRPC();
   const queryClient = useQueryClient();
   const router = useRouter();
-  usePreventRefreshUserDuringUpload(isLoading);
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  usePreventRefreshUserDuringUpload(isUploading);
+  const { data: user } = useQuery(trpc.dashboard.getUser.queryOptions());
   const { data: userRegisteredComp, isLoading: isLoadingUserRegisteredComp } =
-    useQuery({
-      queryKey: ["userRegisteredComp", comp],
-      queryFn: async () => await fetchUserRegisteredComp({ comp }),
-    });
+    useQuery(trpc.dashboard.getUserRegisteredComp.queryOptions({ comp }));
   const {
     register,
     reset,
@@ -123,8 +113,12 @@ export default function SubmitForm({ comp }: { comp: string }) {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-      queryClient.invalidateQueries({ queryKey: ["userRegisteredComp", comp] });
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUser.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUserRegisteredComp.queryKey({ comp }),
+      });
       router.refresh();
     },
   });
@@ -143,7 +137,6 @@ export default function SubmitForm({ comp }: { comp: string }) {
     onUploadBegin: (filename: string) => {
       toast.dismiss("presigning-url");
       setIsUploading(true);
-      setIsLoading(true);
       toast.info(`Upload has begun for the file`, {
         description: `Uploading ${filename}`,
       });
@@ -173,18 +166,18 @@ export default function SubmitForm({ comp }: { comp: string }) {
     },
     onClientUploadComplete: (res) => {
       setIsUploading(false);
-      setIsLoading(false);
       toast.dismiss("upload-document");
       toast.success(`File uploaded successfully!`);
       setValue("fileUrl", res[0].ufsUrl, {
         shouldValidate: true,
       });
-      queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUserDocuments.queryKey(),
+      });
       setFiles([]);
     },
     onUploadError: (e: UploadThingError<Json>) => {
       setIsUploading(false);
-      setIsLoading(false);
       toast.dismiss("upload-document");
       toast.error(`Failed to upload file`, {
         description: e.message,
@@ -353,7 +346,7 @@ export default function SubmitForm({ comp }: { comp: string }) {
               "cursor-pointer mt-2 w-full",
               buttonVariants({ variant: "default" })
             )}
-            disabled={isLoading}
+            disabled={isUploading || isSubmitting || isLoading}
             type="submit"
           >
             {isLoading ? (

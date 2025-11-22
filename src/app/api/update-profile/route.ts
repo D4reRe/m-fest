@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -16,13 +16,13 @@ export async function POST(req: Request) {
     imageUrl,
   } = await req.json();
   try {
-    const authUser = await prisma.user.findUnique({
+    const authUser = await db.user.findUnique({
       where: { email },
     });
     if (!authUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await db.user.update({
       where: { email },
       data: {
         name,

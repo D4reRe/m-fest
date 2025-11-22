@@ -1,7 +1,7 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
-import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
+import { auth } from "@/server/auth/auth";
+import { db } from "@/server/db";
 import { deleteFiles } from "@/action/uploadthing.action";
 
 const f = createUploadthing();
@@ -50,14 +50,14 @@ export const ourFileRouter = {
         fileKey: file.key,
       });
       try {
-        const previousImage = await prisma.user.findUnique({
+        const previousImage = await db.user.findUnique({
           where: { email: metadata.email as string },
           select: { imageKey: true },
         });
         if (previousImage?.imageKey) {
           await deleteFiles(previousImage.imageKey);
         }
-        await prisma.user.update({
+        await db.user.update({
           where: { email: metadata.email as string },
           data: { image: file.ufsUrl, imageKey: file.key },
         });
@@ -99,14 +99,14 @@ export const ourFileRouter = {
         fileKey: file.key,
       });
       try {
-        const previousImage = await prisma.verification.findUnique({
+        const previousImage = await db.verification.findUnique({
           where: { userId: metadata.userId },
           select: { identityCardImageKey: true },
         });
         if (previousImage?.identityCardImageKey) {
           await deleteFiles(previousImage.identityCardImageKey);
         }
-        await prisma.verification.update({
+        await db.verification.update({
           where: { userId: metadata.userId as string },
           data: {
             identityCardImageUrl: file.ufsUrl,
@@ -150,14 +150,14 @@ export const ourFileRouter = {
         fileKey: file.key,
       });
       try {
-        const previousImage = await prisma.verification.findUnique({
+        const previousImage = await db.verification.findUnique({
           where: { userId: metadata.userId },
           select: { twibbonImageKey: true },
         });
         if (previousImage?.twibbonImageKey) {
           await deleteFiles(previousImage.twibbonImageKey);
         }
-        await prisma.verification.update({
+        await db.verification.update({
           where: { userId: metadata.userId as string },
           data: {
             twibbonImageUrl: file.ufsUrl,
@@ -201,14 +201,14 @@ export const ourFileRouter = {
         fileKey: file.key,
       });
       try {
-        const previousImage = await prisma.verification.findUnique({
+        const previousImage = await db.verification.findUnique({
           where: { userId: metadata.userId },
           select: { followIgImageKey: true },
         });
         if (previousImage?.followIgImageKey) {
           await deleteFiles(previousImage.followIgImageKey);
         }
-        await prisma.verification.update({
+        await db.verification.update({
           where: { userId: metadata.userId as string },
           data: {
             followIgImageUrl: file.ufsUrl,
@@ -257,7 +257,7 @@ export const ourFileRouter = {
       });
       try {
         const comp = "BCC";
-        const thisRegisteredCompUser = await prisma.compRegistration.findFirst({
+        const thisRegisteredCompUser = await db.compRegistration.findFirst({
           where: {
             leaderUserId: metadata.userId,
             competitionName: comp,
@@ -267,7 +267,7 @@ export const ourFileRouter = {
 
         console.log(thisRegisteredCompUser);
 
-        const previousFile = await prisma.compRegistration.findFirst({
+        const previousFile = await db.compRegistration.findFirst({
           where: {
             leaderUserId: thisRegisteredCompUser?.leaderUserId as string,
             competitionName: comp,
@@ -278,7 +278,7 @@ export const ourFileRouter = {
           await deleteFiles(previousFile?.submissionFileKey);
         }
 
-        await prisma.compRegistration.update({
+        await db.compRegistration.update({
           where: {
             teamId: thisRegisteredCompUser?.teamId as string,
           },
@@ -330,7 +330,7 @@ export const ourFileRouter = {
       });
       try {
         const comp = "IPPC";
-        const thisRegisteredCompUser = await prisma.compRegistration.findFirst({
+        const thisRegisteredCompUser = await db.compRegistration.findFirst({
           where: {
             leaderUserId: metadata.userId,
             competitionName: comp,
@@ -340,7 +340,7 @@ export const ourFileRouter = {
 
         console.log(thisRegisteredCompUser);
 
-        const previousFile = await prisma.compRegistration.findFirst({
+        const previousFile = await db.compRegistration.findFirst({
           where: {
             leaderUserId: thisRegisteredCompUser?.leaderUserId as string,
             competitionName: comp,
@@ -351,7 +351,7 @@ export const ourFileRouter = {
           await deleteFiles(previousFile?.submissionFileKey);
         }
 
-        await prisma.compRegistration.update({
+        await db.compRegistration.update({
           where: {
             teamId: thisRegisteredCompUser?.teamId as string,
           },
@@ -402,7 +402,7 @@ export const ourFileRouter = {
       });
       try {
         const comp = "PDC";
-        const thisRegisteredCompUser = await prisma.compRegistration.findFirst({
+        const thisRegisteredCompUser = await db.compRegistration.findFirst({
           where: {
             leaderUserId: metadata.userId,
             competitionName: comp,
@@ -412,7 +412,7 @@ export const ourFileRouter = {
 
         console.log(thisRegisteredCompUser);
 
-        const previousFile = await prisma.compRegistration.findFirst({
+        const previousFile = await db.compRegistration.findFirst({
           where: {
             leaderUserId: thisRegisteredCompUser?.leaderUserId as string,
             competitionName: comp,
@@ -423,7 +423,7 @@ export const ourFileRouter = {
           await deleteFiles(previousFile?.submissionFileKey);
         }
 
-        await prisma.compRegistration.update({
+        await db.compRegistration.update({
           where: {
             teamId: thisRegisteredCompUser?.teamId as string,
           },

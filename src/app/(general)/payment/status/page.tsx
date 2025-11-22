@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { prisma } from "@/lib/prisma";
+import { env } from "@/env";
+import { db } from "@/server/db";
 import { SuccessPageProps } from "@/types/types";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -9,8 +10,8 @@ async function SuccessPage({ searchParams }: SuccessPageProps) {
   if (!reference || !merchantOrderId || !resultCode) {
     redirect("/");
   }
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL as string;
-  const paymentData = await prisma.payment.findUnique({
+  const baseUrl = env.NEXT_PUBLIC_BASE_URL as string;
+  const paymentData = await db.payment.findUnique({
     where: { orderId: merchantOrderId },
     select: { referenceDuitku: true, paymentUrl: true, competition: true },
   });
@@ -47,7 +48,7 @@ async function SuccessPage({ searchParams }: SuccessPageProps) {
     // console.log("Payment has failed to check transaction");
   }
 
-  const thisOrderIdData = await prisma.payment.findUnique({
+  const thisOrderIdData = await db.payment.findUnique({
     where: { orderId: merchantOrderId },
     select: { status: true, paymentUrl: true, competition: true },
   });

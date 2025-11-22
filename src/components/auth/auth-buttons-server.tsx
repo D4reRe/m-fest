@@ -1,4 +1,4 @@
-import { signIn } from "@/auth";
+import { signIn } from "@/server/auth/auth";
 import Image from "next/image";
 import { Button } from "../ui/button";
 

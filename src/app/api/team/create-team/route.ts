@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 
 type Member = {
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     teamInstitution,
   } = await req.json();
   try {
-    const authUser = await prisma.user.findUnique({
+    const authUser = await db.user.findUnique({
       where: { email, id: userId },
     });
     if (!authUser) {
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     }
 
     // Check if team is already exist
-    const existingTeamName = await prisma.team.findUnique({ where: { name } });
+    const existingTeamName = await db.team.findUnique({ where: { name } });
     if (existingTeamName) {
       return NextResponse.json(
         { success: false, error: "This team name is already taken." },
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     const submittedMemberEmails = members.map((member: Member) => member.email);
     // console.log("Submitted emails: ", submittedMemberEmails);
 
-    const existingUsers = await prisma.user.findMany({
+    const existingUsers = await db.user.findMany({
       where: { email: { in: submittedMemberEmails } },
     });
     // console.log("Existing users based on submitted emails: ", existingUsers);
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
 
     // ! OLD CODE
     // // Check if all team members are already in a existing team
-    // const existingTeamMembers = await prisma.teamMember.findMany({
+    // const existingTeamMembers = await db.teamMember.findMany({
     //   where: {
     //     email: {
     //       in: members.map((member: Member) => member.email),
@@ -79,7 +79,7 @@ export async function POST(req: Request) {
     //   groupedByTeamOfSameTeamMembers
     // );
 
-    // const allTeamMembers = await prisma.teamMember.findMany();
+    // const allTeamMembers = await db.teamMember.findMany();
     // console.log("All team members: ", allTeamMembers);
 
     // const groupedByTeamOfAllTeamMembers = allTeamMembers.reduce(
@@ -155,7 +155,7 @@ export async function POST(req: Request) {
     // ! OLD CODE
 
     // New Code to check all team members
-    const candidateTeams = await prisma.team.findMany({
+    const candidateTeams = await db.team.findMany({
       where: {
         members: {
           some: {
@@ -227,7 +227,7 @@ export async function POST(req: Request) {
     // console.log("Member profiles: ", memberProfiles);
 
     // Create team
-    const team = await prisma.team.create({
+    const team = await db.team.create({
       data: {
         name,
         leaderUserId: userId,
@@ -239,7 +239,7 @@ export async function POST(req: Request) {
     });
 
     // Create team members
-    const teamMembers = await prisma.teamMember.createMany({
+    const teamMembers = await db.teamMember.createMany({
       data: members.map((member: Member) => ({
         name: member.name,
         email: member.email,

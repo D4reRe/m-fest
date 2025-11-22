@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -11,19 +10,11 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import UploadDocumentDialog from "@/components/document/UploadDocumentDialog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchUser, fetchUserDocuments } from "@/lib/utils";
 import DocumentFormSkeleton from "@/components/document/DocumentFormSkeleton";
 import { UploadThingRoute } from "@/types/types";
 import { useRouter } from "next/navigation";
-
-// all field should be filled of that type image Url
-const documentsSchema = z.object({
-  identityCard: z.string().min(1, "Identity Card photo is required to upload"),
-  twibbon: z.string().min(1, "Twibbon photo is required to upload"),
-  followIg: z.string().min(1, "Follow IG screenshot proof is required"),
-});
-
-type documentsSchema = z.infer<typeof documentsSchema>;
+import { useTRPC } from "@/utils/trpc";
+import { documentsSchema } from "@/lib/schema";
 
 function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   useEffect(() => {
@@ -42,38 +33,35 @@ function usePreventRefreshUserDuringUpload(isLoading: boolean) {
 function DocumentsForm() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const { data: user, isFetched: isFetchedUser } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  const trpc = useTRPC();
+  const { data: user, isFetched } = useQuery(
+    trpc.dashboard.getUser.queryOptions()
+  );
 
   useEffect(() => {
-    if (isFetchedUser) {
-      if (
-        !user?.gender ||
-        !user?.phoneNumber ||
-        !user?.domicile ||
-        !user?.birthDate ||
-        !user?.major ||
-        !user?.institution ||
-        !user?.education ||
-        !user?.major ||
-        !user?.semester
-      ) {
-        router.push("/dashboard/profile?notif=incomplete_profile");
-      }
+    if (!user) return;
+    const missing =
+      !user.gender ||
+      !user.phoneNumber ||
+      !user.domicile ||
+      !user.birthDate ||
+      !user.major ||
+      !user.institution ||
+      !user.education ||
+      !user.semester;
+    if (missing) {
+      router.push("/dashboard/profile?notif=incomplete_profile");
     }
-  }, [isFetchedUser, user, router]);
+  }, [isFetched, user, router]);
 
   const {
     data,
     isLoading: isLoadingUserDocuments,
     isFetched: isFetchedUserDocuments,
-  } = useQuery({
-    queryKey: ["userDocuments"],
-    queryFn: fetchUserDocuments,
-  });
+  } = useQuery(trpc.dashboard.getUserDocuments.queryOptions());
   const queryClient = useQueryClient();
+
+  console.log(data);
 
   const documents = data?.documents;
   const userVerificationStatus = data?.status;
@@ -121,7 +109,9 @@ function DocumentsForm() {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUserDocuments.queryKey(),
+      });
       router.refresh();
     },
   });
@@ -163,7 +153,9 @@ function DocumentsForm() {
   usePreventRefreshUserDuringUpload(isLoading);
 
   if (isFetchedUserDocuments)
-    queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
+    queryClient.invalidateQueries({
+      queryKey: trpc.dashboard.getUserDocuments.queryKey(),
+    });
   if (isLoadingUserDocuments) return <DocumentFormSkeleton />;
 
   async function onSubmit(formData: documentsSchema) {
@@ -213,7 +205,7 @@ function DocumentsForm() {
                     setIsLoading={setIsLoading}
                     id={id}
                     title={title}
-                    type={type}
+                    type={type as UploadThingRoute}
                     uploadThingRoute={uploadThingRoute as UploadThingRoute}
                     setValue={setValue}
                   />

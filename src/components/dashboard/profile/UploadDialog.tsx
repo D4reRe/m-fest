@@ -23,6 +23,7 @@ import { Progress } from "@/components/ui/progress";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { MAX_PROFILEIMAGE_SIZE } from "@/constants/constants";
+import { useTRPC } from "@/utils/trpc";
 
 export default function UploadDialog({
   isLoading,
@@ -44,6 +45,7 @@ export default function UploadDialog({
   // Upload cropped image
   const [uploadCroppedFile, setUploadCroppedFile] = useState<File | null>(null);
   const router = useRouter();
+  const trpc = useTRPC();
   const queryClient = useQueryClient();
   const { startUpload } = useUploadThing("updateProfilePicture", {
     onBeforeUploadBegin(files) {
@@ -89,7 +91,9 @@ export default function UploadDialog({
       toast.dismiss("upload-profile-image");
       toast.success(`Profile image uploaded successfully!`);
       setIsDialogOpen(false);
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUser.queryKey(),
+      });
       router.refresh();
       setCroppedImageUrl(null);
       setCroppedFile(null);
@@ -313,7 +317,9 @@ export default function UploadDialog({
                   toast.dismiss("update-profile-picture");
                   return;
                 }
-                queryClient.invalidateQueries({ queryKey: ["user"] });
+                queryClient.invalidateQueries({
+                  queryKey: trpc.dashboard.getUser.queryKey(),
+                });
                 router.refresh();
 
                 setIsDialogOpen(false);

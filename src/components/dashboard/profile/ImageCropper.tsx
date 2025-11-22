@@ -20,7 +20,7 @@ import {
 } from "@/constants/constants";
 import { UserAvatar } from "@/components/general/UserProfile";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/lib/utils";
+import { useTRPC } from "@/utils/trpc";
 
 export default function ImageCropper({
   updateImgUrl,
@@ -31,10 +31,8 @@ export default function ImageCropper({
   title,
   isProfilePicture,
 }: ImageCropperProps) {
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  const trpc = useTRPC();
+  const { data: user } = useQuery(trpc.dashboard.getUser.queryOptions());
   const ASPECT_RATIO: number | undefined = isProfilePicture ? 1 : undefined;
   const imgRef = useRef<HTMLImageElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);

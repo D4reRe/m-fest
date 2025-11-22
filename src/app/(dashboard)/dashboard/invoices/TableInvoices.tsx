@@ -17,16 +17,16 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchUserInvoices } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useTRPC } from "@/utils/trpc";
 
 export default function TableInvoices() {
+  const trpc = useTRPC();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { data: invoices, isLoading: isLoadingInvoices } = useQuery({
-    queryKey: ["invoices"],
-    queryFn: fetchUserInvoices,
-  });
+  const { data: invoices, isLoading: isLoadingInvoices } = useQuery(
+    trpc.dashboard.getUserInvoices.queryOptions()
+  );
   const queryClient = useQueryClient();
   async function refreshPayment(
     merchantOrderId: string,
@@ -68,7 +68,9 @@ export default function TableInvoices() {
         });
         toast.dismiss("check-status");
         setIsLoading(false);
-        queryClient.invalidateQueries({ queryKey: ["invoices"] });
+        queryClient.invalidateQueries({
+          queryKey: trpc.dashboard.getUserInvoices.queryKey(),
+        });
         router.refresh();
       } else {
         toast.dismiss("check-status");
@@ -76,7 +78,9 @@ export default function TableInvoices() {
           description: `Transaction ${merchantOrderId} for ${competition} is not paid yet`,
         });
         setIsLoading(false);
-        queryClient.invalidateQueries({ queryKey: ["invoices"] });
+        queryClient.invalidateQueries({
+          queryKey: trpc.dashboard.getUserInvoices.queryKey(),
+        });
         router.refresh();
       }
     } catch (error) {
@@ -112,7 +116,6 @@ export default function TableInvoices() {
             <TableCell>{invoice.orderId}</TableCell>
             <TableCell>{invoice.amount}</TableCell>
             <TableCell>{invoice.competition}</TableCell>
-            {/* @ts-expect-error team is exist */}
             <TableCell>{invoice.team?.name ?? "Individual"}</TableCell>
             <TableCell>
               {new Date(invoice.createdAt).toLocaleDateString("en-US", {

@@ -1,14 +1,13 @@
 import RegisterForm from "./register-form";
 import { redirect } from "next/navigation";
-import { getUserProfile } from "@/action/user.action";
-import { prisma } from "@/lib/prisma";
-import { Team, User, CompRegistration, TeamMember } from "@/types/types";
+import { Team, CompRegistration, TeamMember } from "@/types/types";
 import { competitionsName } from "@/constants/constants";
 import { Suspense } from "react";
 import { CompRegisterFormSkeleton } from "@/components/register/CompFormSkeleton";
 import Link from "next/link";
 import Image from "next/image";
 import { competitions } from "@/lib/competition";
+import { getRegisteredTeams } from "@/action/register.action";
 
 export async function generateMetadata({
   params,
@@ -45,7 +44,6 @@ async function FetchCompForm({
 }: {
   params: Promise<{ comp: string }>;
 }) {
-  const user = (await getUserProfile()) as User;
   let { comp } = await params;
   if (comp) {
     if (!competitionsName.includes(comp.toUpperCase())) {
@@ -53,45 +51,16 @@ async function FetchCompForm({
     }
   }
   comp = comp.toLowerCase();
-
-  const [
-    teams,
-    teamMembers,
-    registeredCompetitions,
+  const {
     allRegisteredTeamDatas,
     allTeamsDatas,
     allTeamMembersDatas,
-  ] = await Promise.all([
-    prisma.team.findMany({
-      where: { members: { some: { userId: user.id } } },
-      include: { members: true },
-    }),
-    prisma.teamMember.findMany({
-      where: { userId: user.id },
-      include: { team: true, user: true },
-    }),
-    prisma.compRegistration.findMany({
-      where: { userId: user.id },
-      include: { team: true },
-    }),
-    prisma.compRegistration.findMany({
-      select: { teamId: true },
-    }),
-    prisma.team.findMany({
-      select: {
-        id: true,
-        competition: true,
-      },
-    }),
-    prisma.teamMember.findMany({
-      select: {
-        email: true,
-        teamId: true,
-        userId: true,
-        role: true,
-      },
-    }),
-  ]);
+    userTeams,
+    userRegisteredCompetitions,
+    userAsLeaderTeams,
+    teamNames,
+  } = await getRegisteredTeams();
+
   return (
     <>
       <div className="text-center">
@@ -131,12 +100,15 @@ async function FetchCompForm({
       </div>
       <RegisterForm
         comp={comp}
-        teams={teams as Team[]}
-        registeredCompetitions={registeredCompetitions as CompRegistration[]}
-        teamMembers={teamMembers as TeamMember[]}
+        userTeams={userTeams as Team[]}
+        userRegisteredCompetitions={
+          userRegisteredCompetitions as CompRegistration[]
+        }
         allTeamsDatas={allTeamsDatas as Team[]}
         allRegisteredTeamDatas={allRegisteredTeamDatas as CompRegistration[]}
         allTeamMembersDatas={allTeamMembersDatas as TeamMember[]}
+        userAsLeaderTeams={userAsLeaderTeams as Team[]}
+        teamNames={teamNames as (string | null)[]}
       />
     </>
   );

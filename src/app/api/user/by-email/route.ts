@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     );
   }
 
-  const user = await prisma.user.findUnique({
+  const user = await db.user.findUnique({
     where: { email },
     select: {
       id: true,

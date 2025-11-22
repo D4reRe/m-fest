@@ -1,15 +1,11 @@
 import { getUserProfile } from "@/action/user.action";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { router, protectedProcedure } from "@/server/api/trpc";
 import { z } from "zod";
 
 export const adminRouter = router({
-  getUser: protectedProcedure.query(async () => {
-    const user = await getUserProfile();
-    return user;
-  }),
   getUsers: protectedProcedure.query(async () => {
-    const users = await prisma.user.findMany({
+    const users = await db.user.findMany({
       select: {
         id: true,
         name: true,
@@ -30,7 +26,7 @@ export const adminRouter = router({
     return users;
   }),
   getTeams: protectedProcedure.query(async () => {
-    const teams = await prisma.team.findMany({
+    const teams = await db.team.findMany({
       select: {
         id: true,
         name: true,
@@ -48,18 +44,15 @@ export const adminRouter = router({
     return teams;
   }),
   getRegistrations: protectedProcedure.query(async () => {
-    const totalRegistration = await prisma.compRegistration.findMany();
+    const totalRegistration = await db.compRegistration.findMany();
     return totalRegistration;
   }),
   getEventsRegistration: protectedProcedure.query(async () => {
-    const totalEventRegistration = await prisma.eventRegistration.findMany();
+    const totalEventRegistration = await db.eventRegistration.findMany();
     return totalEventRegistration;
   }),
-
-  approveTeam: protectedProcedure
-    .input(z.object({ teamId: z.string() }))
-    .mutation(({ input }) => {
-      // call prisma or your existing REST API logic
-      return { success: true };
-    }),
+  getInvoices: protectedProcedure.query(async () => {
+    const invoices = await db.payment.findMany();
+    return invoices;
+  }),
 });

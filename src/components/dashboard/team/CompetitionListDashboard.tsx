@@ -13,7 +13,7 @@ import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { User } from "@/types/types";
 import { getUserProfile } from "@/action/user.action";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { Suspense } from "react";
 import CompetitionListSkeleton from "../CompetitionListSkeleton";
 import {
@@ -36,7 +36,7 @@ export default function RegisteredCompetitionList() {
 
 async function FetchUserAvailableCompetitions() {
   const user = (await getUserProfile()) as User;
-  const registeredCompetitions = await prisma.compRegistration.findMany({
+  const registeredCompetitions = await db.compRegistration.findMany({
     where: {
       userId: user.id,
       statusOrder: "SUCCESS",

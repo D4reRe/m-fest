@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/popover";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ChevronDownIcon, Loader2 } from "lucide-react";
@@ -33,26 +32,10 @@ import {
 import { UserAvatar } from "@/components/general/UserProfile";
 import UploadDialog from "@/components/dashboard/profile/UploadDialog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { cn, fetchUser } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import ProfileFormSkeleton from "@/components/dashboard/profile/ProfileFormSkeleton";
-
-const profileSchema = z.object({
-  fullName: z.string().min(5),
-  gender: z.enum(["Male", "Female"]),
-  phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
-  domicile: z.string().min(1, "Domicile is required"),
-  institution: z.string().min(1, "institution is required"),
-  major: z.string().min(1, "Major is required"),
-  education: z.enum(["SMA", "SMK", "D3", "S1"]),
-  semester: z.coerce
-    .number<number>()
-    .min(1, "Minimum semester is 1")
-    .max(8, "Maximum semester is 8"),
-  birthDate: z.date({ error: "Invalid date" }),
-  imageUrl: z.string(),
-});
-
-type profileSchema = z.infer<typeof profileSchema>;
+import { useTRPC } from "@/utils/trpc";
+import { profileSchema } from "@/lib/schema";
 
 function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   useEffect(() => {
@@ -69,17 +52,19 @@ function usePreventRefreshUserDuringUpload(isLoading: boolean) {
 }
 
 function ProfileUpdateForm() {
+  const trpc = useTRPC();
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    isFetched,
+  } = useQuery(trpc.dashboard.getUser.queryOptions());
+  const queryClient = useQueryClient();
   const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
-  const { data: user, isLoading: isLoadingUser } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
-  const queryClient = useQueryClient();
 
   const updateUserMutation = useMutation({
     mutationFn: async (data: profileSchema) => {
@@ -118,7 +103,9 @@ function ProfileUpdateForm() {
       });
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUser.queryKey(),
+      });
       router.replace("/dashboard/profile");
       router.refresh();
     },
@@ -175,24 +162,6 @@ function ProfileUpdateForm() {
       }, 500);
     }
   }, [session?.user, reset, user]);
-  useEffect(() => {
-    if (!isEditing) {
-      setTimeout(() => {
-        reset({
-          fullName: user?.name as string,
-          phoneNumber: user?.phoneNumber ?? "",
-          gender: user?.gender ?? undefined,
-          domicile: user?.domicile ?? "",
-          institution: user?.institution ?? "",
-          major: user?.major ?? "",
-          education: user?.education ?? undefined,
-          semester: (user?.semester as unknown as number) ?? 1,
-          birthDate: user?.birthDate ? new Date(user.birthDate) : undefined,
-          imageUrl: user?.image ?? "",
-        });
-      }, 500);
-    }
-  }, [isEditing, reset, user]);
 
   if (isLoadingUser) return <ProfileFormSkeleton />;
 

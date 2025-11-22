@@ -1,11 +1,11 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const payload = await req.json();
   const { fileUrl, userId, leaderUserId, comp } = payload;
 
-  const thisRegisteredCompUser = await prisma.compRegistration.findFirst({
+  const thisRegisteredCompUser = await db.compRegistration.findFirst({
     where: {
       leaderUserId: leaderUserId as string,
       competitionName:
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     );
   }
 
-  await prisma.compRegistration.update({
+  await db.compRegistration.update({
     where: {
       teamId: thisRegisteredCompUser?.teamId as string,
     },

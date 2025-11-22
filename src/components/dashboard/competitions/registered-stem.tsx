@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import {
   Card,
   CardAction,
@@ -45,7 +45,7 @@ export function RegisteredStemCompetition() {
 
 async function FetchUserRegisteredStem() {
   const user = (await getUserProfile()) as User;
-  const stemComp = await prisma.compRegistration.findMany({
+  const stemComp = await db.compRegistration.findMany({
     where: {
       userId: user.id,
       competitionName: "STEM",

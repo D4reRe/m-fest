@@ -16,15 +16,13 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/lib/utils";
+import { useTRPC } from "@/utils/trpc";
 
 function TeamForm({ team }: { team: Team }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  const trpc = useTRPC();
+  const { data: user } = useQuery(trpc.dashboard.getUser.queryOptions());
   const teamSchema = z
     .object({
       leaderName: z.string().min(5, "Name must be leader's fullname"),

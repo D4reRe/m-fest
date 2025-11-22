@@ -1,5 +1,6 @@
 import { getUserProfile } from "@/action/user.action";
-import { prisma } from "@/lib/prisma";
+import { env } from "@/env";
+import { db } from "@/server/db";
 import crypto from "crypto";
 import { NextResponse } from "next/server";
 
@@ -26,12 +27,12 @@ export async function POST(request: Request) {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        merchantCode: process.env.DUITKU_MERCHANT_ID,
+        merchantCode: env.DUITKU_MERCHANT_ID,
         merchantOrderId: result.merchantOrderId,
         signature: crypto
           .createHash("md5")
           .update(
-            `${process.env.DUITKU_MERCHANT_ID}${result.merchantOrderId}${process.env.DUITKU_API_KEY}`
+            `${env.DUITKU_MERCHANT_ID}${result.merchantOrderId}${env.DUITKU_API_KEY}`
           )
           .digest("hex"),
       }),
@@ -57,7 +58,7 @@ export async function POST(request: Request) {
   if (status.statusCode === "00") {
     // Create payment & Registration status
     if (submittedData.competitionName !== CompetitionName.STEM) {
-      await prisma.payment.create({
+      await db.payment.create({
         data: {
           orderId: merchantOrderId,
           userId: user?.id,
@@ -69,7 +70,7 @@ export async function POST(request: Request) {
         },
       });
 
-      const thisTransaction = await prisma.payment.findUnique({
+      const thisTransaction = await db.payment.findUnique({
         where: {
           orderId: merchantOrderId,
         },
@@ -78,7 +79,7 @@ export async function POST(request: Request) {
         },
       });
 
-      await prisma.compRegistration.create({
+      await db.compRegistration.create({
         data: {
           teamName: submittedData.team as string,
           competitionName: submittedData.competitionName as CompetitionName,
@@ -93,7 +94,7 @@ export async function POST(request: Request) {
           statusOrder: "SUCCESS",
         },
       });
-      await prisma.team.update({
+      await db.team.update({
         where: {
           id: submittedData.teamId,
         },
@@ -105,7 +106,7 @@ export async function POST(request: Request) {
       });
     }
     if (submittedData.competitionName === CompetitionName.STEM) {
-      await prisma.payment.create({
+      await db.payment.create({
         data: {
           orderId: merchantOrderId,
           userId: user?.id,
@@ -116,7 +117,7 @@ export async function POST(request: Request) {
           status: "SUCCESS",
         },
       });
-      const thisTransaction = await prisma.payment.findUnique({
+      const thisTransaction = await db.payment.findUnique({
         where: {
           orderId: merchantOrderId,
         },
@@ -124,7 +125,7 @@ export async function POST(request: Request) {
           orderId: true,
         },
       });
-      await prisma.compRegistration.create({
+      await db.compRegistration.create({
         data: {
           userId: user?.id as string,
           paymentId: thisTransaction?.orderId as string,
@@ -147,7 +148,7 @@ export async function POST(request: Request) {
   } else if (status.statusCode === "01") {
     // Create payment & Registration status
     if (submittedData.competitionName !== CompetitionName.STEM) {
-      await prisma.payment.create({
+      await db.payment.create({
         data: {
           orderId: merchantOrderId,
           userId: user?.id,
@@ -159,7 +160,7 @@ export async function POST(request: Request) {
         },
       });
 
-      const thisTransaction = await prisma.payment.findUnique({
+      const thisTransaction = await db.payment.findUnique({
         where: {
           orderId: merchantOrderId,
         },
@@ -168,7 +169,7 @@ export async function POST(request: Request) {
         },
       });
 
-      await prisma.compRegistration.create({
+      await db.compRegistration.create({
         data: {
           teamName: submittedData.team as string,
           competitionName: submittedData.competitionName as CompetitionName,
@@ -183,7 +184,7 @@ export async function POST(request: Request) {
           statusOrder: "PENDING",
         },
       });
-      await prisma.team.update({
+      await db.team.update({
         where: {
           id: submittedData.teamId,
         },
@@ -195,7 +196,7 @@ export async function POST(request: Request) {
       });
     }
     if (submittedData.competitionName === CompetitionName.STEM) {
-      await prisma.payment.create({
+      await db.payment.create({
         data: {
           orderId: merchantOrderId,
           userId: user?.id,
@@ -206,7 +207,7 @@ export async function POST(request: Request) {
           status: "PENDING",
         },
       });
-      const thisTransaction = await prisma.payment.findUnique({
+      const thisTransaction = await db.payment.findUnique({
         where: {
           orderId: merchantOrderId,
         },
@@ -214,7 +215,7 @@ export async function POST(request: Request) {
           orderId: true,
         },
       });
-      await prisma.compRegistration.create({
+      await db.compRegistration.create({
         data: {
           userId: user?.id as string,
           paymentId: thisTransaction?.orderId as string,
@@ -235,16 +236,16 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } else {
-    await prisma.payment.update({
+    await db.payment.update({
       where: { orderId: result.merchantOrderId },
       data: { status: "CANCELLED", createdAt: new Date() },
     });
-    await prisma.compRegistration.update({
+    await db.compRegistration.update({
       where: { paymentId: result.merchantOrderId },
       data: { statusOrder: "CANCELLED" },
     });
     if (submittedData.competitionName !== CompetitionName.STEM) {
-      await prisma.team.update({
+      await db.team.update({
         where: {
           paymentId: result.merchantOrderId,
         },

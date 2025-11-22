@@ -22,6 +22,7 @@ import { Label } from "../ui/label";
 import { Progress } from "../ui/progress";
 import { useQueryClient } from "@tanstack/react-query";
 import { validExtensions } from "@/constants/constants";
+import { useTRPC } from "@/utils/trpc";
 
 export default function UploadDocumentDialog({
   isLoading,
@@ -40,6 +41,7 @@ export default function UploadDocumentDialog({
   const [croppedFile, setCroppedFile] = useState<File | null>(null);
   const [uploadCroppedFile, setUploadCroppedFile] = useState<File | null>(null);
   const [files, setFiles] = useState<File[]>([]);
+  const trpc = useTRPC();
   const queryClient = useQueryClient();
   const [uploadThingRouteUpload, setUploadThingRouteUpload] =
     useState<UploadThingRoute | null>(null);
@@ -100,7 +102,9 @@ export default function UploadDocumentDialog({
       setValue(uploadThingRouteUpload as UploadThingRoute, res[0].ufsUrl, {
         shouldValidate: true,
       });
-      queryClient.invalidateQueries({ queryKey: ["userDocuments"] });
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUserDocuments.queryKey(),
+      });
       setActiveDialog(null);
       setFiles([]);
     },
@@ -249,7 +253,7 @@ export default function UploadDocumentDialog({
                     });
                   }
                   queryClient.invalidateQueries({
-                    queryKey: ["userDocuments"],
+                    queryKey: trpc.dashboard.getUserDocuments.queryKey(),
                   });
                   setActiveDialog(null);
                 }}

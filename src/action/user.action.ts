@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
+import { auth } from "@/server/auth/auth";
+import { db } from "@/server/db";
 
 export async function getUserProfile() {
   const session = await auth();
@@ -11,7 +11,7 @@ export async function getUserProfile() {
     return null;
   }
 
-  const user = await prisma.user.findUnique({
+  const user = await db.user.findUnique({
     where: { email: session?.user?.email as string },
   });
 

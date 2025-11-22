@@ -19,7 +19,7 @@ import {
   validExtensions,
 } from "@/constants/constants";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/lib/utils";
+import { useTRPC } from "@/utils/trpc";
 
 export default function ImageCropperDocument({
   updateImgUrl,
@@ -41,10 +41,8 @@ export default function ImageCropperDocument({
   const [naturalHeight, setNaturalHeight] = useState<number>(0);
   const [error, setError] = useState<string | null>(null);
   const [crop, setCrop] = useState<Crop>();
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  const trpc = useTRPC();
+  const { data: user } = useQuery(trpc.dashboard.getUser.queryOptions());
   function resetFileInput() {
     if (inputFileRef.current) {
       inputFileRef.current.value = "";

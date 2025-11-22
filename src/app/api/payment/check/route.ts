@@ -1,6 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { env } from "@/env";
 
 export async function POST(request: Request) {
   const { result } = await request.json();
@@ -14,12 +15,12 @@ export async function POST(request: Request) {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        merchantCode: process.env.DUITKU_MERCHANT_ID,
+        merchantCode: env.DUITKU_MERCHANT_ID,
         merchantOrderId: result.merchantOrderId,
         signature: crypto
           .createHash("md5")
           .update(
-            `${process.env.DUITKU_MERCHANT_ID}${result.merchantOrderId}${process.env.DUITKU_API_KEY}`
+            `${env.DUITKU_MERCHANT_ID}${result.merchantOrderId}${env.DUITKU_API_KEY}`
           )
           .digest("hex"),
       }),
@@ -42,16 +43,16 @@ export async function POST(request: Request) {
   }
 
   if (status.statusCode === "00") {
-    await prisma.payment.update({
+    await db.payment.update({
       where: { orderId: result.merchantOrderId },
       data: { status: "SUCCESS" },
     });
-    await prisma.compRegistration.update({
+    await db.compRegistration.update({
       where: { paymentId: result.merchantOrderId },
       data: { statusOrder: "SUCCESS" },
     });
     if (result.competition !== "STEM Competition") {
-      await prisma.team.update({
+      await db.team.update({
         where: {
           paymentId: result.merchantOrderId,
         },
@@ -66,16 +67,16 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } else {
-    await prisma.payment.update({
+    await db.payment.update({
       where: { orderId: result.merchantOrderId },
       data: { status: status.statusMessage, createdAt: new Date() },
     });
-    await prisma.compRegistration.update({
+    await db.compRegistration.update({
       where: { paymentId: result.merchantOrderId },
       data: { statusOrder: status.statusMessage },
     });
     if (result.competition !== "STEM Competition") {
-      await prisma.team.update({
+      await db.team.update({
         where: {
           paymentId: result.merchantOrderId,
         },

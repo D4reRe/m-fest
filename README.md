@@ -19,6 +19,8 @@ It serves as the official system for participants to register, create teams, and
 | **Database**                                                                | [Neon PostgreSQL](https://neon.tech/)               |
 | **Authentication**                                                          | [Auth.js (NextAuth)](https://authjs.dev/)           |
 | **Asynchronous state management, server-state utilities and data fetching** | [TanStack Query](https://tanstack.com/query/latest) |
+| **End-to-end typesafe API**                                                 | [tRPC](https://trpc.io/)                            |
+| **State Managment**                                                         | [Zustand](https://zustand.docs.pmnd.rs/)            |
 | **File Uploads**                                                            | [UploadThing](https://uploadthing.com/)             |
 | **Payments**                                                                | [DuitKu POP](https://docs.duitku.com/)              |
 | **Error Tracking**                                                          | [Sentry.js](https://sentry.io/)                     |

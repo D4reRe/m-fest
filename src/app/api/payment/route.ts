@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { env } from "@/env";
 
 export async function POST(request: Request) {
   function generateDuitkuSignature(
@@ -14,8 +15,8 @@ export async function POST(request: Request) {
     return signature;
   }
 
-  const merchantCode = process.env.DUITKU_MERCHANT_ID as string;
-  const apiKey = process.env.DUITKU_API_KEY as string;
+  const merchantCode = env.DUITKU_MERCHANT_ID as string;
+  const apiKey = env.DUITKU_API_KEY as string;
   const timestamp = Date.now().toString();
   const signature = generateDuitkuSignature(merchantCode, apiKey, timestamp);
   const {

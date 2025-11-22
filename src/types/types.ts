@@ -3,42 +3,42 @@ import { IconProps, type Icon } from "@tabler/icons-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { LucideProps } from "lucide-react";
 
-enum Role {
+export enum Role {
   USER = "USER",
   ADMIN = "ADMIN",
   SUPERADMIN = "SUPERADMIN",
 }
-enum Gender {
+export enum Gender {
   Male = "Male",
   Female = "Female",
 }
 
-enum Education {
+export enum Education {
   SMA = "SMA",
   SMK = "SMK",
   D3 = "D3",
   S1 = "S1",
 }
 
-enum CompetitionName {
+export enum CompetitionName {
   PDC = "PDC",
   IPPC = "PDDC",
   BCC = "BCC",
   STEM = "STEM",
 }
 
-enum TeamRole {
+export enum TeamRole {
   Leader = "Leader",
   Member = "Member",
 }
 
-enum DocumentStatus {
+export enum DocumentStatus {
   AWAITING_UPLOAD = "AWAITING_UPLOAD",
   PENDING = "PENDING",
   VERIFIED = "VERIFIED",
 }
 
-enum VerificationStatus {
+export enum VerificationStatus {
   NOT_SUBMITTED = "NOT_SUBMITTED",
   PENDING = "PENDING",
   ACCEPTED = "ACCEPTED",
@@ -238,12 +238,13 @@ export type ImageCropperProps = {
 
 export type RegisterFormProps = {
   comp: string;
-  teams: Team[];
+  userTeams: Team[];
+  userRegisteredCompetitions: CompRegistration[];
   allTeamsDatas: Team[];
-  registeredCompetitions: CompRegistration[];
-  teamMembers: TeamMember[];
   allRegisteredTeamDatas: CompRegistration[];
   allTeamMembersDatas: TeamMember[];
+  userAsLeaderTeams: Team[];
+  teamNames: (string | null)[];
 };
 
 export type NavMainProps = {

@@ -15,18 +15,16 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/lib/utils";
 import TeamFormSkeleton from "@/components/dashboard/edit-team/TeamFormSkeleton";
+import { useTRPC } from "@/utils/trpc";
 
 function TeamForm() {
+  const trpc = useTRPC();
   const {
     data: user,
     isLoading: isLoadingUser,
     isFetched: isFetchedUser,
-  } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  } = useQuery(trpc.dashboard.getUser.queryOptions());
   const router = useRouter();
   useEffect(() => {
     if (isFetchedUser) {

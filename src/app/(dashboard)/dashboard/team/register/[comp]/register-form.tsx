@@ -1,8 +1,8 @@
 "use client";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -29,41 +29,31 @@ import {
 import { Input } from "@/components/ui/input";
 import { educations } from "@/lib/profile";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/lib/utils";
-
-const stemRegisterSchema = z.object({
-  name: z.string().min(5),
-  gender: z.enum(["Male", "Female"]),
-  school: z.string().min(5),
-  email: z.string().email("Invalid email").min(1, "Email is required"),
-  phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
-  education: z.enum(["SMA", "SMK", "D3", "S1"]),
-  mentor: z.string().min(1),
-  competitionName: z.enum(["STEM"]),
-});
-
-type stemRegisterSchema = z.infer<typeof stemRegisterSchema>;
+import { useTRPC } from "@/utils/trpc";
+import { stemRegisterSchema } from "@/lib/schema";
+import { getCallbackUrl, getReturnUrl } from "@/lib/utils";
 
 function RegisterForm({
   comp,
-  teams: userTeams,
-  registeredCompetitions: userRegisteredCompetitions,
-  teamMembers: userTeamMembers,
+  userTeams,
+  userRegisteredCompetitions,
   allTeamsDatas,
   allRegisteredTeamDatas,
   allTeamMembersDatas,
+  userAsLeaderTeams,
+  teamNames,
 }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [teamInstitution, setTeamInstitution] = useState<string>("");
   const [teamName, setTeamName] = useState<string>("");
   const router = useRouter();
-  const { data: user, isFetched: isFetchedUser } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  const trpc = useTRPC();
+  const { data: user, isFetched } = useQuery(
+    trpc.dashboard.getUser.queryOptions()
+  );
 
   useEffect(() => {
-    if (isFetchedUser) {
+    if (isFetched) {
       if (
         !user?.gender ||
         !user?.phoneNumber ||
@@ -78,22 +68,7 @@ function RegisterForm({
         router.push("/dashboard/profile?notif=incomplete_profile");
       }
     }
-  }, [isFetchedUser, user, router]);
-
-  const userRegisteredTeams = userRegisteredCompetitions.map(
-    (competition) => competition.teamId
-  );
-  // console.log("Registered teams: ", userRegisteredTeams);
-  const userAvailableTeams = userTeams.filter(
-    (team) => !userRegisteredTeams.includes(team.id)
-  );
-  const userAsLeaderTeams = userAvailableTeams.filter((team) => {
-    return userTeamMembers.some((member) => {
-      return member.teamId === team.id && member.role === "Leader";
-    });
-  });
-
-  const teamNames = userAsLeaderTeams.map((team) => team.name);
+  }, [isFetched, user, router]);
 
   const registerSchema = z.object({
     competitionName: z.enum(["BCC", "IPPC", "PDC"]),
@@ -269,15 +244,8 @@ function RegisterForm({
         competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
       }`,
       email: user?.email,
-      callbackUrl:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/api/payment/callback"
-          : "https://m-fest-xi.vercel.app/api/payment/callback",
-
-      returnUrl:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/payment/status"
-          : "https://m-fest-xi.vercel.app/payment/status",
+      callbackUrl: getCallbackUrl(),
+      returnUrl: getReturnUrl(),
       expiryPeriod: 60,
       customerVaName: user?.name,
       phoneNumber: user?.phoneNumber,
@@ -388,15 +356,9 @@ function RegisterForm({
         competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
       }`,
       email: user?.email,
-      callbackUrl:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/api/payment/callback"
-          : "https://m-fest-xi.vercel.app/api/payment/callback",
+      callbackUrl: getCallbackUrl(),
 
-      returnUrl:
-        process.env.NODE_ENV === "development"
-          ? "http://localhost:3000/payment/status"
-          : "https://m-fest-xi.vercel.app/payment/status",
+      returnUrl: getReturnUrl(),
       expiryPeriod: 60,
       customerVaName: user?.name,
       phoneNumber: user?.phoneNumber,

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { Loader2, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn, fetchUser } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { signOut } from "next-auth/react";
@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { UserAvatar } from "./UserProfile";
 import { menuItems } from "@/constants/constants";
 import { useQuery } from "@tanstack/react-query";
+import { useTRPC } from "@/utils/trpc";
 
 export const Navbar = () => {
   const [menuState, setMenuState] = useState(false);
@@ -20,9 +21,9 @@ export const Navbar = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const currentPath = usePathname();
+  const trpc = useTRPC();
   const { data } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
+    ...trpc.dashboard.getUser.queryOptions(),
     enabled: status === "authenticated",
   });
 

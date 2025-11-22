@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { Edit } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../general/UserProfile";
@@ -29,7 +29,7 @@ export function TeamMembers({ user }: { user: User }) {
 }
 
 async function FetchUserTeams({ user }: { user: User }) {
-  const teams = await prisma.team.findMany({
+  const teams = await db.team.findMany({
     where: {
       members: {
         some: {
@@ -121,7 +121,7 @@ async function FetchUserTeams({ user }: { user: User }) {
                 {team.members
                   .sort((a, b) => (a.role === "Leader" ? -1 : 1))
                   .map(async (member) => {
-                    const user = await prisma.user.findUnique({
+                    const user = await db.user.findUnique({
                       where: { id: member.userId },
                     });
 

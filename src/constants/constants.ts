@@ -17,6 +17,7 @@ export const maxFileSize = 4 * 1024 * 1024; // 4 MB
 export const MAX_PROFILEIMAGE_SIZE = 512; // px
 export const MIN_DIMENSION = 150;
 export const competitionsName = ["BCC", "IPPC", "PDC", "STEM"];
+export const adminRoles = ["ADMIN", "SUPERADMIN"];
 export const acceptedFiles = [".png", ".jpeg", ".jpg", ".webp"];
 export const submissionOpenDate = "Ferbuary 1st 2026";
 export const submissionDeadlinePDC = "March 6th 2026";

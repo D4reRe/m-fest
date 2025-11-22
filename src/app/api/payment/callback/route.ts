@@ -1,6 +1,7 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
+import { env } from "@/env";
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -33,9 +34,7 @@ export async function POST(req: Request) {
   console.log("signature: ", signature);
   const expectedSignature = crypto
     .createHash("md5")
-    .update(
-      `${merchantCode}${amount}${merchantOrderId}${process.env.DUITKU_API_KEY}`
-    )
+    .update(`${merchantCode}${amount}${merchantOrderId}${env.DUITKU_API_KEY}`)
     .digest("hex");
 
   // For debugging
@@ -50,7 +49,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Invalid signature" }, { status: 403 });
   }
 
-  await prisma.payment.update({
+  await db.payment.update({
     where: { orderId: merchantOrderId },
     data: {
       status: resultCode === "00" ? "SUCCESS" : "CANCELLED",
@@ -58,18 +57,18 @@ export async function POST(req: Request) {
     },
   });
 
-  await prisma.compRegistration.update({
+  await db.compRegistration.update({
     where: { paymentId: merchantOrderId },
     data: { statusOrder: resultCode === "00" ? "SUCCESS" : "CANCELLED" },
   });
 
-  const thisOrderComp = await prisma.payment.findUnique({
+  const thisOrderComp = await db.payment.findUnique({
     where: { orderId: merchantOrderId },
     select: { competition: true },
   });
 
   if (thisOrderComp?.competition !== "STEM Competition") {
-    await prisma.team.update({
+    await db.team.update({
       where: {
         paymentId: merchantOrderId,
       },

@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 
 type Member = {
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     teamInstitution,
   } = await req.json();
   try {
-    const authUser = await prisma.user.findUnique({
+    const authUser = await db.user.findUnique({
       where: { email, id: userId },
     });
     if (!authUser) {
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     }
 
     // Current team from database
-    const existingCurrentTeam = await prisma.team.findUnique({
+    const existingCurrentTeam = await db.team.findUnique({
       where: { id: submittedTeamId },
       include: { members: true },
     });
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     console.log("Submitted team name: ", submittedTeamName);
 
     if (existingCurrentTeam?.name !== submittedTeamName) {
-      const existingTeamName = await prisma.team.findUnique({
+      const existingTeamName = await db.team.findUnique({
         where: {
           name: submittedTeamName,
         },
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
     }
 
     // Check if all members are registered
-    const existingSubmittedUsers = await prisma.user.findMany({
+    const existingSubmittedUsers = await db.user.findMany({
       where: { email: { in: members.map((member: Member) => member.email) } },
     });
 
@@ -111,7 +111,7 @@ export async function POST(req: Request) {
     console.log("Member profiles: ", submittedMemberProfiles);
 
     // Update team
-    const team = await prisma.team.update({
+    const team = await db.team.update({
       where: { id: submittedTeamId },
       data: {
         name: submittedTeamName,
@@ -143,7 +143,7 @@ export async function POST(req: Request) {
     // If there's any removal or addition of members, check if team already exists
     if (membersToAdd?.length !== 0 || membersToRemove?.length !== 0) {
       //  Check all team members
-      const candidateTeams = await prisma.team.findMany({
+      const candidateTeams = await db.team.findMany({
         where: {
           members: {
             some: {
@@ -204,7 +204,7 @@ export async function POST(req: Request) {
     }
 
     // Remove old members
-    const removeMembers = await prisma.teamMember.deleteMany({
+    const removeMembers = await db.teamMember.deleteMany({
       where: {
         teamId: submittedTeamId,
         email: {
@@ -214,7 +214,7 @@ export async function POST(req: Request) {
     });
     console.log("Remove members: ", removeMembers);
     // Add new members
-    const addMembers = await prisma.teamMember.createMany({
+    const addMembers = await db.teamMember.createMany({
       data: membersToAdd.map((member: Member) => ({
         name: member.name,
         email: member.email,
@@ -237,7 +237,7 @@ export async function POST(req: Request) {
 
     const updatedUser = await Promise.all(
       membersToUpdate.map((member: Member) =>
-        prisma.teamMember.update({
+        db.teamMember.update({
           where: {
             userId_teamId: {
               userId: member.userId,

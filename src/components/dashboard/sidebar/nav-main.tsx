@@ -13,7 +13,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Key } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchUser } from "@/lib/utils";
+import { useTRPC } from "@/utils/trpc";
 
 export function NavMain({
   items,
@@ -25,10 +25,8 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
-  const { data: user } = useQuery({
-    queryKey: ["user"],
-    queryFn: fetchUser,
-  });
+  const trpc = useTRPC();
+  const { data: user } = useQuery(trpc.dashboard.getUser.queryOptions());
   return (
     <SidebarGroup className="bg-transparent backdrop-blur-lg">
       <SidebarGroupContent className="flex flex-col gap-2 bg-transparent backdrop-blur-lg ">

@@ -1,11 +1,11 @@
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { Document } from "@/types/types";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   const payload = await req.json();
   const { userId } = payload;
-  const requestedUser = await prisma.user.findUnique({
+  const requestedUser = await db.user.findUnique({
     where: { id: userId },
   });
 
@@ -14,11 +14,11 @@ export async function POST(req: Request) {
   }
 
   const [userVerification, userDocuments] = await Promise.all([
-    prisma.verification.findUnique({
+    db.verification.findUnique({
       where: { userId },
       select: { status: true },
     }),
-    prisma.verification.findUnique({
+    db.verification.findUnique({
       where: {
         userId,
       },
@@ -89,7 +89,7 @@ export async function POST(req: Request) {
           (document) => document.status === "PENDING"
         );
         if (!documentsNotVerified.length) {
-          await prisma.verification.update({
+          await db.verification.update({
             where: { userId },
             data: {
               status: "ACCEPTED",
@@ -122,7 +122,7 @@ export async function POST(req: Request) {
       console.log("Documents still pending: ", documentsStillPending);
       documentsStillPending?.map(async (document) => {
         if (document.status === "AWAITING_UPLOAD") {
-          await prisma.verification.update({
+          await db.verification.update({
             where: { userId },
             data: {
               [`${document.type}Status`]: "PENDING",
@@ -153,7 +153,7 @@ export async function POST(req: Request) {
 
   // If user verifaction status is NOT_SUBMITTED run the rest of the code
 
-  await prisma.verification.update({
+  await db.verification.update({
     where: {
       userId: requestedUser?.id as string,
     },

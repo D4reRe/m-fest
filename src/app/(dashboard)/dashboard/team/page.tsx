@@ -19,7 +19,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { prisma } from "@/lib/prisma";
+import { db } from "@/server/db";
 import { IconUsersGroup } from "@tabler/icons-react";
 import { Edit, Trash } from "lucide-react";
 import { Metadata } from "next";
@@ -63,7 +63,7 @@ export default function TeamsPage() {
 
 async function FetchTeams() {
   const user = (await getUserProfile()) as User;
-  const teams = await prisma.team.findMany({
+  const teams = await db.team.findMany({
     where: {
       members: {
         some: {
@@ -183,7 +183,7 @@ async function FetchTeams() {
                 {team.members
                   .sort((a, b) => (a.role === "Leader" ? -1 : 1))
                   .map(async (member) => {
-                    const user = await prisma.user.findUnique({
+                    const user = await db.user.findUnique({
                       where: { id: member.userId },
                     });
 
@@ -226,10 +226,10 @@ async function FetchTeams() {
 
 async function deleteTeam(teamId: string) {
   "use server";
-  await prisma.teamMember.deleteMany({
+  await db.teamMember.deleteMany({
     where: { teamId },
   });
-  await prisma.team.delete({
+  await db.team.delete({
     where: { id: teamId },
   });
 }
