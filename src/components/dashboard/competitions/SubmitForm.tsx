@@ -61,6 +61,8 @@ export default function SubmitForm({ comp }: { comp: string }) {
     resolver: zodResolver(submitFileSchema),
     defaultValues: {
       fileUrl: userRegisteredComp?.submissionFileUrl ?? "",
+      competitionName: comp,
+      leaderUserId: user?.id as string,
     },
   });
 
@@ -68,32 +70,14 @@ export default function SubmitForm({ comp }: { comp: string }) {
     if (userRegisteredComp) {
       reset({
         fileUrl: userRegisteredComp?.submissionFileUrl ?? "",
+        competitionName: comp,
+        leaderUserId: user?.id as string,
       });
     }
-  }, [userRegisteredComp, reset]);
+  }, [userRegisteredComp, reset, comp, user]);
 
   const submitFile = useMutation({
-    mutationFn: async (data: submitFileSchema) => {
-      const res = await fetch("/api/submit-file", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          comp,
-          userId: user?.id,
-          leaderUserId: user?.id,
-        }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "Failed to submit file");
-      }
-
-      return res.json();
-    },
+    ...trpc.dashboard.submitCompetitionFile.mutationOptions(),
     onMutate: () => {
       setIsLoading(true);
       toast.loading("Submitting file...", {
@@ -105,11 +89,11 @@ export default function SubmitForm({ comp }: { comp: string }) {
       toast.dismiss("submitting-file");
       toast.success("File submitted successfully!");
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       setIsLoading(false);
       toast.dismiss("submitting-file");
       toast.error("Failed to submit file", {
-        description: (error as Error).message,
+        description: error.message,
       });
     },
     onSettled: () => {
@@ -293,6 +277,36 @@ export default function SubmitForm({ comp }: { comp: string }) {
             render={({ field, fieldState }) => (
               <Input
                 className="w-full p-1"
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+                type="text"
+                readOnly
+                disabled
+              />
+            )}
+          />
+          <Controller
+            name="competitionName"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Input
+                className="w-full p-1 mt-2"
+                {...field}
+                id={field.name}
+                aria-invalid={fieldState.invalid}
+                type="text"
+                readOnly
+                disabled
+              />
+            )}
+          />
+          <Controller
+            name="leaderUserId"
+            control={control}
+            render={({ field, fieldState }) => (
+              <Input
+                className="w-full p-1 mt-2"
                 {...field}
                 id={field.name}
                 aria-invalid={fieldState.invalid}

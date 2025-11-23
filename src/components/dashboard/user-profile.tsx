@@ -4,8 +4,9 @@ import { UserAvatar } from "../general/UserProfile";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { User } from "@/types/types";
+import { getUserProfile } from "@/action/user.action";
 
-export function UserProfile({ user }: { user: User }) {
+export function UserProfile() {
   return (
     <div className="glass p-6 space-y-6">
       <div className="flex flex-col items-center">
@@ -18,7 +19,7 @@ export function UserProfile({ user }: { user: User }) {
             </>
           }
         >
-          <FetchUserAvatar user={user} />
+          <FetchUserAvatar />
         </Suspense>
       </div>
 
@@ -43,14 +44,15 @@ export function UserProfile({ user }: { user: User }) {
             </>
           }
         >
-          <FetchUserInfo user={user} />
+          <FetchUserInfo />
         </Suspense>
       </div>
     </div>
   );
 }
 
-async function FetchUserAvatar({ user }: { user: User }) {
+async function FetchUserAvatar() {
+  const user = (await getUserProfile()) as User;
   return (
     <>
       {user?.image && (
@@ -72,7 +74,8 @@ async function FetchUserAvatar({ user }: { user: User }) {
   );
 }
 
-async function FetchUserInfo({ user }: { user: User }) {
+async function FetchUserInfo() {
+  const user = (await getUserProfile()) as User;
   return (
     <>
       <div>

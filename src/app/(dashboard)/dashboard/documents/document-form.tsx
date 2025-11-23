@@ -67,27 +67,7 @@ function DocumentsForm() {
   const userVerificationStatus = data?.status;
 
   const updateUserDocuments = useMutation({
-    mutationFn: async (data: documentsSchema) => {
-      // Send datas that contained image URLs uploadthing
-      const res = await fetch("/api/submit-document", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...data,
-          userId: user?.id,
-        }),
-      });
-
-      if (!res.ok) {
-        setIsLoading(false);
-        const err = await res.json();
-        throw new Error(err.message || "Failed to submit documents");
-      }
-
-      return res.json();
-    },
+    ...trpc.dashboard.submitDocuments.mutationOptions(),
     onMutate: () => {
       setIsLoading(true);
       toast.loading("Submitting file...", {
@@ -105,7 +85,7 @@ function DocumentsForm() {
       setIsLoading(false);
       toast.dismiss("submitting-file");
       toast.error("Failed to submit file", {
-        description: (error as Error).message,
+        description: error.message,
       });
     },
     onSettled: () => {
@@ -216,8 +196,7 @@ function DocumentsForm() {
                   </p>
                 ) : (
                   <p className="text-sm text-green-500">
-                    Your document have been verified. You can now register for
-                    competitions.
+                    This document have been verified.
                   </p>
                 )}
 

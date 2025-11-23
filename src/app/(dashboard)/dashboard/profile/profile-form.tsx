@@ -53,11 +53,9 @@ function usePreventRefreshUserDuringUpload(isLoading: boolean) {
 
 function ProfileUpdateForm() {
   const trpc = useTRPC();
-  const {
-    data: user,
-    isLoading: isLoadingUser,
-    isFetched,
-  } = useQuery(trpc.dashboard.getUser.queryOptions());
+  const { data: user, isLoading: isLoadingUser } = useQuery(
+    trpc.dashboard.getUser.queryOptions()
+  );
   const queryClient = useQueryClient();
   const { data: session } = useSession();
   const router = useRouter();
@@ -66,23 +64,8 @@ function ProfileUpdateForm() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [open, setOpen] = useState(false);
 
-  const updateUserMutation = useMutation({
-    mutationFn: async (data: profileSchema) => {
-      const res = await fetch("/api/update-profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.message || "Failed to update profile");
-      }
-
-      return res.json();
-    },
+  const updateProfile = useMutation({
+    ...trpc.dashboard.updateProfile.mutationOptions(),
     onMutate: () => {
       setIsLoading(true);
       toast.loading("Updating profile...", {
@@ -95,12 +78,13 @@ function ProfileUpdateForm() {
       toast.success("Profile updated");
       setIsEditing(false);
     },
-    onError: (error: Error) => {
+    onError: (error) => {
       setIsLoading(false);
       toast.dismiss("update-profile");
       toast.error("Failed to update profile", {
-        description: (error as Error).message,
+        description: error.message,
       });
+      console.log(error.message);
     },
     onSettled: () => {
       queryClient.invalidateQueries({
@@ -131,7 +115,7 @@ function ProfileUpdateForm() {
   } = useForm<profileSchema>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      fullName: "",
+      name: "",
       gender: undefined,
       phoneNumber: "",
       domicile: "",
@@ -139,8 +123,8 @@ function ProfileUpdateForm() {
       major: "",
       education: undefined,
       semester: 1,
-      birthDate: user?.birthDate ? new Date(user.birthDate) : undefined,
-      imageUrl: "",
+      image: "",
+      birthDate: user?.birthDate ? new Date(user?.birthDate) : undefined,
     },
   });
 
@@ -148,7 +132,7 @@ function ProfileUpdateForm() {
     if (session?.user) {
       setTimeout(() => {
         reset({
-          fullName: user?.name as string,
+          name: user?.name as string,
           phoneNumber: user?.phoneNumber ?? "",
           gender: user?.gender ?? undefined,
           domicile: user?.domicile ?? "",
@@ -157,7 +141,7 @@ function ProfileUpdateForm() {
           education: user?.education ?? undefined,
           semester: (user?.semester as unknown as number) ?? 1,
           birthDate: user?.birthDate ? new Date(user.birthDate) : undefined,
-          imageUrl: user?.image ?? "",
+          image: user?.image ?? "",
         });
       }, 500);
     }
@@ -168,11 +152,10 @@ function ProfileUpdateForm() {
   async function onSubmit(formData: profileSchema) {
     const data = {
       ...formData,
-      name: formData.fullName,
       email: session?.user?.email,
     };
     console.log("Form data: ", data);
-    updateUserMutation.mutate(data);
+    updateProfile.mutate(data);
   }
 
   return (
@@ -202,7 +185,16 @@ function ProfileUpdateForm() {
                 variant="outline"
                 type="button"
                 className="cursor-pointer"
-                onClick={() => setIsEditing((prev) => !prev)}
+                onClick={() =>
+                  setIsEditing((prev) => {
+                    if (prev) {
+                      setTimeout(() => {
+                        reset();
+                      }, 500);
+                    }
+                    return !prev;
+                  })
+                }
               >
                 {isEditing ? "Cancel" : "Edit Profile"}
               </Button>
@@ -212,7 +204,7 @@ function ProfileUpdateForm() {
         <div className="mt-6 space-y-6 grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-5">
           <div className="space-y-2 hidden">
             <Controller
-              name="imageUrl"
+              name="image"
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
@@ -234,7 +226,7 @@ function ProfileUpdateForm() {
           <div className="grid grid-cols-1 gap-3">
             <div className="space-y-2">
               <Controller
-                name="fullName"
+                name="name"
                 control={control}
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>

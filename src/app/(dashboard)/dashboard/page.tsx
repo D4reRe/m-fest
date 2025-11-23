@@ -1,10 +1,8 @@
-import { getUserProfile } from "@/action/user.action";
 import { Competitions } from "@/components/dashboard/competition";
 import { Events } from "@/components/dashboard/events";
 import { TeamMembers } from "@/components/dashboard/team-member";
 import { UserInfo } from "@/components/dashboard/user-info";
 import { UserProfile } from "@/components/dashboard/user-profile";
-import { User } from "@/types/types";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,8 +10,7 @@ export const metadata: Metadata = {
   description: "Mechanical Festival 2026",
 };
 
-async function DashboardHomePage() {
-  const user = (await getUserProfile()) as User;
+export default function DashboardHomePage() {
   return (
     <div className="min-h-screen bg-transparent">
       <main className="relative z-10">
@@ -31,10 +28,10 @@ async function DashboardHomePage() {
             {/* Profile Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <div className="lg:col-span-1">
-                <UserProfile user={user} />
+                <UserProfile />
               </div>
               <div className="lg:col-span-2">
-                <UserInfo user={user} />
+                <UserInfo />
               </div>
             </div>
 
@@ -45,12 +42,10 @@ async function DashboardHomePage() {
             </div>
 
             {/* Team Members */}
-            <TeamMembers user={user} />
+            <TeamMembers />
           </div>
         </div>
       </main>
     </div>
   );
 }
-
-export default DashboardHomePage;

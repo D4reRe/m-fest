@@ -16,19 +16,21 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { User } from "@/types/types";
 import TeamFallback from "./TeamFallback";
+import { getUserProfile } from "@/action/user.action";
 
-export function TeamMembers({ user }: { user: User }) {
+export function TeamMembers() {
   return (
     <section className="glass p-6">
       <h3 className="text-3xl font-bold text-foreground mb-6">Teams</h3>
       <Suspense fallback={<TeamFallback />}>
-        <FetchUserTeams user={user} />
+        <FetchUserTeams />
       </Suspense>
     </section>
   );
 }
 
-async function FetchUserTeams({ user }: { user: User }) {
+async function FetchUserTeams() {
+  const user = (await getUserProfile()) as User;
   const teams = await db.team.findMany({
     where: {
       members: {

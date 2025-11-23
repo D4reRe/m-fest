@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export const profileSchema = z.object({
-  fullName: z.string().min(5),
+  name: z.string().min(5),
   gender: z.enum(["Male", "Female"]),
   phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
   domicile: z.string().min(1, "Domicile is required"),
@@ -12,8 +12,8 @@ export const profileSchema = z.object({
     .number<number>()
     .min(1, "Minimum semester is 1")
     .max(8, "Maximum semester is 8"),
-  birthDate: z.date({ error: "Invalid date" }),
-  imageUrl: z.string(),
+  birthDate: z.coerce.date<Date>(),
+  image: z.string(),
 });
 
 export type profileSchema = z.infer<typeof profileSchema>;
@@ -29,6 +29,8 @@ export type documentsSchema = z.infer<typeof documentsSchema>;
 
 export const submitFileSchema = z.object({
   fileUrl: z.string().min(1, "File is required"),
+  competitionName: z.string().min(1, "Competition name is required"),
+  leaderUserId: z.string().min(1, "Leader user id is required"),
 });
 
 export type submitFileSchema = z.infer<typeof submitFileSchema>;
