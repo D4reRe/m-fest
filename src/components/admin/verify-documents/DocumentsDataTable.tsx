@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  // DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -35,139 +36,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@example.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@example.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@example.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@example.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@example.com",
-  },
-];
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
+import { useTRPC } from "@/utils/trpc";
+import { Verification } from "@/types/types";
+import { useQuery } from "@tanstack/react-query";
+import Link from "next/link";
 
 export function DocumentsDataTable() {
+  const trpc = useTRPC();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -175,9 +50,204 @@ export function DocumentsDataTable() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const { data } = useQuery(trpc.admin.getAllVerification.queryOptions());
+  const { data: users } = useQuery(trpc.admin.getUsers.queryOptions());
+  const { data: teamMembers } = useQuery(
+    trpc.admin.getAllTeamMembers.queryOptions()
+  );
+
+  const columns: ColumnDef<Verification>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+
+    {
+      accessorKey: "verifiedStatus",
+      header: "Verified Status",
+      cell: ({ row }) => {
+        const userId = row.getValue("userId") as string;
+        const user = users?.find((user) => user.id === userId);
+
+        return (
+          <span className="capitalize">
+            {user?.verified ? "Verified" : "Not Verified"}
+          </span>
+        );
+      },
+    },
+    {
+      accessorKey: "status",
+      header: "Document Status",
+      cell: ({ row }) => (
+        <span className="capitalize">{row.getValue("status")}</span>
+      ),
+    },
+
+    {
+      accessorKey: "userId",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          User Id <ArrowUpDown />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <span className="lowercase">{row.getValue("userId")}</span>
+      ),
+    },
+    {
+      accessorKey: "userName",
+      header: "User Name",
+      cell: ({ row }) => {
+        const userId = row.getValue("userId") as string;
+        const user = users?.find((user) => user.id === userId);
+        return <span>{user?.name}</span>;
+      },
+    },
+    {
+      accessorKey: "userEmail",
+      header: "User Email",
+      cell: ({ row }) => {
+        const userId = row.getValue("userId") as string;
+        const user = users?.find((user) => user.id === userId);
+        return <span>{user?.email}</span>;
+      },
+    },
+    {
+      accessorKey: "userInstitution",
+      header: "User Institution",
+      cell: ({ row }) => {
+        const userId = row.getValue("userId") as string;
+        const user = users?.find((user) => user.id === userId);
+        return <span>{user?.institution}</span>;
+      },
+    },
+    {
+      accessorKey: "userIdentityCard",
+      header: "Identity Card",
+      cell: ({ row }) => {
+        const userId = row.getValue("userId") as string;
+        const identityCardUrl = data?.find(
+          (user) => user.userId === userId
+        )?.identityCardImageUrl;
+        return (
+          <Link
+            href={identityCardUrl as string}
+            className="underline italic"
+            target="_blank"
+          >
+            Identity Card
+          </Link>
+        );
+      },
+    },
+    {
+      accessorKey: "userTwibbon",
+      header: "Twibbon",
+      cell: ({ row }) => {
+        const userId = row.getValue("userId") as string;
+        const twibbonUrl = data?.find(
+          (user) => user.userId === userId
+        )?.twibbonImageUrl;
+        return (
+          <Link
+            href={twibbonUrl as string}
+            className="underline italic"
+            target="_blank"
+          >
+            Twibbon
+          </Link>
+        );
+      },
+    },
+    {
+      accessorKey: "userFollowIg",
+      header: "Follow IG",
+      cell: ({ row }) => {
+        const userId = row.getValue("userId") as string;
+        const followIgUrl = data?.find(
+          (user) => user.userId === userId
+        )?.followIgImageUrl;
+        return (
+          <Link
+            href={followIgUrl as string}
+            className="underline italic"
+            target="_blank"
+          >
+            Follow IG
+          </Link>
+        );
+      },
+    },
+    // {
+    //   accessorKey: "createdAt",
+    //   header: "Created",
+    //   cell: ({ row }) => {
+    //     const date = row.getValue("createdAt") as Date;
+    //     return <span>{new Date(date).toLocaleString()}</span>;
+    //   },
+    // },
+
+    // {
+    //   accessorKey: "updatedAt",
+    //   header: "Updated",
+    //   cell: ({ row }) => {
+    //     const date = row.getValue("updatedAt") as Date;
+    //     return <span>{new Date(date).toLocaleString()}</span>;
+    //   },
+    // },
+
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(item.id)}
+              >
+                Copy payment ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View customer</DropdownMenuItem>
+              <DropdownMenuItem>View payment details</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const table = useReactTable({
-    data,
+    data: data ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -200,9 +270,11 @@ export function DocumentsDataTable() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("userEmail")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("userEmail")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

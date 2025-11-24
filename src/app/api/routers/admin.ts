@@ -42,6 +42,10 @@ export const adminRouter = router({
     });
     return teams;
   }),
+  getAllTeamMembers: adminProcedure.query(async () => {
+    const teamMembers = await db.teamMember.findMany();
+    return teamMembers;
+  }),
   getRegistrations: adminProcedure.query(async () => {
     const totalRegistration = await db.compRegistration.findMany();
     return totalRegistration;

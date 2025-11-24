@@ -144,7 +144,6 @@ export type Invoices = {
 export type Verification = {
   id: string;
   userId: string;
-  userEmail: string;
   IdentityCardImageUrl: string | null;
   twibbonImageUrl: string | null;
   followIgImageUrl: string | null;
