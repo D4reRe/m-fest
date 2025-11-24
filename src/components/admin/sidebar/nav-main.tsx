@@ -24,7 +24,7 @@ export function NavMain({ items }: NavMainProps) {
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   tooltip={item.title}
-                  className={`hover:bg-white/30 ${
+                  className={`hover:bg-white/30 cursor-pointer ${
                     pathname === item.url ? "bg-white/15" : ""
                   }`}
                 >

@@ -84,7 +84,7 @@ function TeamForm() {
           `Duplicate emails detected: ${[...new Set(duplicates)].join(", ")}`
         );
         context.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           message: `Duplicate emails detected: ${[...new Set(duplicates)].join(
             ", "
           )}`,

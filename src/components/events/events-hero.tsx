@@ -14,7 +14,7 @@ import Image from "next/image";
 export default function ContentSection() {
   return (
     <section className="pt-16 pb-8 md:pt-32 md:pb-16">
-      <BlurFade inView delay={1.2}>
+      <BlurFade inView delay={0.2}>
         <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-12">
           <div className="mx-auto max-w-xl space-y-6 text-center md:space-y-12">
             <h2 className="text-balance text-4xl font-medium lg:text-5xl">

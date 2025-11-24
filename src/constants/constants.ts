@@ -138,7 +138,7 @@ export const dataNavSidebar = {
 export const dataNavSidebarAdmin = {
   navMain: [
     {
-      title: "Dashboard",
+      title: "Back to Home Dashboard",
       url: "/dashboard",
       icon: IconDashboard,
     },
@@ -191,7 +191,7 @@ export const dataNavSidebarAdmin = {
 
 export const adminMenus = [
   {
-    title: "Dashboard",
+    title: "Home Dashboard",
     url: "/dashboard",
   },
   {

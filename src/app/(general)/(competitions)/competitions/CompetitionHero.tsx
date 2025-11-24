@@ -6,7 +6,7 @@ import { BlurFade } from "@/components/ui/blur-fade";
 export default function CompetitionsHero() {
   return (
     <section className="overflow-hidden py-16 md:py-32">
-      <BlurFade inView delay={1.2}>
+      <BlurFade inView delay={0.2}>
         <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-12">
           <div className="relative z-10 max-w-2xl">
             <h2 className="text-4xl font-semibold lg:text-5xl">

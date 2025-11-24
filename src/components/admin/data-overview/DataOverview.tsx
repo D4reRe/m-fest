@@ -9,10 +9,12 @@ import {
 } from "@tabler/icons-react";
 import { Users } from "lucide-react";
 import { PaymentsChartLine } from "./PaymentGraph";
-import { useQuery } from "@tanstack/react-query";
+import { useIsFetching, useQuery } from "@tanstack/react-query";
+import { DashboardSkeleton } from "../DashboardSkeleton";
 
 export default function DataOverview() {
   const trpc = useTRPC();
+  const isLoading = useIsFetching();
   const { data: users } = useQuery(trpc.admin.getUsers.queryOptions());
   const { data: teams } = useQuery(trpc.admin.getTeams.queryOptions());
   const { data: registrations } = useQuery(
@@ -22,6 +24,8 @@ export default function DataOverview() {
     trpc.admin.getEventsRegistration.queryOptions()
   );
   const { data: invoices } = useQuery(trpc.admin.getInvoices.queryOptions());
+
+  if (isLoading) return <DashboardSkeleton />;
 
   return (
     <section>

@@ -1,10 +1,9 @@
-import { getUserProfile } from "@/action/user.action";
 import { db } from "@/server/db";
-import { router, protectedProcedure } from "@/server/api/trpc";
+import { router, adminProcedure } from "@/server/api/trpc";
 import { z } from "zod";
 
 export const adminRouter = router({
-  getUsers: protectedProcedure.query(async () => {
+  getUsers: adminProcedure.query(async () => {
     const users = await db.user.findMany({
       select: {
         id: true,
@@ -25,7 +24,7 @@ export const adminRouter = router({
     });
     return users;
   }),
-  getTeams: protectedProcedure.query(async () => {
+  getTeams: adminProcedure.query(async () => {
     const teams = await db.team.findMany({
       select: {
         id: true,
@@ -43,15 +42,15 @@ export const adminRouter = router({
     });
     return teams;
   }),
-  getRegistrations: protectedProcedure.query(async () => {
+  getRegistrations: adminProcedure.query(async () => {
     const totalRegistration = await db.compRegistration.findMany();
     return totalRegistration;
   }),
-  getEventsRegistration: protectedProcedure.query(async () => {
+  getEventsRegistration: adminProcedure.query(async () => {
     const totalEventRegistration = await db.eventRegistration.findMany();
     return totalEventRegistration;
   }),
-  getInvoices: protectedProcedure.query(async () => {
+  getInvoices: adminProcedure.query(async () => {
     const invoices = await db.payment.findMany();
     return invoices;
   }),

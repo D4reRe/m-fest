@@ -36,11 +36,11 @@ export function NavMain({
             <Link href={"/admin"} prefetch>
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  tooltip="Admin Area"
+                  tooltip="Admin Panel"
                   className={`hover:bg-white/30 cursor-pointer`}
                 >
                   <Key className="w-4 h-4" />
-                  <span>Admin Area</span>
+                  <span>Admin Panel</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </Link>
@@ -49,11 +49,11 @@ export function NavMain({
             <Link href={"/admin"} prefetch>
               <SidebarMenuItem>
                 <SidebarMenuButton
-                  tooltip="Admin Area"
+                  tooltip="Admin Panel"
                   className={`hover:bg-white/30 cursor-pointer`}
                 >
                   <Key className="w-4 h-4" />
-                  <span>Admin Area</span>
+                  <span>Admin Panel</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             </Link>
