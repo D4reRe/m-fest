@@ -1,6 +1,7 @@
 import {
   IconConfetti,
   IconDashboard,
+  IconDatabase,
   IconFileText,
   IconHelp,
   IconInvoice,
@@ -172,6 +173,11 @@ export const dataNavSidebarAdmin = {
       url: "/admin/payments",
       icon: IconInvoice,
     },
+    {
+      title: "Database",
+      url: "/admin/database",
+      icon: IconDatabase,
+    },
   ],
   // navSecondary: [
   //   {
@@ -217,6 +223,10 @@ export const adminMenus = [
   {
     title: "Payments & Invoices",
     url: "/admin/payments",
+  },
+  {
+    title: "Database",
+    url: "/admin/database",
   },
 ];
 

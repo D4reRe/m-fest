@@ -165,7 +165,7 @@ model Verification {
   followIgVerified         Boolean? @default(false)
 
   status                    VerificationStatus   @default(NOT_SUBMITTED) 
-  user                      User     @relation(fields: [userId], references: [id])
+  user                      User                 @relation(fields: [userId], references: [id])
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
 }
