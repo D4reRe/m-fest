@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/general/Navbar";
 import FooterSection from "@/components/general/footer";
+import HelpButton from "../help-button";
 
 export const metadata: Metadata = {
   title: "Mechanical Festival 2026",
@@ -14,6 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     >
       <Navbar />
       {children}
+      <HelpButton />
       <FooterSection />
     </main>
   );

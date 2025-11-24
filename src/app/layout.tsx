@@ -31,7 +31,6 @@ export default function RootLayout({
               >
                 <NextTopLoader showSpinner={false} height={3} />
                 {children}
-
                 <Toaster />
               </ThemeProvider>
             </SessionProviders>

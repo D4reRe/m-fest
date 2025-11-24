@@ -1,3 +1,4 @@
+import HelpButton from "@/app/help-button";
 import { AppSidebar } from "@/components/dashboard/sidebar/app-sidebar";
 import { SiteHeader } from "@/components/dashboard/sidebar/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
@@ -20,6 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <SiteHeader />
 
         {children}
+        <HelpButton />
       </SidebarInset>
     </SidebarProvider>
   );
