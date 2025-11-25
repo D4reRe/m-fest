@@ -307,10 +307,13 @@ export function DocumentsDataTable() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Columns</DropdownMenuLabel>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
                     setFilterColumn("userId");
+                    table.getColumn("userId")?.setFilterValue("");
+                    table.resetColumnFilters();
                   }}
                 >
                   userId
@@ -319,6 +322,8 @@ export function DocumentsDataTable() {
                   className="cursor-pointer"
                   onClick={() => {
                     setFilterColumn("userName");
+                    table.getColumn("userName")?.setFilterValue("");
+                    table.resetColumnFilters();
                   }}
                 >
                   userName
@@ -327,6 +332,8 @@ export function DocumentsDataTable() {
                   className="cursor-pointer"
                   onClick={() => {
                     setFilterColumn("userEmail");
+                    table.getColumn("userEmail")?.setFilterValue("");
+                    table.resetColumnFilters();
                   }}
                 >
                   userEmail
@@ -335,6 +342,8 @@ export function DocumentsDataTable() {
                   className="cursor-pointer"
                   onClick={() => {
                     setFilterColumn("userInstitution");
+                    table.getColumn("userInstitution")?.setFilterValue("");
+                    table.resetColumnFilters();
                   }}
                 >
                   userInstitution
