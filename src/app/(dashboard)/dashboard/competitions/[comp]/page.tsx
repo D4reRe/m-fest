@@ -41,6 +41,9 @@ async function FetchCompForm({
   params: Promise<{ comp: string }>;
 }) {
   const { comp } = await params;
+  const submissionDeadline = competitions.find(
+    (competition) => competition.abbreviation === comp.toUpperCase()
+  )?.submissionDeadline;
   if (comp === "STEM") {
     return (
       // Proctor Exam Here
@@ -82,19 +85,6 @@ async function FetchCompForm({
                 <br />
                 Here is the submission details for {comp.toUpperCase()} 2026.
                 Also there are attached files you need to see.
-              </p>
-              <p className="mt-3">
-                <span className="font-semibold">DEADLINE :</span>{" "}
-                {comp.toUpperCase() === "BCC"
-                  ? submissionDeadlineBCC
-                  : comp.toUpperCase() === "IPPC"
-                    ? submissionDeadlineIPPC
-                    : comp.toUpperCase() === "PDC"
-                      ? submissionDeadlinePDC
-                      : comp.toUpperCase() === "STEM"
-                        ? ""
-                        : null}{" "}
-                at 23.59
               </p>
               <p className="mt-3">
                 Good luck!
@@ -225,9 +215,11 @@ async function FetchCompForm({
             </div>
           </div>
         </div>
-        <div className="p-6 bg-transparent ">
-          <SubmitForm comp={comp} />
-        </div>
+        {submissionDeadline && new Date() < submissionDeadline && (
+          <div className="p-6 bg-transparent ">
+            <SubmitForm comp={comp} />
+          </div>
+        )}
       </div>
     </section>
   );
