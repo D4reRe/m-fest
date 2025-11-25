@@ -13,7 +13,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { Loader2, MoreHorizontal, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -24,7 +24,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  // DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -37,9 +36,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTRPC } from "@/utils/trpc";
-import { Verification } from "@/types/types";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
 
 export function DocumentsDataTable() {
   const trpc = useTRPC();
@@ -47,16 +49,33 @@ export function DocumentsDataTable() {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const [filterColumn, setFilterColumn] = React.useState<string>("userEmail");
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const { data } = useQuery(trpc.admin.getAllVerification.queryOptions());
+  const queryClient = useQueryClient();
+  const {
+    data: datas,
+    isLoading,
+    isFetching,
+  } = useQuery(trpc.admin.getAllVerification.queryOptions());
   const { data: users } = useQuery(trpc.admin.getUsers.queryOptions());
-  const { data: teamMembers } = useQuery(
-    trpc.admin.getAllTeamMembers.queryOptions()
-  );
+  const unified = React.useMemo(() => {
+    if (!datas || !users) return [];
 
-  const columns: ColumnDef<Verification>[] = [
+    return datas.map((data) => ({
+      ...data,
+      user: users.find((user) => user.id === data.userId) ?? null,
+    }));
+  }, [datas, users]);
+
+  // type of array
+  // type Unified = typeof unified
+
+  // type of one array element
+  type Unified = (typeof unified)[number];
+
+  const columns: ColumnDef<Unified>[] = [
     {
       id: "select",
       header: ({ table }) => (
@@ -80,21 +99,27 @@ export function DocumentsDataTable() {
 
     {
       accessorKey: "verifiedStatus",
-      header: "Verified Status",
-      cell: ({ row }) => {
-        const userId = row.getValue("userId") as string;
-        const user = users?.find((user) => user.id === userId);
-
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.userId);
+        return user?.verified ? "Verified" : "Not Verified";
+      },
+      header: ({ column }) => {
         return (
-          <span className="capitalize">
-            {user?.verified ? "Verified" : "Not Verified"}
-          </span>
+          <DataTableColumnHeader column={column} title="Verified Status" />
         );
       },
+      cell: ({ getValue }) => (
+        <span className="capitalize">{getValue<string>()}</span>
+      ),
+      filterFn: "includesString",
     },
     {
       accessorKey: "status",
-      header: "Document Status",
+      header: ({ column }) => {
+        return (
+          <DataTableColumnHeader column={column} title="Document Status" />
+        );
+      },
       cell: ({ row }) => (
         <span className="capitalize">{row.getValue("status")}</span>
       ),
@@ -102,60 +127,71 @@ export function DocumentsDataTable() {
 
     {
       accessorKey: "userId",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          User Id <ArrowUpDown />
-        </Button>
-      ),
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.userId);
+        return user?.id ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="User Id" />;
+      },
       cell: ({ row }) => (
         <span className="lowercase">{row.getValue("userId")}</span>
       ),
+      filterFn: "includesString",
     },
     {
       accessorKey: "userName",
-      header: "User Name",
-      cell: ({ row }) => {
-        const userId = row.getValue("userId") as string;
-        const user = users?.find((user) => user.id === userId);
-        return <span>{user?.name}</span>;
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="User Name" />;
       },
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.userId);
+        return user?.name ?? "";
+      },
+      cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+      filterFn: "includesString",
     },
     {
       accessorKey: "userEmail",
-      header: "User Email",
-      cell: ({ row }) => {
-        const userId = row.getValue("userId") as string;
-        const user = users?.find((user) => user.id === userId);
-        return <span>{user?.email}</span>;
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="User Email" />;
       },
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.userId);
+        return user?.email ?? "";
+      },
+      cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+      filterFn: "includesString",
     },
     {
       accessorKey: "userInstitution",
-      header: "User Institution",
-      cell: ({ row }) => {
-        const userId = row.getValue("userId") as string;
-        const user = users?.find((user) => user.id === userId);
-        return <span>{user?.institution}</span>;
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.userId);
+        return user?.institution ?? "";
       },
+      header: ({ column }) => {
+        return (
+          <DataTableColumnHeader column={column} title="User Institution" />
+        );
+      },
+      cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+      filterFn: "includesString",
     },
     {
       accessorKey: "userIdentityCard",
       header: "Identity Card",
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
-        const identityCardUrl = data?.find(
+        const identityCardUrl = datas?.find(
           (user) => user.userId === userId
         )?.identityCardImageUrl;
         return (
           <Link
-            href={identityCardUrl as string}
-            className="underline italic"
+            href={(identityCardUrl as string) ?? ""}
+            className={cn(identityCardUrl ? "underline italic font-bold" : "")}
             target="_blank"
           >
-            Identity Card
+            {identityCardUrl ? "View" : "No File"}
           </Link>
         );
       },
@@ -165,16 +201,16 @@ export function DocumentsDataTable() {
       header: "Twibbon",
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
-        const twibbonUrl = data?.find(
+        const twibbonUrl = datas?.find(
           (user) => user.userId === userId
         )?.twibbonImageUrl;
         return (
           <Link
-            href={twibbonUrl as string}
-            className="underline italic"
+            href={(twibbonUrl as string) ?? ""}
+            className={cn(twibbonUrl ? "underline italic font-bold" : "")}
             target="_blank"
           >
-            Twibbon
+            {twibbonUrl ? "View" : "No File"}
           </Link>
         );
       },
@@ -184,38 +220,20 @@ export function DocumentsDataTable() {
       header: "Follow IG",
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
-        const followIgUrl = data?.find(
+        const followIgUrl = datas?.find(
           (user) => user.userId === userId
         )?.followIgImageUrl;
         return (
           <Link
-            href={followIgUrl as string}
-            className="underline italic"
+            href={(followIgUrl as string) ?? ""}
+            className={cn(followIgUrl ? "underline italic font-bold" : "")}
             target="_blank"
           >
-            Follow IG
+            {followIgUrl ? "View" : "No File"}
           </Link>
         );
       },
     },
-    // {
-    //   accessorKey: "createdAt",
-    //   header: "Created",
-    //   cell: ({ row }) => {
-    //     const date = row.getValue("createdAt") as Date;
-    //     return <span>{new Date(date).toLocaleString()}</span>;
-    //   },
-    // },
-
-    // {
-    //   accessorKey: "updatedAt",
-    //   header: "Updated",
-    //   cell: ({ row }) => {
-    //     const date = row.getValue("updatedAt") as Date;
-    //     return <span>{new Date(date).toLocaleString()}</span>;
-    //   },
-    // },
-
     {
       id: "actions",
       enableHiding: false,
@@ -232,13 +250,13 @@ export function DocumentsDataTable() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(item.id)}
+                onClick={() => navigator.clipboard.writeText(item.userId)}
               >
-                Copy payment ID
+                Copy user ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
+              <DropdownMenuItem>View user</DropdownMenuItem>
+              <DropdownMenuItem>View document details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -247,7 +265,7 @@ export function DocumentsDataTable() {
   ];
 
   const table = useReactTable({
-    data: data ?? [],
+    data: unified ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -268,44 +286,81 @@ export function DocumentsDataTable() {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={
-            (table.getColumn("userEmail")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("userEmail")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
+        <div className="flex gap-2">
+          <Input
+            placeholder="Filter..."
+            value={
+              (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(filterColumn)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm w-full"
+          />
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-fit cursor-pointer">
+                  <span className="">Filter by column:</span>
+                  <span className="capitalize">{filterColumn}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Columns</DropdownMenuLabel>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("userId");
+                  }}
+                >
+                  userId
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("userName");
+                  }}
+                >
+                  userName
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("userEmail");
+                  }}
+                >
+                  userEmail
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("userInstitution");
+                  }}
+                >
+                  userInstitution
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <Button
+            variant="outline"
+            className={cn(
+              "cursor-pointer w-fit",
+              isFetching && "cursor-not-allowed"
+            )}
+            disabled={isFetching}
+            onClick={() => queryClient.invalidateQueries()}
+          >
+            <RefreshCw
+              className={cn("w-4 h-4", {
+                "animate-spin": isFetching,
               })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+            />
+          </Button>
+        </div>
+        <DataTableViewOptions table={table} />
       </div>
-      <div className="overflow-hidden rounded-md border">
+      <div className="overflow-hidden rounded-md border mb-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -342,6 +397,17 @@ export function DocumentsDataTable() {
                   ))}
                 </TableRow>
               ))
+            ) : isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  <span className="flex justify-center items-center">
+                    <Loader2 className="animate-spin w-6 h-6" />
+                  </span>
+                </TableCell>
+              </TableRow>
             ) : (
               <TableRow>
                 <TableCell
@@ -355,30 +421,7 @@ export function DocumentsDataTable() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="text-muted-foreground flex-1 text-sm">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+      <DataTablePagination table={table} />
     </div>
   );
 }
