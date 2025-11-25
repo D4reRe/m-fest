@@ -9,7 +9,7 @@ import {
 import { competitions } from "@/lib/competition";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRightIcon, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -25,6 +25,7 @@ import { db } from "@/server/db";
 import { Suspense } from "react";
 import CompetitionListSkeleton from "../CompetitionListSkeleton";
 import { IconListDetails } from "@tabler/icons-react";
+import CountdownClient from "./CountdownClient";
 
 export default function RegisteredCompetitionList() {
   return (
@@ -102,20 +103,29 @@ async function FetchUserRegisteredCompetitions() {
             </div>
           </CardContent>
           <CardFooter className="flex justify-center mt-auto">
-            <Button
-              variant="default"
-              size="sm"
-              className="gap-1 pr-1.5 cursor-pointer"
-            >
-              <Link
-                href={`/dashboard/competitions/${comp.abbreviation.toUpperCase()}`}
-                prefetch
-                className="flex items-center gap-2"
+            {comp.compOpenCase ? (
+              <CountdownClient
+                date={comp.compOpenCase}
+                comp={comp.abbreviation}
+                description="Case opened in"
+                type="compOpenCase"
+              />
+            ) : (
+              <Button
+                variant="default"
+                size="sm"
+                className="gap-1 pr-1.5 cursor-pointer"
               >
-                <span>View Details</span>
-                <ChevronRight className="size-4" />
-              </Link>
-            </Button>
+                <Link
+                  href={`/dashboard/competitions/${comp.abbreviation.toUpperCase()}`}
+                  prefetch
+                  className="flex items-center gap-2"
+                >
+                  <span>View Details</span>
+                  <ChevronRight className="size-4" />
+                </Link>
+              </Button>
+            )}
           </CardFooter>
         </Card>
       ))}

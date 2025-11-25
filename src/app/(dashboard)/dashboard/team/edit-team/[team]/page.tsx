@@ -25,10 +25,6 @@ export default function EditTeamPage({
             <h1 className="mb-1 mt-4 text-xl font-semibold text-start">
               Edit Team
             </h1>
-            <p className="text-sm text-start">
-              Edit your existing team, make sure to properly fill in all the
-              details.
-            </p>
             <p className="text-sm text-red-500 text-start font-bold mt-2">
               Team must be at least 3 members and maximum of 5 members.
             </p>
@@ -40,7 +36,15 @@ export default function EditTeamPage({
             <p className="text-sm text-red-500 text-start font-bold mt-2">
               Please make sure your members have signed up or logged in on our
               website and complete their profile before adding them to your
-              team.
+              team. Make sure all member&apos;s institution are from the same
+              institution.
+            </p>
+            <p className="text-sm text-red-500 text-start font-bold mt-2">
+              You just need input your member&apos;s email and their name and
+              institution will automatically fill in. if their institution
+              appears to be typo or not correct, or not correctly match with
+              your institution you can change manually by match it with your
+              institution.
             </p>
           </div>
           <Suspense fallback={<TeamFormSkeleton />}>

@@ -68,6 +68,7 @@
     "prisma-zod-generator": "^1.32.1",
     "qss": "^3.0.0",
     "react": "^19.2.0",
+    "react-countdown": "^2.3.6",
     "react-day-picker": "^9.11.1",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.65.0",

@@ -1,3 +1,4 @@
+import CountdownClient from "@/components/dashboard/competitions/CountdownClient";
 import SubmitForm from "@/components/dashboard/competitions/SubmitForm";
 import { Button } from "@/components/ui/button";
 import { LinkPreview } from "@/components/ui/link-preview";
@@ -170,19 +171,7 @@ async function FetchCompForm({
               Here is the submission details for {comp.toUpperCase()} 2026. Also
               there are attached files you need to see.
             </p>
-            <p className="mt-3">
-              <span className="font-semibold">DEADLINE :</span>{" "}
-              {comp.toUpperCase() === "BCC"
-                ? submissionDeadlineBCC
-                : comp.toUpperCase() === "IPPC"
-                  ? submissionDeadlineIPPC
-                  : comp.toUpperCase() === "PDC"
-                    ? submissionDeadlinePDC
-                    : comp.toUpperCase() === "STEM"
-                      ? ""
-                      : null}{" "}
-              at 23.59
-            </p>
+
             <p className="mt-3">
               Good luck!
               <br />
@@ -207,6 +196,32 @@ async function FetchCompForm({
                   Guidebook
                 </LinkPreview>
               </Button>
+            </div>
+            <p className="mt-3 text-red-600">
+              <span className="font-semibold">DEADLINE :</span>{" "}
+              {comp.toUpperCase() === "BCC"
+                ? submissionDeadlineBCC
+                : comp.toUpperCase() === "IPPC"
+                  ? submissionDeadlineIPPC
+                  : comp.toUpperCase() === "PDC"
+                    ? submissionDeadlinePDC
+                    : comp.toUpperCase() === "STEM"
+                      ? ""
+                      : null}{" "}
+              at 23.59
+            </p>
+            <div className="mt-6">
+              <CountdownClient
+                date={
+                  competitions.find(
+                    (competition) =>
+                      competition.abbreviation === comp.toUpperCase()
+                  )?.submissionDeadline as Date
+                }
+                comp={comp}
+                description="Submission Deadline"
+                type="submissionDeadline"
+              />
             </div>
           </div>
         </div>

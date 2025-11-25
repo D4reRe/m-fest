@@ -297,6 +297,7 @@ export default function SubmitForm({ comp }: { comp: string }) {
                 aria-invalid={fieldState.invalid}
                 type="text"
                 readOnly
+                hidden
                 disabled
               />
             )}
@@ -313,6 +314,7 @@ export default function SubmitForm({ comp }: { comp: string }) {
                 type="text"
                 readOnly
                 disabled
+                hidden
               />
             )}
           />

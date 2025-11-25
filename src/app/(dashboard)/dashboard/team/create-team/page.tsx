@@ -12,7 +12,7 @@ async function CreateTeamPage() {
       <div className="bg-transparent m-auto h-fit w-full max-w-5xl overflow-hidden rounded-[calc(var(--radius)+.125rem)] border shadow-md shadow-zinc-950/5 dark:[--color-muted:var(--color-zinc-900)]">
         <div className="bg-transparent -m-px rounded-[calc(var(--radius)+.125rem)] border p-8 pb-6">
           <div className="text-center">
-            <h1 className="mb-1 mt-4 text-xl font-semibold text-start">
+            <h1 className="mb-1 mt-4 text-3xl font-semibold text-start">
               Create Team
             </h1>
             <p className="text-sm text-start">Create your dream team!</p>
@@ -27,7 +27,15 @@ async function CreateTeamPage() {
             <p className="text-sm text-red-500 text-start font-bold mt-2">
               Please make sure your members have signed up or logged in on our
               website and complete their profile before adding them to your
-              team.
+              team. Make sure all member&apos;s institution are from the same
+              institution.
+            </p>
+            <p className="text-sm text-red-500 text-start font-bold mt-2">
+              You just need input your member&apos;s email and their name and
+              institution will automatically fill in. if their institution
+              appears to be typo or not correct, or not correctly match with
+              your institution you can change manually by match it with your
+              institution.
             </p>
           </div>
           <TeamForm />

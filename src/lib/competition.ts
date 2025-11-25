@@ -21,6 +21,8 @@ export const competitions: {
   guideBook: string;
   icon: string;
   uploadThingRoute: string;
+  submissionDeadline: Date | null;
+  compOpenCase: Date | null;
 }[] = [
   {
     title: "Business Case Competition",
@@ -39,6 +41,8 @@ export const competitions: {
       "https://drive.google.com/file/d/1kjCYe7Q95CqQ0ZO-syeZsC_XyJrcApno/view?usp=drive_link",
     icon: "Zap",
     uploadThingRoute: "submitFileBCC",
+    submissionDeadline: new Date("2026-03-07T23:59:59"),
+    compOpenCase: new Date("2026-02-01T00:00:00"),
   },
 
   {
@@ -58,6 +62,8 @@ export const competitions: {
     isOpen: true,
     icon: "Cpu",
     uploadThingRoute: "submitFileIPPC",
+    submissionDeadline: new Date("2026-03-08T23:59:59"),
+    compOpenCase: null,
   },
   {
     title: "Pipeline Design Competition",
@@ -76,6 +82,8 @@ export const competitions: {
     isOpen: true,
     icon: "Lock",
     uploadThingRoute: "submitFilePDC",
+    submissionDeadline: new Date("2026-03-06T23:59:59"),
+    compOpenCase: new Date("2026-02-01T00:00:00"),
   },
   {
     title: "STEM Competition",
@@ -93,5 +101,7 @@ export const competitions: {
       "https://drive.google.com/file/d/1eGfmRZPEVHapgrbBgmbjFBPR5EOneAaI/view?usp=drive_link",
     icon: "Sparkles",
     uploadThingRoute: "submitFileSTEM",
+    submissionDeadline: null,
+    compOpenCase: null,
   },
 ];

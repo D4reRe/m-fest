@@ -108,7 +108,7 @@ async function FetchUserAvailableCompetitions() {
               className="gap-1 pr-1.5 cursor-pointer"
             >
               <Link
-                href={`/dashboard/team/register/${comp.abbreviation.toUpperCase()}`}
+                href={`/dashboard/team/register/${comp.abbreviation}`}
                 prefetch
                 className="flex items-center gap-2"
               >

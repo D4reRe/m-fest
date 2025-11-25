@@ -20,6 +20,10 @@ import { useTRPC } from "@/utils/trpc";
 
 function TeamForm({ team }: { team: Team }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [emailDuplicates, setEmailDuplicates] = useState<string[]>([]);
+  const [differentInstitutions, setDifferentInstitutions] = useState<string[]>(
+    []
+  );
   const router = useRouter();
   const trpc = useTRPC();
   const { data: user } = useQuery(trpc.dashboard.getUser.queryOptions());
@@ -59,29 +63,20 @@ function TeamForm({ team }: { team: Team }) {
         .filter((member) => member.institution !== user?.institution)
         .map((member) => member.name);
       if (duplicates.length > 0) {
-        toast.error(
-          `Duplicate emails detected: ${[...new Set(duplicates)].join(", ")}`
-        );
+        setEmailDuplicates(duplicates);
         context.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `Duplicate emails detected: ${[...new Set(duplicates)].join(
+          code: "custom",
+          message: `Duplicate emails detected ${[...new Set(duplicates)].join(
             ", "
           )}`,
           path: ["members"],
         });
       }
       if (differentInstitutions.length > 0) {
-        toast.error(
-          `Members from different Institutions detected: ${[
-            ...new Set(differentInstitutions),
-          ].join(", ")}`,
-          {
-            description: "All members must be from the same institution.",
-          }
-        );
+        setDifferentInstitutions(differentInstitutions);
         context.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `Duplicate Institutions detected: ${[
+          code: "custom",
+          message: `Different Institutions detected ${[
             ...new Set(duplicates),
           ].join(", ")}`,
           path: ["institutions"],
@@ -188,8 +183,34 @@ function TeamForm({ team }: { team: Team }) {
     }
   }
 
+  // @ts-expect-error error is working
+  const onError = (errors) => {
+    if (errors.members) {
+      toast.error(errors.members.message ?? "Duplicate email detected", {
+        description: `Email ${emailDuplicates.join(", ")} is already added.`,
+      });
+    }
+    if (errors.institutions) {
+      toast.error(
+        errors.institutions.message ?? "Institution validation failed",
+        {
+          description: (
+            <>
+              <p>{`One or more members have different Institutions detected: ${differentInstitutions.join(
+                ", "
+              )} `}</p>
+              <p>
+                Make sure the institution name is match with your institution.
+              </p>
+            </>
+          ),
+        }
+      );
+    }
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="">
+    <form onSubmit={handleSubmit(onSubmit, onError)} className="">
       <section>
         <div className="mt-6 space-y-6 grid grid-cols-1 gap-3 lg:gap-5">
           <div className="space-y-2">
@@ -198,11 +219,17 @@ function TeamForm({ team }: { team: Team }) {
               control={control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Team Name</FieldLabel>
+                  <FieldLabel
+                    htmlFor={field.name}
+                    className="font-bold text-xl"
+                  >
+                    Team Name
+                  </FieldLabel>
                   <Input
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    className="mb-12"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -419,7 +446,7 @@ function TeamForm({ team }: { team: Team }) {
                         id={field.name}
                         aria-invalid={fieldState.invalid}
                         readOnly={index === 0}
-                        disabled
+                        disabled={index === 0}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
@@ -473,7 +500,7 @@ function TeamForm({ team }: { team: Team }) {
                       Add Member
                     </Button>
                   )}
-                  {index !== 0 && index > 0 && (
+                  {index !== 0 && index > 2 && (
                     <Button
                       type="button"
                       variant={"destructive"}
