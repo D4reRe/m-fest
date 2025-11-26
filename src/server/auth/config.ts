@@ -1,6 +1,5 @@
 import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
-import Discord from "next-auth/providers/discord";
 import { db } from "../db";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import { Education, Gender, Role } from "@/types/types";
@@ -48,7 +47,7 @@ declare module "next-auth" {
 
 export const authConfig = {
   adapter: PrismaAdapter(db),
-  providers: [Google, Github, Discord],
+  providers: [Google, Github],
   pages: {
     signIn: "/login",
     error: "/auth-error",
