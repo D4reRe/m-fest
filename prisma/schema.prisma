@@ -56,6 +56,12 @@ enum VerificationStatus{
   ACCEPTED
 }
 
+enum TeamStatus{
+  NOT_REGISTERED
+  PENDING
+  ACCEPTED
+}
+
 model CompRegistration {
   id                String      @id @default(uuid())
   userId            String                                                      // Id User Leader
@@ -68,6 +74,7 @@ model CompRegistration {
   teamId            String?      @unique                                         // Specific Team to register
   paymentId         String       @unique                                         // Specific Payment to register
   statusOrder       String?      @default("PENDING")
+  teamStatus        TeamStatus? 
   competitionName CompetitionName
 
   submissionFileUrl String?
@@ -184,7 +191,8 @@ model Team {
   leaderPhoneNumber String?
   teamInstitution   String?
 
-  status        String?   @default("PENDING")
+  teamStatus    TeamStatus?   @default(NOT_REGISTERED)
+  status        String?      @default("PENDING")
   payment       Payment?     @relation(fields: [paymentId], references: [orderId])
 
 

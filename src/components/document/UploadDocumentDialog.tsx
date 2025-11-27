@@ -32,6 +32,7 @@ export default function UploadDocumentDialog({
   type,
   uploadThingRoute,
   setValue,
+  userId,
 }: UploadDocumentProps) {
   const [progress, setProgress] = useState<number | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
@@ -103,7 +104,7 @@ export default function UploadDocumentDialog({
         shouldValidate: true,
       });
       queryClient.invalidateQueries({
-        queryKey: trpc.dashboard.getUserDocuments.queryKey(),
+        queryKey: trpc.dashboard.getDocumentsByUserId.queryKey({ userId }),
       });
       setActiveDialog(null);
       setFiles([]);
@@ -240,7 +241,9 @@ export default function UploadDocumentDialog({
                 onClick={async () => {
                   setIsLoading(true);
                   const file = uploadCroppedFile as File;
-                  const utfileUrls = await startUpload([file]);
+                  const utfileUrls = await startUpload([file], {
+                    targetUserId: userId,
+                  });
                   if (!utfileUrls) {
                     setIsLoading(false);
                     toast.dismiss("presigning-url");
@@ -253,7 +256,9 @@ export default function UploadDocumentDialog({
                     });
                   }
                   queryClient.invalidateQueries({
-                    queryKey: trpc.dashboard.getUserDocuments.queryKey(),
+                    queryKey: trpc.dashboard.getDocumentsByUserId.queryKey({
+                      userId,
+                    }),
                   });
                   setActiveDialog(null);
                 }}
@@ -288,7 +293,11 @@ export default function UploadDocumentDialog({
                   variant={"default"}
                   className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
                   disabled={isLoading || isUploading}
-                  onClick={() => startUpload(files)}
+                  onClick={() =>
+                    startUpload(files, {
+                      targetUserId: userId,
+                    })
+                  }
                 >
                   Upload {files.length} file
                 </Button>
@@ -297,7 +306,11 @@ export default function UploadDocumentDialog({
                 <Button
                   variant={"default"}
                   className="cursor-pointer mt-2 sm:mt-0 sm:mr-auto"
-                  onClick={() => startUpload(files)}
+                  onClick={() =>
+                    startUpload(files, {
+                      targetUserId: userId,
+                    })
+                  }
                   disabled={true}
                 >
                   Upload

@@ -44,6 +44,12 @@ export enum VerificationStatus {
   ACCEPTED = "ACCEPTED",
 }
 
+export enum TeamStatus {
+  NOT_REGISTERED = "NOT_REGISTERED",
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+}
+
 export type DocumentType = "identityCard" | "twibbon" | "followIg";
 
 export type User = {
@@ -96,6 +102,7 @@ export type CompRegistration = {
 export type Team = {
   id: string;
   status: string | null;
+  teamStatus: TeamStatus;
   name: string | null;
   leaderUserId: string | null;
   leaderEmail: string | null;
@@ -191,10 +198,12 @@ export type UploadDocumentProps = {
   type: UploadThingRoute;
   uploadThingRoute: UploadThingRoute;
   setValue: UseFormSetValue<{
+    userId: string;
     identityCard: string;
     twibbon: string;
     followIg: string;
   }>;
+  userId: string;
 };
 
 export type UploadDialogProps = {

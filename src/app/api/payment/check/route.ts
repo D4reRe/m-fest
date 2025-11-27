@@ -58,6 +58,7 @@ export async function POST(request: Request) {
         },
         data: {
           status: "SUCCESS",
+          teamStatus: "PENDING",
         },
       });
     }
@@ -82,6 +83,7 @@ export async function POST(request: Request) {
         },
         data: {
           status: status.statusMessage,
+          teamStatus: "PENDING",
         },
       });
     }

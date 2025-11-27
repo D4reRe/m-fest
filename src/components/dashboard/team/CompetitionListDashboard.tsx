@@ -77,7 +77,7 @@ async function FetchUserAvailableCompetitions() {
 
   // console.log("Registered competitions: ", competitionsList);
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 p-4 items-stretch my-2">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 items-stretch my-2">
       {competitionsList.map((comp) => (
         <Card
           key={comp.abbreviation}
@@ -90,16 +90,14 @@ async function FetchUserAvailableCompetitions() {
             </CardDescription>
           </CardHeader>
           <CardContent className="flex justify-center items-center grow my-auto">
-            <div className="w-full h-24 relative">
-              <Image
-                src={comp.logo}
-                alt={comp.title}
-                width={400}
-                height={400}
-                loading="lazy"
-                className="object-cover"
-              />
-            </div>
+            <Image
+              src={comp.logo}
+              alt={comp.title}
+              width={200}
+              height={200}
+              loading="lazy"
+              className="object-cover"
+            />
           </CardContent>
           <CardFooter className="flex justify-center mt-auto">
             <Button

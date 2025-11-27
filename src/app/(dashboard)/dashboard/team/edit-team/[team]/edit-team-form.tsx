@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Member, Team } from "@/types/types";
+import { Member, Team, User } from "@/types/types";
 import {
   Field,
   FieldContent,
@@ -397,20 +397,39 @@ function TeamForm({ team }: { team: Team }) {
                               const res = await fetch(
                                 `/api/user/by-email?email=${email}`
                               );
-                              const user = await res.json();
+                              const user = (await res.json()) as User;
 
                               if (res.ok && user) {
                                 toast.dismiss("checking-user");
+                                if (
+                                  !user?.gender ||
+                                  !user?.phoneNumber ||
+                                  !user?.domicile ||
+                                  !user?.birthDate ||
+                                  !user?.institution ||
+                                  !user?.education ||
+                                  !user?.major ||
+                                  !user?.semester
+                                ) {
+                                  toast.error(
+                                    "User is not completed their profile yet!",
+                                    {
+                                      description: `Please ask ${user.name} to complete their profile. Then try again.`,
+                                    }
+                                  );
+                                  return;
+                                }
                                 const userName = user.name;
+                                const userInstitution = user.institution;
                                 toast.success(
                                   `${userName} is a registered member with email ${email}`
                                 );
 
-                                // Update value of the members
+                                // Update value of the userName
                                 const values = getValues();
-                                values.members[index].name = userName;
+                                values.members[index].name = userName as string;
                                 values.members[index].institution =
-                                  user.institution;
+                                  userInstitution as string;
                                 reset(values);
                               } else {
                                 toast.dismiss("checking-user");

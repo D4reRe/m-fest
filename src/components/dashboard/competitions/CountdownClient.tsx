@@ -49,20 +49,20 @@ export default function CountdownClient({
           );
         } else {
           return (
-            <div className="flex flex-col items-center justify-center gap-5 sm:gap-3">
+            <div className="flex flex-col items-center justify-center gap-5 sm:gap-3 text-sm md:text-xs">
               <span className="text-center">
                 <p>{description}</p>
               </span>
               <div className="flex justify-center gap-4">
-                <div className="flex flex-col items-center border rounded-lg p-2">
+                <div className="flex flex-col items-center border rounded-lg p-2 md:p-1">
                   <p>{days}</p>
                   <p>Days</p>
                 </div>
-                <div className="flex flex-col items-center border rounded-lg p-2">
+                <div className="flex flex-col items-center border rounded-lg p-2 md:p-1">
                   <p>{hours}</p>
                   <p>Hours</p>
                 </div>
-                <div className="flex flex-col items-center border rounded-lg p-2">
+                <div className="flex flex-col items-center border rounded-lg p-2 md:p-1">
                   <p>{minutes}</p>
                   <p>Minutes</p>
                 </div>

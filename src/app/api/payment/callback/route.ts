@@ -59,7 +59,9 @@ export async function POST(req: Request) {
 
   await db.compRegistration.update({
     where: { paymentId: merchantOrderId },
-    data: { statusOrder: resultCode === "00" ? "SUCCESS" : "CANCELLED" },
+    data: {
+      statusOrder: resultCode === "00" ? "SUCCESS" : "CANCELLED",
+    },
   });
 
   const thisOrderComp = await db.payment.findUnique({
@@ -74,6 +76,7 @@ export async function POST(req: Request) {
       },
       data: {
         status: resultCode === "00" ? "SUCCESS" : "CANCELLED",
+        teamStatus: "PENDING",
       },
     });
   }

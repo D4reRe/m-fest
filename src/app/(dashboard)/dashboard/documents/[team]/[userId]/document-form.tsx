@@ -30,35 +30,19 @@ function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   }, [isLoading]);
 }
 
-function DocumentsForm() {
+function DocumentsForm({ userId }: { userId: string }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const trpc = useTRPC();
-  const { data: user, isFetched } = useQuery(
-    trpc.dashboard.getUser.queryOptions()
-  );
-
-  useEffect(() => {
-    if (!user) return;
-    const missing =
-      !user.gender ||
-      !user.phoneNumber ||
-      !user.domicile ||
-      !user.birthDate ||
-      !user.major ||
-      !user.institution ||
-      !user.education ||
-      !user.semester;
-    if (missing) {
-      router.push("/dashboard/profile?notif=incomplete_profile");
-    }
-  }, [isFetched, user, router]);
+  // const { data: user, isFetched } = useQuery(
+  //   trpc.dashboard.getUserById.queryOptions({ userId })
+  // );
 
   const {
     data,
     isLoading: isLoadingUserDocuments,
     isFetched: isFetchedUserDocuments,
-  } = useQuery(trpc.dashboard.getUserDocuments.queryOptions());
+  } = useQuery(trpc.dashboard.getDocumentsByUserId.queryOptions({ userId }));
   const queryClient = useQueryClient();
 
   console.log(data);
@@ -90,7 +74,7 @@ function DocumentsForm() {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: trpc.dashboard.getUserDocuments.queryKey(),
+        queryKey: trpc.dashboard.getDocumentsByUserId.queryKey({ userId }),
       });
       router.refresh();
     },
@@ -98,6 +82,7 @@ function DocumentsForm() {
   const { handleSubmit, control, setValue } = useForm<documentsSchema>({
     resolver: zodResolver(documentsSchema),
     defaultValues: {
+      userId,
       identityCard:
         documents?.find((document) => document.type === "identityCard")
           ?.imageUrl ?? "",
@@ -112,6 +97,7 @@ function DocumentsForm() {
 
   useEffect(() => {
     if (documents) {
+      setValue("userId", userId);
       setValue(
         "identityCard",
         documents?.find((document) => document.type === "identityCard")
@@ -128,13 +114,13 @@ function DocumentsForm() {
           ""
       );
     }
-  }, [documents, setValue]);
+  }, [documents, setValue, userId]);
 
   usePreventRefreshUserDuringUpload(isLoading);
 
   if (isFetchedUserDocuments)
     queryClient.invalidateQueries({
-      queryKey: trpc.dashboard.getUserDocuments.queryKey(),
+      queryKey: trpc.dashboard.getDocumentsByUserId.queryKey({ userId }),
     });
   if (isLoadingUserDocuments) return <DocumentFormSkeleton />;
 
@@ -188,6 +174,7 @@ function DocumentsForm() {
                     type={type as UploadThingRoute}
                     uploadThingRoute={uploadThingRoute as UploadThingRoute}
                     setValue={setValue}
+                    userId={userId}
                   />
                 ) : document.status === "PENDING" ? (
                   <p className="text-sm text-yellow-500">

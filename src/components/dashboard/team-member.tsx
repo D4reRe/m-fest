@@ -40,7 +40,13 @@ async function FetchUserTeams() {
       },
     },
     include: {
-      members: true,
+      members: {
+        include: {
+          user: {
+            include: { verification: true },
+          },
+        },
+      },
     },
   });
   if (!teams.length) {
@@ -122,26 +128,22 @@ async function FetchUserTeams() {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
                 {team.members
                   .sort((a, b) => (a.role === "Leader" ? -1 : 1))
-                  .map(async (member) => {
-                    const user = await db.user.findUnique({
-                      where: { id: member.userId },
-                    });
-
+                  .map((member) => {
                     return (
                       <div
-                        key={user?.id}
+                        key={member.user?.id}
                         className="glass-sm p-4 flex flex-col items-center text-center"
                       >
                         <UserAvatar
-                          src={user?.image as string}
-                          alt={user?.name as string}
+                          src={member.user?.image as string}
+                          alt={member.user?.name as string}
                           className="w-24 h-24 border-2 border-primary/50"
                         />
                         <h4 className="font-medium text-foreground text-sm mt-3 line-clamp-1">
-                          {user?.name}
+                          {member.user?.name}
                         </h4>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {user?.institution}
+                          {member.user?.institution}
                         </p>
                         <Badge
                           className={`mt-3 text-xs ${

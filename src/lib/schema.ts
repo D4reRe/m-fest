@@ -20,6 +20,7 @@ export type profileSchema = z.infer<typeof profileSchema>;
 
 // all field should be filled of that type image Url
 export const documentsSchema = z.object({
+  userId: z.string().min(1, "Target User id is required"),
   identityCard: z.string().min(1, "Identity Card photo is required to upload"),
   twibbon: z.string().min(1, "Twibbon photo is required to upload"),
   followIg: z.string().min(1, "Follow IG screenshot proof is required"),

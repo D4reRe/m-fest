@@ -92,6 +92,7 @@ export async function POST(request: Request) {
           leaderPhoneNumber: submittedData.leaderPhoneNumber as string,
           teamInstitution: submittedData.teamInstitution as string,
           statusOrder: "SUCCESS",
+          teamStatus: "PENDING",
         },
       });
       await db.team.update({
@@ -102,6 +103,7 @@ export async function POST(request: Request) {
           paymentId: thisTransaction?.orderId as string,
           competition: submittedData.competitionName as CompetitionName,
           status: "SUCCESS",
+          teamStatus: "PENDING",
         },
       });
     }
@@ -182,6 +184,7 @@ export async function POST(request: Request) {
           leaderPhoneNumber: submittedData.leaderPhoneNumber as string,
           teamInstitution: submittedData.teamInstitution as string,
           statusOrder: "PENDING",
+          teamStatus: "PENDING",
         },
       });
       await db.team.update({
@@ -192,6 +195,7 @@ export async function POST(request: Request) {
           paymentId: thisTransaction?.orderId as string,
           competition: submittedData.competitionName as CompetitionName,
           status: "PENDING",
+          teamStatus: "PENDING",
         },
       });
     }
@@ -251,6 +255,7 @@ export async function POST(request: Request) {
         },
         data: {
           status: "CANCELLED",
+          teamStatus: "NOT_REGISTERED",
         },
       });
     }

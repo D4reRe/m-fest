@@ -20,6 +20,13 @@ export async function GET(req: Request) {
       email: true,
       institution: true,
       image: true,
+      gender: true,
+      phoneNumber: true,
+      domicile: true,
+      birthDate: true,
+      education: true,
+      major: true,
+      semester: true,
     },
   });
 

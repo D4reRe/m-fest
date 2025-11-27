@@ -17,6 +17,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import TeamFormSkeleton from "@/components/dashboard/edit-team/TeamFormSkeleton";
 import { useTRPC } from "@/utils/trpc";
+import { User } from "@/types/types";
 
 function TeamForm() {
   const trpc = useTRPC();
@@ -37,7 +38,6 @@ function TeamForm() {
         !user?.phoneNumber ||
         !user?.domicile ||
         !user?.birthDate ||
-        !user?.major ||
         !user?.institution ||
         !user?.education ||
         !user?.major ||
@@ -451,10 +451,28 @@ function TeamForm() {
                               const res = await fetch(
                                 `/api/user/by-email?email=${email}`
                               );
-                              const user = await res.json();
+                              const user = (await res.json()) as User;
 
                               if (res.ok && user) {
                                 toast.dismiss("checking-user");
+                                if (
+                                  !user?.gender ||
+                                  !user?.phoneNumber ||
+                                  !user?.domicile ||
+                                  !user?.birthDate ||
+                                  !user?.institution ||
+                                  !user?.education ||
+                                  !user?.major ||
+                                  !user?.semester
+                                ) {
+                                  toast.error(
+                                    "User is not completed their profile yet!",
+                                    {
+                                      description: `Please ask ${user.name} to complete their profile.`,
+                                    }
+                                  );
+                                  return;
+                                }
                                 const userName = user.name;
                                 const userInstitution = user.institution;
                                 toast.success(
@@ -463,9 +481,9 @@ function TeamForm() {
 
                                 // Update value of the userName
                                 const values = getValues();
-                                values.members[index].name = userName;
+                                values.members[index].name = userName as string;
                                 values.members[index].institution =
-                                  userInstitution;
+                                  userInstitution as string;
                                 reset(values);
                               } else {
                                 toast.dismiss("checking-user");
