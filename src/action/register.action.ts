@@ -60,11 +60,26 @@ export async function getRegisteredTeams() {
 
   const teamNames = userAsLeaderTeams.map((team) => team.name);
 
+  // STEM
+  const userAsLeaderTeamsForStem = userAvailableTeams.filter((team) => {
+    const totalMembers = team.members.length;
+    return userTeamMembers.some((member) => {
+      return (
+        member.teamId === team.id &&
+        member.role === "Leader" &&
+        totalMembers === 3
+      );
+    });
+  });
+
+  const stemTeamNames = userAsLeaderTeamsForStem.map((team) => team.name);
+
   return {
     userRegisteredTeams,
     userAvailableTeams,
     userAsLeaderTeams,
     teamNames,
+    stemTeamNames,
     allRegisteredTeamDatas,
     allTeamsDatas,
     allTeamMembersDatas,

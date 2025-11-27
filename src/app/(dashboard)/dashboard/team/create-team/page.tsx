@@ -17,7 +17,8 @@ async function CreateTeamPage() {
             </h1>
             <p className="text-sm text-start">Create your dream team!</p>
             <p className="text-sm text-red-500 text-start font-bold mt-2">
-              Team must be at least 3 members and maximum of 5 members.
+              Team must be at least 3 members and maximum of 5 members. For
+              STEM, team must consist of 3 members only.
             </p>
             <p className="text-sm text-red-500 text-start font-bold mt-2">
               The first member is the team leader and the representative of the

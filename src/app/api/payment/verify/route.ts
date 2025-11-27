@@ -129,17 +129,30 @@ export async function POST(request: Request) {
       });
       await db.compRegistration.create({
         data: {
+          teamName: submittedData.team as string,
+          competitionName: submittedData.competitionName as CompetitionName,
           userId: user?.id as string,
+          teamId: submittedData.teamId as string,
           paymentId: thisTransaction?.orderId as string,
-          competitionName: submittedData.competitionName,
-          name: submittedData.name,
-          gender: submittedData.gender,
-          email: submittedData.email,
-          phoneNumber: submittedData.phoneNumber,
-          education: submittedData.education,
-          school: submittedData.school,
-          mentor: submittedData.mentor,
+          leaderUserId: submittedData.leaderUserId as string,
+          leaderName: submittedData.leaderName as string,
+          leaderEmail: submittedData.leaderEmail as string,
+          leaderPhoneNumber: submittedData.leaderPhoneNumber as string,
+          teamInstitution: submittedData.teamInstitution as string,
+          mentor: submittedData.mentor as string,
           statusOrder: "SUCCESS",
+          teamStatus: "PENDING",
+        },
+      });
+      await db.team.update({
+        where: {
+          id: submittedData.teamId,
+        },
+        data: {
+          paymentId: thisTransaction?.orderId as string,
+          competition: submittedData.competitionName as CompetitionName,
+          status: "SUCCESS",
+          teamStatus: "PENDING",
         },
       });
     }
@@ -221,17 +234,30 @@ export async function POST(request: Request) {
       });
       await db.compRegistration.create({
         data: {
+          teamName: submittedData.team as string,
+          competitionName: submittedData.competitionName as CompetitionName,
           userId: user?.id as string,
+          teamId: submittedData.teamId as string,
           paymentId: thisTransaction?.orderId as string,
-          competitionName: submittedData.competitionName,
-          name: submittedData.name,
-          gender: submittedData.gender,
-          email: submittedData.email,
-          phoneNumber: submittedData.phoneNumber,
-          education: submittedData.education,
-          school: submittedData.school,
-          mentor: submittedData.mentor,
+          leaderUserId: submittedData.leaderUserId as string,
+          leaderName: submittedData.leaderName as string,
+          leaderEmail: submittedData.leaderEmail as string,
+          leaderPhoneNumber: submittedData.leaderPhoneNumber as string,
+          teamInstitution: submittedData.teamInstitution as string,
+          mentor: submittedData.mentor as string,
           statusOrder: "PENDING",
+          teamStatus: "PENDING",
+        },
+      });
+      await db.team.update({
+        where: {
+          id: submittedData.teamId,
+        },
+        data: {
+          paymentId: thisTransaction?.orderId as string,
+          competition: submittedData.competitionName as CompetitionName,
+          status: "PENDING",
+          teamStatus: "PENDING",
         },
       });
     }
@@ -248,17 +274,15 @@ export async function POST(request: Request) {
       where: { paymentId: result.merchantOrderId },
       data: { statusOrder: "CANCELLED" },
     });
-    if (submittedData.competitionName !== CompetitionName.STEM) {
-      await db.team.update({
-        where: {
-          paymentId: result.merchantOrderId,
-        },
-        data: {
-          status: "CANCELLED",
-          teamStatus: "NOT_REGISTERED",
-        },
-      });
-    }
+    await db.team.update({
+      where: {
+        paymentId: result.merchantOrderId,
+      },
+      data: {
+        status: "CANCELLED",
+        teamStatus: "NOT_REGISTERED",
+      },
+    });
     return NextResponse.json(
       { status: "CANCELLED", message: "Payment Canceled" },
       { status: 500 }

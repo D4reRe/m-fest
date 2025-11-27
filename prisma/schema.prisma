@@ -84,12 +84,6 @@ model CompRegistration {
   submissionFileSubmitted Boolean @default(false)
 
   // STEM
-  name            String?
-  gender          Gender?
-  email           String?
-  phoneNumber     String?
-  education       Education?
-  school          String?
   mentor          String?
 
   user            User?       @relation(fields: [userId], references: [id])   // Leader
@@ -180,7 +174,6 @@ model Verification {
 model Team {
   id            String    @id @default(cuid())
   name          String?   @unique
-  institution   String?
   competition   CompetitionName?
   paymentId     String?   @unique
   members       TeamMember[]
@@ -192,7 +185,7 @@ model Team {
   teamInstitution   String?
 
   teamStatus    TeamStatus?   @default(NOT_REGISTERED)
-  status        String?      @default("PENDING")
+  status        String?      @default("PENDING")        // This is equivalent of statusOrder (payment)
   payment       Payment?     @relation(fields: [paymentId], references: [orderId])
 
 

@@ -51,17 +51,15 @@ export async function POST(request: Request) {
       where: { paymentId: result.merchantOrderId },
       data: { statusOrder: "SUCCESS" },
     });
-    if (result.competition !== "STEM Competition") {
-      await db.team.update({
-        where: {
-          paymentId: result.merchantOrderId,
-        },
-        data: {
-          status: "SUCCESS",
-          teamStatus: "PENDING",
-        },
-      });
-    }
+    await db.team.update({
+      where: {
+        paymentId: result.merchantOrderId,
+      },
+      data: {
+        status: "SUCCESS",
+        teamStatus: "PENDING",
+      },
+    });
     // console.log("Payment has successfully check transaction");
     return NextResponse.json(
       { status: "success", message: "Your transaction status is successful" },
@@ -76,17 +74,15 @@ export async function POST(request: Request) {
       where: { paymentId: result.merchantOrderId },
       data: { statusOrder: status.statusMessage },
     });
-    if (result.competition !== "STEM Competition") {
-      await db.team.update({
-        where: {
-          paymentId: result.merchantOrderId,
-        },
-        data: {
-          status: status.statusMessage,
-          teamStatus: "PENDING",
-        },
-      });
-    }
+    await db.team.update({
+      where: {
+        paymentId: result.merchantOrderId,
+      },
+      data: {
+        status: status.statusMessage,
+        teamStatus: "PENDING",
+      },
+    });
     // console.log("The transaction status is not successful", {
     //   status: status.statusMessage,
     // });

@@ -49,7 +49,7 @@ export default function CountdownClient({
           );
         } else {
           return (
-            <div className="flex flex-col items-center justify-center gap-5 sm:gap-3 text-sm md:text-xs">
+            <div className="flex flex-col items-center justify-center gap-5 sm:gap-3 text-sm md:text-xs lg:text-sm">
               <span className="text-center">
                 <p>{description}</p>
               </span>

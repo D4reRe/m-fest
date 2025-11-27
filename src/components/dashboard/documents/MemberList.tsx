@@ -58,24 +58,25 @@ async function MemberList({ team }: { team: TeamWithMembers }) {
                   className="w-24 h-24 border-2 border-primary/50 mb-2"
                 />
                 <span>
-                  {member.user?.verification?.status === "NOT_SUBMITTED" ? (
-                    <Badge className="bg-red-500 text-white">
-                      Not Submitted
-                    </Badge>
-                  ) : member.user?.verification?.status === "PENDING" ? (
+                  {member.user?.verification?.status === "PENDING" ? (
                     <Badge
                       variant="secondary"
                       className="bg-yellow-600 text-white"
                     >
                       Pending
                     </Badge>
-                  ) : (
+                  ) : member.user?.verified &&
+                    member.user?.verification?.status === "ACCEPTED" ? (
                     <Badge
                       variant="secondary"
                       className="bg-blue-500 text-white dark:bg-blue-600"
                     >
                       <BadgeCheckIcon />
                       Verified
+                    </Badge>
+                  ) : (
+                    <Badge className="bg-red-500 text-white">
+                      Not Submitted
                     </Badge>
                   )}
                 </span>
@@ -118,18 +119,15 @@ async function MemberList({ team }: { team: TeamWithMembers }) {
                   className="w-24 h-24 border-2 border-primary/50 mb-2"
                 />
                 <span>
-                  {member.user?.verification?.status === "NOT_SUBMITTED" ? (
-                    <Badge className="bg-red-500 text-white">
-                      Not Submitted
-                    </Badge>
-                  ) : member.user?.verification?.status === "PENDING" ? (
+                  {member.user?.verification?.status === "PENDING" ? (
                     <Badge
                       variant="secondary"
                       className="bg-yellow-600 text-white"
                     >
                       Pending
                     </Badge>
-                  ) : member.user?.verification?.status === "ACCEPTED" ? (
+                  ) : member.user?.verified &&
+                    member.user?.verification?.status === "ACCEPTED" ? (
                     <Badge
                       variant="secondary"
                       className="bg-blue-500 text-white dark:bg-blue-600"

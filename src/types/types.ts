@@ -75,28 +75,27 @@ export type User = {
 };
 
 export type CompRegistration = {
-  name: string | null;
   id: string;
   userId: string;
   leaderUserId: string;
+  leaderEmail: string;
+  leaderName: string;
+  leaderPhoneNumber: string;
+  teamInstitution: string;
   teamName: string | null;
   teamId: string | null;
   paymentId: string;
   statusOrder: string | null;
+  teamStatus: TeamStatus;
   competitionName: CompetitionName;
-  gender: Gender | null;
-  email: string | null;
-  phoneNumber: string | null;
-  education: Education | null;
-  school: string | null;
-  mentor: string | null;
-  createdAt: Date;
-  updatedAt: Date;
   submissionFileUrl: string | null;
   submissionFileKey: string | null;
   submissionFileCreatedAt: Date | null;
   submissionFileUploaded: boolean | null;
   submissionFileSubmitted: boolean | null;
+  mentor: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Team = {
@@ -109,7 +108,6 @@ export type Team = {
   leaderName: string | null;
   leaderPhoneNumber: string | null;
   teamInstitution: string | null;
-  institution: string | null;
   paymentId: string | null;
   createdAt: Date;
   updatedAt: Date;
@@ -253,6 +251,7 @@ export type RegisterFormProps = {
   allTeamMembersDatas: TeamMember[];
   userAsLeaderTeams: Team[];
   teamNames: (string | null)[];
+  stemTeamNames: (string | null)[];
 };
 
 export type NavMainProps = {

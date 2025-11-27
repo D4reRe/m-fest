@@ -35,16 +35,3 @@ export const submitFileSchema = z.object({
 });
 
 export type submitFileSchema = z.infer<typeof submitFileSchema>;
-
-export const stemRegisterSchema = z.object({
-  name: z.string().min(5),
-  gender: z.enum(["Male", "Female"]),
-  school: z.string().min(5),
-  email: z.string().email("Invalid email").min(1, "Email is required"),
-  phoneNumber: z.string().regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
-  education: z.enum(["SMA", "SMK", "D3", "S1"]),
-  mentor: z.string().min(1),
-  competitionName: z.enum(["STEM"]),
-});
-
-export type stemRegisterSchema = z.infer<typeof stemRegisterSchema>;

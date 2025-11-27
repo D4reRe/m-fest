@@ -27,10 +27,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { educations } from "@/lib/profile";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/utils/trpc";
-import { stemRegisterSchema } from "@/lib/schema";
 import { getCallbackUrl, getReturnUrl } from "@/lib/utils";
 
 function RegisterForm({
@@ -42,6 +40,7 @@ function RegisterForm({
   allTeamMembersDatas,
   userAsLeaderTeams,
   teamNames,
+  stemTeamNames,
 }: RegisterFormProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [teamInstitution, setTeamInstitution] = useState<string>("");
@@ -85,6 +84,23 @@ function RegisterForm({
   });
   type registerSchema = z.infer<typeof registerSchema>;
 
+  const stemRegisterSchema = z.object({
+    competitionName: z.enum(["STEM"]),
+    leaderName: z.string().min(5, "Name must be leader's fullname"),
+    leaderEmail: z
+      .string()
+      .email("Invalid email")
+      .min(1, "Leader's email is required"),
+    leaderPhoneNumber: z
+      .string()
+      .regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
+    teamName: z.enum(stemTeamNames as string[]),
+    teamInstitution: z.string().min(5, "Team's institution is required"),
+    mentor: z.string().min(1),
+  });
+
+  type stemRegisterSchema = z.infer<typeof stemRegisterSchema>;
+
   const {
     control,
     handleSubmit,
@@ -117,32 +133,15 @@ function RegisterForm({
   } = useForm<stemRegisterSchema>({
     resolver: zodResolver(stemRegisterSchema),
     defaultValues: {
-      name: (user?.name as string) ?? "",
-      gender: user?.gender ?? undefined,
-      email: user?.email as string,
-      phoneNumber: user?.phoneNumber ?? "",
-      education: user?.education ?? undefined,
       competitionName: "STEM",
-      school: user?.institution ?? "",
+      leaderName: user?.name as string,
+      leaderEmail: user?.email as string,
+      leaderPhoneNumber: user?.phoneNumber ?? "",
+      teamInstitution: teamInstitution ?? "",
+      teamName: teamName ?? "",
       mentor: "",
     },
   });
-
-  useEffect(() => {
-    if (user && comp.toUpperCase() === "STEM") {
-      setTimeout(() => {
-        stemReset({
-          name: user?.name as string,
-          email: user?.email as string,
-          phoneNumber: user?.phoneNumber ?? "",
-          gender: user?.gender ?? undefined,
-          school: user?.institution ?? "",
-          education: user?.education ?? undefined,
-          competitionName: "STEM",
-        });
-      }, 500);
-    }
-  }, [stemReset, user, comp]);
 
   useEffect(() => {
     if (user && comp.toUpperCase() !== "STEM") {
@@ -165,6 +164,22 @@ function RegisterForm({
       }, 500);
     }
   }, [reset, user, comp, teamInstitution, teamName]);
+
+  useEffect(() => {
+    if (user && comp.toUpperCase() === "STEM") {
+      setTimeout(() => {
+        stemReset({
+          competitionName: "STEM",
+          leaderName: user?.name as string,
+          leaderEmail: user?.email as string,
+          leaderPhoneNumber: user?.phoneNumber ?? "",
+          teamInstitution: teamInstitution ?? "",
+          teamName: teamName ?? "",
+          mentor: "",
+        });
+      }, 500);
+    }
+  }, [stemReset, user, comp, teamInstitution, teamName]);
 
   useEffect(() => {
     const duitkuPopScript = "https://app-sandbox.duitku.com/lib/js/duitku.js";
@@ -344,7 +359,16 @@ function RegisterForm({
   };
   const checkoutStem = async (formData: stemRegisterSchema, comp: string) => {
     const submittedData = {
-      ...formData,
+      competitionName: formData.competitionName,
+      team: formData.teamName,
+      userId: user?.id,
+      teamId: userTeams.find((team) => team.name === formData.teamName)?.id,
+      leaderUserId: user?.id,
+      leaderName: formData.leaderName,
+      leaderEmail: formData.leaderEmail,
+      leaderPhoneNumber: formData.leaderPhoneNumber,
+      teamInstitution: formData.teamInstitution,
+      mentor: formData.mentor,
     };
 
     const checkOutData = {
@@ -357,7 +381,6 @@ function RegisterForm({
       }`,
       email: user?.email,
       callbackUrl: getCallbackUrl(),
-
       returnUrl: getReturnUrl(),
       expiryPeriod: 60,
       customerVaName: user?.name,
@@ -401,7 +424,7 @@ function RegisterForm({
           toast.dismiss("checking-out");
           console.log("Payment success:", result);
           toast.success("Payment Successful!");
-          toast.dismiss("register-stem");
+          toast.dismiss("register-team");
           toast.success("You have registered successfully!");
           router.replace("/dashboard/competitions");
         },
@@ -421,7 +444,7 @@ function RegisterForm({
           toast.dismiss("checking-out");
           console.log("Payment pending:", result);
           toast.info("Payment Pending. Please complete the transaction.");
-          toast.dismiss("register-stem");
+          toast.dismiss("register-team");
           toast.info(
             "Please complete the transaction to complete the registration. "
           );
@@ -431,13 +454,13 @@ function RegisterForm({
         },
         errorEvent: () => {
           toast.dismiss("checking-out");
-          toast.dismiss("register-stem");
+          toast.dismiss("register-team");
           toast.error("Payment Failed. Please try again.");
         },
         closeEvent: () => {
           toast.dismiss("checking-out");
           toast.warning("Payment window closed before completing transaction.");
-          toast.dismiss("register-stem");
+          toast.dismiss("register-team");
           toast.warning("Your registration is not completed yet.");
           // console.log("Payment popup closed.");
         },
@@ -477,7 +500,7 @@ function RegisterForm({
       (competition) => competition.teamId
     );
 
-    const allTeamsIds = allTeamsDatas.map((team) => team.id);
+    // const allTeamsIds = allTeamsDatas.map((team) => team.id);
 
     // console.log("All registered competitions team Ids: ", allRegisteredTeamIds);
     // console.log("All teams Ids: ", allTeamsIds);
@@ -551,9 +574,97 @@ function RegisterForm({
   }
   async function stemOnSubmit(formData: stemRegisterSchema) {
     setIsLoading(true);
-    toast.loading("Registering...", { id: "register-stem" });
+    toast.loading("Registering team...", { id: "register-team" });
+
+    const selectedTeam = userTeams.find(
+      (team) => team.name === formData.teamName
+    );
+    console.log("Selected team: ", selectedTeam);
+    if (!selectedTeam) {
+      toast.dismiss("register-team");
+      toast.error("Team not found");
+      setIsLoading(false);
+      return;
+    }
+    // @ts-expect-error members is exist based on schema and prisma calls
+    const selectedTeamMembers = selectedTeam.members;
+    // console.log("Team members: ", selectedTeamMembers);
+
+    const allRegisteredTeamIds = allRegisteredTeamDatas.map(
+      (competition) => competition.teamId
+    );
+
+    // const allTeamsIds = allTeamsDatas.map((team) => team.id);
+
+    // console.log("All registered competitions team Ids: ", allRegisteredTeamIds);
+    // console.log("All teams Ids: ", allTeamsIds);
+
+    const registeredTeamsOnThisComp = allTeamsDatas.filter(
+      (team) =>
+        allRegisteredTeamIds.includes(team.id) &&
+        team.competition === comp.toUpperCase()
+    );
+    // console.log("Registered teams on this Comp: ", registeredTeamsOnThisComp);
+
+    const registeredTeamsMembersOnThisComp = allTeamMembersDatas.filter(
+      (member) =>
+        registeredTeamsOnThisComp.some((team) => team.id === member.teamId)
+    );
+    // console.log(
+    //   "Registered teams members on this Comp: ",
+    //   registeredTeamsMembersOnThisComp
+    // );
+
+    const selectedTeamMembersEmails = selectedTeamMembers.map(
+      (member: TeamMember) => member.email
+    );
+    // console.log("Selected team members emails: ", selectedTeamMembersEmails);
+
+    const registeredTeamsMembersEmailsOnThisComp =
+      registeredTeamsMembersOnThisComp.map((member) => member.email);
+
+    // console.log(
+    //   `Registered teams members emails : `,
+    //   registeredTeamsMembersEmailsOnThisComp
+    // );
+
+    const isTeamMemberRegisteredOnThisComp = selectedTeamMembers.some(
+      (member: TeamMember) => {
+        return registeredTeamsMembersOnThisComp.some(
+          (registeredMember) => registeredMember.email === member.email
+        );
+      }
+    );
+
+    // console.log(
+    //   `Is one or more team member registered on this ${comp.toUpperCase()} comp: `,
+    //   isTeamMemberRegisteredOnThisComp
+    // );
+
+    if (isTeamMemberRegisteredOnThisComp) {
+      toast.dismiss("register-team");
+      setIsLoading(false);
+      toast.error(
+        `One or more team members have already registered for ${comp.toUpperCase()}`,
+        {
+          description: `Member ${selectedTeamMembersEmails
+            .filter((email: string) =>
+              registeredTeamsMembersEmailsOnThisComp.includes(email)
+            )
+            .join(", ")} (${selectedTeamMembers
+            .filter((member: TeamMember) =>
+              registeredTeamsMembersEmailsOnThisComp.includes(member.email)
+            )
+            .map((member: TeamMember) => member.name)
+            .join(", ")})`,
+        }
+      );
+      return;
+    }
+
     await checkoutStem(formData, comp);
     setIsLoading(false);
+    return;
   }
 
   return (
@@ -566,11 +677,64 @@ function RegisterForm({
           <div className="grid grid-cols-1 gap-3">
             <div className="space-y-2">
               <Controller
-                name="name"
+                name="teamName"
                 control={stemControl}
                 render={({ field, fieldState }) => (
-                  <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={field.name}>Fullname</FieldLabel>
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf-select-language">
+                        Team Name
+                      </FieldLabel>
+                    </FieldContent>
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setTeamName(value);
+                        setTeamInstitution(
+                          userTeams.find((team) => team.name === value)
+                            ?.teamInstitution ?? ""
+                        );
+                      }}
+                    >
+                      <SelectTrigger
+                        id="form-rhf-select-language"
+                        aria-invalid={fieldState.invalid}
+                        className="w-full"
+                      >
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent position="popper">
+                        {stemTeamNames.map((teamName) => (
+                          <SelectItem key={teamName} value={teamName as string}>
+                            {teamName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
+            <div className="space-y-2">
+              <Controller
+                name="mentor"
+                control={stemControl}
+                render={({ field, fieldState }) => (
+                  <Field
+                    orientation="responsive"
+                    data-invalid={fieldState.invalid}
+                  >
+                    <FieldContent>
+                      <FieldLabel htmlFor="form-rhf">Mentor</FieldLabel>
+                    </FieldContent>
                     <Input
                       {...field}
                       id={field.name}
@@ -586,7 +750,7 @@ function RegisterForm({
           </div>
           <div className="space-y-2">
             <Controller
-              name="gender"
+              name="competitionName"
               control={stemControl}
               render={({ field, fieldState }) => (
                 <Field
@@ -595,13 +759,15 @@ function RegisterForm({
                 >
                   <FieldContent>
                     <FieldLabel htmlFor="form-rhf-select-language">
-                      Gender
+                      Competition Name
                     </FieldLabel>
                   </FieldContent>
                   <Select
                     name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
+                    defaultValue={comp.toUpperCase()}
+                    disabled
                   >
                     <SelectTrigger
                       id="form-rhf-select-language"
@@ -611,8 +777,10 @@ function RegisterForm({
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent position="item-aligned">
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="BCC">BCC</SelectItem>
+                      <SelectItem value="IPPC">IPPC</SelectItem>
+                      <SelectItem value="PDC">PDC</SelectItem>
+                      <SelectItem value="STEM">STEM</SelectItem>
                     </SelectContent>
                   </Select>
                   {fieldState.invalid && (
@@ -620,50 +788,11 @@ function RegisterForm({
                   )}
                 </Field>
               )}
-            ></Controller>
-          </div>
-          <div className="space-y-2">
-            <Controller
-              name="email"
-              control={stemControl}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    aria-invalid={fieldState.invalid}
-                    disabled
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
             />
           </div>
           <div className="space-y-2">
             <Controller
-              name="phoneNumber"
-              control={stemControl}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Phone Number</FieldLabel>
-                  <Input
-                    {...field}
-                    id={field.name}
-                    aria-invalid={fieldState.invalid}
-                  />
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            />
-          </div>
-          <div className="space-y-2">
-            <Controller
-              name="education"
+              name="leaderName"
               control={stemControl}
               render={({ field, fieldState }) => (
                 <Field
@@ -671,49 +800,14 @@ function RegisterForm({
                   data-invalid={fieldState.invalid}
                 >
                   <FieldContent>
-                    <FieldLabel htmlFor="form-rhf-select-language">
-                      Current Education
-                    </FieldLabel>
+                    <FieldLabel htmlFor="form-rhf">Leader Name</FieldLabel>
                   </FieldContent>
-                  <Select
-                    name={field.name}
-                    value={field.value}
-                    onValueChange={field.onChange}
-                  >
-                    <SelectTrigger
-                      id="form-rhf-select-language"
-                      aria-invalid={fieldState.invalid}
-                      className="min-w-[120px]"
-                    >
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent position="item-aligned">
-                      {educations.map((education) => (
-                        <SelectItem key={education.key} value={education.key}>
-                          {education.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
-                  )}
-                </Field>
-              )}
-            ></Controller>
-          </div>
-          <div className="space-y-2">
-            <Controller
-              name="competitionName"
-              control={stemControl}
-              render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Competition</FieldLabel>
                   <Input
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
                     disabled
+                    readOnly
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -724,15 +818,22 @@ function RegisterForm({
           </div>
           <div className="space-y-2">
             <Controller
-              name="school"
+              name="leaderEmail"
               control={stemControl}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>School</FieldLabel>
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">Leader Email</FieldLabel>
+                  </FieldContent>
                   <Input
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    disabled
+                    readOnly
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -743,15 +844,50 @@ function RegisterForm({
           </div>
           <div className="space-y-2">
             <Controller
-              name="mentor"
+              name="leaderPhoneNumber"
               control={stemControl}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={field.name}>Mentor</FieldLabel>
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">
+                      Leader Phone Number
+                    </FieldLabel>
+                  </FieldContent>
                   <Input
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
+                    disabled
+                    readOnly
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="teamInstitution"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">Team Institution</FieldLabel>
+                  </FieldContent>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    disabled
+                    readOnly
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -814,9 +950,9 @@ function RegisterForm({
                         <SelectValue placeholder="Select" />
                       </SelectTrigger>
                       <SelectContent position="popper">
-                        {userAsLeaderTeams.map((team) => (
-                          <SelectItem key={team.id} value={team.name as string}>
-                            {team.name}
+                        {teamNames.map((teamName) => (
+                          <SelectItem key={teamName} value={teamName as string}>
+                            {teamName}
                           </SelectItem>
                         ))}
                       </SelectContent>

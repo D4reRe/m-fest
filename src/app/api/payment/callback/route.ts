@@ -64,21 +64,14 @@ export async function POST(req: Request) {
     },
   });
 
-  const thisOrderComp = await db.payment.findUnique({
-    where: { orderId: merchantOrderId },
-    select: { competition: true },
+  await db.team.update({
+    where: {
+      paymentId: merchantOrderId,
+    },
+    data: {
+      status: resultCode === "00" ? "SUCCESS" : "CANCELLED",
+      teamStatus: "PENDING",
+    },
   });
-
-  if (thisOrderComp?.competition !== "STEM Competition") {
-    await db.team.update({
-      where: {
-        paymentId: merchantOrderId,
-      },
-      data: {
-        status: resultCode === "00" ? "SUCCESS" : "CANCELLED",
-        teamStatus: "PENDING",
-      },
-    });
-  }
   return NextResponse.json({ message: "OK" }, { status: 200 });
 }

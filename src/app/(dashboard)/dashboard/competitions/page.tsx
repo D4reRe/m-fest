@@ -6,7 +6,6 @@ export const metadata: Metadata = {
 };
 
 import { RegisteredCompetitionsTeams } from "@/components/dashboard/competitions/registered-teams";
-import { RegisteredStemCompetition } from "@/components/dashboard/competitions/registered-stem";
 import RegisteredCompetitionList from "@/components/dashboard/competitions/RegisteredCompetitionList";
 
 export default function CompPage() {
@@ -19,7 +18,6 @@ export default function CompPage() {
       </div>
       <RegisteredCompetitionList />
       <RegisteredCompetitionsTeams />
-      <RegisteredStemCompetition />
     </section>
   );
 }

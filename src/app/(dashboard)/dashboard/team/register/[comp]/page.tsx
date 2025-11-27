@@ -59,6 +59,7 @@ async function FetchCompForm({
     userRegisteredCompetitions,
     userAsLeaderTeams,
     teamNames,
+    stemTeamNames,
   } = await getRegisteredTeams();
 
   return (
@@ -77,17 +78,27 @@ async function FetchCompForm({
             loading="lazy"
           />
         </Link>
-        <h1 className="mb-1 mt-4 text-xl font-semibold">
+        <h1 className="mb-1 mt-4 text-2xl font-semibold">
           Register{" "}
           {
             competitions.find((c) => c.abbreviation === comp.toUpperCase())
               ?.title
           }
         </h1>
-        <p className="text-sm">
-          Please fill in the form below to register for {comp.toUpperCase()}
-        </p>
-        <h2 className="text-lg text-center mt-2">
+        <h3 className="text-lg">
+          Before you register, please read this competition{" "}
+          <Link
+            className="underline italic font-bold"
+            href={
+              competitions.find((c) => c.abbreviation === comp.toUpperCase())
+                ?.guideBook as string
+            }
+            target="_blank"
+          >
+            Guidebook
+          </Link>
+        </h3>
+        <h2 className="text-lg text-center mb-3">
           Fee:{" "}
           <span className="font-bold italic">
             Rp. {""}
@@ -97,6 +108,12 @@ async function FetchCompForm({
             }
           </span>
         </h2>
+        <p className="text-sm mb-2">
+          Please fill in the form below to register for {comp.toUpperCase()}
+        </p>
+        {comp.toUpperCase() === "STEM" && (
+          <p>For STEM, team must consist of 3 members only.</p>
+        )}
       </div>
       <RegisterForm
         comp={comp}
@@ -109,6 +126,7 @@ async function FetchCompForm({
         allTeamMembersDatas={allTeamMembersDatas as TeamMember[]}
         userAsLeaderTeams={userAsLeaderTeams as Team[]}
         teamNames={teamNames as (string | null)[]}
+        stemTeamNames={stemTeamNames as (string | null)[]}
       />
     </>
   );
