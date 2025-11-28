@@ -92,6 +92,8 @@ model CompRegistration {
   
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+
+  @@index([id, userId, teamId, paymentId])
 }
 
 model EventRegistration {
@@ -103,6 +105,8 @@ model EventRegistration {
   
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+
+  @@index([id, userId])
 }
 
 model User {
@@ -140,6 +144,8 @@ model User {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([id])
 }
 
 model Verification {
@@ -169,6 +175,8 @@ model Verification {
   user                      User                 @relation(fields: [userId], references: [id])
   createdAt                 DateTime @default(now())
   updatedAt                 DateTime @updatedAt
+
+  @@index([id, userId])
 }
 
 model Team {
@@ -194,6 +202,8 @@ model Team {
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  @@index([id, name, paymentId, leaderUserId])
 }
 
 model TeamMember {
@@ -213,6 +223,7 @@ model TeamMember {
   team         Team?  @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
  @@id([userId, teamId])
+ @@index([userId, teamId])
 }
 
 
@@ -230,6 +241,8 @@ model Payment {
   referenceDuitku     String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+
+  @@index([id, userId, orderId])
 }
  
 model Account {
@@ -261,6 +274,7 @@ model Session {
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
 }
  
 model VerificationToken {
