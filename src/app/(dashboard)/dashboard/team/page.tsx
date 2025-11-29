@@ -22,12 +22,12 @@ import {
 import { db } from "@/server/db";
 import { IconUsersGroup } from "@tabler/icons-react";
 import { Edit, Trash } from "lucide-react";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import Link from "next/link";
 import { Fragment, Suspense } from "react";
 import AlertDialogActionButton from "@/components/dashboard/deleteButton";
 import { getUserProfile } from "@/action/user.action";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import TeamFallback from "@/components/dashboard/TeamFallback";
 import CompetitionListDashboard from "@/components/dashboard/team/CompetitionListDashboard";
 

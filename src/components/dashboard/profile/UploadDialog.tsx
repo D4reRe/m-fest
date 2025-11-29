@@ -14,9 +14,9 @@ import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { useUploadThing } from "@/utils/uploadthing";
 import { Loader2, Upload } from "lucide-react";
-import { UploadDialogProps } from "@/types/types";
+import { type UploadDialogProps } from "@/types/types";
 import { UploadThingError } from "uploadthing/server";
-import { Json } from "@uploadthing/shared";
+import { type Json } from "@uploadthing/shared";
 import { useDropzone } from "@uploadthing/react";
 import { UserAvatar } from "@/components/general/UserProfile";
 import { Progress } from "@/components/ui/progress";
@@ -128,20 +128,20 @@ export default function UploadDialog({
       toast.error("Only one file is allowed");
       return;
     }
-    if (!acceptedFiles[0].type.startsWith("image")) {
+    if (!acceptedFiles[0]?.type.startsWith("image")) {
       toast.error("Only image files are allowed");
       return;
     }
     const validExtensions = ["png", "jpeg", "jpg", "webp"];
     if (
       !validExtensions.includes(
-        acceptedFiles[0].type.split("/").pop()?.toLowerCase() as string
+        acceptedFiles[0]?.type.split("/").pop()?.toLowerCase() as string
       )
     ) {
       toast.error("Supported types: jpg, jpeg, png, & webp");
       return;
     }
-    if (acceptedFiles[0].size > 4 * 1024 * 1024) {
+    if (acceptedFiles[0]?.size > 4 * 1024 * 1024) {
       toast.error("File size must be less than 4MB");
       return;
     }

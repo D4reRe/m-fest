@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { Member, Team, User } from "@/types/types";
+import { type Member, type Team, type User } from "@/types/types";
 import {
   Field,
   FieldContent,

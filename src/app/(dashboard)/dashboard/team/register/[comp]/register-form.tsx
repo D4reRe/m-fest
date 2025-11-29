@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { competitions } from "@/lib/competition";
 import {
-  RegisterFormProps,
-  ResultTransaction,
-  TeamMember,
+  type RegisterFormProps,
+  type ResultTransaction,
+  type TeamMember,
 } from "@/types/types";
 import {
   Field,

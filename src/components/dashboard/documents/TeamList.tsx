@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/empty";
 import { cn } from "@/lib/utils";
 import { db } from "@/server/db";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import { IconUsersGroup } from "@tabler/icons-react";
 import { BadgeCheckIcon, Loader2 } from "lucide-react";
 import Link from "next/link";

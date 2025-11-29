@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "../../../../prisma/generated/prisma/client";
 import { UserAvatar } from "@/components/general/UserProfile";
 import Link from "next/link";
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip";

@@ -1,6 +1,6 @@
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import { getUserProfile } from "@/action/user.action";
-import { Team, User } from "@/types/types";
+import { type Team, type User } from "@/types/types";
 import TeamForm from "./edit-team-form";
 import { db } from "@/server/db";
 import { redirect } from "next/navigation";

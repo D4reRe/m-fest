@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import DocumentsForm from "./document-form";
 import { Suspense } from "react";
 import DocumentFormSkeleton from "@/components/document/DocumentFormSkeleton";

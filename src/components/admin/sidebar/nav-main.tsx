@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { NavMainProps } from "@/types/types";
+import { type NavMainProps } from "@/types/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

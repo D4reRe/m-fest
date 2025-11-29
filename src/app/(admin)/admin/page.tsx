@@ -1,6 +1,6 @@
 import { getUserProfile } from "@/action/user.action";
 import DataOverview from "@/components/admin/data-overview/DataOverview";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 

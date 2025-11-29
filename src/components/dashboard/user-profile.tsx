@@ -3,7 +3,7 @@ import Link from "next/link";
 import { UserAvatar } from "../general/UserProfile";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import { getUserProfile } from "@/action/user.action";
 
 export function UserProfile() {

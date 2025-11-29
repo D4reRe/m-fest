@@ -14,7 +14,7 @@ import {
 import { IconUsersGroup } from "@tabler/icons-react";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import TeamFallback from "./TeamFallback";
 import { getUserProfile } from "@/action/user.action";
 

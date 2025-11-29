@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../../general/UserProfile";
 import { getUserProfile } from "@/action/user.action";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import { IconUsersGroup } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import {

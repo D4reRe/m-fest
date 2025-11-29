@@ -1,5 +1,5 @@
 import TableInvoices from "./TableInvoices";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Invoices | Mechanical Festival 2026",

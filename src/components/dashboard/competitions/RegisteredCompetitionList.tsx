@@ -19,7 +19,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import { getUserProfile } from "@/action/user.action";
 import { db } from "@/server/db";
 import { Suspense } from "react";

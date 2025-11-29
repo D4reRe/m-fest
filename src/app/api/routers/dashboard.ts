@@ -1,6 +1,6 @@
 import { getUserProfile } from "@/action/user.action";
 import { router, protectedProcedure } from "@/server/api/trpc";
-import { Document, User } from "@/types/types";
+import { type Document, type User } from "@/types/types";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { documentsSchema, profileSchema, submitFileSchema } from "@/lib/schema";

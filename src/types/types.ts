@@ -1,7 +1,7 @@
-import { UseFormSetValue } from "react-hook-form";
-import { IconProps, type Icon } from "@tabler/icons-react";
-import { ForwardRefExoticComponent, RefAttributes } from "react";
-import { LucideProps } from "lucide-react";
+import { type UseFormSetValue } from "react-hook-form";
+import { type IconProps, type Icon } from "@tabler/icons-react";
+import { type ForwardRefExoticComponent, type RefAttributes } from "react";
+import { type LucideProps } from "lucide-react";
 
 export enum Role {
   USER = "USER",

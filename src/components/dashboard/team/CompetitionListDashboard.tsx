@@ -11,7 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import { getUserProfile } from "@/action/user.action";
 import { db } from "@/server/db";
 import { Suspense } from "react";

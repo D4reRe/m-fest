@@ -1,10 +1,9 @@
 import { Suspense } from "react";
 import MemberList from "@/components/dashboard/documents/MemberList";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 import { getUserProfile } from "@/action/user.action";
 import { db } from "@/server/db";
 import { redirect } from "next/navigation";
-import { Skeleton } from "@/components/ui/skeleton";
 import MemberListSkeleton from "@/components/dashboard/documents/MemberListSkeleton";
 
 export async function generateMetadata({

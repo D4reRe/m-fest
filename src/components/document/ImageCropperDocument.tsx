@@ -12,7 +12,7 @@ import ReactCrop, {
 import Image from "next/image";
 import { Button } from "../ui/button";
 import { setCanvasPreview, setCanvasUpload } from "./setCanvasPreview";
-import { ImageCropperDocumentProps } from "@/types/types";
+import { type ImageCropperDocumentProps } from "@/types/types";
 import {
   maxFileSize,
   MIN_DIMENSION,

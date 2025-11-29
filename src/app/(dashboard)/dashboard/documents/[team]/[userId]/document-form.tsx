@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import UploadDocumentDialog from "@/components/document/UploadDocumentDialog";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import DocumentFormSkeleton from "@/components/document/DocumentFormSkeleton";
-import { UploadThingRoute } from "@/types/types";
+import { type UploadThingRoute } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/utils/trpc";
 import { documentsSchema } from "@/lib/schema";

@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/server/db";
 import { getUserProfile } from "./user.action";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 
 export async function getRegisteredTeams() {
   const user = (await getUserProfile()) as User;

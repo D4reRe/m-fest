@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 import Link from "next/link";
-import { RefObject, useRef, useState } from "react";
+import { type RefObject, useRef, useState } from "react";
 import { FaQuestion } from "react-icons/fa6";
 import { useOnClickOutside } from "usehooks-ts";
 

@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import TeamForm from "./team-form";
 
 export const metadata: Metadata = {

@@ -1,6 +1,10 @@
 import RegisterForm from "./register-form";
 import { redirect } from "next/navigation";
-import { Team, CompRegistration, TeamMember } from "@/types/types";
+import {
+  type Team,
+  type CompRegistration,
+  type TeamMember,
+} from "@/types/types";
 import { competitionsName } from "@/constants/constants";
 import { Suspense } from "react";
 import { CompRegisterFormSkeleton } from "@/components/register/CompFormSkeleton";

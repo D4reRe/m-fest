@@ -16,8 +16,8 @@ import { toast } from "sonner";
 import { useDropzone } from "@uploadthing/react";
 import { useUploadThing } from "@/utils/uploadthing";
 import { UploadThingError } from "uploadthing/server";
-import { Json } from "@uploadthing/shared";
-import { UploadDocumentProps, UploadThingRoute } from "@/types/types";
+import { type Json } from "@uploadthing/shared";
+import { type UploadDocumentProps, type UploadThingRoute } from "@/types/types";
 import { Label } from "../ui/label";
 import { Progress } from "../ui/progress";
 import { useQueryClient } from "@tanstack/react-query";
@@ -100,9 +100,13 @@ export default function UploadDocumentDialog({
       setIsLoading(false);
       toast.dismiss("upload-document");
       toast.success(`Image uploaded successfully!`);
-      setValue(uploadThingRouteUpload as UploadThingRoute, res[0].ufsUrl, {
-        shouldValidate: true,
-      });
+      setValue(
+        uploadThingRouteUpload as UploadThingRoute,
+        res[0]?.ufsUrl as string,
+        {
+          shouldValidate: true,
+        }
+      );
       queryClient.invalidateQueries({
         queryKey: trpc.dashboard.getDocumentsByUserId.queryKey({ userId }),
       });
@@ -125,19 +129,19 @@ export default function UploadDocumentDialog({
       toast.error("Only one file is allowed");
       return;
     }
-    if (!acceptedFiles[0].type.startsWith("image")) {
+    if (!acceptedFiles[0]?.type.startsWith("image")) {
       toast.error("Only image files are allowed");
       return;
     }
     if (
       !validExtensions.includes(
-        acceptedFiles[0].type.split("/").pop()?.toLowerCase() as string
+        acceptedFiles[0]?.type.split("/").pop()?.toLowerCase() as string
       )
     ) {
       toast.error("Supported types: jpg, jpeg, png, & webp");
       return;
     }
-    if (acceptedFiles[0].size > 4 * 1024 * 1024) {
+    if (acceptedFiles[0]?.size > 4 * 1024 * 1024) {
       toast.error("File size must be less than 4MB");
       return;
     }
@@ -250,7 +254,7 @@ export default function UploadDocumentDialog({
                     toast.dismiss("upload-document");
                     return;
                   }
-                  if (utfileUrls[0].ufsUrl) {
+                  if (utfileUrls[0]?.ufsUrl) {
                     setValue(type, utfileUrls[0].ufsUrl, {
                       shouldValidate: true,
                     });

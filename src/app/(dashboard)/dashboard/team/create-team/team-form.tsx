@@ -17,7 +17,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import TeamFormSkeleton from "@/components/dashboard/edit-team/TeamFormSkeleton";
 import { useTRPC } from "@/utils/trpc";
-import { User } from "@/types/types";
+import { type User } from "@/types/types";
 
 function TeamForm() {
   const trpc = useTRPC();

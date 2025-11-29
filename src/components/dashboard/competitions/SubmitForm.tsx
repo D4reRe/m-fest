@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useUploadThing } from "@/utils/uploadthing";
 import { UploadThingError } from "uploadthing/server";
-import { Json } from "@uploadthing/shared";
+import { type Json } from "@uploadthing/shared";
 import { useDropzone } from "@uploadthing/react";
 import { validSubmissionExtensions } from "@/constants/constants";
 import { competitions } from "@/lib/competition";
@@ -152,7 +152,7 @@ export default function SubmitForm({ comp }: { comp: string }) {
       setIsUploading(false);
       toast.dismiss("upload-document");
       toast.success(`File uploaded successfully!`);
-      setValue("fileUrl", res[0].ufsUrl, {
+      setValue("fileUrl", res[0]?.ufsUrl as string, {
         shouldValidate: true,
       });
       queryClient.invalidateQueries({
@@ -176,21 +176,21 @@ export default function SubmitForm({ comp }: { comp: string }) {
       return;
     }
     if (
-      !acceptedFiles[0].type.startsWith("application/pdf") &&
-      !acceptedFiles[0].type.startsWith("application/zip")
+      !acceptedFiles[0]?.type.startsWith("application/pdf") &&
+      !acceptedFiles[0]?.type.startsWith("application/zip")
     ) {
       toast.error("Only zip or pdf files are allowed");
       return;
     }
     if (
       !validSubmissionExtensions.includes(
-        acceptedFiles[0].type.split("/").pop()?.toLowerCase() as string
+        acceptedFiles[0]?.type.split("/").pop()?.toLowerCase() as string
       )
     ) {
       toast.error("Supported types: .pdf, .zip");
       return;
     }
-    if (acceptedFiles[0].size > 4 * 1024 * 1024) {
+    if (acceptedFiles[0]?.size > 4 * 1024 * 1024) {
       toast.error("File size must be less than 4MB");
       return;
     }

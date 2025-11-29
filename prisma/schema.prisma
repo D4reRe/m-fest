@@ -1,17 +1,16 @@
 generator client {
-  provider = "prisma-client-js"
+  // ESM-first
+  provider   = "prisma-client" // rust-free and ESM
+  // Rust-free
+  engineType = "client"
+  // No generation into node_modules
+  output     = "./generated/prisma"
+  runtime    = "vercel-edge"
 }
 
-// generator zod {
-//   provider = "prisma-zod-generator"
-  // optional output = "./prisma/generated" (JSON config can supply if omitted)
-  // optional config = "./zod-generator.config.json" (relative to schema file)
-// }
-
+// Ignore this error for Prisma 7
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
 }
 
 enum Role {
@@ -44,104 +43,105 @@ enum Gender {
   Female
 }
 
-enum DocumentStatus{
+enum DocumentStatus {
   AWAITING_UPLOAD
   PENDING
   VERIFIED
 }
 
-enum VerificationStatus{
+enum VerificationStatus {
   NOT_SUBMITTED
   PENDING
   ACCEPTED
 }
 
-enum TeamStatus{
+enum TeamStatus {
   NOT_REGISTERED
   PENDING
   ACCEPTED
 }
 
 model CompRegistration {
-  id                String      @id @default(uuid())
-  userId            String                                                      // Id User Leader
+  id                String          @id @default(uuid())
+  userId            String // Id User Leader
   leaderUserId      String?
   leaderEmail       String?
   leaderName        String?
   leaderPhoneNumber String?
   teamInstitution   String?
   teamName          String?
-  teamId            String?      @unique                                         // Specific Team to register
-  paymentId         String       @unique                                         // Specific Payment to register
-  statusOrder       String?      @default("PENDING")
-  teamStatus        TeamStatus? 
-  competitionName CompetitionName
+  teamId            String?         @unique // Specific Team to register
+  paymentId         String          @unique // Specific Payment to register
+  statusOrder       String?         @default("PENDING")
+  teamStatus        TeamStatus?
+  competitionName   CompetitionName
 
-  submissionFileUrl String?
-  submissionFileKey String?
+  submissionFileUrl       String?
+  submissionFileKey       String?
   submissionFileCreatedAt DateTime @default(now())
-  submissionFileUploaded Boolean @default(false)
-  submissionFileSubmitted Boolean @default(false)
+  submissionFileUploaded  Boolean  @default(false)
+  submissionFileSubmitted Boolean  @default(false)
 
   // STEM
-  mentor          String?
+  mentor String?
 
-  user            User?       @relation(fields: [userId], references: [id])   // Leader
-  team            Team?        @relation(fields: [teamId], references: [id])
-  payment         Payment     @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
-  
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  user    User?   @relation(fields: [userId], references: [id]) // Leader
+  team    Team?   @relation(fields: [teamId], references: [id])
+  payment Payment @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
 
-  @@index([id, userId, teamId, paymentId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([teamId])
+  @@index([paymentId])
 }
 
 model EventRegistration {
-  id              String      @id @default(uuid())
-  event_name      String
-  userId          String
+  id         String @id @default(uuid())
+  event_name String
+  userId     String
 
-  user            User?     @relation(fields: [userId], references: [id])
-  
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  user User? @relation(fields: [userId], references: [id])
 
-  @@index([id, userId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
 
 model User {
-  id                String          @id @default(cuid())
-  name              String?
-  email             String          @unique
-  emailVerified     DateTime?
-  password          String?
-  image             String?
-  imageKey          String?
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  imageKey      String?
 
-  gender            Gender?
-  phoneNumber       String?
-  domicile          String?
-  institution       String?
-  major             String?
-  education         Education?
-  semester          Int?
-  birthDate         DateTime?
-  role              Role            @default(USER)
+  gender      Gender?
+  phoneNumber String?
+  domicile    String?
+  institution String?
+  major       String?
+  education   Education?
+  semester    Int?
+  birthDate   DateTime?
+  role        Role       @default(USER)
 
-  verified          Boolean  @default(false)
-  verification      Verification?
+  verified     Boolean       @default(false)
+  verification Verification?
 
   team_member       TeamMember[]
   registration      CompRegistration[]
   eventRegistration EventRegistration[]
 
-
-  payments           Payment[]
-  accounts           Account[]
-  sessions           Session[]
+  payments      Payment[]
+  accounts      Account[]
+  sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -149,42 +149,43 @@ model User {
 }
 
 model Verification {
-  id                        String   @id @default(cuid())
-  userId                    String   @unique
-  identityCardImageUrl      String?
-  twibbonImageUrl           String?
-  followIgImageUrl          String?
+  id                   String  @id @default(cuid())
+  userId               String  @unique
+  identityCardImageUrl String?
+  twibbonImageUrl      String?
+  followIgImageUrl     String?
 
-  identityCardImageKey      String?
-  twibbonImageKey           String?
-  followIgImageKey          String?
+  identityCardImageKey String?
+  twibbonImageKey      String?
+  followIgImageKey     String?
 
-  identityCardCreatedAt     DateTime? @default(now())
-  twibbonCreatedAt          DateTime? @default(now())
-  followIgCreatedAt         DateTime? @default(now())
+  identityCardCreatedAt DateTime? @default(now())
+  twibbonCreatedAt      DateTime? @default(now())
+  followIgCreatedAt     DateTime? @default(now())
 
-  identityCardStatus        DocumentStatus?   @default(AWAITING_UPLOAD)
-  twibbonStatus             DocumentStatus?   @default(AWAITING_UPLOAD)
-  followIgStatus            DocumentStatus?   @default(AWAITING_UPLOAD)
+  identityCardStatus DocumentStatus? @default(AWAITING_UPLOAD)
+  twibbonStatus      DocumentStatus? @default(AWAITING_UPLOAD)
+  followIgStatus     DocumentStatus? @default(AWAITING_UPLOAD)
 
-  identityCardVerified     Boolean? @default(false)
-  twibbonVerified          Boolean? @default(false)
-  followIgVerified         Boolean? @default(false)
+  identityCardVerified Boolean? @default(false)
+  twibbonVerified      Boolean? @default(false)
+  followIgVerified     Boolean? @default(false)
 
-  status                    VerificationStatus   @default(NOT_SUBMITTED) 
-  user                      User                 @relation(fields: [userId], references: [id])
-  createdAt                 DateTime @default(now())
-  updatedAt                 DateTime @updatedAt
+  status    VerificationStatus @default(NOT_SUBMITTED)
+  user      User               @relation(fields: [userId], references: [id])
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 
-  @@index([id, userId])
+  @@index([userId])
+  @@index([id])
 }
 
 model Team {
-  id            String    @id @default(cuid())
-  name          String?   @unique
-  competition   CompetitionName?
-  paymentId     String?   @unique
-  members       TeamMember[]
+  id          String           @id @default(cuid())
+  name        String?          @unique
+  competition CompetitionName?
+  paymentId   String?          @unique
+  members     TeamMember[]
 
   leaderUserId      String?
   leaderEmail       String?
@@ -192,59 +193,61 @@ model Team {
   leaderPhoneNumber String?
   teamInstitution   String?
 
-  teamStatus    TeamStatus?   @default(NOT_REGISTERED)
-  status        String?      @default("PENDING")        // This is equivalent of statusOrder (payment)
-  payment       Payment?     @relation(fields: [paymentId], references: [orderId])
+  teamStatus TeamStatus? @default(NOT_REGISTERED)
+  status     String?     @default("PENDING") // This is equivalent of statusOrder (payment)
+  payment    Payment?    @relation(fields: [paymentId], references: [orderId])
 
+  registration CompRegistration?
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  registration  CompRegistration?
-
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@index([id, name, paymentId, leaderUserId])
+  @@index([name])
+  @@index([paymentId])
+  @@index([leaderUserId])
+  @@index([id])
 }
 
 model TeamMember {
-  userId      String
-  teamId      String
+  userId String
+  teamId String
 
   name        String?
-  email       String? 
+  email       String?
   institution String?
-  
-  role        TeamRole?   // Leader or Member
-  joinDate    DateTime?  @default(now())
 
-  verified     Boolean  @default(false)
+  role     TeamRole? // Leader or Member
+  joinDate DateTime? @default(now())
 
-  user         User?  @relation(fields: [userId], references: [id])
-  team         Team?  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  verified Boolean @default(false)
 
- @@id([userId, teamId])
- @@index([userId, teamId])
+  user User? @relation(fields: [userId], references: [id])
+  team Team? @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@id([userId, teamId])
+  @@index([userId])
+  @@index([teamId])
 }
-
 
 model Payment {
-  id            String    @id @default(cuid())
-  orderId       String    @unique
-  user          User?     @relation(fields : [userId], references: [id])
-  userId        String?
-  status        String?   @default("PENDING")
-  competition   String?
-  registration  CompRegistration?
-  team          Team?
-  amount        Int
+  id              String            @id @default(cuid())
+  orderId         String            @unique
+  user            User?             @relation(fields: [userId], references: [id])
+  userId          String?
+  status          String?           @default("PENDING")
+  competition     String?
+  registration    CompRegistration?
+  team            Team?
+  amount          Int
   paymentUrl      String?
-  referenceDuitku     String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  referenceDuitku String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
 
-  @@index([id, userId, orderId])
+  @@index([userId])
+  @@index([orderId])
 }
- 
+
 model Account {
   userId            String
   type              String
@@ -257,34 +260,33 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([provider, providerAccountId])
 }
- 
+
 model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
- 
+
 model VerificationToken {
   identifier String
   token      String
   expires    DateTime
- 
+
   @@id([identifier, token])
 }
- 
+
 // Optional for WebAuthn support
 model Authenticator {
   credentialID         String  @unique
@@ -295,8 +297,8 @@ model Authenticator {
   credentialDeviceType String
   credentialBackedUp   Boolean
   transports           String?
- 
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
- 
+
   @@id([userId, credentialID])
 }
