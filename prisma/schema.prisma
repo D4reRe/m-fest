@@ -5,7 +5,6 @@ generator client {
   engineType = "client"
   // No generation into node_modules
   output     = "./generated/prisma"
-  runtime    = "vercel-edge"
 }
 
 // Ignore this error for Prisma 7
