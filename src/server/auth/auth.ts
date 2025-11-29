@@ -1,16 +1,13 @@
-import { betterAuth, type BetterAuthOptions } from "better-auth";
+import { betterAuth, type BetterAuthOptions } from "better-auth/minimal";
 import { customSession } from "better-auth/plugins";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "../db";
 import { env } from "@/env";
 const options = {
   appName: "Mechanical Festival 2026",
-  // Prisma integration
   database: prismaAdapter(db, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
-
-  // Replaces providers: [Google, Github]
   socialProviders: {
     google: {
       clientId: env.GOOGLE_CLIENT_ID,
@@ -22,8 +19,13 @@ const options = {
     },
   },
   session: {
-    expiresIn: 60 * 60 * 24 * 7,
-    updateAge: 60 * 60 * 24,
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    updateAge: 60 * 60 * 24, // 1 day
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds (5 minutes)
+      //   strategy: "compact"  // compact is the default stratergy in better-auth
+    },
   },
   secret: env.BETTER_AUTH_SECRET,
   trustedOrigins: [

@@ -1,4 +1,4 @@
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import DataOverview from "@/components/admin/data-overview/DataOverview";
 import { type User } from "@/types/types";
 import { redirect } from "next/navigation";
@@ -31,7 +31,7 @@ export default function AdminPage() {
 }
 
 async function FetchDatas() {
-  const user = (await getUserProfile()) as User;
+  const user = (await getUser()) as User;
   if (user?.role !== "ADMIN" && user?.role !== "SUPERADMIN") {
     redirect("/dashboard");
   }

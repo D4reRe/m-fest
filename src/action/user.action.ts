@@ -4,7 +4,7 @@ import { auth } from "@/server/auth/auth";
 import { db } from "@/server/db";
 import { headers } from "next/headers";
 
-export async function getUserProfile() {
+export async function getUserSession() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -14,6 +14,11 @@ export async function getUserProfile() {
     return null;
   }
 
+  return session;
+}
+
+export async function getUser() {
+  const session = await getUserSession();
   const user = await db.user.findUnique({
     where: { id: session?.user.id as string },
   });

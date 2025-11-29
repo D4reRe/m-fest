@@ -3,7 +3,7 @@ import { db } from "@/server/db";
 import { ArrowRight } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../../general/UserProfile";
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import { type User } from "@/types/types";
 import { IconUsersGroup } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ export function RegisteredCompetitionsTeams() {
 }
 
 async function RegisteredTeams() {
-  const user = (await getUserProfile()) as User;
+  const user = (await getUser()) as User;
   const teams = await db.team.findMany({
     where: {
       members: {

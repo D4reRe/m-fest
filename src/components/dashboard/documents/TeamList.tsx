@@ -1,4 +1,4 @@
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -36,7 +36,7 @@ function TeamList() {
 export default TeamList;
 
 async function FetchUserTeams() {
-  const user = (await getUserProfile()) as User;
+  const user = (await getUser()) as User;
   const teams = await db.team.findMany({
     where: {
       leaderUserId: user.id,

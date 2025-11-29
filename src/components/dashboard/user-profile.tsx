@@ -4,7 +4,7 @@ import { UserAvatar } from "../general/UserProfile";
 import { Suspense } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { type User } from "@/types/types";
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 
 export function UserProfile() {
   return (
@@ -52,7 +52,7 @@ export function UserProfile() {
 }
 
 async function FetchUserAvatar() {
-  const user = (await getUserProfile()) as User;
+  const user = (await getUser()) as User;
   return (
     <>
       {user?.image && (
@@ -75,7 +75,7 @@ async function FetchUserAvatar() {
 }
 
 async function FetchUserInfo() {
-  const user = (await getUserProfile()) as User;
+  const user = (await getUser()) as User;
   return (
     <>
       <div>

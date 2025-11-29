@@ -1,4 +1,4 @@
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import { router, protectedProcedure } from "@/server/api/trpc";
 import { type Document, type User } from "@/types/types";
 import { z } from "zod";
@@ -7,7 +7,7 @@ import { documentsSchema, profileSchema, submitFileSchema } from "@/lib/schema";
 
 export const dashboardRouter = router({
   getUser: protectedProcedure.query(async () => {
-    const user = await getUserProfile();
+    const user = await getUser();
     return user;
   }),
   getUserById: protectedProcedure
@@ -141,7 +141,7 @@ export const dashboardRouter = router({
       })
     ) // @ts-expect-error documents is exist
     .query(async ({ ctx }) => {
-      const user = await getUserProfile();
+      const user = await getUser();
 
       const userDocuments = await ctx.db.documents.findUnique({
         where: {
@@ -210,7 +210,7 @@ export const dashboardRouter = router({
       };
     }),
   getUserInvoices: protectedProcedure.query(async ({ ctx }) => {
-    const user = await getUserProfile();
+    const user = await getUser();
     if (!user) {
       console.log("User not found");
       throw new TRPCError({
@@ -247,7 +247,7 @@ export const dashboardRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const user = (await getUserProfile()) as User;
+      const user = (await getUser()) as User;
       const thisRegisteredCompUser = await ctx.db.compRegistration.findFirst({
         where: {
           leaderUserId: user.id as string,

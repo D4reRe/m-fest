@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import MemberList from "@/components/dashboard/documents/MemberList";
 import { type User } from "@/types/types";
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import { db } from "@/server/db";
 import { redirect } from "next/navigation";
 import MemberListSkeleton from "@/components/dashboard/documents/MemberListSkeleton";
@@ -48,7 +48,7 @@ async function FetchTeamMembers({
 }: {
   params: Promise<{ team: string }>;
 }) {
-  const user = (await getUserProfile()) as User; // This user is the leader of the team
+  const user = (await getUser()) as User; // This user is the leader of the team
   const { team: teamName } = await params;
   let team = await db.team.findUnique({
     where: { name: teamName.split("-").join(" "), leaderUserId: user.id },

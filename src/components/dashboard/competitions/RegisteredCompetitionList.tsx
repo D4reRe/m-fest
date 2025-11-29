@@ -20,7 +20,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty";
 import { type User } from "@/types/types";
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import { db } from "@/server/db";
 import { Suspense } from "react";
 import CompetitionListSkeleton from "../CompetitionListSkeleton";
@@ -36,7 +36,7 @@ export default function RegisteredCompetitionList() {
 }
 
 async function FetchUserRegisteredCompetitions() {
-  const user = (await getUserProfile()) as User;
+  const user = (await getUser()) as User;
   const registeredCompetitions = await db.compRegistration.findMany({
     where: {
       userId: user.id,

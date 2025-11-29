@@ -1,5 +1,5 @@
 import { type Metadata } from "next";
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import { type Team, type User } from "@/types/types";
 import TeamForm from "./edit-team-form";
 import { db } from "@/server/db";
@@ -62,7 +62,7 @@ async function FetchTeamForm({
 }: {
   params: Promise<{ team: string }>;
 }) {
-  const user: User = (await getUserProfile()) as User;
+  const user: User = (await getUser()) as User;
   const { team: teamName } = await params;
   let team = await db.team.findUnique({
     where: { name: teamName.split("-").join(" "), leaderUserId: user.id },

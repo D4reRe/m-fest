@@ -1,4 +1,4 @@
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import { env } from "@/env";
 import { db } from "@/server/db";
 import crypto from "crypto";
@@ -12,7 +12,7 @@ enum CompetitionName {
 }
 
 export async function POST(request: Request) {
-  const user = await getUserProfile();
+  const user = await getUser();
   const { result, submittedData, InvoiceData, checkOutData } =
     await request.json();
   const { merchantOrderId, productDetails, paymentAmount, quantity } =

@@ -26,7 +26,7 @@ import { type Metadata } from "next";
 import Link from "next/link";
 import { Fragment, Suspense } from "react";
 import AlertDialogActionButton from "@/components/dashboard/deleteButton";
-import { getUserProfile } from "@/action/user.action";
+import { getUser } from "@/action/user.action";
 import { type User } from "@/types/types";
 import TeamFallback from "@/components/dashboard/TeamFallback";
 import CompetitionListDashboard from "@/components/dashboard/team/CompetitionListDashboard";
@@ -62,7 +62,7 @@ export default function TeamsPage() {
 }
 
 async function FetchTeams() {
-  const user = (await getUserProfile()) as User;
+  const user = (await getUser()) as User;
   const teams = await db.team.findMany({
     where: {
       members: {
