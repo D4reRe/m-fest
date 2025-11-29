@@ -4,7 +4,6 @@ import "./globals.css";
 // @ts-expect-error lenis.css exist
 import "lenis/dist/lenis.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import SessionProviders from "@/components/providers/session-provider";
 import { Toaster } from "@/components/ui/sonner";
 import NextTopLoader from "nextjs-toploader";
 import { ReactLenis } from "lenis/react";
@@ -22,18 +21,16 @@ export default function RootLayout({
       >
         <ReactLenis root>
           <QueryTanstackProvider>
-            <SessionProviders>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                <NextTopLoader showSpinner={false} height={3} />
-                {children}
-                <Toaster />
-              </ThemeProvider>
-            </SessionProviders>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <NextTopLoader showSpinner={false} height={3} />
+              {children}
+              <Toaster />
+            </ThemeProvider>
           </QueryTanstackProvider>
         </ReactLenis>
       </body>

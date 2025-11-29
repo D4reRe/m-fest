@@ -44,7 +44,7 @@ async function RegisteredTeams() {
       members: {
         include: {
           user: {
-            include: { verification: true },
+            include: { documents: true },
           },
         },
       },

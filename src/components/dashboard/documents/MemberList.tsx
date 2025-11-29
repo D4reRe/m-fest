@@ -8,7 +8,7 @@ import { BadgeCheckIcon } from "lucide-react";
 
 type TeamWithMembers = Prisma.TeamGetPayload<{
   include: {
-    members: { include: { user: { include: { verification: true } } } };
+    members: { include: { user: { include: { documents: true } } } };
   };
 }>;
 
@@ -58,7 +58,7 @@ async function MemberList({ team }: { team: TeamWithMembers }) {
                   className="w-24 h-24 border-2 border-primary/50 mb-2"
                 />
                 <span>
-                  {member.user?.verification?.status === "PENDING" ? (
+                  {member.user?.documents?.status === "PENDING" ? (
                     <Badge
                       variant="secondary"
                       className="bg-yellow-600 text-white"
@@ -66,7 +66,7 @@ async function MemberList({ team }: { team: TeamWithMembers }) {
                       Pending
                     </Badge>
                   ) : member.user?.verified &&
-                    member.user?.verification?.status === "ACCEPTED" ? (
+                    member.user?.documents?.status === "ACCEPTED" ? (
                     <Badge
                       variant="secondary"
                       className="bg-blue-500 text-white dark:bg-blue-600"
@@ -119,7 +119,7 @@ async function MemberList({ team }: { team: TeamWithMembers }) {
                   className="w-24 h-24 border-2 border-primary/50 mb-2"
                 />
                 <span>
-                  {member.user?.verification?.status === "PENDING" ? (
+                  {member.user?.documents?.status === "PENDING" ? (
                     <Badge
                       variant="secondary"
                       className="bg-yellow-600 text-white"
@@ -127,7 +127,7 @@ async function MemberList({ team }: { team: TeamWithMembers }) {
                       Pending
                     </Badge>
                   ) : member.user?.verified &&
-                    member.user?.verification?.status === "ACCEPTED" ? (
+                    member.user?.documents?.status === "ACCEPTED" ? (
                     <Badge
                       variant="secondary"
                       className="bg-blue-500 text-white dark:bg-blue-600"

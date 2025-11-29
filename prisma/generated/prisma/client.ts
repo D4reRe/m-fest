@@ -52,10 +52,10 @@ export type EventRegistration = Prisma.EventRegistrationModel
  */
 export type User = Prisma.UserModel
 /**
- * Model Verification
+ * Model Documents
  * 
  */
-export type Verification = Prisma.VerificationModel
+export type Documents = Prisma.DocumentsModel
 /**
  * Model Team
  * 
@@ -82,12 +82,7 @@ export type Account = Prisma.AccountModel
  */
 export type Session = Prisma.SessionModel
 /**
- * Model VerificationToken
+ * Model Verification
  * 
  */
-export type VerificationToken = Prisma.VerificationTokenModel
-/**
- * Model Authenticator
- * 
- */
-export type Authenticator = Prisma.AuthenticatorModel
+export type Verification = Prisma.VerificationModel

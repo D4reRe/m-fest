@@ -58,8 +58,8 @@ export const adminRouter = router({
     const invoices = await db.payment.findMany();
     return invoices;
   }),
-  getAllVerification: adminProcedure.query(async () => {
-    const verifications = await db.verification.findMany();
+  getAllDocuments: adminProcedure.query(async () => {
+    const verifications = await db.documents.findMany();
     return verifications;
   }),
 });

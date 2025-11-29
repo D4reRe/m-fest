@@ -11,6 +11,7 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import { auth } from "../auth/auth";
 import { db } from "../db";
 import { adminRoles } from "@/constants/constants";
+import { headers } from "next/headers";
 
 /**
  * 1. CONTEXT
@@ -26,7 +27,9 @@ import { adminRoles } from "@/constants/constants";
  */
 
 export async function createTRPCContext(opts: { headers: Headers }) {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return {
     session,
@@ -68,7 +71,10 @@ export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
   });
 });
 export const adminProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.session?.user || !adminRoles.includes(ctx.session.user.role)) {
+  if (
+    !ctx.session?.user ||
+    !adminRoles.includes(ctx.session.user.role as string)
+  ) {
     throw new TRPCError({
       message:
         "Unauthorized to access this resource, only admin can access this resource",

@@ -230,6 +230,22 @@ function RegisterForm({
       </div>
     );
   }
+  if (!stemTeamNames.length && comp.toUpperCase() === "STEM") {
+    return (
+      <div className="bg-card -m-px rounded-[calc(var(--radius)+.125rem)] border p-8">
+        <div className="text-center">
+          <h1 className="mb-1 mt-2 text-xl font-semibold">
+            You have already registered for all available teams or you are not a
+            leader of any team or your team has more than 3 members.
+          </h1>
+          <p className="text-sm">
+            Please contact us if you want to change your registration or create
+            a new team as a leader to register for a competition.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   function generateFeeId(): string {
     const timestamp = Date.now().toString(36); // time in base36

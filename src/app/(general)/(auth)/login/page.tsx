@@ -1,8 +1,7 @@
-import { auth } from "@/server/auth/auth";
 import Image from "next/image";
 import Link from "next/link";
 import AuthButtons from "@/components/auth/auth-buttons";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import LoginErrorHandler from "./LoginErrorHandler";
 
 export const metadata: Metadata = {

@@ -26,69 +26,27 @@ export type AggregateVerification = {
 
 export type VerificationMinAggregateOutputType = {
   id: string | null
-  userId: string | null
-  identityCardImageUrl: string | null
-  twibbonImageUrl: string | null
-  followIgImageUrl: string | null
-  identityCardImageKey: string | null
-  twibbonImageKey: string | null
-  followIgImageKey: string | null
-  identityCardCreatedAt: Date | null
-  twibbonCreatedAt: Date | null
-  followIgCreatedAt: Date | null
-  identityCardStatus: $Enums.DocumentStatus | null
-  twibbonStatus: $Enums.DocumentStatus | null
-  followIgStatus: $Enums.DocumentStatus | null
-  identityCardVerified: boolean | null
-  twibbonVerified: boolean | null
-  followIgVerified: boolean | null
-  status: $Enums.VerificationStatus | null
+  identifier: string | null
+  value: string | null
+  expiresAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type VerificationMaxAggregateOutputType = {
   id: string | null
-  userId: string | null
-  identityCardImageUrl: string | null
-  twibbonImageUrl: string | null
-  followIgImageUrl: string | null
-  identityCardImageKey: string | null
-  twibbonImageKey: string | null
-  followIgImageKey: string | null
-  identityCardCreatedAt: Date | null
-  twibbonCreatedAt: Date | null
-  followIgCreatedAt: Date | null
-  identityCardStatus: $Enums.DocumentStatus | null
-  twibbonStatus: $Enums.DocumentStatus | null
-  followIgStatus: $Enums.DocumentStatus | null
-  identityCardVerified: boolean | null
-  twibbonVerified: boolean | null
-  followIgVerified: boolean | null
-  status: $Enums.VerificationStatus | null
+  identifier: string | null
+  value: string | null
+  expiresAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
 
 export type VerificationCountAggregateOutputType = {
   id: number
-  userId: number
-  identityCardImageUrl: number
-  twibbonImageUrl: number
-  followIgImageUrl: number
-  identityCardImageKey: number
-  twibbonImageKey: number
-  followIgImageKey: number
-  identityCardCreatedAt: number
-  twibbonCreatedAt: number
-  followIgCreatedAt: number
-  identityCardStatus: number
-  twibbonStatus: number
-  followIgStatus: number
-  identityCardVerified: number
-  twibbonVerified: number
-  followIgVerified: number
-  status: number
+  identifier: number
+  value: number
+  expiresAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -97,69 +55,27 @@ export type VerificationCountAggregateOutputType = {
 
 export type VerificationMinAggregateInputType = {
   id?: true
-  userId?: true
-  identityCardImageUrl?: true
-  twibbonImageUrl?: true
-  followIgImageUrl?: true
-  identityCardImageKey?: true
-  twibbonImageKey?: true
-  followIgImageKey?: true
-  identityCardCreatedAt?: true
-  twibbonCreatedAt?: true
-  followIgCreatedAt?: true
-  identityCardStatus?: true
-  twibbonStatus?: true
-  followIgStatus?: true
-  identityCardVerified?: true
-  twibbonVerified?: true
-  followIgVerified?: true
-  status?: true
+  identifier?: true
+  value?: true
+  expiresAt?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type VerificationMaxAggregateInputType = {
   id?: true
-  userId?: true
-  identityCardImageUrl?: true
-  twibbonImageUrl?: true
-  followIgImageUrl?: true
-  identityCardImageKey?: true
-  twibbonImageKey?: true
-  followIgImageKey?: true
-  identityCardCreatedAt?: true
-  twibbonCreatedAt?: true
-  followIgCreatedAt?: true
-  identityCardStatus?: true
-  twibbonStatus?: true
-  followIgStatus?: true
-  identityCardVerified?: true
-  twibbonVerified?: true
-  followIgVerified?: true
-  status?: true
+  identifier?: true
+  value?: true
+  expiresAt?: true
   createdAt?: true
   updatedAt?: true
 }
 
 export type VerificationCountAggregateInputType = {
   id?: true
-  userId?: true
-  identityCardImageUrl?: true
-  twibbonImageUrl?: true
-  followIgImageUrl?: true
-  identityCardImageKey?: true
-  twibbonImageKey?: true
-  followIgImageKey?: true
-  identityCardCreatedAt?: true
-  twibbonCreatedAt?: true
-  followIgCreatedAt?: true
-  identityCardStatus?: true
-  twibbonStatus?: true
-  followIgStatus?: true
-  identityCardVerified?: true
-  twibbonVerified?: true
-  followIgVerified?: true
-  status?: true
+  identifier?: true
+  value?: true
+  expiresAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -239,25 +155,11 @@ export type VerificationGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 
 export type VerificationGroupByOutputType = {
   id: string
-  userId: string
-  identityCardImageUrl: string | null
-  twibbonImageUrl: string | null
-  followIgImageUrl: string | null
-  identityCardImageKey: string | null
-  twibbonImageKey: string | null
-  followIgImageKey: string | null
-  identityCardCreatedAt: Date | null
-  twibbonCreatedAt: Date | null
-  followIgCreatedAt: Date | null
-  identityCardStatus: $Enums.DocumentStatus | null
-  twibbonStatus: $Enums.DocumentStatus | null
-  followIgStatus: $Enums.DocumentStatus | null
-  identityCardVerified: boolean | null
-  twibbonVerified: boolean | null
-  followIgVerified: boolean | null
-  status: $Enums.VerificationStatus
-  createdAt: Date
-  updatedAt: Date
+  identifier: string
+  value: string
+  expiresAt: Date
+  createdAt: Date | null
+  updatedAt: Date | null
   _count: VerificationCountAggregateOutputType | null
   _min: VerificationMinAggregateOutputType | null
   _max: VerificationMaxAggregateOutputType | null
@@ -283,100 +185,41 @@ export type VerificationWhereInput = {
   OR?: Prisma.VerificationWhereInput[]
   NOT?: Prisma.VerificationWhereInput | Prisma.VerificationWhereInput[]
   id?: Prisma.StringFilter<"Verification"> | string
-  userId?: Prisma.StringFilter<"Verification"> | string
-  identityCardImageUrl?: Prisma.StringNullableFilter<"Verification"> | string | null
-  twibbonImageUrl?: Prisma.StringNullableFilter<"Verification"> | string | null
-  followIgImageUrl?: Prisma.StringNullableFilter<"Verification"> | string | null
-  identityCardImageKey?: Prisma.StringNullableFilter<"Verification"> | string | null
-  twibbonImageKey?: Prisma.StringNullableFilter<"Verification"> | string | null
-  followIgImageKey?: Prisma.StringNullableFilter<"Verification"> | string | null
-  identityCardCreatedAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
-  twibbonCreatedAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
-  followIgCreatedAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
-  identityCardStatus?: Prisma.EnumDocumentStatusNullableFilter<"Verification"> | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.EnumDocumentStatusNullableFilter<"Verification"> | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.EnumDocumentStatusNullableFilter<"Verification"> | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.BoolNullableFilter<"Verification"> | boolean | null
-  twibbonVerified?: Prisma.BoolNullableFilter<"Verification"> | boolean | null
-  followIgVerified?: Prisma.BoolNullableFilter<"Verification"> | boolean | null
-  status?: Prisma.EnumVerificationStatusFilter<"Verification"> | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeFilter<"Verification"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Verification"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  identifier?: Prisma.StringFilter<"Verification"> | string
+  value?: Prisma.StringFilter<"Verification"> | string
+  expiresAt?: Prisma.DateTimeFilter<"Verification"> | Date | string
+  createdAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
+  updatedAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
 }
 
 export type VerificationOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  identityCardImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  identityCardImageKey?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonImageKey?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgImageKey?: Prisma.SortOrderInput | Prisma.SortOrder
-  identityCardCreatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonCreatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgCreatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  identityCardStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  identityCardVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
+  identifier?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type VerificationWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  userId?: string
   AND?: Prisma.VerificationWhereInput | Prisma.VerificationWhereInput[]
   OR?: Prisma.VerificationWhereInput[]
   NOT?: Prisma.VerificationWhereInput | Prisma.VerificationWhereInput[]
-  identityCardImageUrl?: Prisma.StringNullableFilter<"Verification"> | string | null
-  twibbonImageUrl?: Prisma.StringNullableFilter<"Verification"> | string | null
-  followIgImageUrl?: Prisma.StringNullableFilter<"Verification"> | string | null
-  identityCardImageKey?: Prisma.StringNullableFilter<"Verification"> | string | null
-  twibbonImageKey?: Prisma.StringNullableFilter<"Verification"> | string | null
-  followIgImageKey?: Prisma.StringNullableFilter<"Verification"> | string | null
-  identityCardCreatedAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
-  twibbonCreatedAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
-  followIgCreatedAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
-  identityCardStatus?: Prisma.EnumDocumentStatusNullableFilter<"Verification"> | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.EnumDocumentStatusNullableFilter<"Verification"> | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.EnumDocumentStatusNullableFilter<"Verification"> | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.BoolNullableFilter<"Verification"> | boolean | null
-  twibbonVerified?: Prisma.BoolNullableFilter<"Verification"> | boolean | null
-  followIgVerified?: Prisma.BoolNullableFilter<"Verification"> | boolean | null
-  status?: Prisma.EnumVerificationStatusFilter<"Verification"> | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeFilter<"Verification"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"Verification"> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-}, "id" | "userId">
+  identifier?: Prisma.StringFilter<"Verification"> | string
+  value?: Prisma.StringFilter<"Verification"> | string
+  expiresAt?: Prisma.DateTimeFilter<"Verification"> | Date | string
+  createdAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
+  updatedAt?: Prisma.DateTimeNullableFilter<"Verification"> | Date | string | null
+}, "id">
 
 export type VerificationOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  identityCardImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgImageUrl?: Prisma.SortOrderInput | Prisma.SortOrder
-  identityCardImageKey?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonImageKey?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgImageKey?: Prisma.SortOrderInput | Prisma.SortOrder
-  identityCardCreatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonCreatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgCreatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
-  identityCardStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgStatus?: Prisma.SortOrderInput | Prisma.SortOrder
-  identityCardVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  twibbonVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  followIgVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  status?: Prisma.SortOrder
-  createdAt?: Prisma.SortOrder
-  updatedAt?: Prisma.SortOrder
+  identifier?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
+  createdAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  updatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.VerificationCountOrderByAggregateInput
   _max?: Prisma.VerificationMaxOrderByAggregateInput
   _min?: Prisma.VerificationMinOrderByAggregateInput
@@ -387,543 +230,153 @@ export type VerificationScalarWhereWithAggregatesInput = {
   OR?: Prisma.VerificationScalarWhereWithAggregatesInput[]
   NOT?: Prisma.VerificationScalarWhereWithAggregatesInput | Prisma.VerificationScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"Verification"> | string
-  userId?: Prisma.StringWithAggregatesFilter<"Verification"> | string
-  identityCardImageUrl?: Prisma.StringNullableWithAggregatesFilter<"Verification"> | string | null
-  twibbonImageUrl?: Prisma.StringNullableWithAggregatesFilter<"Verification"> | string | null
-  followIgImageUrl?: Prisma.StringNullableWithAggregatesFilter<"Verification"> | string | null
-  identityCardImageKey?: Prisma.StringNullableWithAggregatesFilter<"Verification"> | string | null
-  twibbonImageKey?: Prisma.StringNullableWithAggregatesFilter<"Verification"> | string | null
-  followIgImageKey?: Prisma.StringNullableWithAggregatesFilter<"Verification"> | string | null
-  identityCardCreatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Verification"> | Date | string | null
-  twibbonCreatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Verification"> | Date | string | null
-  followIgCreatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Verification"> | Date | string | null
-  identityCardStatus?: Prisma.EnumDocumentStatusNullableWithAggregatesFilter<"Verification"> | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.EnumDocumentStatusNullableWithAggregatesFilter<"Verification"> | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.EnumDocumentStatusNullableWithAggregatesFilter<"Verification"> | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.BoolNullableWithAggregatesFilter<"Verification"> | boolean | null
-  twibbonVerified?: Prisma.BoolNullableWithAggregatesFilter<"Verification"> | boolean | null
-  followIgVerified?: Prisma.BoolNullableWithAggregatesFilter<"Verification"> | boolean | null
-  status?: Prisma.EnumVerificationStatusWithAggregatesFilter<"Verification"> | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<"Verification"> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Verification"> | Date | string
+  identifier?: Prisma.StringWithAggregatesFilter<"Verification"> | string
+  value?: Prisma.StringWithAggregatesFilter<"Verification"> | string
+  expiresAt?: Prisma.DateTimeWithAggregatesFilter<"Verification"> | Date | string
+  createdAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Verification"> | Date | string | null
+  updatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Verification"> | Date | string | null
 }
 
 export type VerificationCreateInput = {
-  id?: string
-  identityCardImageUrl?: string | null
-  twibbonImageUrl?: string | null
-  followIgImageUrl?: string | null
-  identityCardImageKey?: string | null
-  twibbonImageKey?: string | null
-  followIgImageKey?: string | null
-  identityCardCreatedAt?: Date | string | null
-  twibbonCreatedAt?: Date | string | null
-  followIgCreatedAt?: Date | string | null
-  identityCardStatus?: $Enums.DocumentStatus | null
-  twibbonStatus?: $Enums.DocumentStatus | null
-  followIgStatus?: $Enums.DocumentStatus | null
-  identityCardVerified?: boolean | null
-  twibbonVerified?: boolean | null
-  followIgVerified?: boolean | null
-  status?: $Enums.VerificationStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutVerificationInput
+  id: string
+  identifier: string
+  value: string
+  expiresAt: Date | string
+  createdAt?: Date | string | null
+  updatedAt?: Date | string | null
 }
 
 export type VerificationUncheckedCreateInput = {
-  id?: string
-  userId: string
-  identityCardImageUrl?: string | null
-  twibbonImageUrl?: string | null
-  followIgImageUrl?: string | null
-  identityCardImageKey?: string | null
-  twibbonImageKey?: string | null
-  followIgImageKey?: string | null
-  identityCardCreatedAt?: Date | string | null
-  twibbonCreatedAt?: Date | string | null
-  followIgCreatedAt?: Date | string | null
-  identityCardStatus?: $Enums.DocumentStatus | null
-  twibbonStatus?: $Enums.DocumentStatus | null
-  followIgStatus?: $Enums.DocumentStatus | null
-  identityCardVerified?: boolean | null
-  twibbonVerified?: boolean | null
-  followIgVerified?: boolean | null
-  status?: $Enums.VerificationStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  id: string
+  identifier: string
+  value: string
+  expiresAt: Date | string
+  createdAt?: Date | string | null
+  updatedAt?: Date | string | null
 }
 
 export type VerificationUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  identityCardImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  twibbonCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  followIgCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  identityCardStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  twibbonVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  followIgVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutVerificationNestedInput
+  identifier?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type VerificationUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  identityCardImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  twibbonCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  followIgCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  identityCardStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  twibbonVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  followIgVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  identifier?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type VerificationCreateManyInput = {
-  id?: string
-  userId: string
-  identityCardImageUrl?: string | null
-  twibbonImageUrl?: string | null
-  followIgImageUrl?: string | null
-  identityCardImageKey?: string | null
-  twibbonImageKey?: string | null
-  followIgImageKey?: string | null
-  identityCardCreatedAt?: Date | string | null
-  twibbonCreatedAt?: Date | string | null
-  followIgCreatedAt?: Date | string | null
-  identityCardStatus?: $Enums.DocumentStatus | null
-  twibbonStatus?: $Enums.DocumentStatus | null
-  followIgStatus?: $Enums.DocumentStatus | null
-  identityCardVerified?: boolean | null
-  twibbonVerified?: boolean | null
-  followIgVerified?: boolean | null
-  status?: $Enums.VerificationStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
+  id: string
+  identifier: string
+  value: string
+  expiresAt: Date | string
+  createdAt?: Date | string | null
+  updatedAt?: Date | string | null
 }
 
 export type VerificationUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  identityCardImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  twibbonCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  followIgCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  identityCardStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  twibbonVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  followIgVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  identifier?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type VerificationUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  identityCardImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  twibbonCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  followIgCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  identityCardStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  twibbonVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  followIgVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type VerificationNullableScalarRelationFilter = {
-  is?: Prisma.VerificationWhereInput | null
-  isNot?: Prisma.VerificationWhereInput | null
+  identifier?: Prisma.StringFieldUpdateOperationsInput | string
+  value?: Prisma.StringFieldUpdateOperationsInput | string
+  expiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  updatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type VerificationCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  identityCardImageUrl?: Prisma.SortOrder
-  twibbonImageUrl?: Prisma.SortOrder
-  followIgImageUrl?: Prisma.SortOrder
-  identityCardImageKey?: Prisma.SortOrder
-  twibbonImageKey?: Prisma.SortOrder
-  followIgImageKey?: Prisma.SortOrder
-  identityCardCreatedAt?: Prisma.SortOrder
-  twibbonCreatedAt?: Prisma.SortOrder
-  followIgCreatedAt?: Prisma.SortOrder
-  identityCardStatus?: Prisma.SortOrder
-  twibbonStatus?: Prisma.SortOrder
-  followIgStatus?: Prisma.SortOrder
-  identityCardVerified?: Prisma.SortOrder
-  twibbonVerified?: Prisma.SortOrder
-  followIgVerified?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  identifier?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type VerificationMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  identityCardImageUrl?: Prisma.SortOrder
-  twibbonImageUrl?: Prisma.SortOrder
-  followIgImageUrl?: Prisma.SortOrder
-  identityCardImageKey?: Prisma.SortOrder
-  twibbonImageKey?: Prisma.SortOrder
-  followIgImageKey?: Prisma.SortOrder
-  identityCardCreatedAt?: Prisma.SortOrder
-  twibbonCreatedAt?: Prisma.SortOrder
-  followIgCreatedAt?: Prisma.SortOrder
-  identityCardStatus?: Prisma.SortOrder
-  twibbonStatus?: Prisma.SortOrder
-  followIgStatus?: Prisma.SortOrder
-  identityCardVerified?: Prisma.SortOrder
-  twibbonVerified?: Prisma.SortOrder
-  followIgVerified?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  identifier?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
 
 export type VerificationMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-  identityCardImageUrl?: Prisma.SortOrder
-  twibbonImageUrl?: Prisma.SortOrder
-  followIgImageUrl?: Prisma.SortOrder
-  identityCardImageKey?: Prisma.SortOrder
-  twibbonImageKey?: Prisma.SortOrder
-  followIgImageKey?: Prisma.SortOrder
-  identityCardCreatedAt?: Prisma.SortOrder
-  twibbonCreatedAt?: Prisma.SortOrder
-  followIgCreatedAt?: Prisma.SortOrder
-  identityCardStatus?: Prisma.SortOrder
-  twibbonStatus?: Prisma.SortOrder
-  followIgStatus?: Prisma.SortOrder
-  identityCardVerified?: Prisma.SortOrder
-  twibbonVerified?: Prisma.SortOrder
-  followIgVerified?: Prisma.SortOrder
-  status?: Prisma.SortOrder
+  identifier?: Prisma.SortOrder
+  value?: Prisma.SortOrder
+  expiresAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type VerificationCreateNestedOneWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.VerificationCreateWithoutUserInput, Prisma.VerificationUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.VerificationCreateOrConnectWithoutUserInput
-  connect?: Prisma.VerificationWhereUniqueInput
-}
-
-export type VerificationUncheckedCreateNestedOneWithoutUserInput = {
-  create?: Prisma.XOR<Prisma.VerificationCreateWithoutUserInput, Prisma.VerificationUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.VerificationCreateOrConnectWithoutUserInput
-  connect?: Prisma.VerificationWhereUniqueInput
-}
-
-export type VerificationUpdateOneWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.VerificationCreateWithoutUserInput, Prisma.VerificationUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.VerificationCreateOrConnectWithoutUserInput
-  upsert?: Prisma.VerificationUpsertWithoutUserInput
-  disconnect?: Prisma.VerificationWhereInput | boolean
-  delete?: Prisma.VerificationWhereInput | boolean
-  connect?: Prisma.VerificationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.VerificationUpdateToOneWithWhereWithoutUserInput, Prisma.VerificationUpdateWithoutUserInput>, Prisma.VerificationUncheckedUpdateWithoutUserInput>
-}
-
-export type VerificationUncheckedUpdateOneWithoutUserNestedInput = {
-  create?: Prisma.XOR<Prisma.VerificationCreateWithoutUserInput, Prisma.VerificationUncheckedCreateWithoutUserInput>
-  connectOrCreate?: Prisma.VerificationCreateOrConnectWithoutUserInput
-  upsert?: Prisma.VerificationUpsertWithoutUserInput
-  disconnect?: Prisma.VerificationWhereInput | boolean
-  delete?: Prisma.VerificationWhereInput | boolean
-  connect?: Prisma.VerificationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.VerificationUpdateToOneWithWhereWithoutUserInput, Prisma.VerificationUpdateWithoutUserInput>, Prisma.VerificationUncheckedUpdateWithoutUserInput>
-}
-
-export type NullableEnumDocumentStatusFieldUpdateOperationsInput = {
-  set?: $Enums.DocumentStatus | null
-}
-
-export type NullableBoolFieldUpdateOperationsInput = {
-  set?: boolean | null
-}
-
-export type EnumVerificationStatusFieldUpdateOperationsInput = {
-  set?: $Enums.VerificationStatus
-}
-
-export type VerificationCreateWithoutUserInput = {
-  id?: string
-  identityCardImageUrl?: string | null
-  twibbonImageUrl?: string | null
-  followIgImageUrl?: string | null
-  identityCardImageKey?: string | null
-  twibbonImageKey?: string | null
-  followIgImageKey?: string | null
-  identityCardCreatedAt?: Date | string | null
-  twibbonCreatedAt?: Date | string | null
-  followIgCreatedAt?: Date | string | null
-  identityCardStatus?: $Enums.DocumentStatus | null
-  twibbonStatus?: $Enums.DocumentStatus | null
-  followIgStatus?: $Enums.DocumentStatus | null
-  identityCardVerified?: boolean | null
-  twibbonVerified?: boolean | null
-  followIgVerified?: boolean | null
-  status?: $Enums.VerificationStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type VerificationUncheckedCreateWithoutUserInput = {
-  id?: string
-  identityCardImageUrl?: string | null
-  twibbonImageUrl?: string | null
-  followIgImageUrl?: string | null
-  identityCardImageKey?: string | null
-  twibbonImageKey?: string | null
-  followIgImageKey?: string | null
-  identityCardCreatedAt?: Date | string | null
-  twibbonCreatedAt?: Date | string | null
-  followIgCreatedAt?: Date | string | null
-  identityCardStatus?: $Enums.DocumentStatus | null
-  twibbonStatus?: $Enums.DocumentStatus | null
-  followIgStatus?: $Enums.DocumentStatus | null
-  identityCardVerified?: boolean | null
-  twibbonVerified?: boolean | null
-  followIgVerified?: boolean | null
-  status?: $Enums.VerificationStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type VerificationCreateOrConnectWithoutUserInput = {
-  where: Prisma.VerificationWhereUniqueInput
-  create: Prisma.XOR<Prisma.VerificationCreateWithoutUserInput, Prisma.VerificationUncheckedCreateWithoutUserInput>
-}
-
-export type VerificationUpsertWithoutUserInput = {
-  update: Prisma.XOR<Prisma.VerificationUpdateWithoutUserInput, Prisma.VerificationUncheckedUpdateWithoutUserInput>
-  create: Prisma.XOR<Prisma.VerificationCreateWithoutUserInput, Prisma.VerificationUncheckedCreateWithoutUserInput>
-  where?: Prisma.VerificationWhereInput
-}
-
-export type VerificationUpdateToOneWithWhereWithoutUserInput = {
-  where?: Prisma.VerificationWhereInput
-  data: Prisma.XOR<Prisma.VerificationUpdateWithoutUserInput, Prisma.VerificationUncheckedUpdateWithoutUserInput>
-}
-
-export type VerificationUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  identityCardImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  twibbonCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  followIgCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  identityCardStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  twibbonVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  followIgVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type VerificationUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  identityCardImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  twibbonImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  followIgImageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  identityCardCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  twibbonCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  followIgCreatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  identityCardStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  twibbonStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  followIgStatus?: Prisma.NullableEnumDocumentStatusFieldUpdateOperationsInput | $Enums.DocumentStatus | null
-  identityCardVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  twibbonVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  followIgVerified?: Prisma.NullableBoolFieldUpdateOperationsInput | boolean | null
-  status?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
 
 export type VerificationSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  identityCardImageUrl?: boolean
-  twibbonImageUrl?: boolean
-  followIgImageUrl?: boolean
-  identityCardImageKey?: boolean
-  twibbonImageKey?: boolean
-  followIgImageKey?: boolean
-  identityCardCreatedAt?: boolean
-  twibbonCreatedAt?: boolean
-  followIgCreatedAt?: boolean
-  identityCardStatus?: boolean
-  twibbonStatus?: boolean
-  followIgStatus?: boolean
-  identityCardVerified?: boolean
-  twibbonVerified?: boolean
-  followIgVerified?: boolean
-  status?: boolean
+  identifier?: boolean
+  value?: boolean
+  expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["verification"]>
 
 export type VerificationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  identityCardImageUrl?: boolean
-  twibbonImageUrl?: boolean
-  followIgImageUrl?: boolean
-  identityCardImageKey?: boolean
-  twibbonImageKey?: boolean
-  followIgImageKey?: boolean
-  identityCardCreatedAt?: boolean
-  twibbonCreatedAt?: boolean
-  followIgCreatedAt?: boolean
-  identityCardStatus?: boolean
-  twibbonStatus?: boolean
-  followIgStatus?: boolean
-  identityCardVerified?: boolean
-  twibbonVerified?: boolean
-  followIgVerified?: boolean
-  status?: boolean
+  identifier?: boolean
+  value?: boolean
+  expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["verification"]>
 
 export type VerificationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  userId?: boolean
-  identityCardImageUrl?: boolean
-  twibbonImageUrl?: boolean
-  followIgImageUrl?: boolean
-  identityCardImageKey?: boolean
-  twibbonImageKey?: boolean
-  followIgImageKey?: boolean
-  identityCardCreatedAt?: boolean
-  twibbonCreatedAt?: boolean
-  followIgCreatedAt?: boolean
-  identityCardStatus?: boolean
-  twibbonStatus?: boolean
-  followIgStatus?: boolean
-  identityCardVerified?: boolean
-  twibbonVerified?: boolean
-  followIgVerified?: boolean
-  status?: boolean
+  identifier?: boolean
+  value?: boolean
+  expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["verification"]>
 
 export type VerificationSelectScalar = {
   id?: boolean
-  userId?: boolean
-  identityCardImageUrl?: boolean
-  twibbonImageUrl?: boolean
-  followIgImageUrl?: boolean
-  identityCardImageKey?: boolean
-  twibbonImageKey?: boolean
-  followIgImageKey?: boolean
-  identityCardCreatedAt?: boolean
-  twibbonCreatedAt?: boolean
-  followIgCreatedAt?: boolean
-  identityCardStatus?: boolean
-  twibbonStatus?: boolean
-  followIgStatus?: boolean
-  identityCardVerified?: boolean
-  twibbonVerified?: boolean
-  followIgVerified?: boolean
-  status?: boolean
+  identifier?: boolean
+  value?: boolean
+  expiresAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type VerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "identityCardImageUrl" | "twibbonImageUrl" | "followIgImageUrl" | "identityCardImageKey" | "twibbonImageKey" | "followIgImageKey" | "identityCardCreatedAt" | "twibbonCreatedAt" | "followIgCreatedAt" | "identityCardStatus" | "twibbonStatus" | "followIgStatus" | "identityCardVerified" | "twibbonVerified" | "followIgVerified" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["verification"]>
-export type VerificationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}
-export type VerificationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}
-export type VerificationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-}
+export type VerificationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "identifier" | "value" | "expiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["verification"]>
 
 export type $VerificationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Verification"
-  objects: {
-    user: Prisma.$UserPayload<ExtArgs>
-  }
+  objects: {}
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    userId: string
-    identityCardImageUrl: string | null
-    twibbonImageUrl: string | null
-    followIgImageUrl: string | null
-    identityCardImageKey: string | null
-    twibbonImageKey: string | null
-    followIgImageKey: string | null
-    identityCardCreatedAt: Date | null
-    twibbonCreatedAt: Date | null
-    followIgCreatedAt: Date | null
-    identityCardStatus: $Enums.DocumentStatus | null
-    twibbonStatus: $Enums.DocumentStatus | null
-    followIgStatus: $Enums.DocumentStatus | null
-    identityCardVerified: boolean | null
-    twibbonVerified: boolean | null
-    followIgVerified: boolean | null
-    status: $Enums.VerificationStatus
-    createdAt: Date
-    updatedAt: Date
+    identifier: string
+    value: string
+    expiresAt: Date
+    createdAt: Date | null
+    updatedAt: Date | null
   }, ExtArgs["result"]["verification"]>
   composites: {}
 }
@@ -1318,7 +771,6 @@ readonly fields: VerificationFieldRefs;
  */
 export interface Prisma__VerificationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1349,23 +801,9 @@ export interface Prisma__VerificationClient<T, Null = never, ExtArgs extends run
  */
 export interface VerificationFieldRefs {
   readonly id: Prisma.FieldRef<"Verification", 'String'>
-  readonly userId: Prisma.FieldRef<"Verification", 'String'>
-  readonly identityCardImageUrl: Prisma.FieldRef<"Verification", 'String'>
-  readonly twibbonImageUrl: Prisma.FieldRef<"Verification", 'String'>
-  readonly followIgImageUrl: Prisma.FieldRef<"Verification", 'String'>
-  readonly identityCardImageKey: Prisma.FieldRef<"Verification", 'String'>
-  readonly twibbonImageKey: Prisma.FieldRef<"Verification", 'String'>
-  readonly followIgImageKey: Prisma.FieldRef<"Verification", 'String'>
-  readonly identityCardCreatedAt: Prisma.FieldRef<"Verification", 'DateTime'>
-  readonly twibbonCreatedAt: Prisma.FieldRef<"Verification", 'DateTime'>
-  readonly followIgCreatedAt: Prisma.FieldRef<"Verification", 'DateTime'>
-  readonly identityCardStatus: Prisma.FieldRef<"Verification", 'DocumentStatus'>
-  readonly twibbonStatus: Prisma.FieldRef<"Verification", 'DocumentStatus'>
-  readonly followIgStatus: Prisma.FieldRef<"Verification", 'DocumentStatus'>
-  readonly identityCardVerified: Prisma.FieldRef<"Verification", 'Boolean'>
-  readonly twibbonVerified: Prisma.FieldRef<"Verification", 'Boolean'>
-  readonly followIgVerified: Prisma.FieldRef<"Verification", 'Boolean'>
-  readonly status: Prisma.FieldRef<"Verification", 'VerificationStatus'>
+  readonly identifier: Prisma.FieldRef<"Verification", 'String'>
+  readonly value: Prisma.FieldRef<"Verification", 'String'>
+  readonly expiresAt: Prisma.FieldRef<"Verification", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"Verification", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Verification", 'DateTime'>
 }
@@ -1385,10 +823,6 @@ export type VerificationFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
-  /**
    * Filter, which Verification to fetch.
    */
   where: Prisma.VerificationWhereUniqueInput
@@ -1407,10 +841,6 @@ export type VerificationFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Exte
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
-  /**
    * Filter, which Verification to fetch.
    */
   where: Prisma.VerificationWhereUniqueInput
@@ -1428,10 +858,6 @@ export type VerificationFindFirstArgs<ExtArgs extends runtime.Types.Extensions.I
    * Omit specific fields from the Verification
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
   /**
    * Filter, which Verification to fetch.
    */
@@ -1481,10 +907,6 @@ export type VerificationFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Exten
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
-  /**
    * Filter, which Verification to fetch.
    */
   where?: Prisma.VerificationWhereInput
@@ -1533,10 +955,6 @@ export type VerificationFindManyArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
-  /**
    * Filter, which Verifications to fetch.
    */
   where?: Prisma.VerificationWhereInput
@@ -1580,10 +998,6 @@ export type VerificationCreateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
   /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
-  /**
    * The data needed to create a Verification.
    */
   data: Prisma.XOR<Prisma.VerificationCreateInput, Prisma.VerificationUncheckedCreateInput>
@@ -1617,10 +1031,6 @@ export type VerificationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    */
   data: Prisma.VerificationCreateManyInput | Prisma.VerificationCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1635,10 +1045,6 @@ export type VerificationUpdateArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the Verification
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
   /**
    * The data needed to update a Verification.
    */
@@ -1691,10 +1097,6 @@ export type VerificationUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * Limit how many Verifications to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1709,10 +1111,6 @@ export type VerificationUpsertArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the Verification
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
   /**
    * The filter to search for the Verification to update in case it exists.
    */
@@ -1739,10 +1137,6 @@ export type VerificationDeleteArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the Verification
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
   /**
    * Filter which Verification to delete.
    */
@@ -1775,8 +1169,4 @@ export type VerificationDefaultArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the Verification
    */
   omit?: Prisma.VerificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
 }

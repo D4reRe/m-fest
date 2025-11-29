@@ -216,7 +216,7 @@ function TeamForm() {
         toast.success("Team created successfully!");
         setTimeout(() => {
           router.refresh();
-          router.replace("/dashboard/team");
+          router.push("/dashboard/team");
         }, 500);
       } else {
         const { error, success } = await res.json();

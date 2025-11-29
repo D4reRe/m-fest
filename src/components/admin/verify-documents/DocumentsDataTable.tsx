@@ -58,7 +58,7 @@ export function DocumentsDataTable() {
     data: datas,
     isLoading,
     isFetching,
-  } = useQuery(trpc.admin.getAllVerification.queryOptions());
+  } = useQuery(trpc.admin.getAllDocuments.queryOptions());
   const { data: users } = useQuery(trpc.admin.getUsers.queryOptions());
   const unified = React.useMemo(() => {
     if (!datas || !users) return [];

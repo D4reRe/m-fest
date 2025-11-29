@@ -22,7 +22,6 @@ import { useEffect, useState } from "react";
 import { ChevronDownIcon, Loader2 } from "lucide-react";
 import { educations } from "@/lib/profile";
 import { toast } from "sonner";
-import { useSession } from "next-auth/react";
 import {
   Field,
   FieldContent,
@@ -36,6 +35,7 @@ import { cn } from "@/lib/utils";
 import ProfileFormSkeleton from "@/components/dashboard/profile/ProfileFormSkeleton";
 import { useTRPC } from "@/utils/trpc";
 import { profileSchema } from "@/lib/schema";
+import { authClient } from "@/lib/auth-client";
 
 function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   useEffect(() => {
@@ -52,12 +52,12 @@ function usePreventRefreshUserDuringUpload(isLoading: boolean) {
 }
 
 function ProfileUpdateForm() {
+  const { data: session } = authClient.useSession();
   const trpc = useTRPC();
   const { data: user, isLoading: isLoadingUser } = useQuery(
     trpc.dashboard.getUser.queryOptions()
   );
   const queryClient = useQueryClient();
-  const { data: session } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState<boolean>(false);

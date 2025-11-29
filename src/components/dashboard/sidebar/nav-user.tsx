@@ -14,7 +14,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { signOut, useSession } from "next-auth/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -23,20 +22,22 @@ import { UserAvatar } from "../../general/UserProfile";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/utils/trpc";
+import { authClient } from "@/lib/auth-client";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
-  const { status } = useSession();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const trpc = useTRPC();
-  const { data: user } = useQuery(trpc.dashboard.getUser.queryOptions());
+  const { data: user, isFetched } = useQuery(
+    trpc.dashboard.getUser.queryOptions()
+  );
   return (
     <SidebarMenu className="bg-transparent backdrop-blur-lg">
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            {status === "authenticated" ? (
+            {isFetched ? (
               <SidebarMenuButton
                 size="lg"
                 className="data-[state=open]:bg-white/20data-[state=open]:text-sidebar-accent-foreground hover:bg-white/20 "
@@ -108,7 +109,7 @@ export function NavUser() {
                   id: "logging-out",
                 });
                 try {
-                  await signOut({ redirect: false });
+                  await authClient.signOut();
                   toast.success("Logged out successfully");
                   toast.dismiss("logging-out");
                   router.replace("/");

@@ -1,9 +1,9 @@
 "use client";
 import Image from "next/image";
 import { Button } from "../ui/button";
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
 
 function AuthButtons() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -21,7 +21,10 @@ function AuthButtons() {
             setIsLoading(true);
             toast.loading("Signing in...");
             try {
-              await signIn("google", { redirectTo: "/" });
+              await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/",
+              });
             } catch (error) {
               toast.error("Failed to sign in");
               console.error(error);
@@ -70,7 +73,10 @@ function AuthButtons() {
             setIsLoading(true);
             toast.loading("Signing in...", { id: "signing-in" });
             try {
-              await signIn("github", { redirectTo: "/" });
+              await await authClient.signIn.social({
+                provider: "github",
+                callbackURL: "/",
+              });
             } catch (error) {
               toast.error("Failed to sign in");
               console.error(error);

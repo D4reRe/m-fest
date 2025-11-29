@@ -54,7 +54,7 @@ async function FetchTeamMembers({
     where: { name: teamName.split("-").join(" "), leaderUserId: user.id },
     include: {
       members: {
-        include: { user: { include: { verification: true } } },
+        include: { user: { include: { documents: true } } },
       },
     },
   });
@@ -66,7 +66,7 @@ async function FetchTeamMembers({
         members: {
           include: {
             user: {
-              include: { verification: true },
+              include: { documents: true },
             },
           },
         },

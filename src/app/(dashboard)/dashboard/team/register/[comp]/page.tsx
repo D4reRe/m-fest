@@ -89,6 +89,11 @@ async function FetchCompForm({
               ?.title
           }
         </h1>
+        {comp.toUpperCase() === "STEM" && (
+          <p className="text-xl mb-2 text-red-500">
+            For STEM, team must consist of 3 members only.
+          </p>
+        )}
         <h3 className="text-lg">
           Before you register, please read this competition{" "}
           <Link
@@ -115,9 +120,6 @@ async function FetchCompForm({
         <p className="text-sm mb-2">
           Please fill in the form below to register for {comp.toUpperCase()}
         </p>
-        {comp.toUpperCase() === "STEM" && (
-          <p>For STEM, team must consist of 3 members only.</p>
-        )}
       </div>
       <RegisterForm
         comp={comp}

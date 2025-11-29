@@ -53,14 +53,13 @@ export enum TeamStatus {
 export type DocumentType = "identityCard" | "twibbon" | "followIg";
 
 export type User = {
-  image: string | null;
+  id: string;
   name: string | null;
   email: string;
-  id: string;
-  role: Role;
-  emailVerified: Date | null;
-  password: string | null;
+  emailVerified: boolean | null;
+  image: string | null;
   imageKey: string | null;
+
   gender: Gender | null;
   phoneNumber: string | null;
   domicile: string | null;
@@ -69,6 +68,8 @@ export type User = {
   education: Education | null;
   semester: number | null;
   birthDate: Date | null;
+  role: Role;
+
   verified: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -146,7 +147,7 @@ export type Invoices = {
   referenceDuitku: string | null;
 }[];
 
-export type Verification = {
+export type Documents = {
   id: string;
   userId: string;
   IdentityCardImageUrl: string | null;
@@ -181,10 +182,6 @@ export type Document = {
   createdAt: Date | null;
   status: "AWAITING_UPLOAD" | "PENDING" | "VERIFIED" | null;
   verified: boolean | null;
-};
-
-export type Documents = {
-  [K in DocumentType]: Document;
 };
 
 export type UploadThingRoute = "identityCard" | "twibbon" | "followIg";

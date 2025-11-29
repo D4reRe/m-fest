@@ -75,7 +75,7 @@ async function FetchTeams() {
       members: {
         include: {
           user: {
-            include: { verification: true },
+            include: { documents: true },
           },
         },
       },

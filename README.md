@@ -17,7 +17,7 @@ It serves as the official system for participants to register, create teams, and
 | **UI Components**                                                           | [shadcn/ui](https://ui.shadcn.com/)                 |
 | **Database ORM**                                                            | [Prisma](https://www.prisma.io/)                    |
 | **Database**                                                                | [Neon PostgreSQL](https://neon.tech/)               |
-| **Authentication**                                                          | [Auth.js (NextAuth)](https://authjs.dev/)           |
+| **Authentication**                                                          | [Better-Auth ](https://www.better-auth.com/)        |
 | **Asynchronous state management, server-state utilities and data fetching** | [TanStack Query](https://tanstack.com/query/latest) |
 | **End-to-end typesafe API**                                                 | [tRPC](https://trpc.io/)                            |
 | **State Managment**                                                         | [Zustand](https://zustand.docs.pmnd.rs/)            |

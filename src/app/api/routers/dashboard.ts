@@ -53,14 +53,14 @@ export const dashboardRouter = router({
         where: { id: input.userId },
       });
 
-      const userDocuments = await ctx.db.verification.findUnique({
+      const userDocuments = await ctx.db.documents.findUnique({
         where: {
           userId: user?.id,
         },
       });
 
       if (!userDocuments) {
-        const createUserDocuments = await ctx.db.verification.create({
+        const createUserDocuments = await ctx.db.documents.create({
           data: {
             userId: user?.id as string,
           },
@@ -143,14 +143,14 @@ export const dashboardRouter = router({
     .query(async ({ ctx }) => {
       const user = await getUserProfile();
 
-      const userDocuments = await ctx.db.verification.findUnique({
+      const userDocuments = await ctx.db.documents.findUnique({
         where: {
           userId: user?.id,
         },
       });
 
       if (!userDocuments) {
-        const createUserDocuments = await ctx.db.verification.create({
+        const createUserDocuments = await ctx.db.documents.create({
           data: {
             userId: user?.id as string,
           },
@@ -333,11 +333,11 @@ export const dashboardRouter = router({
       }
 
       const [userVerification, userDocuments] = await Promise.all([
-        ctx.db.verification.findUnique({
+        ctx.db.documents.findUnique({
           where: { userId },
           select: { status: true },
         }),
-        ctx.db.verification.findUnique({
+        ctx.db.documents.findUnique({
           where: {
             userId,
           },
@@ -346,7 +346,7 @@ export const dashboardRouter = router({
       if (!userVerification) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "User verification not found",
+          message: "User documents not found",
         });
       }
       if (!userDocuments) {
@@ -402,7 +402,7 @@ export const dashboardRouter = router({
       ];
 
       console.log("Documents: ", documents);
-      console.log("User verification: ", userVerification);
+      console.log("User documents: ", userVerification);
       if (userVerification?.status === "PENDING") {
         // AWAITING_UPLOAD means user has not submitted any pending documents
         // PENDING means user has submitted documents but not verified yet
@@ -419,7 +419,7 @@ export const dashboardRouter = router({
               (document) => document.status === "PENDING"
             );
             if (!documentsNotVerified.length) {
-              await ctx.db.verification.update({
+              await ctx.db.documents.update({
                 where: { userId },
                 data: {
                   status: "ACCEPTED",
@@ -447,7 +447,7 @@ export const dashboardRouter = router({
           console.log("Documents still pending: ", documentsStillPending);
           documentsStillPending?.map(async (document) => {
             if (document.status === "AWAITING_UPLOAD") {
-              await ctx.db.verification.update({
+              await ctx.db.documents.update({
                 where: { userId },
                 data: {
                   [`${document.type}Status`]: "PENDING",
@@ -473,7 +473,7 @@ export const dashboardRouter = router({
 
       // If user verifaction status is NOT_SUBMITTED run the rest of the code
 
-      await ctx.db.verification.update({
+      await ctx.db.documents.update({
         where: {
           userId,
         },

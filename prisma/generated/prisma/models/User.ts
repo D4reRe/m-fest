@@ -38,8 +38,7 @@ export type UserMinAggregateOutputType = {
   id: string | null
   name: string | null
   email: string | null
-  emailVerified: Date | null
-  password: string | null
+  emailVerified: boolean | null
   image: string | null
   imageKey: string | null
   gender: $Enums.Gender | null
@@ -60,8 +59,7 @@ export type UserMaxAggregateOutputType = {
   id: string | null
   name: string | null
   email: string | null
-  emailVerified: Date | null
-  password: string | null
+  emailVerified: boolean | null
   image: string | null
   imageKey: string | null
   gender: $Enums.Gender | null
@@ -83,7 +81,6 @@ export type UserCountAggregateOutputType = {
   name: number
   email: number
   emailVerified: number
-  password: number
   image: number
   imageKey: number
   gender: number
@@ -115,7 +112,6 @@ export type UserMinAggregateInputType = {
   name?: true
   email?: true
   emailVerified?: true
-  password?: true
   image?: true
   imageKey?: true
   gender?: true
@@ -137,7 +133,6 @@ export type UserMaxAggregateInputType = {
   name?: true
   email?: true
   emailVerified?: true
-  password?: true
   image?: true
   imageKey?: true
   gender?: true
@@ -159,7 +154,6 @@ export type UserCountAggregateInputType = {
   name?: true
   email?: true
   emailVerified?: true
-  password?: true
   image?: true
   imageKey?: true
   gender?: true
@@ -265,10 +259,9 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
 
 export type UserGroupByOutputType = {
   id: string
-  name: string | null
+  name: string
   email: string
-  emailVerified: Date | null
-  password: string | null
+  emailVerified: boolean
   image: string | null
   imageKey: string | null
   gender: $Enums.Gender | null
@@ -310,10 +303,9 @@ export type UserWhereInput = {
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   id?: Prisma.StringFilter<"User"> | string
-  name?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
-  emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  password?: Prisma.StringNullableFilter<"User"> | string | null
+  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   imageKey?: Prisma.StringNullableFilter<"User"> | string | null
   gender?: Prisma.EnumGenderNullableFilter<"User"> | $Enums.Gender | null
@@ -328,22 +320,20 @@ export type UserWhereInput = {
   verified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  verification?: Prisma.XOR<Prisma.VerificationNullableScalarRelationFilter, Prisma.VerificationWhereInput> | null
+  documents?: Prisma.XOR<Prisma.DocumentsNullableScalarRelationFilter, Prisma.DocumentsWhereInput> | null
   team_member?: Prisma.TeamMemberListRelationFilter
   registration?: Prisma.CompRegistrationListRelationFilter
   eventRegistration?: Prisma.EventRegistrationListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
-  Authenticator?: Prisma.AuthenticatorListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  password?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   imageKey?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -358,14 +348,13 @@ export type UserOrderByWithRelationInput = {
   verified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  verification?: Prisma.VerificationOrderByWithRelationInput
+  documents?: Prisma.DocumentsOrderByWithRelationInput
   team_member?: Prisma.TeamMemberOrderByRelationAggregateInput
   registration?: Prisma.CompRegistrationOrderByRelationAggregateInput
   eventRegistration?: Prisma.EventRegistrationOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
-  Authenticator?: Prisma.AuthenticatorOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -374,9 +363,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
-  name?: Prisma.StringNullableFilter<"User"> | string | null
-  emailVerified?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  password?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
+  emailVerified?: Prisma.BoolFilter<"User"> | boolean
   image?: Prisma.StringNullableFilter<"User"> | string | null
   imageKey?: Prisma.StringNullableFilter<"User"> | string | null
   gender?: Prisma.EnumGenderNullableFilter<"User"> | $Enums.Gender | null
@@ -391,22 +379,20 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   verified?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  verification?: Prisma.XOR<Prisma.VerificationNullableScalarRelationFilter, Prisma.VerificationWhereInput> | null
+  documents?: Prisma.XOR<Prisma.DocumentsNullableScalarRelationFilter, Prisma.DocumentsWhereInput> | null
   team_member?: Prisma.TeamMemberListRelationFilter
   registration?: Prisma.CompRegistrationListRelationFilter
   eventRegistration?: Prisma.EventRegistrationListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
   accounts?: Prisma.AccountListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
-  Authenticator?: Prisma.AuthenticatorListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  name?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  emailVerified?: Prisma.SortOrderInput | Prisma.SortOrder
-  password?: Prisma.SortOrderInput | Prisma.SortOrder
+  emailVerified?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   imageKey?: Prisma.SortOrderInput | Prisma.SortOrder
   gender?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -433,10 +419,9 @@ export type UserScalarWhereWithAggregatesInput = {
   OR?: Prisma.UserScalarWhereWithAggregatesInput[]
   NOT?: Prisma.UserScalarWhereWithAggregatesInput | Prisma.UserScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"User"> | string
-  name?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  name?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
-  emailVerified?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-  password?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  emailVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   image?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   imageKey?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   gender?: Prisma.EnumGenderNullableWithAggregatesFilter<"User"> | $Enums.Gender | null
@@ -454,11 +439,10 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -473,22 +457,20 @@ export type UserCreateInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -503,22 +485,20 @@ export type UserUncheckedCreateInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationUncheckedCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -533,22 +513,20 @@ export type UserUpdateInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -563,22 +541,20 @@ export type UserUncheckedUpdateInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUncheckedUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -597,10 +573,9 @@ export type UserCreateManyInput = {
 
 export type UserUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -619,10 +594,9 @@ export type UserUpdateManyMutationInput = {
 
 export type UserUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -649,7 +623,6 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   image?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   gender?: Prisma.SortOrder
@@ -675,7 +648,6 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   image?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   gender?: Prisma.SortOrder
@@ -697,7 +669,6 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   email?: Prisma.SortOrder
   emailVerified?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   image?: Prisma.SortOrder
   imageKey?: Prisma.SortOrder
   gender?: Prisma.SortOrder
@@ -755,10 +726,6 @@ export type UserUpdateOneWithoutEventRegistrationNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEventRegistrationInput, Prisma.UserUpdateWithoutEventRegistrationInput>, Prisma.UserUncheckedUpdateWithoutEventRegistrationInput>
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type NullableEnumGenderFieldUpdateOperationsInput = {
   set?: $Enums.Gender | null
 }
@@ -775,22 +742,26 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
-export type UserCreateNestedOneWithoutVerificationInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutVerificationInput, Prisma.UserUncheckedCreateWithoutVerificationInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVerificationInput
+export type UserCreateNestedOneWithoutDocumentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDocumentsInput, Prisma.UserUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDocumentsInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutVerificationNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutVerificationInput, Prisma.UserUncheckedCreateWithoutVerificationInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVerificationInput
-  upsert?: Prisma.UserUpsertWithoutVerificationInput
+export type UserUpdateOneRequiredWithoutDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDocumentsInput, Prisma.UserUncheckedCreateWithoutDocumentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDocumentsInput
+  upsert?: Prisma.UserUpsertWithoutDocumentsInput
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVerificationInput, Prisma.UserUpdateWithoutVerificationInput>, Prisma.UserUncheckedUpdateWithoutVerificationInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDocumentsInput, Prisma.UserUpdateWithoutDocumentsInput>, Prisma.UserUncheckedUpdateWithoutDocumentsInput>
 }
 
 export type UserCreateNestedOneWithoutTeam_memberInput = {
@@ -853,26 +824,11 @@ export type UserUpdateOneRequiredWithoutSessionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSessionsInput, Prisma.UserUpdateWithoutSessionsInput>, Prisma.UserUncheckedUpdateWithoutSessionsInput>
 }
 
-export type UserCreateNestedOneWithoutAuthenticatorInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthenticatorInput, Prisma.UserUncheckedCreateWithoutAuthenticatorInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthenticatorInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutAuthenticatorNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthenticatorInput, Prisma.UserUncheckedCreateWithoutAuthenticatorInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthenticatorInput
-  upsert?: Prisma.UserUpsertWithoutAuthenticatorInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthenticatorInput, Prisma.UserUpdateWithoutAuthenticatorInput>, Prisma.UserUncheckedUpdateWithoutAuthenticatorInput>
-}
-
 export type UserCreateWithoutRegistrationInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -887,21 +843,19 @@ export type UserCreateWithoutRegistrationInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRegistrationInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -916,13 +870,12 @@ export type UserUncheckedCreateWithoutRegistrationInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationUncheckedCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRegistrationInput = {
@@ -943,10 +896,9 @@ export type UserUpdateToOneWithWhereWithoutRegistrationInput = {
 
 export type UserUpdateWithoutRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -961,21 +913,19 @@ export type UserUpdateWithoutRegistrationInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -990,21 +940,19 @@ export type UserUncheckedUpdateWithoutRegistrationInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUncheckedUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutEventRegistrationInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1019,21 +967,19 @@ export type UserCreateWithoutEventRegistrationInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutEventRegistrationInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1048,13 +994,12 @@ export type UserUncheckedCreateWithoutEventRegistrationInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationUncheckedCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutEventRegistrationInput = {
@@ -1075,10 +1020,9 @@ export type UserUpdateToOneWithWhereWithoutEventRegistrationInput = {
 
 export type UserUpdateWithoutEventRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1093,21 +1037,19 @@ export type UserUpdateWithoutEventRegistrationInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutEventRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1122,21 +1064,19 @@ export type UserUncheckedUpdateWithoutEventRegistrationInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUncheckedUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
 }
 
-export type UserCreateWithoutVerificationInput = {
-  id?: string
-  name?: string | null
+export type UserCreateWithoutDocumentsInput = {
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1157,15 +1097,13 @@ export type UserCreateWithoutVerificationInput = {
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
-export type UserUncheckedCreateWithoutVerificationInput = {
-  id?: string
-  name?: string | null
+export type UserUncheckedCreateWithoutDocumentsInput = {
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1186,31 +1124,29 @@ export type UserUncheckedCreateWithoutVerificationInput = {
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
-export type UserCreateOrConnectWithoutVerificationInput = {
+export type UserCreateOrConnectWithoutDocumentsInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutVerificationInput, Prisma.UserUncheckedCreateWithoutVerificationInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDocumentsInput, Prisma.UserUncheckedCreateWithoutDocumentsInput>
 }
 
-export type UserUpsertWithoutVerificationInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutVerificationInput, Prisma.UserUncheckedUpdateWithoutVerificationInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutVerificationInput, Prisma.UserUncheckedCreateWithoutVerificationInput>
+export type UserUpsertWithoutDocumentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDocumentsInput, Prisma.UserUncheckedUpdateWithoutDocumentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDocumentsInput, Prisma.UserUncheckedCreateWithoutDocumentsInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutVerificationInput = {
+export type UserUpdateToOneWithWhereWithoutDocumentsInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutVerificationInput, Prisma.UserUncheckedUpdateWithoutVerificationInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDocumentsInput, Prisma.UserUncheckedUpdateWithoutDocumentsInput>
 }
 
-export type UserUpdateWithoutVerificationInput = {
+export type UserUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1231,15 +1167,13 @@ export type UserUpdateWithoutVerificationInput = {
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutVerificationInput = {
+export type UserUncheckedUpdateWithoutDocumentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1260,15 +1194,13 @@ export type UserUncheckedUpdateWithoutVerificationInput = {
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutTeam_memberInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1283,21 +1215,19 @@ export type UserCreateWithoutTeam_memberInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTeam_memberInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1312,13 +1242,12 @@ export type UserUncheckedCreateWithoutTeam_memberInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationUncheckedCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTeam_memberInput = {
@@ -1339,10 +1268,9 @@ export type UserUpdateToOneWithWhereWithoutTeam_memberInput = {
 
 export type UserUpdateWithoutTeam_memberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1357,21 +1285,19 @@ export type UserUpdateWithoutTeam_memberInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTeam_memberInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1386,21 +1312,19 @@ export type UserUncheckedUpdateWithoutTeam_memberInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUncheckedUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPaymentsInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1415,21 +1339,19 @@ export type UserCreateWithoutPaymentsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPaymentsInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1444,13 +1366,12 @@ export type UserUncheckedCreateWithoutPaymentsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationUncheckedCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPaymentsInput = {
@@ -1471,10 +1392,9 @@ export type UserUpdateToOneWithWhereWithoutPaymentsInput = {
 
 export type UserUpdateWithoutPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1489,21 +1409,19 @@ export type UserUpdateWithoutPaymentsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPaymentsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1518,21 +1436,19 @@ export type UserUncheckedUpdateWithoutPaymentsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUncheckedUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1547,21 +1463,19 @@ export type UserCreateWithoutAccountsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1576,13 +1490,12 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationUncheckedCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1603,10 +1516,9 @@ export type UserUpdateToOneWithWhereWithoutAccountsInput = {
 
 export type UserUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1621,21 +1533,19 @@ export type UserUpdateWithoutAccountsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1650,21 +1560,19 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUncheckedUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1679,21 +1587,19 @@ export type UserCreateWithoutSessionsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
-  id?: string
-  name?: string | null
+  id: string
+  name: string
   email: string
-  emailVerified?: Date | string | null
-  password?: string | null
+  emailVerified: boolean
   image?: string | null
   imageKey?: string | null
   gender?: $Enums.Gender | null
@@ -1708,13 +1614,12 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   verified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
-  verification?: Prisma.VerificationUncheckedCreateNestedOneWithoutUserInput
+  documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  Authenticator?: Prisma.AuthenticatorUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1735,10 +1640,9 @@ export type UserUpdateToOneWithWhereWithoutSessionsInput = {
 
 export type UserUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1753,21 +1657,19 @@ export type UserUpdateWithoutSessionsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
@@ -1782,145 +1684,12 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUncheckedUpdateOneWithoutUserNestedInput
+  documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  Authenticator?: Prisma.AuthenticatorUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutAuthenticatorInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  password?: string | null
-  image?: string | null
-  imageKey?: string | null
-  gender?: $Enums.Gender | null
-  phoneNumber?: string | null
-  domicile?: string | null
-  institution?: string | null
-  major?: string | null
-  education?: $Enums.Education | null
-  semester?: number | null
-  birthDate?: Date | string | null
-  role?: $Enums.Role
-  verified?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  verification?: Prisma.VerificationCreateNestedOneWithoutUserInput
-  team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
-  registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
-  eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutAuthenticatorInput = {
-  id?: string
-  name?: string | null
-  email: string
-  emailVerified?: Date | string | null
-  password?: string | null
-  image?: string | null
-  imageKey?: string | null
-  gender?: $Enums.Gender | null
-  phoneNumber?: string | null
-  domicile?: string | null
-  institution?: string | null
-  major?: string | null
-  education?: $Enums.Education | null
-  semester?: number | null
-  birthDate?: Date | string | null
-  role?: $Enums.Role
-  verified?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  verification?: Prisma.VerificationUncheckedCreateNestedOneWithoutUserInput
-  team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
-  registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
-  eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutAuthenticatorInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuthenticatorInput, Prisma.UserUncheckedCreateWithoutAuthenticatorInput>
-}
-
-export type UserUpsertWithoutAuthenticatorInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthenticatorInput, Prisma.UserUncheckedUpdateWithoutAuthenticatorInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuthenticatorInput, Prisma.UserUncheckedCreateWithoutAuthenticatorInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutAuthenticatorInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthenticatorInput, Prisma.UserUncheckedUpdateWithoutAuthenticatorInput>
-}
-
-export type UserUpdateWithoutAuthenticatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  domicile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  major?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  education?: Prisma.NullableEnumEducationFieldUpdateOperationsInput | $Enums.Education | null
-  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUpdateOneWithoutUserNestedInput
-  team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
-  registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
-  eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutAuthenticatorInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  password?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  domicile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  major?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  education?: Prisma.NullableEnumEducationFieldUpdateOperationsInput | $Enums.Education | null
-  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verification?: Prisma.VerificationUncheckedUpdateOneWithoutUserNestedInput
-  team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
-  registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1935,7 +1704,6 @@ export type UserCountOutputType = {
   payments: number
   accounts: number
   sessions: number
-  Authenticator: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1945,7 +1713,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   payments?: boolean | UserCountOutputTypeCountPaymentsArgs
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
-  Authenticator?: boolean | UserCountOutputTypeCountAuthenticatorArgs
 }
 
 /**
@@ -2000,20 +1767,12 @@ export type UserCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.SessionWhereInput
 }
 
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountAuthenticatorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AuthenticatorWhereInput
-}
-
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   email?: boolean
   emailVerified?: boolean
-  password?: boolean
   image?: boolean
   imageKey?: boolean
   gender?: boolean
@@ -2028,14 +1787,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   verified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  verification?: boolean | Prisma.User$verificationArgs<ExtArgs>
+  documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
   team_member?: boolean | Prisma.User$team_memberArgs<ExtArgs>
   registration?: boolean | Prisma.User$registrationArgs<ExtArgs>
   eventRegistration?: boolean | Prisma.User$eventRegistrationArgs<ExtArgs>
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  Authenticator?: boolean | Prisma.User$AuthenticatorArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2044,7 +1802,6 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   emailVerified?: boolean
-  password?: boolean
   image?: boolean
   imageKey?: boolean
   gender?: boolean
@@ -2066,7 +1823,6 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   email?: boolean
   emailVerified?: boolean
-  password?: boolean
   image?: boolean
   imageKey?: boolean
   gender?: boolean
@@ -2088,7 +1844,6 @@ export type UserSelectScalar = {
   name?: boolean
   email?: boolean
   emailVerified?: boolean
-  password?: boolean
   image?: boolean
   imageKey?: boolean
   gender?: boolean
@@ -2105,16 +1860,15 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "password" | "image" | "imageKey" | "gender" | "phoneNumber" | "domicile" | "institution" | "major" | "education" | "semester" | "birthDate" | "role" | "verified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "imageKey" | "gender" | "phoneNumber" | "domicile" | "institution" | "major" | "education" | "semester" | "birthDate" | "role" | "verified" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  verification?: boolean | Prisma.User$verificationArgs<ExtArgs>
+  documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
   team_member?: boolean | Prisma.User$team_memberArgs<ExtArgs>
   registration?: boolean | Prisma.User$registrationArgs<ExtArgs>
   eventRegistration?: boolean | Prisma.User$eventRegistrationArgs<ExtArgs>
   payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
-  Authenticator?: boolean | Prisma.User$AuthenticatorArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2123,21 +1877,19 @@ export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    verification: Prisma.$VerificationPayload<ExtArgs> | null
+    documents: Prisma.$DocumentsPayload<ExtArgs> | null
     team_member: Prisma.$TeamMemberPayload<ExtArgs>[]
     registration: Prisma.$CompRegistrationPayload<ExtArgs>[]
     eventRegistration: Prisma.$EventRegistrationPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
-    Authenticator: Prisma.$AuthenticatorPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    name: string | null
+    name: string
     email: string
-    emailVerified: Date | null
-    password: string | null
+    emailVerified: boolean
     image: string | null
     imageKey: string | null
     gender: $Enums.Gender | null
@@ -2546,14 +2298,13 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  verification<T extends Prisma.User$verificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$verificationArgs<ExtArgs>>): Prisma.Prisma__VerificationClient<runtime.Types.Result.GetResult<Prisma.$VerificationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  documents<T extends Prisma.User$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$documentsArgs<ExtArgs>>): Prisma.Prisma__DocumentsClient<runtime.Types.Result.GetResult<Prisma.$DocumentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   team_member<T extends Prisma.User$team_memberArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$team_memberArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   registration<T extends Prisma.User$registrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$registrationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   eventRegistration<T extends Prisma.User$eventRegistrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$eventRegistrationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  Authenticator<T extends Prisma.User$AuthenticatorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$AuthenticatorArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthenticatorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2586,8 +2337,7 @@ export interface UserFieldRefs {
   readonly id: Prisma.FieldRef<"User", 'String'>
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
-  readonly emailVerified: Prisma.FieldRef<"User", 'DateTime'>
-  readonly password: Prisma.FieldRef<"User", 'String'>
+  readonly emailVerified: Prisma.FieldRef<"User", 'Boolean'>
   readonly image: Prisma.FieldRef<"User", 'String'>
   readonly imageKey: Prisma.FieldRef<"User", 'String'>
   readonly gender: Prisma.FieldRef<"User", 'Gender'>
@@ -2990,22 +2740,22 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.verification
+ * User.documents
  */
-export type User$verificationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$documentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Verification
+   * Select specific fields to fetch from the Documents
    */
-  select?: Prisma.VerificationSelect<ExtArgs> | null
+  select?: Prisma.DocumentsSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Verification
+   * Omit specific fields from the Documents
    */
-  omit?: Prisma.VerificationOmit<ExtArgs> | null
+  omit?: Prisma.DocumentsOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.VerificationInclude<ExtArgs> | null
-  where?: Prisma.VerificationWhereInput
+  include?: Prisma.DocumentsInclude<ExtArgs> | null
+  where?: Prisma.DocumentsWhereInput
 }
 
 /**
@@ -3150,30 +2900,6 @@ export type User$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.SessionScalarFieldEnum | Prisma.SessionScalarFieldEnum[]
-}
-
-/**
- * User.Authenticator
- */
-export type User$AuthenticatorArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Authenticator
-   */
-  select?: Prisma.AuthenticatorSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Authenticator
-   */
-  omit?: Prisma.AuthenticatorOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AuthenticatorInclude<ExtArgs> | null
-  where?: Prisma.AuthenticatorWhereInput
-  orderBy?: Prisma.AuthenticatorOrderByWithRelationInput | Prisma.AuthenticatorOrderByWithRelationInput[]
-  cursor?: Prisma.AuthenticatorWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AuthenticatorScalarFieldEnum | Prisma.AuthenticatorScalarFieldEnum[]
 }
 
 /**

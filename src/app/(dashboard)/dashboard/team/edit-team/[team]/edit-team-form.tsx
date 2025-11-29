@@ -164,7 +164,7 @@ function TeamForm({ team }: { team: Team }) {
         toast.success("Team edited successfully!");
         setTimeout(() => {
           router.refresh();
-          router.replace("/dashboard/team");
+          router.push("/dashboard/team");
         }, 500);
       } else {
         const { error, success } = await res.json();

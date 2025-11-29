@@ -179,7 +179,7 @@ function DocumentsForm({ userId }: { userId: string }) {
                 ) : document.status === "PENDING" ? (
                   <p className="text-sm text-yellow-500">
                     You have already submitted your document. Please wait for
-                    the verification process to complete.
+                    the documents process to complete.
                   </p>
                 ) : (
                   <p className="text-sm text-green-500">

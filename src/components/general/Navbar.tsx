@@ -4,8 +4,6 @@ import { Loader2, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
@@ -13,18 +11,24 @@ import { UserAvatar } from "./UserProfile";
 import { menuItems } from "@/constants/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/utils/trpc";
+import { authClient } from "@/lib/auth-client";
 
 export const Navbar = () => {
   const [menuState, setMenuState] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { data: session, status } = useSession();
   const currentPath = usePathname();
+  const { data: session } = authClient.useSession();
+
   const trpc = useTRPC();
-  const { data } = useQuery({
+  const {
+    data,
+    isLoading: isLoadingUser,
+    isFetched,
+  } = useQuery({
     ...trpc.dashboard.getUser.queryOptions(),
-    enabled: status === "authenticated",
+    enabled: session?.user ? true : false,
   });
 
   useEffect(() => {
@@ -97,7 +101,7 @@ export const Navbar = () => {
                     </Link>
                   </li>
                 ))}
-                {status === "authenticated" && session?.user && (
+                {isFetched && session?.user && (
                   <li>
                     <Link
                       href="/dashboard"
@@ -129,7 +133,7 @@ export const Navbar = () => {
                       </Link>
                     </li>
                   ))}
-                  {status === "authenticated" && session?.user && (
+                  {isFetched && session?.user && (
                     <li>
                       <Link
                         href="/dashboard"
@@ -147,13 +151,13 @@ export const Navbar = () => {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                {status === "loading" && (
+                {isLoadingUser && (
                   <div className="flex items-center gap-2 animate-pulse">
                     <div className="w-8 h-8 rounded-full bg-gray-300" />
                     <div className="w-20 h-4 bg-gray-300 rounded" />
                   </div>
                 )}
-                {status === "authenticated" && session?.user && (
+                {isFetched && session?.user && (
                   <div className="flex gap-5 items-center">
                     {data?.image ? (
                       <UserAvatar
@@ -184,7 +188,7 @@ export const Navbar = () => {
                           id: "logging-out",
                         });
                         try {
-                          await signOut({ redirect: false });
+                          await authClient.signOut();
                           toast.success("Logged out successfully");
                           toast.dismiss("logging-out");
                           router.refresh();
@@ -208,7 +212,7 @@ export const Navbar = () => {
                     </Button>
                   </div>
                 )}
-                {status === "unauthenticated" && (
+                {!session?.user && (
                   <>
                     <Button
                       asChild

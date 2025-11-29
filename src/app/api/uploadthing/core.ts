@@ -4,6 +4,7 @@ import { UploadThingError } from "uploadthing/server";
 import { auth } from "@/server/auth/auth";
 import { db } from "@/server/db";
 import { deleteFiles } from "@/action/uploadthing.action";
+import { headers } from "next/headers";
 
 const f = createUploadthing();
 
@@ -22,7 +23,9 @@ export const ourFileRouter = {
   })
     // Set permissions and file types for this FileRoute
     .middleware(async () => {
-      const session = await auth();
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
       // This code runs on your server before upload
 
       // If you throw, the user will not be able to upload
@@ -83,7 +86,9 @@ export const ourFileRouter = {
       })
     )
     .middleware(async ({ input }) => {
-      const session = await auth();
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
       const user = await db.user.findUnique({
         where: { id: input.targetUserId },
       });
@@ -115,14 +120,14 @@ export const ourFileRouter = {
         fileKey: file.key,
       });
       try {
-        const previousImage = await db.verification.findUnique({
+        const previousImage = await db.documents.findUnique({
           where: { userId: metadata.userId },
           select: { identityCardImageKey: true },
         });
         if (previousImage?.identityCardImageKey) {
           await deleteFiles(previousImage.identityCardImageKey);
         }
-        await db.verification.update({
+        await db.documents.update({
           where: { userId: metadata.userId as string },
           data: {
             identityCardImageUrl: file.ufsUrl,
@@ -149,7 +154,9 @@ export const ourFileRouter = {
       })
     )
     .middleware(async ({ input }) => {
-      const session = await auth();
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
       const user = await db.user.findUnique({
         where: { id: input.targetUserId },
       });
@@ -181,14 +188,14 @@ export const ourFileRouter = {
         fileKey: file.key,
       });
       try {
-        const previousImage = await db.verification.findUnique({
+        const previousImage = await db.documents.findUnique({
           where: { userId: metadata.userId },
           select: { twibbonImageKey: true },
         });
         if (previousImage?.twibbonImageKey) {
           await deleteFiles(previousImage.twibbonImageKey);
         }
-        await db.verification.update({
+        await db.documents.update({
           where: { userId: metadata.userId as string },
           data: {
             twibbonImageUrl: file.ufsUrl,
@@ -215,7 +222,9 @@ export const ourFileRouter = {
       })
     )
     .middleware(async ({ input }) => {
-      const session = await auth();
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
       const user = await db.user.findUnique({
         where: { id: input.targetUserId },
       });
@@ -247,14 +256,14 @@ export const ourFileRouter = {
         fileKey: file.key,
       });
       try {
-        const previousImage = await db.verification.findUnique({
+        const previousImage = await db.documents.findUnique({
           where: { userId: metadata.userId },
           select: { followIgImageKey: true },
         });
         if (previousImage?.followIgImageKey) {
           await deleteFiles(previousImage.followIgImageKey);
         }
-        await db.verification.update({
+        await db.documents.update({
           where: { userId: metadata.userId as string },
           data: {
             followIgImageUrl: file.ufsUrl,
@@ -280,7 +289,9 @@ export const ourFileRouter = {
     },
   })
     .middleware(async () => {
-      const session = await auth();
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
       if (!session) {
         console.log("Unauthorized user tried to upload");
         throw new UploadThingError("Unauthorized");
@@ -353,7 +364,9 @@ export const ourFileRouter = {
     },
   })
     .middleware(async () => {
-      const session = await auth();
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
       if (!session) {
         console.log("Unauthorized user tried to upload");
         throw new UploadThingError("Unauthorized");
@@ -425,7 +438,9 @@ export const ourFileRouter = {
     },
   })
     .middleware(async () => {
-      const session = await auth();
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
       if (!session) {
         console.log("Unauthorized user tried to upload");
         throw new UploadThingError("Unauthorized");

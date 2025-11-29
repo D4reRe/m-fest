@@ -95,6 +95,7 @@ model CompRegistration {
   @@index([userId])
   @@index([teamId])
   @@index([paymentId])
+  @@map("comp_registration")
 }
 
 model EventRegistration {
@@ -108,14 +109,14 @@ model EventRegistration {
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+  @@map("event_registration")
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  password      String?
+  id            String  @id
+  name          String
+  email         String
+  emailVerified Boolean
   image         String?
   imageKey      String?
 
@@ -129,26 +130,26 @@ model User {
   birthDate   DateTime?
   role        Role       @default(USER)
 
-  verified     Boolean       @default(false)
-  verification Verification?
+  verified  Boolean    @default(false)
+  documents Documents?
 
   team_member       TeamMember[]
   registration      CompRegistration[]
   eventRegistration EventRegistration[]
 
-  payments      Payment[]
-  accounts      Account[]
-  sessions      Session[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
+  payments Payment[]
+  accounts Account[]
+  sessions Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  @@unique([email])
   @@index([id])
+  @@map("user")
 }
 
-model Verification {
+model Documents {
   id                   String  @id @default(cuid())
   userId               String  @unique
   identityCardImageUrl String?
@@ -178,6 +179,7 @@ model Verification {
 
   @@index([userId])
   @@index([id])
+  @@map("documents")
 }
 
 model Team {
@@ -206,6 +208,7 @@ model Team {
   @@index([paymentId])
   @@index([leaderUserId])
   @@index([id])
+  @@map("team")
 }
 
 model TeamMember {
@@ -227,6 +230,7 @@ model TeamMember {
   @@id([userId, teamId])
   @@index([userId])
   @@index([teamId])
+  @@map("team_member")
 }
 
 model Payment {
@@ -246,59 +250,50 @@ model Payment {
 
   @@index([userId])
   @@index([orderId])
+  @@map("payment")
 }
 
 model Account {
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([provider, providerAccountId])
+  @@map("account")
 }
 
 model Session {
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@unique([token])
+  @@map("session")
 }
 
-model VerificationToken {
+model Verification {
+  id         String    @id
   identifier String
-  token      String
-  expires    DateTime
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
 
-  @@id([identifier, token])
-}
-
-// Optional for WebAuthn support
-model Authenticator {
-  credentialID         String  @unique
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([userId, credentialID])
+  @@map("verification")
 }
