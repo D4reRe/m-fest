@@ -212,8 +212,9 @@ model Team {
 }
 
 model TeamMember {
-  userId String
-  teamId String
+  userId   String
+  teamId   String
+  teamName String?
 
   name        String?
   email       String?

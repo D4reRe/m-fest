@@ -1302,6 +1302,7 @@ export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof Team
 export const TeamMemberScalarFieldEnum = {
   userId: 'userId',
   teamId: 'teamId',
+  teamName: 'teamName',
   name: 'name',
   email: 'email',
   institution: 'institution',

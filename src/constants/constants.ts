@@ -159,6 +159,11 @@ export const dataNavSidebarAdmin = {
       icon: IconUsers,
     },
     {
+      title: "Teams",
+      url: "/admin/teams",
+      icon: IconUsersGroup,
+    },
+    {
       title: "Competitions",
       url: "/admin/competitions",
       icon: IconListDetails,
@@ -211,6 +216,10 @@ export const adminMenus = [
   {
     title: "User",
     url: "/admin/users",
+  },
+  {
+    title: "Teams",
+    url: "/admin/teams",
   },
   {
     title: "Competitions",

@@ -5,21 +5,10 @@ import { z } from "zod";
 export const adminRouter = router({
   getUsers: adminProcedure.query(async () => {
     const users = await db.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        phoneNumber: true,
-        gender: true,
-        email: true,
-        institution: true,
-        semester: true,
-        image: true,
-        birthDate: true,
-        domicile: true,
-        education: true,
-        major: true,
-        role: true,
-        verified: true,
+      include: {
+        documents: true,
+        team_member: true,
+        registration: true,
       },
     });
     return users;
@@ -35,8 +24,17 @@ export const adminRouter = router({
         leaderEmail: true,
         leaderPhoneNumber: true,
         teamInstitution: true,
-        members: true,
+        members: {
+          include: {
+            user: {
+              include: {
+                documents: true,
+              },
+            },
+          },
+        },
         status: true,
+        teamStatus: true,
         paymentId: true,
       },
     });
@@ -47,7 +45,21 @@ export const adminRouter = router({
     return teamMembers;
   }),
   getRegistrations: adminProcedure.query(async () => {
-    const totalRegistration = await db.compRegistration.findMany();
+    const totalRegistration = await db.compRegistration.findMany({
+      include: {
+        user: true,
+        team: {
+          include: {
+            members: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+        payment: true,
+      },
+    });
     return totalRegistration;
   }),
   getEventsRegistration: adminProcedure.query(async () => {
@@ -55,7 +67,13 @@ export const adminRouter = router({
     return totalEventRegistration;
   }),
   getInvoices: adminProcedure.query(async () => {
-    const invoices = await db.payment.findMany();
+    const invoices = await db.payment.findMany({
+      include: {
+        user: true,
+        team: true,
+        registration: true,
+      },
+    });
     return invoices;
   }),
   getAllDocuments: adminProcedure.query(async () => {

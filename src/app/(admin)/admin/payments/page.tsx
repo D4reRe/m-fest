@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/admin/DataTable";
+import { PaymentsDataTable } from "@/components/admin/payments/PaymentsDataTable";
 
 export default function PaymentsManagementPage() {
   return (
@@ -7,7 +7,7 @@ export default function PaymentsManagementPage() {
         <h1 className="text-3xl font-bold text-foreground">Payments</h1>
       </div>
       <div className="mt-8">
-        <DataTable />
+        <PaymentsDataTable />
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/admin/DataTable";
+import { UsersDataTable } from "@/components/admin/users/UsersDataTable";
 
 export default function UserManagementPage() {
   return (
@@ -7,7 +7,7 @@ export default function UserManagementPage() {
         <h1 className="text-3xl font-bold text-foreground">Users</h1>
       </div>
       <div className="mt-8">
-        <DataTable />
+        <UsersDataTable />
       </div>
     </section>
   );

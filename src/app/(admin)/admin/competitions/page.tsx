@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/admin/DataTable";
+import { CompsDataTable } from "@/components/admin/competitions/CompsDataTable";
 
 export default function CompetitionsManagementPage() {
   return (
@@ -7,7 +7,7 @@ export default function CompetitionsManagementPage() {
         <h1 className="text-3xl font-bold text-foreground">Competitions</h1>
       </div>
       <div className="mt-8">
-        <DataTable />
+        <CompsDataTable />
       </div>
     </section>
   );

@@ -1,0 +1,720 @@
+"use client";
+
+import * as React from "react";
+import {
+  type ColumnDef,
+  type ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  type SortingState,
+  useReactTable,
+  type VisibilityState,
+} from "@tanstack/react-table";
+import { Loader2, MoreHorizontal, RefreshCw } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useTRPC } from "@/utils/trpc";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
+import Image from "next/image";
+import type { TeamMember } from "../../../../prisma/generated/prisma/browser";
+import type { CompRegistration } from "../../../../prisma/generated/prisma/client";
+
+export function UsersDataTable() {
+  const trpc = useTRPC();
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+  const [filterColumn, setFilterColumn] = React.useState<string>("email");
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState({});
+  const queryClient = useQueryClient();
+  const {
+    data: users,
+    isLoading,
+    isFetching,
+  } = useQuery(trpc.admin.getUsers.queryOptions());
+  const unified = React.useMemo(() => {
+    if (!users) return [];
+
+    return users;
+  }, [users]);
+
+  // type of array
+  // type Unified = typeof unified
+
+  // type of one array element
+  type Unified = (typeof unified)[number];
+
+  const columns: ColumnDef<Unified>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "verified",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.verified ? "Verified" : "Not Verified";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Verified" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("verified")}</span>,
+    },
+    {
+      accessorKey: "id",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.id ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="User Id" />;
+      },
+      cell: ({ row }) => (
+        <span className="capitalize">{row.getValue("id")}</span>
+      ),
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "role",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.role ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Role" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("role")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "name",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Name" />;
+      },
+      cell: ({ row }) => (
+        <span className="capitalize">{row.getValue("name")}</span>
+      ),
+      filterFn: "includesString",
+    },
+
+    {
+      accessorKey: "email",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.email ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Email" />;
+      },
+      cell: ({ row }) => (
+        <span className="lowercase">{row.getValue("email")}</span>
+      ),
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "emailVerified",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Email Verified" />;
+      },
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.emailVerified ? "Verified" : "Not Verified";
+      },
+      cell: ({ row }) => <span>{row.getValue("emailVerified")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "image",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.image ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Image" />;
+      },
+      cell: ({ row }) => {
+        const imageUrl = row.getValue("image") as string;
+        return (
+          <>
+            {imageUrl ? (
+              <Link href={imageUrl} target="_blank">
+                <div className="w-10 h-10 relative">
+                  <Image
+                    src={imageUrl}
+                    alt="User's Image"
+                    fill
+                    className=" object-cover rounded-full "
+                  />
+                </div>
+              </Link>
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gray-300" />
+            )}
+          </>
+        );
+      },
+    },
+    {
+      accessorKey: "imageKey",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.imageKey ?? "Image URL was set by the social provider";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Image Key" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("imageKey")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "gender",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.gender ?? "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Gender" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("gender")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "phoneNumber",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Phone Number" />;
+      },
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.phoneNumber ?? "Not set";
+      },
+      cell: ({ row }) => <span>{row.getValue("phoneNumber")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "institution",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.institution ?? "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Institution" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("institution")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "domicile",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.domicile ?? "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Domicile" />;
+      },
+      cell: ({ row }) => {
+        const domicile = row.getValue("domicile") as string;
+        return <span>{domicile}</span>;
+      },
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "major",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.major ?? "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Major" />;
+      },
+      cell: ({ row }) => {
+        return <span>{row.getValue("major")}</span>;
+      },
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "semester",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.semester ?? "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Semester" />;
+      },
+      cell: ({ row }) => {
+        return <span>{row.getValue("semester")}</span>;
+      },
+    },
+    {
+      accessorKey: "education",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.education ?? "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Education" />;
+      },
+      cell: ({ row }) => {
+        return <span>{row.getValue("education")}</span>;
+      },
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "birthDate",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.birthDate
+          ? new Date(user.birthDate).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Birth Date" />;
+      },
+      cell: ({ row }) => {
+        return <span>{row.getValue("birthDate")}</span>;
+      },
+    },
+    {
+      accessorKey: "createdAt",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.createdAt
+          ? new Date(user.createdAt).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          : "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Created At" />;
+      },
+      cell: ({ row }) => {
+        return <span>{row.getValue("createdAt")}</span>;
+      },
+    },
+    {
+      accessorKey: "registration",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return (
+          user?.registration ??
+          "Not registered or not a leader for any competition"
+        );
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Registration" />;
+      },
+      cell: ({ row }) => {
+        const registration = row.getValue("registration") as CompRegistration[];
+        return (
+          <span>
+            {registration[0]?.competitionName ??
+              "Not registered or not a leader for any competition"}
+          </span>
+        );
+      },
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "team_member",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.team_member ?? "Not member of any team";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Team Member" />;
+      },
+      cell: ({ row }) => {
+        const teamMember = row.getValue("team_member") as TeamMember[];
+        return (
+          <span>{teamMember[0]?.teamName ?? "Not member of any team"}</span>
+        );
+      },
+    },
+    {
+      accessorKey: "IdentityCard",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.documents?.identityCardImageUrl ?? "No File";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Identity Card" />;
+      },
+      cell: ({ row }) => {
+        const identityCardUrl = row.getValue("IdentityCard") as string;
+        return (
+          <>
+            {identityCardUrl !== "No File" ? (
+              <Link
+                href={(identityCardUrl as string) ?? ""}
+                className={cn(
+                  identityCardUrl ? "underline italic font-bold" : ""
+                )}
+                target="_blank"
+              >
+                {identityCardUrl ? "View" : "No File"}
+              </Link>
+            ) : (
+              <span>No File</span>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      accessorKey: "twibbon",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.documents?.twibbonImageUrl ?? "No File";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Twibbon" />;
+      },
+      cell: ({ row }) => {
+        const twibbonUrl = row.getValue("twibbon") as string;
+        return (
+          <>
+            {twibbonUrl !== "No File" ? (
+              <Link
+                href={(twibbonUrl as string) ?? ""}
+                className={cn(twibbonUrl ? "underline italic font-bold" : "")}
+                target="_blank"
+              >
+                {twibbonUrl ? "View" : "No File"}
+              </Link>
+            ) : (
+              <span>No File</span>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      accessorKey: "followIg",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.id);
+        return user?.documents?.followIgImageUrl ?? "No File";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Follow IG" />;
+      },
+      cell: ({ row }) => {
+        const followIgUrl = row.getValue("followIg") as string;
+        return (
+          <>
+            {followIgUrl !== "No File" ? (
+              <Link
+                href={(followIgUrl as string) ?? ""}
+                className={cn(followIgUrl ? "underline italic font-bold" : "")}
+                target="_blank"
+              >
+                {followIgUrl ? "View" : "No File"}
+              </Link>
+            ) : (
+              <span>No File</span>
+            )}
+          </>
+        );
+      },
+    },
+
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(item.id)}
+              >
+                Copy user ID
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>View user</DropdownMenuItem>
+              <DropdownMenuItem>View document details</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
+  const table = useReactTable({
+    data: unified ?? [],
+    columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
+
+  return (
+    <div className="w-full">
+      <div className="flex items-center py-4">
+        <div className="flex gap-2">
+          <Input
+            placeholder="Filter..."
+            value={
+              (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(filterColumn)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm w-full"
+          />
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-fit cursor-pointer">
+                  <span className="">Filter by column:</span>
+                  <span className="capitalize">{filterColumn}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Columns</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("id");
+                    table.getColumn("id")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  User Id
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("name");
+                    table.getColumn("name")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Name
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("email");
+                    table.getColumn("email")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Email
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("phoneNumber");
+                    table.getColumn("phoneNumber")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Phone Number
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("institution");
+                    table.getColumn("institution")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Institution
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("major");
+                    table.getColumn("major")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Major
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("domicile");
+                    table.getColumn("domicile")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Domicile
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("education");
+                    table.getColumn("education")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Education
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("role");
+                    table.getColumn("role")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Role
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <Button
+            variant="outline"
+            className={cn(
+              "cursor-pointer w-fit",
+              isFetching && "cursor-not-allowed"
+            )}
+            disabled={isFetching}
+            onClick={() => queryClient.invalidateQueries()}
+          >
+            <RefreshCw
+              className={cn("w-4 h-4", {
+                "animate-spin": isFetching,
+              })}
+            />
+          </Button>
+        </div>
+        <DataTableViewOptions table={table} />
+      </div>
+      <div className="overflow-hidden rounded-md border mb-2">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  <span className="flex justify-center items-center">
+                    <Loader2 className="animate-spin w-6 h-6" />
+                  </span>
+                </TableCell>
+              </TableRow>
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <DataTablePagination table={table} />
+    </div>
+  );
+}

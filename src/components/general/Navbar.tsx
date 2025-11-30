@@ -19,7 +19,7 @@ export const Navbar = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const currentPath = usePathname();
-  const { data: session } = authClient.useSession();
+  const { data: session, isPending } = authClient.useSession();
 
   const trpc = useTRPC();
   const {
@@ -151,7 +151,7 @@ export const Navbar = () => {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                {isLoadingUser && (
+                {isPending && (
                   <div className="flex items-center gap-2 animate-pulse">
                     <div className="w-8 h-8 rounded-full bg-gray-300" />
                     <div className="w-20 h-4 bg-gray-300 rounded" />
@@ -212,7 +212,7 @@ export const Navbar = () => {
                     </Button>
                   </div>
                 )}
-                {!session?.user && (
+                {!session?.user && !isPending && (
                   <>
                     <Button
                       asChild
