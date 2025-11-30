@@ -60,6 +60,42 @@ function AuthButtons() {
           <span>Google</span>
         </Button>
       </div>
+      <div className="w-full">
+        <Button
+          type="button"
+          variant="outline"
+          className={`w-full ${
+            isLoading ? "cursor-not-allowed" : "cursor-pointer"
+          }`}
+          disabled={isLoading}
+          onClick={async () => {
+            setIsLoading(true);
+            toast.loading("Signing in...", { id: "signing-in" });
+            try {
+              await authClient.signIn.social({
+                provider: "discord",
+                callbackURL: "/",
+              });
+            } catch (error) {
+              toast.error("Failed to sign in");
+              console.error(error);
+            } finally {
+              toast.dismiss("signing-in");
+              setIsLoading(false);
+            }
+          }}
+        >
+          <div className="flex items-center justify-center  gap-2">
+            <Image
+              src="https://api.iconify.design/skill-icons/discord.svg?color=%23fff"
+              alt="Discord"
+              width={20}
+              height={20}
+            />
+            <span>Discord</span>
+          </div>
+        </Button>
+      </div>
 
       <div className="w-full">
         <Button
@@ -73,7 +109,7 @@ function AuthButtons() {
             setIsLoading(true);
             toast.loading("Signing in...", { id: "signing-in" });
             try {
-              await await authClient.signIn.social({
+              await authClient.signIn.social({
                 provider: "github",
                 callbackURL: "/",
               });

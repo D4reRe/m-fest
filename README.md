@@ -19,7 +19,10 @@ It serves as the official system for participants to register, create teams, and
 | **Database**                                                                | [Neon PostgreSQL](https://neon.tech/)               |
 | **Authentication**                                                          | [Better-Auth ](https://www.better-auth.com/)        |
 | **Asynchronous state management, server-state utilities and data fetching** | [TanStack Query](https://tanstack.com/query/latest) |
+| **Headless Table UI**                                                       | [TanStack Table](https://tanstack.com/table/latest) |
 | **End-to-end typesafe API**                                                 | [tRPC](https://trpc.io/)                            |
+| **Schema Validation**                                                       | [Zod](https://zod.dev/)                             |
+| **Form Managment**                                                          | [React Hook Form](https://react-hook-form.com/)     |
 | **State Managment**                                                         | [Zustand](https://zustand.docs.pmnd.rs/)            |
 | **File Uploads**                                                            | [UploadThing](https://uploadthing.com/)             |
 | **Payments**                                                                | [DuitKu POP](https://docs.duitku.com/)              |
@@ -93,20 +96,18 @@ DIRECT_URL=""
 # NODENV
 NODE_ENV="development"
 
-# BASE URL Dev
+# BASE URL
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
-# BASE_URL_PROD
-# NEXT_PUBLIC_BASE_URL=""
-
-# Auth.js
-AUTH_SECRET=""
-AUTH_GITHUB_ID=""
-AUTH_GITHUB_SECRET=""
-AUTH_GOOGLE_ID=""
-AUTH_GOOGLE_SECRET=""
-AUTH_DISCORD_ID=""
-AUTH_DISCORD_SECRET=""
+# Better-Auth
+BETTER_AUTH_URL=""
+BETTER_AUTH_SECRET=""
+GITHUB_CLIENT_ID=""
+GITHUB_CLIENT_SECRET=""
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+DISCORD_CLIENT_ID=""
+DISCORD_CLIENT_ID=""
 
 # UploadThing
 UPLOADTHING_TOKEN=''
@@ -120,10 +121,6 @@ DUITKU_API_KEY=""
 # Sentry
 SENTRY_AUTH_TOKEN=""
 ```
-
-# STORYBLOK
-
-STORYBLOK_CONTENT_API_ACCESS_TOKEN=""
 
 ### 4 Initialize Prisma
 
@@ -148,12 +145,40 @@ http://localhost:3000
 ```
 └── 📁src
     └── 📁action
+        ├── register.action.ts
         ├── uploadthing.action.ts
         ├── user.action.ts
     └── 📁app
+        └── 📁(admin)
+            └── 📁admin
+                └── 📁competitions
+                    ├── page.tsx
+                └── 📁database
+                    ├── page.tsx
+                └── 📁events
+                    ├── page.tsx
+                └── 📁payments
+                    ├── page.tsx
+                └── 📁teams
+                    ├── page.tsx
+                └── 📁users
+                    ├── page.tsx
+                └── 📁verify-documents
+                    ├── page.tsx
+                ├── layout.tsx
+                ├── page.tsx
         └── 📁(dashboard)
             └── 📁dashboard
                 └── 📁competitions
+                    └── 📁[comp]
+                        ├── page.tsx
+                    ├── page.tsx
+                └── 📁documents
+                    └── 📁[team]
+                        └── 📁[userId]
+                            ├── document-form.tsx
+                            ├── page.tsx
+                        ├── page.tsx
                     ├── page.tsx
                 └── 📁events
                     ├── page.tsx
@@ -172,30 +197,24 @@ http://localhost:3000
                             ├── edit-team-form.tsx
                             ├── page.tsx
                         ├── page.tsx
+                    └── 📁register
+                        └── 📁[comp]
+                            ├── page.tsx
+                            ├── register-form.tsx
+                        ├── page.tsx
                     ├── page.tsx
                 ├── layout.tsx
                 ├── page.tsx
         └── 📁(general)
-            └── 📁_components
-                ├── faqs.tsx
-                ├── hero-section.tsx
             └── 📁(auth)
-                └── 📁_sign-up
-                    ├── page.tsx
-                    ├── sign-up.tsx
                 └── 📁login
-                    ├── login-form.tsx
                     ├── LoginErrorHandler.tsx
                     ├── page.tsx
             └── 📁(competitions)
                 └── 📁competitions
-                    ├── competition-desc.tsx
-                    ├── competitions.tsx
+                    ├── CompetitionHero.tsx
+                    ├── CompetitionList.tsx
                     ├── page.tsx
-                └── 📁register
-                    └── 📁[comp]
-                        ├── page.tsx
-                        ├── register-form.tsx
             └── 📁events
                 └── 📁[event]
                     ├── event-form.tsx
@@ -204,76 +223,133 @@ http://localhost:3000
             └── 📁payment
                 └── 📁error
                     ├── page.tsx
-                └── 📁thanks
+                └── 📁status
                     ├── page.tsx
             ├── layout.tsx
             ├── page.tsx
         └── 📁api
             └── 📁auth
-                └── 📁[...nextauth]
-                    ├── route.ts
-                └── 📁sign-up
+                └── 📁[...all]
                     ├── route.ts
             └── 📁payment
-                └── 📁check
+                └── 📁callback
                     ├── route.ts
-                └── 📁notification
+                └── 📁check
                     ├── route.ts
                 └── 📁verify
                     ├── route.ts
                 ├── route.ts
+            └── 📁routers
+                ├── admin.ts
+                ├── dashboard.ts
             └── 📁team
                 └── 📁create-team
                     ├── route.ts
                 └── 📁edit-team
                     ├── route.ts
-            └── 📁update-profile
-                ├── route.ts
+            └── 📁trpc
+                └── 📁[trpc]
+                    ├── route.ts
             └── 📁uploadthing
                 ├── core.ts
                 ├── route.ts
             └── 📁user
                 └── 📁by-email
                     ├── route.ts
-                └── 📁search
+            └── 📁verify-document
+                ├── route.ts
         ├── favicon.ico
         ├── global-error.tsx
         ├── globals.css
+        ├── help-button.tsx
         ├── layout.tsx
     └── 📁components
+        └── 📁admin
+            └── 📁competitions
+                ├── CompsDataTable.tsx
+            └── 📁data-overview
+                ├── DataOverview.tsx
+                ├── PaymentGraph.tsx
+            └── 📁payments
+                ├── PaymentsDataTable.tsx
+            └── 📁sidebar
+                ├── app-sidebar.tsx
+                ├── nav-documents.tsx
+                ├── nav-main.tsx
+                ├── nav-secondary.tsx
+                ├── nav-user.tsx
+                ├── PaymentsChartSkeleton.tsx
+                ├── site-header.tsx
+            └── 📁teams
+                ├── TeamsDataTable.tsx
+            └── 📁users
+                ├── UsersDataTable.tsx
+            └── 📁verify-documents
+                ├── DocumentsDataTable.tsx
+            ├── DashboardSkeleton.tsx
+            ├── DataTable.tsx
         └── 📁auth
-            ├── auth-buttons-server.tsx
             ├── auth-buttons.tsx
+        └── 📁contact
+            ├── ContactSection.tsx
         └── 📁dashboard
-            ├── app-sidebar.tsx
+            └── 📁competitions
+                ├── CountdownClient.tsx
+                ├── registered-teams.tsx
+                ├── RegisteredCompetitionList.tsx
+                ├── SubmitForm.tsx
+                ├── SubmitFormSkeleton.tsx
+            └── 📁documents
+                ├── MemberList.tsx
+                ├── MemberListSkeleton.tsx
+                ├── TeamList.tsx
+            └── 📁edit-team
+                ├── TeamFormSkeleton.tsx
+            └── 📁profile
+                ├── ImageCropper.tsx
+                ├── PencilIcon.tsx
+                ├── ProfileFormSkeleton.tsx
+                ├── setCanvasPreview.ts
+                ├── UploadDialog.tsx
+            └── 📁sidebar
+                ├── app-sidebar.tsx
+                ├── nav-documents.tsx
+                ├── nav-main.tsx
+                ├── nav-secondary.tsx
+                ├── nav-user.tsx
+                ├── site-header.tsx
+            └── 📁team
+                ├── CompetitionListDashboard.tsx
             ├── competition.tsx
+            ├── CompetitionListSkeleton.tsx
             ├── deleteButton.tsx
             ├── events.tsx
-            ├── nav-documents.tsx
-            ├── nav-main.tsx
-            ├── nav-secondary.tsx
-            ├── nav-user.tsx
-            ├── registered-stem.tsx
-            ├── registered-teams.tsx
-            ├── site-header.tsx
             ├── team-member.tsx
+            ├── TeamFallback.tsx
             ├── user-info.tsx
             ├── user-profile.tsx
+        └── 📁document
+            ├── DocumentFormSkeleton.tsx
+            ├── ImageCropperDocument.tsx
+            ├── setCanvasPreview.ts
+            ├── UploadDocumentDialog.tsx
         └── 📁events
             ├── events-hero.tsx
             ├── index.tsx
         └── 📁general
+            ├── faqs.tsx
             ├── footer.tsx
+            ├── hero-section.tsx
             ├── Navbar.tsx
-            ├── RouteLoader.tsx
             ├── UserProfile.tsx
         └── 📁providers
-            ├── session-provider.tsx
+            ├── query-provider.tsx
             ├── theme-provider.tsx
-        └── 📁ticket
-            ├── pricing.tsx
+        └── 📁register
+            ├── CompFormSkeleton.tsx
         └── 📁timeline
             ├── timeline-item.tsx
+            ├── timeline-test.tsx
             ├── timeline.tsx
         └── 📁ui
             ├── accordion.tsx
@@ -281,11 +357,20 @@ http://localhost:3000
             ├── animated-group.tsx
             ├── avatar.tsx
             ├── badge.tsx
+            ├── blur-fade.tsx
             ├── breadcrumb.tsx
             ├── button.tsx
+            ├── calendar.tsx
             ├── card.tsx
             ├── chart.tsx
             ├── checkbox.tsx
+            ├── collapsible.tsx
+            ├── confetti.tsx
+            ├── data-table-column-header.tsx
+            ├── data-table-pagination.tsx
+            ├── data-table-view-options.tsx
+            ├── data-table.tsx
+            ├── dialog.tsx
             ├── drawer.tsx
             ├── dropdown-menu.tsx
             ├── empty.tsx
@@ -293,6 +378,9 @@ http://localhost:3000
             ├── infinite-slider.tsx
             ├── input.tsx
             ├── label.tsx
+            ├── link-preview.tsx
+            ├── popover.tsx
+            ├── progress.tsx
             ├── progressive-blur.tsx
             ├── select.tsx
             ├── separator.tsx
@@ -303,38 +391,47 @@ http://localhost:3000
             ├── table.tsx
             ├── tabs.tsx
             ├── text-effect.tsx
+            ├── timeline.tsx
             ├── toggle-group.tsx
             ├── toggle.tsx
             ├── tooltip.tsx
         ├── sponsor-item.tsx
         ├── sponsors.tsx
-        ├── StoryblokProvider.tsx
         ├── ToggleTheme.tsx
+    └── 📁constants
+        ├── constants.ts
     └── 📁hooks
         ├── use-mobile.ts
     └── 📁lib
+        ├── auth-client.ts
         ├── competition.ts
         ├── event.ts
-        ├── hero.ts
-        ├── prisma.ts
         ├── profile.ts
-        ├── storyblok.ts
+        ├── schema.ts
         ├── utils.ts
     └── 📁server
-        ├── trpc.ts
+        └── 📁api
+            ├── root.ts
+            ├── trpc.ts
+        └── 📁auth
+            ├── auth.ts
+        ├── db.ts
         ├── uploadthing.ts
+    └── 📁store
+        ├── admin.store.ts
+        ├── dashboard.store.ts
     └── 📁styles
         ├── font.ts
     └── 📁types
-        ├── next-auth.d.ts
+        ├── types.ts
     └── 📁utils
+        ├── trpc.ts
         ├── uploadthing.ts
-    ├── auth.ts
+    ├── env.ts
     ├── instrumentation-client.ts
-    └── instrumentation.ts
+    ├── instrumentation.ts
+    └── proxy.ts
 ```
-
----
 
 ### 📝 License
 
