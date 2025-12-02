@@ -36,7 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTRPC } from "@/utils/trpc";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
@@ -77,6 +77,65 @@ export function TeamsDataTable() {
 
     return teams;
   }, [teams]);
+
+  const verifyTeam = useMutation({
+    ...trpc.admin.verifyTeam.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating team...", {
+        id: "update-team",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-team");
+      toast.error("Failed to verify team", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-team");
+      toast.success(
+        `Team ${
+          teams?.find((team) => team.id === variables.teamId)?.name
+        } verified successfully`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getTeams.queryKey(),
+      });
+    },
+  });
+  const unVerifyTeam = useMutation({
+    ...trpc.admin.unVerifyTeam.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating team...", {
+        id: "update-team",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-team");
+      toast.error("Failed to unverify team", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-team");
+      toast.success(
+        `Team ${
+          teams?.find((team) => team.id === variables.teamId)?.name
+        } unverified successfully`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getTeams.queryKey(),
+      });
+    },
+  });
 
   // type of array
   // type Unified = typeof unified
@@ -345,6 +404,16 @@ export function TeamsDataTable() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => verifyTeam.mutate({ teamId: item.id })}
+              >
+                Accept team
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => unVerifyTeam.mutate({ teamId: item.id })}
+              >
+                Reject team
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(item.id)}
               >

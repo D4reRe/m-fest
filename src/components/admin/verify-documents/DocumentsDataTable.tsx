@@ -36,12 +36,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTRPC } from "@/utils/trpc";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
+import { toast } from "sonner";
 
 export function DocumentsDataTable() {
   const trpc = useTRPC();
@@ -60,6 +61,70 @@ export function DocumentsDataTable() {
     isFetching,
   } = useQuery(trpc.admin.getAllDocuments.queryOptions());
   const { data: users } = useQuery(trpc.admin.getUsers.queryOptions());
+  const verifyAllDocuments = useMutation({
+    ...trpc.admin.verifyAllDocuments.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating user documents...", {
+        id: "update-documents",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-documents");
+      toast.error("Failed to verify user documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-documents");
+      toast.success(
+        `Documents verifed successfully for ${
+          users?.find((user) => user.id === variables.userId)?.name
+        }`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+    },
+  });
+  const unVerifyAllDocuments = useMutation({
+    ...trpc.admin.unVerifyAllDocuments.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating user documents...", {
+        id: "update-documents",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-documents");
+      toast.error("Failed to unverify user documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-documents");
+      toast.success(
+        `Documents unverifed successfully for ${
+          users?.find((user) => user.id === variables.userId)?.name
+        }`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+    },
+  });
   const unified = React.useMemo(() => {
     if (!datas || !users) return [];
 
@@ -249,6 +314,20 @@ export function DocumentsDataTable() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() =>
+                  verifyAllDocuments.mutate({ userId: item.userId })
+                }
+              >
+                Accept all documents
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  unVerifyAllDocuments.mutate({ userId: item.userId })
+                }
+              >
+                Reject all documents
+              </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(item.userId)}
               >

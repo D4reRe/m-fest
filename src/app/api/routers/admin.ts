@@ -80,4 +80,84 @@ export const adminRouter = router({
     const verifications = await db.documents.findMany();
     return verifications;
   }),
+  verifyAllDocuments: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db.documents.update({
+        where: { userId: input.userId },
+        data: {
+          status: "ACCEPTED",
+          followIgStatus: "VERIFIED",
+          identityCardStatus: "VERIFIED",
+          twibbonStatus: "VERIFIED",
+          followIgVerified: true,
+          identityCardVerified: true,
+          twibbonVerified: true,
+        },
+      });
+      await db.user.update({
+        where: { id: input.userId },
+        data: {
+          verified: true,
+        },
+      });
+    }),
+  unVerifyAllDocuments: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db.documents.update({
+        where: { userId: input.userId },
+        data: {
+          status: "PENDING",
+          followIgStatus: "AWAITING_UPLOAD",
+          identityCardStatus: "AWAITING_UPLOAD",
+          twibbonStatus: "AWAITING_UPLOAD",
+          followIgVerified: false,
+          identityCardVerified: false,
+          twibbonVerified: false,
+        },
+      });
+      await db.user.update({
+        where: { id: input.userId },
+        data: {
+          verified: false,
+        },
+      });
+    }),
+  verifyTeam: adminProcedure
+    .input(
+      z.object({
+        teamId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db.team.update({
+        where: { id: input.teamId },
+        data: {
+          teamStatus: "ACCEPTED",
+        },
+      });
+    }),
+  unVerifyTeam: adminProcedure
+    .input(
+      z.object({
+        teamId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db.team.update({
+        where: { id: input.teamId },
+        data: {
+          teamStatus: "PENDING",
+        },
+      });
+    }),
 });
