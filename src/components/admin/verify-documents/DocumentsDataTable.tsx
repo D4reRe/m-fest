@@ -43,6 +43,7 @@ import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
 import { toast } from "sonner";
+import Image from "next/image";
 
 export function DocumentsDataTable() {
   const trpc = useTRPC();
@@ -61,70 +62,7 @@ export function DocumentsDataTable() {
     isFetching,
   } = useQuery(trpc.admin.getAllDocuments.queryOptions());
   const { data: users } = useQuery(trpc.admin.getUsers.queryOptions());
-  const verifyAllDocuments = useMutation({
-    ...trpc.admin.verifyAllDocuments.mutationOptions(),
-    onMutate: () => {
-      toast.loading("Updating user documents...", {
-        id: "update-documents",
-      });
-    },
 
-    onError: (error) => {
-      toast.dismiss("update-documents");
-      toast.error("Failed to verify user documents", {
-        description: error.message,
-      });
-      console.log(error.message);
-    },
-    onSuccess(data, variables) {
-      toast.dismiss("update-documents");
-      toast.success(
-        `Documents verifed successfully for ${
-          users?.find((user) => user.id === variables.userId)?.name
-        }`
-      );
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.admin.getAllDocuments.queryKey(),
-      });
-      queryClient.invalidateQueries({
-        queryKey: trpc.admin.getUsers.queryKey(),
-      });
-    },
-  });
-  const unVerifyAllDocuments = useMutation({
-    ...trpc.admin.unVerifyAllDocuments.mutationOptions(),
-    onMutate: () => {
-      toast.loading("Updating user documents...", {
-        id: "update-documents",
-      });
-    },
-
-    onError: (error) => {
-      toast.dismiss("update-documents");
-      toast.error("Failed to unverify user documents", {
-        description: error.message,
-      });
-      console.log(error.message);
-    },
-    onSuccess(data, variables) {
-      toast.dismiss("update-documents");
-      toast.success(
-        `Documents unverifed successfully for ${
-          users?.find((user) => user.id === variables.userId)?.name
-        }`
-      );
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.admin.getAllDocuments.queryKey(),
-      });
-      queryClient.invalidateQueries({
-        queryKey: trpc.admin.getUsers.queryKey(),
-      });
-    },
-  });
   const unified = React.useMemo(() => {
     if (!datas || !users) return [];
 
@@ -205,6 +143,37 @@ export function DocumentsDataTable() {
       filterFn: "includesString",
     },
     {
+      accessorKey: "image",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.user?.id);
+        return user?.image ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="User Image" />;
+      },
+      cell: ({ row }) => {
+        const imageUrl = row.getValue("image") as string;
+        return (
+          <>
+            {imageUrl ? (
+              <Link href={imageUrl} target="_blank">
+                <div className="w-10 h-10 relative mx-auto">
+                  <Image
+                    src={imageUrl}
+                    alt="User's Image"
+                    fill
+                    className=" object-cover rounded-full "
+                  />
+                </div>
+              </Link>
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-gray-300" />
+            )}
+          </>
+        );
+      },
+    },
+    {
       accessorKey: "userName",
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="User Name" />;
@@ -240,6 +209,58 @@ export function DocumentsDataTable() {
         );
       },
       cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "userRegisteredTeam",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.user?.id);
+        const userRegisteredTeam = user?.team_member.find(
+          (member) => member.userId === row.user?.id
+        );
+        const userRegisteredTeamName = userRegisteredTeam?.team?.name;
+        const isUserTeamRegistered =
+          userRegisteredTeam?.team?.teamStatus === "ACCEPTED";
+        if (!isUserTeamRegistered) {
+          return "Not a member of any registered team";
+        } else {
+          return userRegisteredTeamName;
+        }
+      },
+      header: ({ column }) => {
+        return (
+          <DataTableColumnHeader column={column} title="User Registered Team" />
+        );
+      },
+      cell: ({ row }) => {
+        const teamMember = row.getValue("userRegisteredTeam");
+        return <span>{teamMember as unknown as string}</span>;
+      },
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "comp_registration",
+      accessorFn: (row) => {
+        const user = users?.find((user) => user.id === row.userId);
+        const userRegisteredMember = user?.team_member.find(
+          (member) => member.userId === row.userId
+        );
+        const registeredComp = userRegisteredMember?.team?.competition;
+        const isTeamRegistered =
+          userRegisteredMember?.team?.teamStatus === "ACCEPTED";
+        if (!isTeamRegistered) {
+          return "Not registered to any competition";
+        } else {
+          return registeredComp;
+        }
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Competition" />;
+      },
+      cell: ({ row }) => {
+        const registration = row.getValue("comp_registration");
+        return <span>{registration as unknown as string}</span>;
+      },
       filterFn: "includesString",
     },
     {
@@ -313,7 +334,11 @@ export function DocumentsDataTable() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                Actions for{" "}
+                <span className="font-bold truncate">{item.user?.name}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() =>
                   verifyAllDocuments.mutate({ userId: item.userId })
@@ -359,6 +384,133 @@ export function DocumentsDataTable() {
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+  });
+
+  const verifyAllDocuments = useMutation({
+    ...trpc.admin.verifyAllDocuments.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating user documents...", {
+        id: "update-documents",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-documents");
+      toast.error("Failed to verify user documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-documents");
+      toast.success(
+        `Documents verifed successfully for ${
+          users?.find((user) => user.id === variables.userId)?.name
+        }`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+    },
+  });
+  const unVerifyAllDocuments = useMutation({
+    ...trpc.admin.unVerifyAllDocuments.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating user documents...", {
+        id: "update-documents",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-documents");
+      toast.error("Failed to unverify user documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-documents");
+      toast.success(
+        `Documents unverifed successfully for ${
+          users?.find((user) => user.id === variables.userId)?.name
+        }`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+    },
+  });
+  const verifyDocumentsByMany = useMutation({
+    ...trpc.admin.verifyDocumentsByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating user documents...", {
+        id: "update-documents",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-documents");
+      toast.error("Failed to verify user documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-documents");
+      toast.success(
+        `Documents verifed successfully for ${variables.userIds.length} users`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
+  const unVerifyDocumentsByMany = useMutation({
+    ...trpc.admin.unVerifyDocumentsByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating user documents...", {
+        id: "update-documents",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-documents");
+      toast.error("Failed to unverify user documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-documents");
+      toast.success(
+        `Documents unverifed successfully for ${variables.userIds.length} users`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+      table.resetRowSelection();
     },
   });
 
@@ -427,6 +579,26 @@ export function DocumentsDataTable() {
                 >
                   userInstitution
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("userRegisteredTeam");
+                    table.getColumn("userRegisteredTeam")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  userRegisteredTeam
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("comp_registration");
+                    table.getColumn("comp_registration")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Competition
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -445,7 +617,63 @@ export function DocumentsDataTable() {
               })}
             />
           </Button>
+          {table.getFilteredSelectedRowModel().rows.length ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="relative cursor-pointer"
+                  disabled={isFetching}
+                >
+                  <div
+                    className={cn(
+                      "absolute -top-1 -right-1 w-4 h-4 border rounded-full bg-white text-black flex justify-center items-center",
+                      {
+                        "w-6":
+                          table.getFilteredSelectedRowModel().rows.length > 9,
+                        "w-7":
+                          table.getFilteredSelectedRowModel().rows.length > 99,
+                      }
+                    )}
+                  >
+                    <p>{table.getFilteredSelectedRowModel().rows.length}</p>
+                  </div>
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    const userIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.userId);
+                    verifyDocumentsByMany.mutate({ userIds });
+                  }}
+                  className="cursor-pointer"
+                >
+                  Accept {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  user&apos;s documents
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    const userIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.userId);
+                    unVerifyDocumentsByMany.mutate({ userIds });
+                  }}
+                  className="cursor-pointer"
+                >
+                  Reject {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  user&apos;s documents
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
         </div>
+
         <DataTableViewOptions table={table} />
       </div>
       <div className="overflow-hidden rounded-md border mb-2">

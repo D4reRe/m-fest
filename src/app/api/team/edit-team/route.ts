@@ -140,68 +140,69 @@ export async function POST(req: Request) {
       existingCurrentTeamMembersEmails.has(member.email)
     );
 
+    // !! Since every user can only have 1 registration, we don't need to check if editing a team, must consist of many combination of users that are different from existing teams
     // If there's any removal or addition of members, check if team already exists
-    if (membersToAdd?.length !== 0 || membersToRemove?.length !== 0) {
-      //  Check all team members
-      const candidateTeams = await db.team.findMany({
-        where: {
-          members: {
-            some: {
-              email: {
-                in: submittedMemberEmails,
-              },
-            },
-          },
-        },
-        include: {
-          members: true,
-        },
-      });
-      // console.log("Candidate teams: ", candidateTeams);
-      // console.log("Candidate teams total: ", candidateTeams.length);
-      const teamAlreadyExists = candidateTeams.some((team, index: number) => {
-        // console.log("iteration: ", index);
-        // console.log("Team: ", team);
-        // console.log("Team Members: ", team.members);
-        // console.log(
-        //   "Existing Team Members Emails: ",
-        //   team.members.map((member) => member.email)
-        // );
-        // console.log(
-        //   "Existing Team Members Emails Total: ",
-        //   team.members.map((member) => member.email).length
-        // );
-        // console.log("Submitted member emails: ", submittedMemberEmails);
-        // console.log(
-        //   "Submitted member emails total: ",
-        //   submittedMemberEmails.length
-        // );
-        const existingTeamMembersEmails = new Set(
-          team.members.map((member) => member.email)
-        );
-        if (existingTeamMembersEmails.size !== submittedMemberEmailsSet.size)
-          return false;
-        for (const email of existingTeamMembersEmails) {
-          if (!submittedMemberEmailsSet.has(email)) return false;
-        }
-        return true;
-      });
-      console.log(
-        "Team already exists or result of checks: ",
-        teamAlreadyExists
-      );
-      if (teamAlreadyExists) {
-        console.log("Team already exists");
-        return NextResponse.json(
-          {
-            success: false,
-            error: "All these members are already in the same team.",
-          },
-          { status: 400 }
-        );
-      }
-      console.log("Team does not already exist, proceed to edit team");
-    }
+    // if (membersToAdd?.length !== 0 || membersToRemove?.length !== 0) {
+    //   //  Check all team members
+    //   const candidateTeams = await db.team.findMany({
+    //     where: {
+    //       members: {
+    //         some: {
+    //           email: {
+    //             in: submittedMemberEmails,
+    //           },
+    //         },
+    //       },
+    //     },
+    //     include: {
+    //       members: true,
+    //     },
+    //   });
+    //   // console.log("Candidate teams: ", candidateTeams);
+    //   // console.log("Candidate teams total: ", candidateTeams.length);
+    //   const teamAlreadyExists = candidateTeams.some((team, index: number) => {
+    //     // console.log("iteration: ", index);
+    //     // console.log("Team: ", team);
+    //     // console.log("Team Members: ", team.members);
+    //     // console.log(
+    //     //   "Existing Team Members Emails: ",
+    //     //   team.members.map((member) => member.email)
+    //     // );
+    //     // console.log(
+    //     //   "Existing Team Members Emails Total: ",
+    //     //   team.members.map((member) => member.email).length
+    //     // );
+    //     // console.log("Submitted member emails: ", submittedMemberEmails);
+    //     // console.log(
+    //     //   "Submitted member emails total: ",
+    //     //   submittedMemberEmails.length
+    //     // );
+    //     const existingTeamMembersEmails = new Set(
+    //       team.members.map((member) => member.email)
+    //     );
+    //     if (existingTeamMembersEmails.size !== submittedMemberEmailsSet.size)
+    //       return false;
+    //     for (const email of existingTeamMembersEmails) {
+    //       if (!submittedMemberEmailsSet.has(email)) return false;
+    //     }
+    //     return true;
+    //   });
+    //   console.log(
+    //     "Team already exists or result of checks: ",
+    //     teamAlreadyExists
+    //   );
+    //   if (teamAlreadyExists) {
+    //     console.log("Team already exists");
+    //     return NextResponse.json(
+    //       {
+    //         success: false,
+    //         error: "All these members are already in the same team.",
+    //       },
+    //       { status: 400 }
+    //     );
+    //   }
+    //   console.log("Team does not already exist, proceed to edit team");
+    // }
 
     // Remove old members
     const removeMembers = await db.teamMember.deleteMany({

@@ -43,8 +43,6 @@ import { DataTableColumnHeader } from "@/components/ui/data-table-column-header"
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
 import Image from "next/image";
-import type { TeamMember } from "../../../../prisma/generated/prisma/browser";
-import type { CompRegistration } from "../../../../prisma/generated/prisma/client";
 
 export function UsersDataTable() {
   const trpc = useTRPC();
@@ -343,43 +341,56 @@ export function UsersDataTable() {
       },
     },
     {
-      accessorKey: "registration",
+      accessorKey: "comp_registration",
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.id);
-        return (
-          user?.registration ??
-          "Not registered or not a leader for any competition"
+        const userRegisteredMember = user?.team_member.find(
+          (member) => member.userId === row.id
         );
+        const registeredComp = userRegisteredMember?.team?.competition;
+        const isTeamRegistered =
+          userRegisteredMember?.team?.teamStatus === "ACCEPTED";
+        if (!isTeamRegistered) {
+          return "Not registered to any competition";
+        } else {
+          return registeredComp;
+        }
       },
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Registration" />;
+        return <DataTableColumnHeader column={column} title="Competition" />;
       },
       cell: ({ row }) => {
-        const registration = row.getValue("registration") as CompRegistration[];
-        return (
-          <span>
-            {registration[0]?.competitionName ??
-              "Not registered or not a leader for any competition"}
-          </span>
-        );
+        const registration = row.getValue("comp_registration");
+        return <span>{registration as unknown as string}</span>;
       },
       filterFn: "includesString",
     },
     {
-      accessorKey: "team_member",
+      accessorKey: "userRegisteredTeam",
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.id);
-        return user?.team_member ?? "Not member of any team";
+        const userRegisteredTeam = user?.team_member.find(
+          (member) => member.userId === row.id
+        );
+        const userRegisteredTeamName = userRegisteredTeam?.team?.name;
+        const isUserTeamRegistered =
+          userRegisteredTeam?.team?.teamStatus === "ACCEPTED";
+        if (!isUserTeamRegistered) {
+          return "Not a member of any registered team";
+        } else {
+          return userRegisteredTeamName;
+        }
       },
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Team Member" />;
-      },
-      cell: ({ row }) => {
-        const teamMember = row.getValue("team_member") as TeamMember[];
         return (
-          <span>{teamMember[0]?.teamName ?? "Not member of any team"}</span>
+          <DataTableColumnHeader column={column} title="User Registered Team" />
         );
       },
+      cell: ({ row }) => {
+        const teamMember = row.getValue("userRegisteredTeam");
+        return <span>{teamMember as unknown as string}</span>;
+      },
+      filterFn: "includesString",
     },
     {
       accessorKey: "IdentityCard",
@@ -631,6 +642,26 @@ export function UsersDataTable() {
                   }}
                 >
                   Role
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("comp_registration");
+                    table.getColumn("comp_registration")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Competition
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("userRegisteredTeam");
+                    table.getColumn("userRegisteredTeam")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  User Registered Team
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

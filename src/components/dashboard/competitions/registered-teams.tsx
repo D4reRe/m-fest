@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { db } from "@/server/db";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BadgeCheckIcon } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../../general/UserProfile";
 import { getUser } from "@/action/user.action";
@@ -106,9 +106,31 @@ async function RegisteredTeams() {
                       : "No competition"}
                   </h5>
                 </div>
-                <Badge className="bg-primary/30 text-primary border-primary/50 ml-auto">
-                  {team.members.length} members
-                </Badge>
+                <div className="ml-auto flex flex-col-reverse gap-2 items-center justify-center">
+                  <Badge className="bg-primary/30 text-primary border-primary/50">
+                    {team.members.length} members
+                  </Badge>
+                  <span>
+                    {team.teamStatus === "NOT_REGISTERED" ? (
+                      <Badge variant={"default"}>Unregistered</Badge>
+                    ) : team.teamStatus === "PENDING" ? (
+                      <Badge
+                        variant="secondary"
+                        className="bg-yellow-600 text-white"
+                      >
+                        Pending
+                      </Badge>
+                    ) : (
+                      <Badge
+                        variant="secondary"
+                        className="bg-blue-500 text-white dark:bg-blue-600"
+                      >
+                        <BadgeCheckIcon />
+                        Verified
+                      </Badge>
+                    )}
+                  </span>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
@@ -120,6 +142,29 @@ async function RegisteredTeams() {
                         key={member.user?.id}
                         className="glass-sm p-4 flex flex-col items-center text-center"
                       >
+                        <span className="mb-2">
+                          {member.user?.documents?.status === "PENDING" ? (
+                            <Badge
+                              variant="secondary"
+                              className="bg-yellow-600 text-white"
+                            >
+                              Pending
+                            </Badge>
+                          ) : member.user?.verified &&
+                            member.user?.documents?.status === "ACCEPTED" ? (
+                            <Badge
+                              variant="secondary"
+                              className="bg-blue-500 text-white dark:bg-blue-600"
+                            >
+                              <BadgeCheckIcon />
+                              Verified
+                            </Badge>
+                          ) : (
+                            <Badge className="bg-red-500 text-white">
+                              Not Submitted
+                            </Badge>
+                          )}
+                        </span>
                         <UserAvatar
                           src={member.user?.image as string}
                           alt={member.user?.name as string}

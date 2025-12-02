@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { db } from "@/server/db";
-import { Edit } from "lucide-react";
+import { BadgeCheckIcon, Edit, Trash } from "lucide-react";
 import { Fragment, Suspense } from "react";
 import { UserAvatar } from "../general/UserProfile";
 import {
@@ -17,6 +17,27 @@ import Link from "next/link";
 import { type User } from "@/types/types";
 import TeamFallback from "./TeamFallback";
 import { getUser } from "@/action/user.action";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import AlertDialogActionButton from "./deleteButton";
+
+async function deleteTeam(teamId: string) {
+  "use server";
+  await db.teamMember.deleteMany({
+    where: { teamId },
+  });
+  await db.team.delete({
+    where: { id: teamId },
+  });
+}
 
 export function TeamMembers() {
   return (
@@ -97,21 +118,55 @@ async function FetchUserTeams() {
                         member.userId === user?.id && member.role === "Leader"
                     ) &&
                       !team.competition && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="ml-2 cursor-pointer h-8 w-8"
-                          asChild
-                        >
-                          <Link
-                            href={`/dashboard/team/edit-team/${team?.name
-                              ?.split(" ")
-                              .join("-")}`}
-                            prefetch
+                        <div className="flex items-center">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="ml-2 cursor-pointer h-8 w-8"
+                            asChild
                           >
-                            <Edit className="w-4 h-4" />
-                          </Link>
-                        </Button>
+                            <Link
+                              href={`/dashboard/team/edit-team/${team?.name
+                                ?.split(" ")
+                                .join("-")}`}
+                              prefetch
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Link>
+                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="ml-2 cursor-pointer h-8 w-8"
+                              >
+                                <Trash className="w-4 h-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-transparent backdrop-blur-lg">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Are you absolutely sure?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  This action cannot be undone. This will
+                                  permanently delete {team.name} and remove this
+                                  team from our servers.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel className="cursor-pointer">
+                                  Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogActionButton
+                                  teamId={team.id}
+                                  deleteTeam={deleteTeam}
+                                />
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       )}
                   </h3>
                   <h5 className="text-sm text-muted-foreground">
@@ -120,9 +175,31 @@ async function FetchUserTeams() {
                       : "No competition"}
                   </h5>
                 </div>
-                <Badge className="bg-primary/30 text-primary border-primary/50 ml-auto">
-                  {team.members.length} members
-                </Badge>
+                <div className="ml-auto flex flex-col-reverse gap-2 items-center justify-center">
+                  <Badge className="bg-primary/30 text-primary border-primary/50">
+                    {team.members.length} members
+                  </Badge>
+                  <span>
+                    {team.teamStatus === "NOT_REGISTERED" ? (
+                      <Badge variant={"default"}>Unregistered</Badge>
+                    ) : team.teamStatus === "PENDING" ? (
+                      <Badge
+                        variant="secondary"
+                        className="bg-yellow-600 text-white"
+                      >
+                        Pending
+                      </Badge>
+                    ) : (
+                      <Badge
+                        variant="secondary"
+                        className="bg-blue-500 text-white dark:bg-blue-600"
+                      >
+                        <BadgeCheckIcon />
+                        Verified
+                      </Badge>
+                    )}
+                  </span>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
@@ -134,6 +211,29 @@ async function FetchUserTeams() {
                         key={member.user?.id}
                         className="glass-sm p-4 flex flex-col items-center text-center"
                       >
+                        <span className="mb-2">
+                          {member.user?.documents?.status === "PENDING" ? (
+                            <Badge
+                              variant="secondary"
+                              className="bg-yellow-600 text-white"
+                            >
+                              Pending
+                            </Badge>
+                          ) : member.user?.verified &&
+                            member.user?.documents?.status === "ACCEPTED" ? (
+                            <Badge
+                              variant="secondary"
+                              className="bg-blue-500 text-white dark:bg-blue-600"
+                            >
+                              <BadgeCheckIcon />
+                              Verified
+                            </Badge>
+                          ) : (
+                            <Badge className="bg-red-500 text-white">
+                              Not Submitted
+                            </Badge>
+                          )}
+                        </span>
                         <UserAvatar
                           src={member.user?.image as string}
                           alt={member.user?.name as string}

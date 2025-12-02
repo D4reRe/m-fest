@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Check if team is already exist
+    // Check if team name is already exist
     const existingTeamName = await db.team.findUnique({ where: { name } });
     if (existingTeamName) {
       return NextResponse.json(
@@ -36,188 +36,90 @@ export async function POST(req: Request) {
       );
     }
 
+    // !! Since every user can only have 1 registration, we don't need to check if creating a new team, must consist of many combination of users that are different from existing teams
     // Check if all members are registered
-    const submittedMemberEmails = members.map((member: Member) => member.email);
+    // const submittedMemberEmails = members.map((member: Member) => member.email);
     // console.log("Submitted emails: ", submittedMemberEmails);
 
-    const existingUsers = await db.user.findMany({
-      where: { email: { in: submittedMemberEmails } },
-    });
+    // const existingUsers = await db.user.findMany({
+    //   where: { email: { in: submittedMemberEmails } },
+    // });
     // console.log("Existing users based on submitted emails: ", existingUsers);
-    if (existingUsers.length !== members.length) {
-      return NextResponse.json(
-        { success: false, error: "All members must be registered" },
-        { status: 400 }
-      );
-    }
+    // if (existingUsers.length !== members.length) {
+    //   return NextResponse.json(
+    //     { success: false, error: "All members must be registered" },
+    //     { status: 400 }
+    //   );
+    // }
 
-    // ! OLD CODE
-    // // Check if all team members are already in a existing team
-    // const existingTeamMembers = await db.teamMember.findMany({
+    // const candidateTeams = await db.team.findMany({
     //   where: {
-    //     email: {
-    //       in: members.map((member: Member) => member.email),
+    //     members: {
+    //       some: {
+    //         email: {
+    //           in: submittedMemberEmails,
+    //         },
+    //       },
     //     },
     //   },
-    // });
-    // console.log(
-    //   "Existing team members based on submitted emails: ",
-    //   existingTeamMembers
-    // );
-
-    // // Group members by team id in array of strings with key of string (teamId)
-    // const groupedByTeamOfSameTeamMembers = existingTeamMembers.reduce(
-    //   (acc, member) => {
-    //     acc[member.teamId] = acc[member.teamId] || [];
-    //     acc[member.teamId].push(member.email as string);
-    //     return acc;
+    //   include: {
+    //     members: true,
     //   },
-    //   {} as Record<string, string[]>
-    // );
-    // console.log(
-    //   "Grouped by team of same team members: ",
-    //   groupedByTeamOfSameTeamMembers
-    // );
-
-    // const allTeamMembers = await db.teamMember.findMany();
-    // console.log("All team members: ", allTeamMembers);
-
-    // const groupedByTeamOfAllTeamMembers = allTeamMembers.reduce(
-    //   (acc, member) => {
-    //     acc[member.teamId] = acc[member.teamId] || [];
-    //     acc[member.teamId].push(member.email as string);
-    //     return acc;
-    //   },
-    //   {} as Record<string, string[]>
-    // );
-    // console.log(
-    //   "Grouped by team of all team members: ",
-    //   groupedByTeamOfAllTeamMembers
-    // );
-
-    // const teamAlreadyExistsByAllTeamMembers = Object.values(
-    //   groupedByTeamOfAllTeamMembers
-    // ).some((emails) => {
-    //   console.log("All team's Emails: ", emails);
-    //   console.log("All Emails total: ", emails.length);
-    //   const existingSet = new Set(emails);
-    //   const submittedSet = new Set(
-    //     members.map((member: Member) => member.email)
-    //   );
-    //   if (existingSet.size !== submittedSet.size) return false;
-    //   for (const email of existingSet) {
-    //     if (!submittedSet.has(email)) return false;
-    //   }
-    //   return true;
     // });
-
-    // if (teamAlreadyExistsByAllTeamMembers) {
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       error: "All these members are already in the same team.",
-    //     },
-    //     { status: 400 }
-    //   );
-    // }
-
-    // // Check if any team already contains *all* of these emails
-    // const teamAlreadyExistsBySameTeamMembers = Object.values(
-    //   groupedByTeamOfSameTeamMembers
-    // ).some((emails) => {
-    //   console.log("Existing team's Emails: ", emails);
-    //   console.log("Existing team's Emails total: ", emails.length);
-    //   const existingSet = new Set(emails);
-    //   const submittedSet = new Set(
-    //     members.map((member: Member) => member.email)
-    //   );
-    //   if (existingSet.size !== submittedSet.size) return false;
-    //   for (const email of existingSet) {
-    //     if (!submittedSet.has(email)) return false;
-    //   }
-    //   return true;
-    // });
-    // console.log("Members: ", members);
-    // console.log("Members Total: ", members.length);
-
-    // console.log("Team already exists: ", teamAlreadyExistsBySameTeamMembers);
-
-    // if (teamAlreadyExistsBySameTeamMembers) {
-    //   return NextResponse.json(
-    //     {
-    //       success: false,
-    //       error: "All these members are already in the same team.",
-    //     },
-    //     { status: 400 }
-    //   );
-    // }
-
-    // ! OLD CODE
-
-    // New Code to check all team members
-    const candidateTeams = await db.team.findMany({
-      where: {
-        members: {
-          some: {
-            email: {
-              in: submittedMemberEmails,
-            },
-          },
-        },
-      },
-      include: {
-        members: true,
-      },
-    });
     // console.log("Candidate teams: ", candidateTeams);
     // console.log("Candidate teams total: ", candidateTeams.length);
 
-    const submittedMemberEmailsSet = new Set(submittedMemberEmails);
+    // const submittedMemberEmailsSet = new Set(submittedMemberEmails);
 
-    const teamAlreadyExists = candidateTeams.some((team, index: number) => {
-      // console.log("iteration: ", index);
-      // console.log("Team: ", team);
-      // console.log("Team Members: ", team.members);
-      // console.log(
-      //   "Existing Team Members Emails: ",
-      //   team.members.map((member) => member.email)
-      // );
-      // console.log(
-      //   "Existing Team Members Emails Total: ",
-      //   team.members.map((member) => member.email).length
-      // );
-      // console.log("Submitted member emails: ", submittedMemberEmails);
-      // console.log(
-      //   "Submitted member emails total: ",
-      //   submittedMemberEmails.length
-      // );
-      const existingTeamMembersEmails = new Set(
-        team.members.map((member) => member.email)
-      );
-      if (existingTeamMembersEmails.size !== submittedMemberEmailsSet.size)
-        return false;
-      for (const email of existingTeamMembersEmails) {
-        if (!submittedMemberEmailsSet.has(email)) return false;
-      }
-      return true;
-    });
+    // const teamAlreadyExists = candidateTeams.some((team, index: number) => {
+    //   console.log("iteration: ", index);
+    //   console.log("Team: ", team);
+    //   console.log("Team Members: ", team.members);
+    //   console.log(
+    //     "Existing Team Members Emails: ",
+    //     team.members.map((member) => member.email)
+    //   );
+    //   console.log(
+    //     "Existing Team Members Emails Total: ",
+    //     team.members.map((member) => member.email).length
+    //   );
+    //   console.log("Submitted member emails: ", submittedMemberEmails);
+    //   console.log(
+    //     "Submitted member emails total: ",
+    //     submittedMemberEmails.length
+    //   );
+    //   const existingTeamMembersEmails = new Set(
+    //     team.members.map((member) => member.email)
+    //   );
+    //   if (existingTeamMembersEmails.size !== submittedMemberEmailsSet.size)
+    //     return false;
+    //   for (const email of existingTeamMembersEmails) {
+    //     if (!submittedMemberEmailsSet.has(email)) return false;
+    //   }
+    //   return true;
+    // });
 
     // console.log("Team already exists or result of checks: ", teamAlreadyExists);
 
-    if (teamAlreadyExists) {
-      // console.log("Team already exists");
-      return NextResponse.json(
-        {
-          success: false,
-          error: "All these members are already in the same team.",
-        },
-        { status: 400 }
-      );
-    }
+    // if (teamAlreadyExists) {
+    //   console.log("Team already exists");
+    //   return NextResponse.json(
+    //     {
+    //       success: false,
+    //       error: "All these members are already in the same team.",
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
 
     // console.log("Team does not already exist, proceed to create team");
 
-    // Check if all members are unique
+    // Just creating some variables that are established from previous code
+    const submittedMemberEmails = members.map((member: Member) => member.email);
+    const existingUsers = await db.user.findMany({
+      where: { email: { in: submittedMemberEmails } },
+    });
+
     const memberProfiles = existingUsers.map((user) => {
       return {
         email: user.email,

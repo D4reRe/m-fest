@@ -78,65 +78,6 @@ export function TeamsDataTable() {
     return teams;
   }, [teams]);
 
-  const verifyTeam = useMutation({
-    ...trpc.admin.verifyTeam.mutationOptions(),
-    onMutate: () => {
-      toast.loading("Updating team...", {
-        id: "update-team",
-      });
-    },
-
-    onError: (error) => {
-      toast.dismiss("update-team");
-      toast.error("Failed to verify team", {
-        description: error.message,
-      });
-      console.log(error.message);
-    },
-    onSuccess(data, variables) {
-      toast.dismiss("update-team");
-      toast.success(
-        `Team ${
-          teams?.find((team) => team.id === variables.teamId)?.name
-        } verified successfully`
-      );
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.admin.getTeams.queryKey(),
-      });
-    },
-  });
-  const unVerifyTeam = useMutation({
-    ...trpc.admin.unVerifyTeam.mutationOptions(),
-    onMutate: () => {
-      toast.loading("Updating team...", {
-        id: "update-team",
-      });
-    },
-
-    onError: (error) => {
-      toast.dismiss("update-team");
-      toast.error("Failed to unverify team", {
-        description: error.message,
-      });
-      console.log(error.message);
-    },
-    onSuccess(data, variables) {
-      toast.dismiss("update-team");
-      toast.success(
-        `Team ${
-          teams?.find((team) => team.id === variables.teamId)?.name
-        } unverified successfully`
-      );
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.admin.getTeams.queryKey(),
-      });
-    },
-  });
-
   // type of array
   // type Unified = typeof unified
 
@@ -403,7 +344,10 @@ export function TeamsDataTable() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                Actions for <span className="font-bold">{item.name}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => verifyTeam.mutate({ teamId: item.id })}
               >
@@ -415,13 +359,16 @@ export function TeamsDataTable() {
                 Reject team
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={() => deleteTeam.mutate({ teamId: item.id })}
+                className="text-red-500"
+              >
+                Delete Team
+              </DropdownMenuItem>
+              <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(item.id)}
               >
                 Copy user ID
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View user</DropdownMenuItem>
-              <DropdownMenuItem>View document details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -445,6 +392,178 @@ export function TeamsDataTable() {
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+  });
+
+  const verifyTeam = useMutation({
+    ...trpc.admin.verifyTeam.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating team...", {
+        id: "update-team",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-team");
+      toast.error("Failed to verify team", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-team");
+      toast.success(
+        `Team ${
+          teams?.find((team) => team.id === variables.teamId)?.name
+        } verified successfully`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getTeams.queryKey(),
+      });
+    },
+  });
+  const unVerifyTeam = useMutation({
+    ...trpc.admin.unVerifyTeam.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating team...", {
+        id: "update-team",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-team");
+      toast.error("Failed to unverify team", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-team");
+      toast.success(
+        `Team ${
+          teams?.find((team) => team.id === variables.teamId)?.name
+        } unverified successfully`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getTeams.queryKey(),
+      });
+    },
+  });
+  const deleteTeam = useMutation({
+    ...trpc.admin.deleteTeam.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting team...", {
+        id: "delete-team",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("delete-team");
+      toast.error("Failed to delete team", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("delete-team");
+      toast.success(
+        `Team ${
+          teams?.find((team) => team.id === variables.teamId)?.name
+        } deleted successfully`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getTeams.queryKey(),
+      });
+    },
+  });
+  const verifyTeamsByMany = useMutation({
+    ...trpc.admin.verifyTeamsByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating teams...", {
+        id: "update-team",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-team");
+      toast.error("Failed to verify teams", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-team");
+      toast.success(
+        `Teams verified successfully for ${variables.teamIds.length} teams`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getTeams.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
+  const unVerifyTeamsByMany = useMutation({
+    ...trpc.admin.unVerifyTeamsByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating teams...", {
+        id: "update-team",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("update-team");
+      toast.error("Failed to unverify teams", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-team");
+      toast.success(
+        `Teams unverifed successfully for ${variables.teamIds.length} teams`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getTeams.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
+  const deleteTeamByMany = useMutation({
+    ...trpc.admin.deleteTeamByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting teams...", {
+        id: "delete-team",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("delete-team");
+      toast.error("Failed to delete teams", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("delete-team");
+      toast.success(
+        `Teams deleted successfully for ${variables.teamIds.length} teams`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getTeams.queryKey(),
+      });
+      table.resetRowSelection();
     },
   });
 
@@ -611,6 +730,70 @@ export function TeamsDataTable() {
               })}
             />
           </Button>
+          {table.getFilteredSelectedRowModel().rows.length ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="relative cursor-pointer"
+                  disabled={isFetching}
+                >
+                  <div
+                    className={cn(
+                      "absolute -top-1 -right-1 w-4 h-4 border rounded-full bg-white text-black flex justify-center items-center",
+                      {
+                        "w-6":
+                          table.getFilteredSelectedRowModel().rows.length > 9,
+                        "w-7":
+                          table.getFilteredSelectedRowModel().rows.length > 99,
+                      }
+                    )}
+                  >
+                    <p>{table.getFilteredSelectedRowModel().rows.length}</p>
+                  </div>
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    const teamIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.id);
+                    verifyTeamsByMany.mutate({ teamIds });
+                  }}
+                  className="cursor-pointer"
+                >
+                  Accept {table.getFilteredSelectedRowModel().rows.length} teams
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    const teamIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.id);
+                    unVerifyTeamsByMany.mutate({ teamIds });
+                  }}
+                  className="cursor-pointer"
+                >
+                  Reject {table.getFilteredSelectedRowModel().rows.length} teams
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    const teamIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.id);
+                    deleteTeamByMany.mutate({ teamIds });
+                  }}
+                  className="cursor-pointer text-red-500"
+                >
+                  Delete {table.getFilteredSelectedRowModel().rows.length} teams
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
         </div>
         <DataTableViewOptions table={table} />
       </div>

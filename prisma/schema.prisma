@@ -84,8 +84,8 @@ model CompRegistration {
   // STEM
   mentor String?
 
-  user    User?   @relation(fields: [userId], references: [id]) // Leader
-  team    Team?   @relation(fields: [teamId], references: [id])
+  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade) // Leader
+  team    Team?   @relation(fields: [teamId], references: [id], onDelete: Cascade)
   payment Payment @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
 
   createdAt DateTime @default(now())
