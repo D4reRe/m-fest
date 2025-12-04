@@ -343,6 +343,7 @@ export function DocumentsDataTable() {
                 onClick={() =>
                   verifyAllDocuments.mutate({ userId: item.userId })
                 }
+                className="cursor-pointer"
               >
                 Accept all documents
               </DropdownMenuItem>
@@ -350,17 +351,23 @@ export function DocumentsDataTable() {
                 onClick={() =>
                   unVerifyAllDocuments.mutate({ userId: item.userId })
                 }
+                className="cursor-pointer"
               >
                 Reject all documents
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(item.userId)}
+                className="cursor-pointer"
               >
                 Copy user ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View user</DropdownMenuItem>
-              <DropdownMenuItem>View document details</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                View user
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                View document details
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

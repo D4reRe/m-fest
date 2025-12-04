@@ -493,15 +493,28 @@ export function UsersDataTable() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                Actions for <span className="font-bold">{item.name}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
+                className="cursor-pointer"
                 onClick={() => navigator.clipboard.writeText(item.id)}
               >
                 Copy user ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View user</DropdownMenuItem>
-              <DropdownMenuItem>View document details</DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <Link href={`/admin/users/${item.id}`} target="_blank">
+                  View User
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                {" "}
+                <Link href={`/admin/users/${item.id}`} target="_blank">
+                  View Documents Detail
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

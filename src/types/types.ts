@@ -22,7 +22,7 @@ export enum Education {
 
 export enum CompetitionName {
   PDC = "PDC",
-  IPPC = "PDDC",
+  IPPC = "IPPC",
   BCC = "BCC",
   STEM = "STEM",
 }
@@ -97,6 +97,26 @@ export type CompRegistration = {
   mentor: string | null;
   createdAt: Date;
   updatedAt: Date;
+};
+
+export type Competition = {
+  title: string;
+  logo: string;
+  desc: string;
+  regLink: string;
+  abbreviation: CompetitionName;
+  cover: string;
+  isOpen?: boolean;
+  prize: number;
+  reg1: string;
+  reg2: string;
+  fee1: number;
+  fee2: number;
+  guideBook: string;
+  icon: string;
+  uploadThingRoute: string;
+  submissionDeadline: Date | null;
+  compOpenCase: Date | null;
 };
 
 export type Team = {

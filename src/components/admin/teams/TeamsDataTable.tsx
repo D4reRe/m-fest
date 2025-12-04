@@ -350,24 +350,27 @@ export function TeamsDataTable() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => verifyTeam.mutate({ teamId: item.id })}
+                className="cursor-pointer"
               >
                 Accept team
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => unVerifyTeam.mutate({ teamId: item.id })}
+                className="cursor-pointer"
               >
                 Reject team
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => deleteTeam.mutate({ teamId: item.id })}
-                className="text-red-500"
+                className="text-red-500 cursor-pointer"
               >
                 Delete Team
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(item.id)}
+                className="cursor-pointer"
               >
-                Copy user ID
+                Copy team ID
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

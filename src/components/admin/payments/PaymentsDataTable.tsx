@@ -279,11 +279,9 @@ export function PaymentsDataTable() {
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(item.id)}
               >
-                Copy user ID
+                Copy payment ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View user</DropdownMenuItem>
-              <DropdownMenuItem>View document details</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );

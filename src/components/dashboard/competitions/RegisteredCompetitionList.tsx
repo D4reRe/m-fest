@@ -19,13 +19,14 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { type User } from "@/types/types";
+import { type Competition, type User } from "@/types/types";
 import { getUser } from "@/action/user.action";
 import { db } from "@/server/db";
 import { Suspense } from "react";
 import CompetitionListSkeleton from "../CompetitionListSkeleton";
 import { IconListDetails } from "@tabler/icons-react";
 import CountdownClient from "./CountdownClient";
+import type { Team } from "../../../../prisma/generated/prisma/client";
 
 export default function RegisteredCompetitionList() {
   return (
@@ -41,6 +42,11 @@ async function FetchUserRegisteredCompetitions() {
     where: {
       userId: user.id,
       statusOrder: "SUCCESS",
+    },
+  });
+  const team = await db.team.findFirst({
+    where: {
+      leaderUserId: user.id,
     },
   });
   // console.log("Registered competitions: ", registeredCompetitions);
@@ -106,22 +112,28 @@ async function FetchUserRegisteredCompetitions() {
             {comp.compOpenCase ? (
               <CountdownClient
                 date={comp.compOpenCase}
-                comp={comp.abbreviation}
+                comp={comp as Competition}
                 description="Case opened in"
                 type="compOpenCase"
+                team={team as Team}
               />
             ) : (
               <Button
                 variant="default"
                 size="sm"
                 className="gap-1 pr-1.5 cursor-pointer"
+                disabled={team?.teamStatus === "ACCEPTED" ? false : true}
               >
                 <Link
                   href={`/dashboard/competitions/${comp.abbreviation.toUpperCase()}`}
                   prefetch
                   className="flex items-center gap-2"
                 >
-                  <span>View Details</span>
+                  <span>
+                    {team?.teamStatus === "ACCEPTED"
+                      ? "View Details"
+                      : "Team status is pending"}
+                  </span>
                   <ChevronRight className="size-4" />
                 </Link>
               </Button>

@@ -4,17 +4,21 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import Countdown from "react-countdown";
+import type { Team } from "../../../../prisma/generated/prisma/client";
+import type { Competition } from "@/types/types";
 
 export default function CountdownClient({
   date,
   comp,
   description,
   type,
+  team,
 }: {
   date: Date;
-  comp: string;
+  comp: Competition;
   description: string;
   type: "compOpenCase" | "submissionDeadline";
+  team: Team;
 }) {
   return (
     <Countdown
@@ -27,13 +31,18 @@ export default function CountdownClient({
                 variant="default"
                 size="sm"
                 className="gap-1 pr-1.5 cursor-pointer"
+                disabled={team?.teamStatus === "ACCEPTED" ? false : true}
               >
                 <Link
-                  href={`/dashboard/competitions/${comp.toUpperCase()}`}
+                  href={`/dashboard/competitions/${comp.abbreviation.toUpperCase()}`}
                   prefetch
                   className="flex items-center gap-2"
                 >
-                  <span>View Details</span>
+                  <span>
+                    {team?.teamStatus === "ACCEPTED"
+                      ? "View Details"
+                      : "Team in Pending"}
+                  </span>
                   <ChevronRight className="size-4" />
                 </Link>
               </Button>
