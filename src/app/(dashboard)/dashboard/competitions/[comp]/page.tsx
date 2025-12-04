@@ -10,6 +10,10 @@ import {
   submissionOpenDate,
 } from "@/constants/constants";
 import { competitions } from "@/lib/competition";
+import { auth } from "@/server/auth/auth";
+import { db } from "@/server/db";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata({
   params,
@@ -44,6 +48,19 @@ async function FetchCompForm({
   const submissionDeadline = competitions.find(
     (competition) => competition.abbreviation === comp.toUpperCase()
   )?.submissionDeadline;
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+  const team = await db.team.findFirst({
+    where: {
+      leaderUserId: session?.user.id,
+    },
+  });
+
+  if (team?.teamStatus !== "ACCEPTED") {
+    redirect("/dashboard/competitions");
+  }
+
   if (comp === "STEM") {
     return (
       // Proctor Exam Here
@@ -208,7 +225,6 @@ async function FetchCompForm({
                       competition.abbreviation === comp.toUpperCase()
                   )?.submissionDeadline as Date
                 }
-                comp={comp}
                 description="Submission Deadline"
                 type="submissionDeadline"
               />

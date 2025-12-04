@@ -41,16 +41,21 @@ export const dashboardRouter = router({
             imageUrl: z.string().nullable(),
             imageKey: z.string().nullable(),
             createdAt: z.date().nullable(),
-            status: z.string().nullable(),
+            status: z
+              .enum(["AWAITING_UPLOAD", "PENDING", "VERIFIED"])
+              .nullable(),
             verified: z.boolean().nullable(),
           })
         ),
-        status: z.string().nullable(),
+        status: z.enum(["NOT_SUBMITTED", "PENDING", "ACCEPTED"]).nullable(),
       })
     ) // @ts-expect-error documents is exist
     .query(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUnique({
         where: { id: input.userId },
+        include: {
+          documents: true,
+        },
       });
 
       const userDocuments = await ctx.db.documents.findUnique({
@@ -133,11 +138,13 @@ export const dashboardRouter = router({
             imageUrl: z.string().nullable(),
             imageKey: z.string().nullable(),
             createdAt: z.date().nullable(),
-            status: z.string().nullable(),
+            status: z
+              .enum(["AWAITING_UPLOAD", "PENDING", "VERIFIED"])
+              .nullable(),
             verified: z.boolean().nullable(),
           })
         ),
-        status: z.string().nullable(),
+        status: z.enum(["NOT_SUBMITTED", "PENDING", "ACCEPTED"]).nullable(),
       })
     ) // @ts-expect-error documents is exist
     .query(async ({ ctx }) => {

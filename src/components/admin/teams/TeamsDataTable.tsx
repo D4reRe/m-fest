@@ -338,7 +338,7 @@ export function TeamsDataTable() {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                 <span className="sr-only">Open menu</span>
                 <MoreHorizontal />
               </Button>
@@ -349,13 +349,13 @@ export function TeamsDataTable() {
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => verifyTeam.mutate({ teamId: item.id })}
+                onClick={() => approveTeam.mutate({ teamId: item.id })}
                 className="cursor-pointer"
               >
-                Accept team
+                Approve team
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => unVerifyTeam.mutate({ teamId: item.id })}
+                onClick={() => rejectTeam.mutate({ teamId: item.id })}
                 className="cursor-pointer"
               >
                 Reject team
@@ -366,11 +366,45 @@ export function TeamsDataTable() {
               >
                 Delete Team
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(item.id)}
+                onClick={() => {
+                  navigator.clipboard.writeText(item.id);
+                  toast.success("Team ID copied to clipboard");
+                }}
                 className="cursor-pointer"
               >
                 Copy team ID
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(item.leaderUserId as string);
+                  toast.success("Leader User ID copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy leader&apos;s user Id
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(item.leaderEmail as string);
+                  toast.success("Leader email copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy leader&apos;s email
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    item.leaderPhoneNumber as string
+                  );
+                  toast.success("Leader phone number copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy leader&apos;s phone number
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -398,8 +432,8 @@ export function TeamsDataTable() {
     },
   });
 
-  const verifyTeam = useMutation({
-    ...trpc.admin.verifyTeam.mutationOptions(),
+  const approveTeam = useMutation({
+    ...trpc.admin.approveTeam.mutationOptions(),
     onMutate: () => {
       toast.loading("Updating team...", {
         id: "update-team",
@@ -427,8 +461,8 @@ export function TeamsDataTable() {
       });
     },
   });
-  const unVerifyTeam = useMutation({
-    ...trpc.admin.unVerifyTeam.mutationOptions(),
+  const rejectTeam = useMutation({
+    ...trpc.admin.rejectTeam.mutationOptions(),
     onMutate: () => {
       toast.loading("Updating team...", {
         id: "update-team",
@@ -485,8 +519,8 @@ export function TeamsDataTable() {
       });
     },
   });
-  const verifyTeamsByMany = useMutation({
-    ...trpc.admin.verifyTeamsByMany.mutationOptions(),
+  const approveTeamsByMany = useMutation({
+    ...trpc.admin.approveTeamsByMany.mutationOptions(),
     onMutate: () => {
       toast.loading("Updating teams...", {
         id: "update-team",
@@ -513,8 +547,8 @@ export function TeamsDataTable() {
       table.resetRowSelection();
     },
   });
-  const unVerifyTeamsByMany = useMutation({
-    ...trpc.admin.unVerifyTeamsByMany.mutationOptions(),
+  const rejectTeamsByMany = useMutation({
+    ...trpc.admin.rejectTeamsByMany.mutationOptions(),
     onMutate: () => {
       toast.loading("Updating teams...", {
         id: "update-team",
@@ -766,18 +800,19 @@ export function TeamsDataTable() {
                     const teamIds = table
                       .getFilteredSelectedRowModel()
                       .rows.map((row) => row.original.id);
-                    verifyTeamsByMany.mutate({ teamIds });
+                    approveTeamsByMany.mutate({ teamIds });
                   }}
                   className="cursor-pointer"
                 >
-                  Accept {table.getFilteredSelectedRowModel().rows.length} teams
+                  Approve {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  teams
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
                     const teamIds = table
                       .getFilteredSelectedRowModel()
                       .rows.map((row) => row.original.id);
-                    unVerifyTeamsByMany.mutate({ teamIds });
+                    rejectTeamsByMany.mutate({ teamIds });
                   }}
                   className="cursor-pointer"
                 >

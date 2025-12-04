@@ -9,16 +9,16 @@ import type { Competition } from "@/types/types";
 
 export default function CountdownClient({
   date,
-  comp,
   description,
   type,
+  comp,
   team,
 }: {
   date: Date;
-  comp: Competition;
   description: string;
   type: "compOpenCase" | "submissionDeadline";
-  team: Team;
+  comp?: Competition;
+  team?: Team;
 }) {
   return (
     <Countdown
@@ -34,7 +34,7 @@ export default function CountdownClient({
                 disabled={team?.teamStatus === "ACCEPTED" ? false : true}
               >
                 <Link
-                  href={`/dashboard/competitions/${comp.abbreviation.toUpperCase()}`}
+                  href={`/dashboard/competitions/${comp?.abbreviation.toUpperCase()}`}
                   prefetch
                   className="flex items-center gap-2"
                 >

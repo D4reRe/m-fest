@@ -45,7 +45,11 @@ async function MemberList({ team }: { team: TeamWithMembers }) {
                       .join("-")}/${member.userId}`}
                   >
                     <span className="flex items-center gap-2">
-                      <p>Verify Member</p>
+                      <p>
+                        {member.user?.documents?.status === "ACCEPTED"
+                          ? "View Documents"
+                          : "Verify Member"}
+                      </p>
                     </span>
                   </Link>
                 </button>

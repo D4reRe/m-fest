@@ -328,7 +328,7 @@ export function DocumentsDataTable() {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                 <span className="sr-only">Open menu</span>
                 <MoreHorizontal />
               </Button>
@@ -341,32 +341,57 @@ export function DocumentsDataTable() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() =>
-                  verifyAllDocuments.mutate({ userId: item.userId })
+                  approveAllDocuments.mutate({ userId: item.userId })
                 }
                 className="cursor-pointer"
               >
-                Accept all documents
+                Approve all documents
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() =>
-                  unVerifyAllDocuments.mutate({ userId: item.userId })
+                  rejectAllDocuments.mutate({ userId: item.userId })
                 }
                 className="cursor-pointer"
               >
                 Reject all documents
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(item.userId)}
+                onClick={() => {
+                  navigator.clipboard.writeText(item.userId);
+                  toast.success("User ID copied to clipboard");
+                }}
                 className="cursor-pointer"
               >
                 Copy user ID
               </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(item.user?.email as string);
+                  toast.success("Email copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy email
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
-                View user
+                <Link
+                  href={`/admin/users/${item.userId}`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View User
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
-                View document details
+                {" "}
+                <Link
+                  href={`/admin/users/${item.userId}#documents`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View Documents Detail
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -394,8 +419,8 @@ export function DocumentsDataTable() {
     },
   });
 
-  const verifyAllDocuments = useMutation({
-    ...trpc.admin.verifyAllDocuments.mutationOptions(),
+  const approveAllDocuments = useMutation({
+    ...trpc.admin.approveAllDocuments.mutationOptions(),
     onMutate: () => {
       toast.loading("Updating user documents...", {
         id: "update-documents",
@@ -426,8 +451,8 @@ export function DocumentsDataTable() {
       });
     },
   });
-  const unVerifyAllDocuments = useMutation({
-    ...trpc.admin.unVerifyAllDocuments.mutationOptions(),
+  const rejectAllDocuments = useMutation({
+    ...trpc.admin.rejectAllDocuments.mutationOptions(),
     onMutate: () => {
       toast.loading("Updating user documents...", {
         id: "update-documents",
@@ -458,8 +483,8 @@ export function DocumentsDataTable() {
       });
     },
   });
-  const verifyDocumentsByMany = useMutation({
-    ...trpc.admin.verifyDocumentsByMany.mutationOptions(),
+  const approveDocumentsByMany = useMutation({
+    ...trpc.admin.approveDocumentsByMany.mutationOptions(),
     onMutate: () => {
       toast.loading("Updating user documents...", {
         id: "update-documents",
@@ -489,8 +514,8 @@ export function DocumentsDataTable() {
       table.resetRowSelection();
     },
   });
-  const unVerifyDocumentsByMany = useMutation({
-    ...trpc.admin.unVerifyDocumentsByMany.mutationOptions(),
+  const rejectDocumentsByMany = useMutation({
+    ...trpc.admin.rejectDocumentsByMany.mutationOptions(),
     onMutate: () => {
       toast.loading("Updating user documents...", {
         id: "update-documents",
@@ -657,11 +682,11 @@ export function DocumentsDataTable() {
                     const userIds = table
                       .getFilteredSelectedRowModel()
                       .rows.map((row) => row.original.userId);
-                    verifyDocumentsByMany.mutate({ userIds });
+                    approveDocumentsByMany.mutate({ userIds });
                   }}
                   className="cursor-pointer"
                 >
-                  Accept {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  Approve {table.getFilteredSelectedRowModel().rows.length}{" "}
                   user&apos;s documents
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -669,7 +694,7 @@ export function DocumentsDataTable() {
                     const userIds = table
                       .getFilteredSelectedRowModel()
                       .rows.map((row) => row.original.userId);
-                    unVerifyDocumentsByMany.mutate({ userIds });
+                    rejectDocumentsByMany.mutate({ userIds });
                   }}
                   className="cursor-pointer"
                 >

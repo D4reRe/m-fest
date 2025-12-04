@@ -36,16 +36,21 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTRPC } from "@/utils/trpc";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
 import Image from "next/image";
+import { toast } from "sonner";
+import { authClient } from "@/lib/auth-client";
+import { userRoles } from "@/constants/constants";
+import type { Role } from "../../../../prisma/generated/prisma/enums";
 
 export function UsersDataTable() {
   const trpc = useTRPC();
+  const { data: session } = authClient.useSession();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -60,6 +65,31 @@ export function UsersDataTable() {
     isLoading,
     isFetching,
   } = useQuery(trpc.admin.getUsers.queryOptions());
+  const updateUserRole = useMutation({
+    ...trpc.admin.updateUserRole.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating user role...", {
+        id: "update-user-role",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("update-user-role");
+      toast.error("Failed to update user role", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess() {
+      toast.success("User role updated successfully", {
+        id: "update-user-role",
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+    },
+  });
   const unified = React.useMemo(() => {
     if (!users) return [];
 
@@ -487,7 +517,7 @@ export function UsersDataTable() {
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
                 <span className="sr-only">Open menu</span>
                 <MoreHorizontal />
               </Button>
@@ -499,19 +529,60 @@ export function UsersDataTable() {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(item.id)}
+                onClick={() => {
+                  navigator.clipboard.writeText(item.id);
+                  toast.success("User ID copied to clipboard");
+                }}
               >
                 Copy user ID
               </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(item.email);
+                  toast.success("Email copied to clipboard");
+                }}
+              >
+                Copy email
+              </DropdownMenuItem>
+              {session?.user.role === "SUPERADMIN" &&
+                item.role !== "SUPERADMIN" && (
+                  <>
+                    {userRoles
+                      .filter((role) => role !== item.role)
+                      .map((role) => (
+                        <DropdownMenuItem
+                          key={role}
+                          className="cursor-pointer"
+                          onClick={() =>
+                            updateUserRole.mutate({
+                              userId: item.id,
+                              role: role as Role,
+                            })
+                          }
+                        >
+                          Update role to {role}
+                        </DropdownMenuItem>
+                      ))}
+                  </>
+                )}
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
-                <Link href={`/admin/users/${item.id}`} target="_blank">
+                <Link
+                  href={`/admin/users/${item.id}`}
+                  target="_blank"
+                  className="w-full"
+                >
                   View User
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer">
                 {" "}
-                <Link href={`/admin/users/${item.id}`} target="_blank">
+                <Link
+                  href={`/admin/users/${item.id}#documents`}
+                  target="_blank"
+                  className="w-full"
+                >
                   View Documents Detail
                 </Link>
               </DropdownMenuItem>

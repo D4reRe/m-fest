@@ -121,7 +121,9 @@ async function FetchUserTeams() {
             <Link
               href={`/dashboard/documents/${team.name?.split(" ").join("-")}`}
             >
-              Verify Members
+              {team.teamStatus === "ACCEPTED"
+                ? "View Documents"
+                : "Verify Members"}
             </Link>
           </Button>
         </div>

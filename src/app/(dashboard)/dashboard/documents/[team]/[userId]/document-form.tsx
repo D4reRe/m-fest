@@ -15,6 +15,7 @@ import { type UploadThingRoute } from "@/types/types";
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/utils/trpc";
 import { documentsSchema } from "@/lib/schema";
+import { Badge } from "@/components/ui/badge";
 
 function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   useEffect(() => {
@@ -131,6 +132,18 @@ function DocumentsForm({ userId }: { userId: string }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col gap-5 mt-5">
+        <div className="w-full flex justify-start gap-2 items-center">
+          <h2 className="text-xl font-bold">Verification Status</h2>
+          <Badge variant={"secondary"}>
+            {userVerificationStatus === "PENDING" ? (
+              <p className="text-sm text-yellow-500">Pending</p>
+            ) : userVerificationStatus === "ACCEPTED" ? (
+              <p className="text-sm text-green-500">Verified</p>
+            ) : (
+              <p className="text-sm text-red-500">Not Submitted</p>
+            )}
+          </Badge>
+        </div>
         {documents?.map((document) => {
           const {
             title,
@@ -178,8 +191,8 @@ function DocumentsForm({ userId }: { userId: string }) {
                   />
                 ) : document.status === "PENDING" ? (
                   <p className="text-sm text-yellow-500">
-                    You have already submitted your document. Please wait for
-                    the documents process to complete.
+                    You have already submitted your {document.title} document.
+                    Please wait for the documents process to complete.
                   </p>
                 ) : (
                   <p className="text-sm text-green-500">
