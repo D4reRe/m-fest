@@ -70,8 +70,7 @@ async function FetchCompForm({
     <>
       <div className="text-center">
         <Link
-          href="/"
-          aria-label="go home"
+          href={`/dashboard/team/register/${comp}`}
           className="flex items-center gap-4 justify-center"
         >
           <Image

@@ -384,8 +384,46 @@ export default function UserDocuments({ userId }: { userId: string }) {
                     </div>
                   )}
                 </div>
-                <div className="w-full max-w-sm flex justify-center items-center mt-5">
-                  {document.verified === true ? (
+                <div className="w-full max-w-sm flex justify-center sm:justify-start items-center mt-5">
+                  {document.verified === false &&
+                    document.status === "AWAITING_UPLOAD" && (
+                      <Button
+                        type="submit"
+                        disabled
+                        className="cursor-pointer w-full mt-5"
+                        variant={"outline"}
+                      >
+                        User not submitted this document yet.
+                      </Button>
+                    )}
+                  {document.verified === false &&
+                    document.status === "PENDING" && (
+                      <div className="flex flex-col justify-center gap-2 sm:flex-row sm:justify-start">
+                        <Button
+                          type="submit"
+                          disabled={isLoading}
+                          className="cursor-pointer w-full mt-5"
+                          variant={"outline"}
+                          onClick={() =>
+                            approveDocumentByType.mutate({ userId, type })
+                          }
+                        >
+                          Approve
+                        </Button>
+                        <Button
+                          type="submit"
+                          disabled={isLoading}
+                          className="cursor-pointer w-full mt-5"
+                          variant={"outline"}
+                          onClick={() =>
+                            rejectDocumentByType.mutate({ userId, type })
+                          }
+                        >
+                          Reject
+                        </Button>
+                      </div>
+                    )}
+                  {document.verified === true && (
                     <Button
                       type="submit"
                       disabled={isLoading}
@@ -396,18 +434,6 @@ export default function UserDocuments({ userId }: { userId: string }) {
                       }
                     >
                       Reject
-                    </Button>
-                  ) : (
-                    <Button
-                      type="submit"
-                      disabled={isLoading}
-                      className="cursor-pointer w-full mt-5"
-                      variant={"outline"}
-                      onClick={() =>
-                        approveDocumentByType.mutate({ userId, type })
-                      }
-                    >
-                      Approve
                     </Button>
                   )}
                 </div>

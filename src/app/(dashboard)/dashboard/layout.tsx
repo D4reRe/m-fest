@@ -14,10 +14,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }
+      // className={`min-h-screen`}
       className={`min-h-screen bg-[url("/landing.webp")] bg-cover bg-center bg-fixed bg-repeat`}
     >
       <AppSidebar variant="inset" />
       <SidebarInset className="bg-transparent backdrop-blur-lg">
+        {/* <SidebarInset className="bg-card"> */}
         <SiteHeader />
 
         {children}

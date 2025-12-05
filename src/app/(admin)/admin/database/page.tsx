@@ -1,4 +1,10 @@
 import { DataTable } from "@/components/admin/DataTable";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Database Management | Admin Panel",
+  description: "Mechanical Festival 2026",
+};
 
 export default function DatabasePage() {
   return (

@@ -4,8 +4,8 @@ import { Suspense } from "react";
 import DocumentFormSkeleton from "@/components/document/DocumentFormSkeleton";
 
 export const metadata: Metadata = {
-  title: "Documents | Mechanical Festival 2026",
-  description: "Documents to Mechanical Festival 2026",
+  title: "Verify Member Documents | Mechanical Festival 2026",
+  description: "Verify Member Documents Mechanical Festival 2026",
 };
 
 export default function MemberDocumentsPage({

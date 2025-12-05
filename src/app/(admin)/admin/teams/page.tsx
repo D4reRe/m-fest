@@ -1,4 +1,10 @@
 import { TeamsDataTable } from "@/components/admin/teams/TeamsDataTable";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Team Management | Admin Panel",
+  description: "Mechanical Festival 2026",
+};
 
 export default function TeamsManagementPage() {
   return (

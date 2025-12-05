@@ -1,4 +1,10 @@
 import { PaymentsDataTable } from "@/components/admin/payments/PaymentsDataTable";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Payments Management | Admin Panel",
+  description: "Mechanical Festival 2026",
+};
 
 export default function PaymentsManagementPage() {
   return (

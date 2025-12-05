@@ -77,7 +77,9 @@ export function SiteHeader() {
                   </BreadcrumbSeparator>
                   <BreadcrumbItem>
                     {isLast ? (
-                      <span className="text-foreground">{title}</span>
+                      <span className="text-foreground truncate max-sm:w-16">
+                        {title}
+                      </span>
                     ) : (
                       <BreadcrumbLink asChild>
                         <Link href={href} prefetch>

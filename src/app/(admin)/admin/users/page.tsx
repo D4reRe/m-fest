@@ -1,4 +1,10 @@
 import { UsersDataTable } from "@/components/admin/users/UsersDataTable";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Users Management | Admin Panel",
+  description: "Mechanical Festival 2026",
+};
 
 export default function UserManagementPage() {
   return (

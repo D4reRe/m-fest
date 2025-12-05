@@ -1,4 +1,10 @@
 import { DocumentsDataTable } from "@/components/admin/verify-documents/DocumentsDataTable";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Manage Documents | Admin Panel",
+  description: "Mechanical Festival 2026",
+};
 
 export default function VerifyDocumentsPage() {
   return (

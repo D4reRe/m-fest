@@ -4,6 +4,13 @@ import { type User } from "@/types/types";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard | Admin Panel",
+  description: "Mechanical Festival 2026",
+};
+
 export default function AdminPage() {
   return (
     <div className="min-h-screen bg-transparent">

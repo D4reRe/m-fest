@@ -1,4 +1,10 @@
 import { CompsDataTable } from "@/components/admin/competitions/CompsDataTable";
+import { type Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Competitions Management | Admin Panel",
+  description: "Mechanical Festival 2026",
+};
 
 export default function CompetitionsManagementPage() {
   return (

@@ -6,6 +6,12 @@ import { db } from "@/server/db";
 import { IconListDetails, IconUsersGroup } from "@tabler/icons-react";
 import { BadgeCheckIcon, Calendar, Mail, MapPin, Phone } from "lucide-react";
 import { Suspense } from "react";
+import { type Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "User Details | Admin Panel",
+  description: "Mechanical Festival 2026",
+};
 
 export default function UserPage({
   params,
