@@ -445,6 +445,14 @@ function TeamForm({ team }: { team: Team }) {
                             }
                           }
                         }}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (value.includes("@")) {
+                            field.onChange(value.replace(/@.*/, "@gmail.com"));
+                          } else {
+                            field.onChange(value);
+                          }
+                        }}
                       />
                       {fieldState.invalid && (
                         <FieldError errors={[fieldState.error]} />
