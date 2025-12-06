@@ -321,7 +321,10 @@ function RegisterForm({
           toast.success("Payment Successful!");
           toast.dismiss("register-team");
           toast.success("Your team have registered successfully!");
-          router.replace("/dashboard/competitions");
+          router.refresh();
+          setTimeout(() => {
+            router.push("/dashboard/competitions");
+          }, 500);
         },
         pendingEvent: async (result: ResultTransaction) => {
           await fetch("/api/payment/verify", {
@@ -442,7 +445,10 @@ function RegisterForm({
           toast.success("Payment Successful!");
           toast.dismiss("register-team");
           toast.success("You have registered successfully!");
-          router.replace("/dashboard/competitions");
+          router.refresh();
+          setTimeout(() => {
+            router.push("/dashboard/competitions");
+          }, 500);
         },
         pendingEvent: async (result: ResultTransaction) => {
           await fetch("/api/payment/verify", {

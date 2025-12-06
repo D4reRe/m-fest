@@ -449,4 +449,66 @@ export const adminRouter = router({
         },
       });
     }),
+  deleteCompRegistration: adminProcedure
+    .input(
+      z.object({
+        compRegistrationId: z.string(),
+        teamId: z.string(),
+        paymentId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db.compRegistration.delete({
+        where: { id: input.compRegistrationId },
+      });
+      await db.team.update({
+        where: { id: input.teamId },
+        data: {
+          paymentId: null,
+          competition: null,
+          teamStatus: "NOT_REGISTERED",
+          status: "PENDING",
+        },
+      });
+      await db.payment.delete({
+        where: { orderId: input.paymentId },
+      });
+    }),
+  deleteCompRegistrationByMany: adminProcedure
+    .input(
+      z.object({
+        compRegistrationIds: z.array(z.string()),
+        teamIds: z.array(z.string()),
+        paymentIds: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db.compRegistration.deleteMany({
+        where: {
+          id: {
+            in: input.compRegistrationIds,
+          },
+        },
+      });
+      await db.team.updateMany({
+        where: {
+          id: {
+            in: input.teamIds,
+          },
+        },
+        data: {
+          paymentId: null,
+          competition: null,
+          teamStatus: "NOT_REGISTERED",
+          status: "PENDING",
+        },
+      });
+      await db.payment.deleteMany({
+        where: {
+          orderId: {
+            in: input.paymentIds,
+          },
+        },
+      });
+    }),
 });

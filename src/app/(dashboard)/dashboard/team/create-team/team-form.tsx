@@ -214,10 +214,10 @@ function TeamForm() {
       if (res.ok) {
         toast.dismiss("create-team");
         toast.success("Team created successfully!");
+        router.refresh();
         setTimeout(() => {
-          router.refresh();
           router.push("/dashboard/team");
-        }, 500);
+        }, 1000);
       } else {
         const { error, success } = await res.json();
         toast.dismiss("create-team");

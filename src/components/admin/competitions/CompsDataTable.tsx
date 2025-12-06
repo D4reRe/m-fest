@@ -36,7 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useTRPC } from "@/utils/trpc";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
@@ -477,12 +477,26 @@ export function CompsDataTable() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(item.id)}
+                className="cursor-pointer"
               >
                 Copy registration ID
               </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => {
+                  deleteCompRegistration.mutate({
+                    compRegistrationId: item.id,
+                    teamId: item.teamId as string,
+                    paymentId: item.paymentId as string,
+                  });
+                }}
+                className="cursor-pointer text-red-500"
+              >
+                Delete registration
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -506,6 +520,58 @@ export function CompsDataTable() {
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+  });
+
+  const deleteCompRegistration = useMutation({
+    ...trpc.admin.deleteCompRegistration.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting registration...", {
+        id: "delete-registration",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("delete-registration");
+      toast.error("Failed to delete registration", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess() {
+      toast.dismiss("delete-registration");
+      toast.success(`Deleted registration successfully`);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getRegistrations.queryKey(),
+      });
+    },
+  });
+  const deleteCompRegistrationByMany = useMutation({
+    ...trpc.admin.deleteCompRegistrationByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting registrations...", {
+        id: "delete-registrations",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("delete-registrations");
+      toast.error("Failed to delete registrations", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("delete-registrations");
+      toast.success(
+        `Deleted ${variables.compRegistrationIds.length} registrations successfully`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getRegistrations.queryKey(),
+      });
+      table.resetRowSelection();
     },
   });
 
@@ -672,6 +738,59 @@ export function CompsDataTable() {
               })}
             />
           </Button>
+          {table.getFilteredSelectedRowModel().rows.length ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="relative cursor-pointer"
+                  disabled={isFetching}
+                >
+                  <div
+                    className={cn(
+                      "absolute -top-1 -right-1 w-4 h-4 border rounded-full bg-white text-black flex justify-center items-center",
+                      {
+                        "w-6":
+                          table.getFilteredSelectedRowModel().rows.length > 9,
+                        "w-7":
+                          table.getFilteredSelectedRowModel().rows.length > 99,
+                      }
+                    )}
+                  >
+                    <p>{table.getFilteredSelectedRowModel().rows.length}</p>
+                  </div>
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    const teamIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.teamId);
+                    const compRegistrationIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.id);
+                    const paymentIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.paymentId);
+                    deleteCompRegistrationByMany.mutate({
+                      teamIds: teamIds as string[],
+                      compRegistrationIds,
+                      paymentIds: paymentIds as string[],
+                    });
+                  }}
+                  className="cursor-pointer text-red-500"
+                >
+                  Delete {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  registrations
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
         </div>
         <DataTableViewOptions table={table} />
       </div>
