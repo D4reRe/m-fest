@@ -28,9 +28,6 @@ export default function CompetitionsList() {
             <div className="grid gap-6 md:grid-cols-2 md:gap-12">
               <h2 className="text-4xl font-medium flex flex-col gap-3">
                 {competition.title}
-                <span className="text-2xl">
-                  Registration fee: Rp.{competition.fee1}
-                </span>
               </h2>
               <div className="space-y-6">
                 <p>{competition.desc}</p>
