@@ -49,7 +49,7 @@ export function DocumentsDataTable() {
   const trpc = useTRPC();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [filterColumn, setFilterColumn] = React.useState<string>("userEmail");
   const [columnVisibility, setColumnVisibility] =
@@ -216,7 +216,7 @@ export function DocumentsDataTable() {
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.user?.id);
         const userRegisteredTeam = user?.team_member.find(
-          (member) => member.userId === row.user?.id
+          (member) => member.userId === row.user?.id,
         );
         const userRegisteredTeamName = userRegisteredTeam?.team?.name;
         const isUserTeamRegistered =
@@ -243,7 +243,7 @@ export function DocumentsDataTable() {
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.userId);
         const userRegisteredMember = user?.team_member.find(
-          (member) => member.userId === row.userId
+          (member) => member.userId === row.userId,
         );
         const registeredComp = userRegisteredMember?.team?.competition;
         const isTeamRegistered =
@@ -269,7 +269,7 @@ export function DocumentsDataTable() {
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
         const identityCardUrl = datas?.find(
-          (user) => user.userId === userId
+          (user) => user.userId === userId,
         )?.identityCardImageUrl;
         return (
           <Link
@@ -288,7 +288,7 @@ export function DocumentsDataTable() {
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
         const twibbonUrl = datas?.find(
-          (user) => user.userId === userId
+          (user) => user.userId === userId,
         )?.twibbonImageUrl;
         return (
           <Link
@@ -307,7 +307,7 @@ export function DocumentsDataTable() {
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
         const followIgUrl = datas?.find(
-          (user) => user.userId === userId
+          (user) => user.userId === userId,
         )?.followIgImageUrl;
         return (
           <Link
@@ -343,7 +343,7 @@ export function DocumentsDataTable() {
                 onClick={() =>
                   approveAllDocuments.mutate({ userId: item.userId })
                 }
-                className="cursor-pointer"
+                className="cursor-pointer text-green-500 hover:text-green-500! hover:bg-green-900/60!"
               >
                 Approve all documents
               </DropdownMenuItem>
@@ -352,9 +352,24 @@ export function DocumentsDataTable() {
                   rejectAllDocuments.mutate({ userId: item.userId })
                 }
                 className="cursor-pointer"
+                variant="destructive"
               >
                 Reject all documents
               </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/80!"
+                onClick={() => {
+                  resetUserDocuments.mutate({
+                    userId: item.userId,
+                    identityCardImageKey: item.identityCardImageKey,
+                    twibbonImageKey: item.twibbonImageKey,
+                    followIgImageKey: item.followIgImageKey,
+                  });
+                }}
+              >
+                Reset documents
+              </DropdownMenuItem>
+
               <DropdownMenuItem
                 onClick={() => {
                   navigator.clipboard.writeText(item.userId);
@@ -372,6 +387,21 @@ export function DocumentsDataTable() {
                 className="cursor-pointer"
               >
                 Copy email
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer"
+                variant="destructive"
+                onClick={() => {
+                  deleteUserDocuments.mutate({
+                    userId: item.userId,
+                    identityCardImageKey: item.identityCardImageKey,
+                    twibbonImageKey: item.twibbonImageKey,
+                    followIgImageKey: item.followIgImageKey,
+                  });
+                }}
+              >
+                Delete documents
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
@@ -439,7 +469,7 @@ export function DocumentsDataTable() {
       toast.success(
         `Documents verifed successfully for ${
           users?.find((user) => user.id === variables.userId)?.name
-        }`
+        }`,
       );
     },
     onSettled: () => {
@@ -471,7 +501,7 @@ export function DocumentsDataTable() {
       toast.success(
         `Documents unverifed successfully for ${
           users?.find((user) => user.id === variables.userId)?.name
-        }`
+        }`,
       );
     },
     onSettled: () => {
@@ -501,7 +531,7 @@ export function DocumentsDataTable() {
     onSuccess(data, variables) {
       toast.dismiss("update-documents");
       toast.success(
-        `Documents verifed successfully for ${variables.userIds.length} users`
+        `Documents verifed successfully for ${variables.userIds.length} users`,
       );
     },
     onSettled: () => {
@@ -532,7 +562,127 @@ export function DocumentsDataTable() {
     onSuccess(data, variables) {
       toast.dismiss("update-documents");
       toast.success(
-        `Documents unverifed successfully for ${variables.userIds.length} users`
+        `Documents unverifed successfully for ${variables.userIds.length} users`,
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
+  const resetUserDocuments = useMutation({
+    ...trpc.admin.resetUserDocuments.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Resetting user documents...", {
+        id: "reset-document",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("reset-document");
+      toast.error("Failed to reset user documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess: (data, variables) => {
+      toast.dismiss("reset-document");
+      toast.success(
+        `Documents reset successfully for ${users?.find((user) => user.id === variables.userId)?.name}`,
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
+  const resetDocumentsByMany = useMutation({
+    ...trpc.admin.resetDocumentsByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Resetting documents...", {
+        id: "reset-documents",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("reset-documents");
+      toast.error("Failed to reset users documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess: (data, variables) => {
+      toast.dismiss("reset-documents");
+      toast.success(
+        `Documents reset successfully for ${variables.userIds.length} users.`,
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
+  const deleteUserDocuments = useMutation({
+    ...trpc.admin.deleteUserDocuments.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting user documents...", {
+        id: "delete-document",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("delete-document");
+      toast.error("Failed to delete user documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess: (data, variables) => {
+      toast.dismiss("delete-document");
+      toast.success(
+        `Documents deleted successfully for ${users?.find((user) => user.id === variables.userId)?.name}`,
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getAllDocuments.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
+  const deleteDocumentsByMany = useMutation({
+    ...trpc.admin.deleteDocumentsByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting documents...", {
+        id: "delete-documents",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("delete-documents");
+      toast.error("Failed to delete users documents", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess: (data, variables) => {
+      toast.dismiss("delete-documents");
+      toast.success(
+        `Documents deleted successfully for ${variables.userIds.length} users.`,
       );
     },
     onSettled: () => {
@@ -638,7 +788,7 @@ export function DocumentsDataTable() {
             variant="outline"
             className={cn(
               "cursor-pointer w-fit",
-              isFetching && "cursor-not-allowed"
+              isFetching && "cursor-not-allowed",
             )}
             disabled={isFetching}
             onClick={() => queryClient.invalidateQueries()}
@@ -665,7 +815,7 @@ export function DocumentsDataTable() {
                           table.getFilteredSelectedRowModel().rows.length > 9,
                         "w-7":
                           table.getFilteredSelectedRowModel().rows.length > 99,
-                      }
+                      },
                     )}
                   >
                     <p>{table.getFilteredSelectedRowModel().rows.length}</p>
@@ -684,7 +834,7 @@ export function DocumentsDataTable() {
                       .rows.map((row) => row.original.userId);
                     approveDocumentsByMany.mutate({ userIds });
                   }}
-                  className="cursor-pointer"
+                  className="cursor-pointer text-green-500 hover:text-green-500! hover:bg-green-900/60!"
                 >
                   Approve {table.getFilteredSelectedRowModel().rows.length}{" "}
                   user&apos;s documents
@@ -697,8 +847,65 @@ export function DocumentsDataTable() {
                     rejectDocumentsByMany.mutate({ userIds });
                   }}
                   className="cursor-pointer"
+                  variant="destructive"
                 >
                   Reject {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  user&apos;s documents
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    const userIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.userId) as string[];
+                    const identityCardImageKeys = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.identityCardImageKey);
+                    const twibbonImageKeys = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.twibbonImageKey);
+                    const followIgImageKeys = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.followIgImageKey);
+
+                    resetDocumentsByMany.mutate({
+                      userIds,
+                      identityCardImageKeys,
+                      twibbonImageKeys,
+                      followIgImageKeys,
+                    });
+                  }}
+                  className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/80!"
+                >
+                  Reset {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  user&apos;s documents
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    const userIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.userId) as string[];
+                    const identityCardImageKeys = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.identityCardImageKey);
+                    const twibbonImageKeys = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.twibbonImageKey);
+                    const followIgImageKeys = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.followIgImageKey);
+
+                    deleteDocumentsByMany.mutate({
+                      userIds,
+                      identityCardImageKeys,
+                      twibbonImageKeys,
+                      followIgImageKeys,
+                    });
+                  }}
+                  className="cursor-pointer"
+                  variant="destructive"
+                >
+                  Delete {table.getFilteredSelectedRowModel().rows.length}{" "}
                   user&apos;s documents
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -720,7 +927,7 @@ export function DocumentsDataTable() {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -739,7 +946,7 @@ export function DocumentsDataTable() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

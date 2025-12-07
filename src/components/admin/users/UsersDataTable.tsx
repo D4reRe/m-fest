@@ -90,6 +90,32 @@ export function UsersDataTable() {
       });
     },
   });
+
+  const deleteUser = useMutation({
+    ...trpc.admin.deleteUser.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting user...", {
+        id: "delete-user",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("delete-user");
+      toast.error("Failed to delete user", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess() {
+      toast.dismiss("delete-user");
+      toast.success(`User deleted successfully`);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+    },
+  });
   const unified = React.useMemo(() => {
     if (!users) return [];
 
@@ -545,6 +571,7 @@ export function UsersDataTable() {
               >
                 Copy email
               </DropdownMenuItem>
+
               {session?.user.role === "SUPERADMIN" &&
                 item.role !== "SUPERADMIN" && (
                   <>
@@ -553,7 +580,7 @@ export function UsersDataTable() {
                       .map((role) => (
                         <DropdownMenuItem
                           key={role}
-                          className="cursor-pointer"
+                          className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/60!"
                           onClick={() =>
                             updateUserRole.mutate({
                               userId: item.id,
@@ -566,6 +593,16 @@ export function UsersDataTable() {
                       ))}
                   </>
                 )}
+              <DropdownMenuItem
+                className="cursor-pointer text-red-500"
+                onClick={() => deleteUser.mutate({ userId: item.id })}
+                variant="destructive"
+                disabled={item.id === session?.user.id}
+              >
+                {item.id === session?.user.id
+                  ? "You cannot delete yourself"
+                  : "Delete User"}
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
                 <Link
@@ -609,6 +646,32 @@ export function UsersDataTable() {
       columnFilters,
       columnVisibility,
       rowSelection,
+    },
+  });
+
+  const deleteUserByMany = useMutation({
+    ...trpc.admin.deleteUsersByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting users...", {
+        id: "delete-user",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("delete-user");
+      toast.error("Failed to delete users", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("delete-user");
+      toast.success(`Deleted ${variables.userIds.length} users successfully`);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+      table.resetRowSelection();
     },
   });
 
@@ -765,6 +828,49 @@ export function UsersDataTable() {
               })}
             />
           </Button>
+          {table.getFilteredSelectedRowModel().rows.length ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="relative cursor-pointer"
+                  disabled={isFetching}
+                >
+                  <div
+                    className={cn(
+                      "absolute -top-1 -right-1 w-4 h-4 border rounded-full bg-white text-black flex justify-center items-center",
+                      {
+                        "w-6":
+                          table.getFilteredSelectedRowModel().rows.length > 9,
+                        "w-7":
+                          table.getFilteredSelectedRowModel().rows.length > 99,
+                      }
+                    )}
+                  >
+                    <p>{table.getFilteredSelectedRowModel().rows.length}</p>
+                  </div>
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  variant="destructive"
+                  onClick={() => {
+                    const userIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.id);
+                    deleteUserByMany.mutate({ userIds });
+                  }}
+                  className="cursor-pointer"
+                >
+                  Delete {table.getFilteredSelectedRowModel().rows.length} users
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
         </div>
         <DataTableViewOptions table={table} />
       </div>

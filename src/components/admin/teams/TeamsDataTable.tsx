@@ -362,7 +362,8 @@ export function TeamsDataTable() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => deleteTeam.mutate({ teamId: item.id })}
-                className="text-red-500 cursor-pointer"
+                className="cursor-pointer"
+                variant="destructive"
               >
                 Delete Team
               </DropdownMenuItem>
@@ -825,7 +826,8 @@ export function TeamsDataTable() {
                       .rows.map((row) => row.original.id);
                     deleteTeamByMany.mutate({ teamIds });
                   }}
-                  className="cursor-pointer text-red-500"
+                  className="cursor-pointer"
+                  variant="destructive"
                 >
                   Delete {table.getFilteredSelectedRowModel().rows.length} teams
                 </DropdownMenuItem>

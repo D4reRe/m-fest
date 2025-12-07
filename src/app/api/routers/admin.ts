@@ -1,6 +1,8 @@
 import { db } from "@/server/db";
 import { router, adminProcedure, superAdminProcedure } from "@/server/api/trpc";
 import { z } from "zod";
+import { deleteFiles } from "@/action/uploadthing.action";
+import { TRPCError } from "@trpc/server";
 
 export const adminRouter = router({
   getUsers: adminProcedure.query(async () => {
@@ -21,7 +23,7 @@ export const adminRouter = router({
     .input(
       z.object({
         userId: z.string(),
-      })
+      }),
     )
     .query(async ({ input, ctx }) => {
       const user = await ctx.db.user.findUnique({
@@ -109,7 +111,7 @@ export const adminRouter = router({
     .input(
       z.object({
         userId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.user.update({
@@ -129,7 +131,7 @@ export const adminRouter = router({
     .input(
       z.object({
         userId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.user.update({
@@ -149,9 +151,21 @@ export const adminRouter = router({
     .input(
       z.object({
         userId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
+      const document = await db.documents.findFirst({
+        where: { userId: input.userId },
+        select: {
+          status: true,
+        },
+      });
+      if (document?.status === "NOT_SUBMITTED") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot approve documents that are not submitted",
+        });
+      }
       await db.documents.update({
         where: { userId: input.userId },
         data: {
@@ -175,9 +189,21 @@ export const adminRouter = router({
     .input(
       z.object({
         userId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
+      const document = await db.documents.findFirst({
+        where: { userId: input.userId },
+        select: {
+          status: true,
+        },
+      });
+      if (document?.status === "NOT_SUBMITTED") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot reject documents that are not submitted",
+        });
+      }
       await db.documents.update({
         where: { userId: input.userId },
         data: {
@@ -202,7 +228,7 @@ export const adminRouter = router({
       z.object({
         userId: z.string(),
         type: z.enum(["identityCard", "twibbon", "followIg"]),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.documents.update({
@@ -218,7 +244,7 @@ export const adminRouter = router({
       z.object({
         userId: z.string(),
         type: z.enum(["identityCard", "twibbon", "followIg"]),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.documents.update({
@@ -234,9 +260,21 @@ export const adminRouter = router({
     .input(
       z.object({
         userIds: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
+      const documents = await db.documents.findMany({
+        where: { userId: { in: input.userIds } },
+        select: {
+          status: true,
+        },
+      });
+      if (documents.some((document) => document.status === "NOT_SUBMITTED")) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot approve documents that are not submitted",
+        });
+      }
       await db.documents.updateMany({
         where: {
           userId: {
@@ -268,9 +306,21 @@ export const adminRouter = router({
     .input(
       z.object({
         userIds: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
+      const documents = await db.documents.findMany({
+        where: { userId: { in: input.userIds } },
+        select: {
+          status: true,
+        },
+      });
+      if (documents.some((document) => document.status === "NOT_SUBMITTED")) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot reject documents that are not submitted",
+        });
+      }
       await db.documents.updateMany({
         where: {
           userId: {
@@ -303,7 +353,7 @@ export const adminRouter = router({
     .input(
       z.object({
         teamId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.team.update({
@@ -323,7 +373,7 @@ export const adminRouter = router({
     .input(
       z.object({
         teamId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.team.update({
@@ -343,7 +393,7 @@ export const adminRouter = router({
     .input(
       z.object({
         teamId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.teamMember.deleteMany({
@@ -357,7 +407,7 @@ export const adminRouter = router({
     .input(
       z.object({
         teamIds: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.team.updateMany({
@@ -385,7 +435,7 @@ export const adminRouter = router({
     .input(
       z.object({
         teamIds: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.team.updateMany({
@@ -413,7 +463,7 @@ export const adminRouter = router({
     .input(
       z.object({
         teamIds: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.teamMember.deleteMany({
@@ -436,7 +486,7 @@ export const adminRouter = router({
       z.object({
         userId: z.string(),
         role: z.enum(["USER", "ADMIN", "SUPERADMIN"]),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       if (ctx.session.user.id === input.userId) {
@@ -455,7 +505,7 @@ export const adminRouter = router({
         compRegistrationId: z.string(),
         teamId: z.string(),
         paymentId: z.string(),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.compRegistration.delete({
@@ -480,7 +530,7 @@ export const adminRouter = router({
         compRegistrationIds: z.array(z.string()),
         teamIds: z.array(z.string()),
         paymentIds: z.array(z.string()),
-      })
+      }),
     )
     .mutation(async ({ input }) => {
       await db.compRegistration.deleteMany({
@@ -508,6 +558,192 @@ export const adminRouter = router({
           orderId: {
             in: input.paymentIds,
           },
+        },
+      });
+    }),
+  deleteUser: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (input.userId === ctx.session.user.id) {
+        throw new Error("You cannot delete yourself");
+      }
+      await db.user.delete({
+        where: { id: input.userId },
+      });
+      await db.account.deleteMany({
+        where: { userId: input.userId },
+      });
+      await db.session.deleteMany({
+        where: { userId: input.userId },
+      });
+    }),
+  deleteUsersByMany: adminProcedure
+    .input(
+      z.object({
+        userIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (input.userIds.includes(ctx.session.user.id as string)) {
+        throw new Error("You cannot delete yourself");
+      }
+      await db.user.deleteMany({
+        where: {
+          id: {
+            in: input.userIds,
+          },
+        },
+      });
+      await db.account.deleteMany({
+        where: {
+          userId: {
+            in: input.userIds,
+          },
+        },
+      });
+      await db.session.deleteMany({
+        where: {
+          userId: {
+            in: input.userIds,
+          },
+        },
+      });
+    }),
+  resetUserDocuments: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        identityCardImageKey: z.string().nullable(),
+        twibbonImageKey: z.string().nullable(),
+        followIgImageKey: z.string().nullable(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await deleteFiles(input.identityCardImageKey);
+      await deleteFiles(input.twibbonImageKey);
+      await deleteFiles(input.followIgImageKey);
+      await db.documents.update({
+        where: { userId: input.userId },
+        data: {
+          identityCardImageUrl: null,
+          twibbonImageUrl: null,
+          followIgImageUrl: null,
+          identityCardImageKey: null,
+          twibbonImageKey: null,
+          followIgImageKey: null,
+          identityCardCreatedAt: null,
+          twibbonCreatedAt: null,
+          followIgCreatedAt: null,
+          identityCardStatus: "AWAITING_UPLOAD",
+          twibbonStatus: "AWAITING_UPLOAD",
+          followIgStatus: "AWAITING_UPLOAD",
+          status: "NOT_SUBMITTED",
+        },
+      });
+      await db.user.update({
+        where: { id: input.userId },
+        data: {
+          verified: false,
+        },
+      });
+    }),
+  resetDocumentsByMany: adminProcedure
+    .input(
+      z.object({
+        userIds: z.array(z.string()),
+        identityCardImageKeys: z.array(z.string().nullable()),
+        twibbonImageKeys: z.array(z.string().nullable()),
+        followIgImageKeys: z.array(z.string().nullable()),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await deleteFiles(input.identityCardImageKeys);
+      await deleteFiles(input.twibbonImageKeys);
+      await deleteFiles(input.followIgImageKeys);
+      await db.documents.updateMany({
+        where: { userId: { in: input.userIds } },
+        data: {
+          identityCardImageUrl: null,
+          twibbonImageUrl: null,
+          followIgImageUrl: null,
+          identityCardImageKey: null,
+          twibbonImageKey: null,
+          followIgImageKey: null,
+          identityCardCreatedAt: null,
+          twibbonCreatedAt: null,
+          followIgCreatedAt: null,
+          identityCardStatus: "AWAITING_UPLOAD",
+          twibbonStatus: "AWAITING_UPLOAD",
+          followIgStatus: "AWAITING_UPLOAD",
+          status: "NOT_SUBMITTED",
+        },
+      });
+      await db.user.updateMany({
+        where: {
+          id: {
+            in: input.userIds,
+          },
+        },
+        data: {
+          verified: false,
+        },
+      });
+    }),
+  deleteUserDocuments: adminProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        identityCardImageKey: z.string().nullable(),
+        twibbonImageKey: z.string().nullable(),
+        followIgImageKey: z.string().nullable(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await deleteFiles(input.identityCardImageKey);
+      await deleteFiles(input.twibbonImageKey);
+      await deleteFiles(input.followIgImageKey);
+      await db.documents.delete({
+        where: { userId: input.userId },
+      });
+      await db.user.update({
+        where: { id: input.userId },
+        data: {
+          verified: false,
+        },
+      });
+    }),
+  deleteDocumentsByMany: adminProcedure
+    .input(
+      z.object({
+        userIds: z.array(z.string()),
+        identityCardImageKeys: z.array(z.string().nullable()),
+        twibbonImageKeys: z.array(z.string().nullable()),
+        followIgImageKeys: z.array(z.string().nullable()),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await deleteFiles(input.identityCardImageKeys);
+      await deleteFiles(input.twibbonImageKeys);
+      await deleteFiles(input.followIgImageKeys);
+      await db.documents.deleteMany({
+        where: {
+          userId: {
+            in: input.userIds,
+          },
+        },
+      });
+      await db.user.updateMany({
+        where: {
+          id: {
+            in: input.userIds,
+          },
+        },
+        data: {
+          verified: false,
         },
       });
     }),
