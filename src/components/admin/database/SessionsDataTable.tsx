@@ -14,7 +14,6 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { Loader2, MoreHorizontal, RefreshCw } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -35,42 +34,39 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useTRPC } from "@/utils/trpc";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { DataTablePagination } from "@/components/ui/data-table-pagination";
+import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
-import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
 import Image from "next/image";
+import { useTRPC } from "@/utils/trpc";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export function PaymentsDataTable() {
+export default function SessionsDataTable() {
   const trpc = useTRPC();
+  // const { data: session } = authClient.useSession();
+  const queryClient = useQueryClient();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     [],
   );
-  const [filterColumn, setFilterColumn] = React.useState<string>("id");
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const queryClient = useQueryClient();
+  const [filterColumn, setFilterColumn] = React.useState<string>("id");
   const {
-    data: payments,
+    data: sessions,
     isLoading,
     isFetching,
-  } = useQuery(trpc.admin.getInvoices.queryOptions());
+  } = useQuery(trpc.admin.getSessions.queryOptions());
   const unified = React.useMemo(() => {
-    if (!payments) return [];
+    if (!sessions) return [];
 
-    return payments;
-  }, [payments]);
+    return sessions;
+  }, [sessions]);
 
-  // type of array
-  // type Unified = typeof unified
-
-  // type of one array element
   type Unified = (typeof unified)[number];
 
   const columns: ColumnDef<Unified>[] = [
@@ -83,12 +79,14 @@ export function PaymentsDataTable() {
             (table.getIsSomePageRowsSelected() && "indeterminate")
           }
           onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
         />
       ),
       cell: ({ row }) => (
         <Checkbox
           checked={row.getIsSelected()}
           onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
         />
       ),
       enableSorting: false,
@@ -96,49 +94,91 @@ export function PaymentsDataTable() {
     },
     {
       accessorKey: "id",
-      accessorFn: (row) => {
-        return row.id;
-      },
+      accessorFn: (row) => row.id,
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Payment ID" />;
+        return <DataTableColumnHeader column={column} title="Id" />;
       },
-      cell: ({ row }) => <span>{row.getValue("id")}</span>,
+      cell: ({ row }) => <div className="">{row.getValue("id")}</div>,
     },
     {
-      accessorKey: "orderId",
-      accessorFn: (row) => {
-        return row.orderId;
-      },
+      accessorKey: "token",
+      accessorFn: (row) => row.token,
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Order ID" />;
+        return <DataTableColumnHeader column={column} title="Token" />;
+      },
+      cell: ({ row }) => <div className="">{row.getValue("token")}</div>,
+    },
+    {
+      accessorKey: "expiresAt",
+      accessorFn: (row) => row.expiresAt,
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Expires At" />;
       },
       cell: ({ row }) => (
-        <span className="capitalize">{row.getValue("orderId")}</span>
+        <div className="">
+          {row.getValue("expiresAt")
+            ? new Date(row.getValue("expiresAt")).toLocaleString()
+            : "Null"}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "userId",
+      accessorFn: (row) => row.userId,
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="User Id" />;
+      },
+      cell: ({ row }) => <div className="">{row.getValue("userId")}</div>,
+    },
+    {
+      accessorKey: "userName",
+      accessorFn: (row) => {
+        return row.user?.name ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Name" />;
+      },
+      cell: ({ row }) => (
+        <span className="capitalize">{row.getValue("userName")}</span>
       ),
       filterFn: "includesString",
     },
     {
-      accessorKey: "userId",
+      accessorKey: "userEmail",
       accessorFn: (row) => {
-        return row.userId;
+        return row.user?.email ?? "";
       },
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="User ID" />;
+        return <DataTableColumnHeader column={column} title="Email" />;
       },
-      cell: ({ row }) => <span>{row.getValue("userId")}</span>,
+      cell: ({ row }) => (
+        <span className="lowercase">{row.getValue("userEmail")}</span>
+      ),
+      filterFn: "includesString",
     },
     {
-      accessorKey: "userImage",
+      accessorKey: "emailVerified",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Email Verified" />;
+      },
       accessorFn: (row) => {
-        return row.user?.image;
+        return row.user?.emailVerified ? "True" : "False";
+      },
+      cell: ({ row }) => <span>{row.getValue("emailVerified")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "image",
+      accessorFn: (row) => {
+        return row.user?.image ?? "";
       },
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="User Image" />;
+        return <DataTableColumnHeader column={column} title="Image" />;
       },
       cell: ({ row }) => {
-        const imageUrl = row.getValue("userImage") as string;
+        const imageUrl = row.getValue("image") as string;
         return (
-          <div className="flex justify-center">
+          <>
             {imageUrl ? (
               <Link href={imageUrl} target="_blank">
                 <div className="w-10 h-10 relative">
@@ -153,115 +193,54 @@ export function PaymentsDataTable() {
             ) : (
               <div className="w-10 h-10 rounded-full bg-gray-300" />
             )}
-          </div>
+          </>
         );
       },
     },
     {
-      accessorKey: "userName",
-      accessorFn: (row) => {
-        return row.user?.name;
-      },
+      accessorKey: "userAgent",
+      accessorFn: (row) => row.userAgent,
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="User Name" />;
+        return <DataTableColumnHeader column={column} title="User Agent" />;
       },
-      cell: ({ row }) => <span>{row.getValue("userName")}</span>,
+      cell: ({ row }) => <div className="">{row.getValue("userAgent")}</div>,
     },
     {
-      accessorKey: "userEmail",
-      accessorFn: (row) => {
-        return row.user?.email;
-      },
+      accessorKey: "ipAddress",
+      accessorFn: (row) => row.ipAddress,
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="User Email" />;
+        return <DataTableColumnHeader column={column} title="IP Address" />;
       },
-      cell: ({ row }) => <span>{row.getValue("userEmail")}</span>,
+      cell: ({ row }) => <div className="">{row.getValue("ipAddress")}</div>,
     },
     {
-      accessorKey: "userPhoneNumber",
-      accessorFn: (row) => {
-        return row.user?.phoneNumber;
-      },
+      accessorKey: "createdAt",
+      accessorFn: (row) => row.createdAt,
       header: ({ column }) => {
-        return (
-          <DataTableColumnHeader column={column} title="User Phone Number" />
-        );
-      },
-      cell: ({ row }) => <span>{row.getValue("userPhoneNumber")}</span>,
-    },
-    {
-      accessorKey: "status",
-      accessorFn: (row) => {
-        return row.status;
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Status" />;
+        return <DataTableColumnHeader column={column} title="Created At" />;
       },
       cell: ({ row }) => (
-        <span className="capitalize">{row.getValue("status")}</span>
+        <div className="">
+          {row.getValue("createdAt")
+            ? new Date(row.getValue("createdAt")).toLocaleString()
+            : "Null"}
+        </div>
       ),
     },
-
     {
-      accessorKey: "competition",
-      accessorFn: (row) => {
-        return row.competition;
-      },
+      accessorKey: "updatedAt",
+      accessorFn: (row) => row.updatedAt,
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Competition" />;
+        return <DataTableColumnHeader column={column} title="Updated At" />;
       },
       cell: ({ row }) => (
-        <span className="capitalize">{row.getValue("competition")}</span>
+        <div className="">
+          {row.getValue("updatedAt")
+            ? new Date(row.getValue("updatedAt")).toLocaleString()
+            : "Null"}
+        </div>
       ),
-      filterFn: "includesString",
     },
-    {
-      accessorKey: "amount",
-      accessorFn: (row) => {
-        return row.amount;
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Amount" />;
-      },
-      cell: ({ row }) => <span>{row.getValue("amount")}</span>,
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "paymentUrl",
-      accessorFn: (row) => {
-        return row.paymentUrl;
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Payment URL" />;
-      },
-      cell: ({ row }) => {
-        const paymentUrl = row.getValue("paymentUrl") as string;
-        return (
-          <Link
-            href={paymentUrl}
-            target="_blank"
-            className="underline italic font-bold"
-          >
-            View
-          </Link>
-        );
-      },
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "referenceDuitku",
-      accessorFn: (row) => {
-        return row.referenceDuitku;
-      },
-      header: ({ column }) => {
-        return (
-          <DataTableColumnHeader column={column} title="Reference Duitku" />
-        );
-      },
-      cell: ({ row }) => <span>{row.getValue("referenceDuitku")}</span>,
-      filterFn: "includesString",
-    },
-
     {
       id: "actions",
       enableHiding: false,
@@ -279,23 +258,32 @@ export function PaymentsDataTable() {
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                className="cursor-pointer"
                 variant="destructive"
-                onClick={() => {
-                  deleteInvoice.mutate({
-                    invoiceId: item.id,
-                    orderId: item.orderId,
-                  });
-                }}
+                className="cursor-pointer"
+                onClick={() => deleteSession.mutate({ sessionId: item.id })}
               >
-                Delete invoice
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(item.id)}
-              >
-                Copy payment ID
+                Delete Session
               </DropdownMenuItem>
               <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <Link
+                  href={`/admin/users/${item.userId}`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View User
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                {" "}
+                <Link
+                  href={`/admin/users/${item.userId}#documents`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View Documents Detail
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         );
@@ -322,54 +310,55 @@ export function PaymentsDataTable() {
     },
   });
 
-  const deleteInvoice = useMutation({
-    ...trpc.admin.deleteInvoice.mutationOptions(),
+  const deleteSession = useMutation({
+    ...trpc.admin.deleteSession.mutationOptions(),
     onMutate: () => {
-      toast.loading("Deleting invoice...", {
-        id: "delete-invoice",
+      toast.loading("Deleting session...", {
+        id: "delete-session",
       });
     },
+
     onError: (error) => {
-      toast.dismiss("delete-invoice");
-      toast.error("Failed to delete invoice", {
+      toast.dismiss("delete-session");
+      toast.error("Failed to delete session", {
         description: error.message,
       });
       console.log(error.message);
     },
     onSuccess() {
-      toast.dismiss("delete-invoice");
-      toast.success(`Invoice deleted successfully`);
+      toast.dismiss("delete-session");
+      toast.success(`Session deleted successfully`);
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: trpc.admin.getInvoices.queryKey(),
+        queryKey: trpc.admin.getSessions.queryKey(),
       });
     },
   });
 
-  const deleteInvoicesByMany = useMutation({
-    ...trpc.admin.deleteInvoicesByMany.mutationOptions(),
+  const deleteSessionsByMany = useMutation({
+    ...trpc.admin.deleteSessionsByMany.mutationOptions(),
     onMutate: () => {
-      toast.loading("Deleting invoices...", {
-        id: "delete-invoices",
+      toast.loading("Deleting sessions...", {
+        id: "delete-sessions",
       });
     },
     onError: (error) => {
-      toast.dismiss("delete-invoices");
-      toast.error("Failed to delete invoice", {
+      toast.dismiss("delete-sessions");
+      toast.error("Failed to delete sessions", {
         description: error.message,
       });
       console.log(error.message);
     },
     onSuccess(data, variables) {
-      toast.dismiss("delete-invoices");
+      toast.dismiss("delete-sessions");
       toast.success(
-        `Deleted ${variables.invoiceIds.length} invoices successfully`,
+        `Deleted ${variables.sessionIds.length} sessions successfully`,
       );
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: trpc.admin.getInvoices.queryKey(),
+        queryKey: trpc.admin.getSessions.queryKey(),
       });
       table.resetRowSelection();
     },
@@ -408,17 +397,17 @@ export function PaymentsDataTable() {
                     table.resetColumnFilters();
                   }}
                 >
-                  Payment ID
+                  Id
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("orderId");
-                    table.getColumn("orderId")?.setFilterValue("");
+                    setFilterColumn("token");
+                    table.getColumn("token")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Order ID
+                  Token
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
@@ -449,56 +438,6 @@ export function PaymentsDataTable() {
                   }}
                 >
                   User Email
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setFilterColumn("userPhoneNumber");
-                    table.getColumn("userPhoneNumber")?.setFilterValue("");
-                    table.resetColumnFilters();
-                  }}
-                >
-                  User Phone Number
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setFilterColumn("status");
-                    table.getColumn("status")?.setFilterValue("");
-                    table.resetColumnFilters();
-                  }}
-                >
-                  Status
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setFilterColumn("competition");
-                    table.getColumn("competition")?.setFilterValue("");
-                    table.resetColumnFilters();
-                  }}
-                >
-                  Competition
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setFilterColumn("amount");
-                    table.getColumn("amount")?.setFilterValue("");
-                    table.resetColumnFilters();
-                  }}
-                >
-                  Amount
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setFilterColumn("referenceDuitku");
-                    table.getColumn("referenceDuitku")?.setFilterValue("");
-                    table.resetColumnFilters();
-                  }}
-                >
-                  Reference Duitku
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -548,19 +487,16 @@ export function PaymentsDataTable() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   variant="destructive"
+                  className="cursor-pointer"
                   onClick={() => {
-                    const invoiceIds = table
+                    const sessionIds = table
                       .getFilteredSelectedRowModel()
                       .rows.map((row) => row.original.id);
-                    const orderIds = table
-                      .getFilteredSelectedRowModel()
-                      .rows.map((row) => row.original.orderId);
-                    deleteInvoicesByMany.mutate({ invoiceIds, orderIds });
+                    deleteSessionsByMany.mutate({ sessionIds });
                   }}
-                  className="cursor-pointer"
                 >
                   Delete {table.getFilteredSelectedRowModel().rows.length}{" "}
-                  invoices
+                  sessions
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

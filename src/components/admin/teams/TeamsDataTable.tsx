@@ -60,7 +60,7 @@ export function TeamsDataTable() {
   const trpc = useTRPC();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [filterColumn, setFilterColumn] = React.useState<string>("id");
   const [columnVisibility, setColumnVisibility] =
@@ -361,7 +361,12 @@ export function TeamsDataTable() {
                 Reject team
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => deleteTeam.mutate({ teamId: item.id })}
+                onClick={() =>
+                  deleteTeam.mutate({
+                    teamId: item.id,
+                    paymentId: item.paymentId,
+                  })
+                }
                 className="cursor-pointer"
                 variant="destructive"
               >
@@ -399,7 +404,7 @@ export function TeamsDataTable() {
               <DropdownMenuItem
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    item.leaderPhoneNumber as string
+                    item.leaderPhoneNumber as string,
                   );
                   toast.success("Leader phone number copied to clipboard");
                 }}
@@ -453,7 +458,7 @@ export function TeamsDataTable() {
       toast.success(
         `Team ${
           teams?.find((team) => team.id === variables.teamId)?.name
-        } verified successfully`
+        } verified successfully`,
       );
     },
     onSettled: () => {
@@ -482,7 +487,7 @@ export function TeamsDataTable() {
       toast.success(
         `Team ${
           teams?.find((team) => team.id === variables.teamId)?.name
-        } unverified successfully`
+        } unverified successfully`,
       );
     },
     onSettled: () => {
@@ -511,7 +516,7 @@ export function TeamsDataTable() {
       toast.success(
         `Team ${
           teams?.find((team) => team.id === variables.teamId)?.name
-        } deleted successfully`
+        } deleted successfully`,
       );
     },
     onSettled: () => {
@@ -538,7 +543,7 @@ export function TeamsDataTable() {
     onSuccess(data, variables) {
       toast.dismiss("update-team");
       toast.success(
-        `Teams verified successfully for ${variables.teamIds.length} teams`
+        `Teams verified successfully for ${variables.teamIds.length} teams`,
       );
     },
     onSettled: () => {
@@ -566,7 +571,7 @@ export function TeamsDataTable() {
     onSuccess(data, variables) {
       toast.dismiss("update-team");
       toast.success(
-        `Teams unverifed successfully for ${variables.teamIds.length} teams`
+        `Teams unverifed successfully for ${variables.teamIds.length} teams`,
       );
     },
     onSettled: () => {
@@ -594,7 +599,7 @@ export function TeamsDataTable() {
     onSuccess(data, variables) {
       toast.dismiss("delete-team");
       toast.success(
-        `Teams deleted successfully for ${variables.teamIds.length} teams`
+        `Teams deleted successfully for ${variables.teamIds.length} teams`,
       );
     },
     onSettled: () => {
@@ -668,7 +673,7 @@ export function TeamsDataTable() {
                     table.resetColumnFilters();
                   }}
                 >
-                  Payment ID
+                  Payment Id
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
@@ -757,7 +762,7 @@ export function TeamsDataTable() {
             variant="outline"
             className={cn(
               "cursor-pointer w-fit",
-              isFetching && "cursor-not-allowed"
+              isFetching && "cursor-not-allowed",
             )}
             disabled={isFetching}
             onClick={() => queryClient.invalidateQueries()}
@@ -784,7 +789,7 @@ export function TeamsDataTable() {
                           table.getFilteredSelectedRowModel().rows.length > 9,
                         "w-7":
                           table.getFilteredSelectedRowModel().rows.length > 99,
-                      }
+                      },
                     )}
                   >
                     <p>{table.getFilteredSelectedRowModel().rows.length}</p>
@@ -824,7 +829,10 @@ export function TeamsDataTable() {
                     const teamIds = table
                       .getFilteredSelectedRowModel()
                       .rows.map((row) => row.original.id);
-                    deleteTeamByMany.mutate({ teamIds });
+                    const paymentIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.paymentId);
+                    deleteTeamByMany.mutate({ teamIds, paymentIds });
                   }}
                   className="cursor-pointer"
                   variant="destructive"
@@ -849,7 +857,7 @@ export function TeamsDataTable() {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -868,7 +876,7 @@ export function TeamsDataTable() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}

@@ -23,12 +23,13 @@ import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/utils/trpc";
 import { authClient } from "@/lib/auth-client";
+import { adminRoles } from "@/constants/constants";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const trpc = useTRPC();
   const { data: user, isFetched } = useQuery(
-    trpc.dashboard.getUser.queryOptions()
+    trpc.dashboard.getUser.queryOptions(),
   );
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +57,7 @@ export function NavUser() {
                           ? "max-w-20"
                           : user?.role === "ADMIN"
                             ? "max-w-25"
-                            : "w-full"
+                            : "w-full",
                       )}
                     >
                       {user?.name as string}

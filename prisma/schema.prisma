@@ -197,7 +197,7 @@ model Team {
 
   teamStatus TeamStatus? @default(NOT_REGISTERED)
   status     String?     @default("PENDING") // This is equivalent of statusOrder (payment)
-  payment    Payment?    @relation(fields: [paymentId], references: [orderId])
+  payment    Payment?    @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
 
   registration CompRegistration?
 
@@ -237,7 +237,7 @@ model TeamMember {
 model Payment {
   id              String            @id @default(cuid())
   orderId         String            @unique
-  user            User?             @relation(fields: [userId], references: [id])
+  user            User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String?
   status          String?           @default("PENDING")
   competition     String?

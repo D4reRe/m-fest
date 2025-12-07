@@ -19,6 +19,22 @@ export const adminRouter = router({
     });
     return users;
   }),
+  getAccounts: adminProcedure.query(async () => {
+    const accounts = await db.account.findMany({
+      include: {
+        user: true,
+      },
+    });
+    return accounts;
+  }),
+  getSessions: adminProcedure.query(async () => {
+    const sessions = await db.session.findMany({
+      include: {
+        user: true,
+      },
+    });
+    return sessions;
+  }),
   getUserById: adminProcedure
     .input(
       z.object({
@@ -348,7 +364,6 @@ export const adminRouter = router({
         },
       });
     }),
-
   approveTeam: adminProcedure
     .input(
       z.object({
@@ -393,6 +408,7 @@ export const adminRouter = router({
     .input(
       z.object({
         teamId: z.string(),
+        paymentId: z.string().nullable(),
       }),
     )
     .mutation(async ({ input }) => {
@@ -402,6 +418,22 @@ export const adminRouter = router({
       await db.team.delete({
         where: { id: input.teamId },
       });
+      const isTeamRegistered = await db.compRegistration.findFirst({
+        where: { teamId: input.teamId },
+        select: {
+          id: true,
+        },
+      });
+      if (isTeamRegistered) {
+        await db.compRegistration.delete({
+          where: { teamId: input.teamId },
+        });
+      }
+      if (input.paymentId) {
+        await db.payment.delete({
+          where: { orderId: input.paymentId },
+        });
+      }
     }),
   approveTeamsByMany: adminProcedure
     .input(
@@ -463,6 +495,7 @@ export const adminRouter = router({
     .input(
       z.object({
         teamIds: z.array(z.string()),
+        paymentIds: z.array(z.string().nullable()),
       }),
     )
     .mutation(async ({ input }) => {
@@ -477,6 +510,24 @@ export const adminRouter = router({
         where: {
           id: {
             in: input.teamIds,
+          },
+        },
+      });
+      await db.compRegistration.deleteMany({
+        where: {
+          teamId: {
+            in: input.teamIds,
+          },
+        },
+      });
+      // Only delete payments that are not null
+      const validPaymentIds = input.paymentIds.filter(
+        (paymentId) => paymentId !== null,
+      );
+      await db.payment.deleteMany({
+        where: {
+          orderId: {
+            in: validPaymentIds,
           },
         },
       });
@@ -744,6 +795,126 @@ export const adminRouter = router({
         },
         data: {
           verified: false,
+        },
+      });
+    }),
+  deleteInvoice: adminProcedure
+    .input(
+      z.object({
+        invoiceId: z.string(),
+        orderId: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await db.compRegistration.delete({
+        where: { paymentId: input.orderId },
+      });
+      const isAnyTeamRegistered = await db.team.findFirst({
+        where: { paymentId: input.orderId },
+        select: {
+          id: true,
+        },
+      });
+      if (isAnyTeamRegistered) {
+        await db.team.update({
+          where: { paymentId: input.orderId },
+          data: {
+            paymentId: null,
+            competition: null,
+            teamStatus: "NOT_REGISTERED",
+            status: "PENDING",
+          },
+        });
+      }
+      await db.payment.delete({
+        where: { id: input.invoiceId },
+      });
+    }),
+  deleteInvoicesByMany: adminProcedure
+    .input(
+      z.object({
+        invoiceIds: z.array(z.string()),
+        orderIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await db.compRegistration.deleteMany({
+        where: {
+          paymentId: {
+            in: input.orderIds,
+          },
+        },
+      });
+      await db.team.updateMany({
+        where: {
+          paymentId: {
+            in: input.orderIds,
+          },
+        },
+        data: {
+          paymentId: null,
+          competition: null,
+          teamStatus: "NOT_REGISTERED",
+          status: "PENDING",
+        },
+      });
+      await db.payment.deleteMany({
+        where: {
+          id: {
+            in: input.invoiceIds,
+          },
+        },
+      });
+    }),
+  deleteSession: adminProcedure
+    .input(
+      z.object({
+        sessionId: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await db.session.delete({
+        where: { id: input.sessionId },
+      });
+    }),
+  deleteSessionsByMany: adminProcedure
+    .input(
+      z.object({
+        sessionIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await db.session.deleteMany({
+        where: {
+          id: {
+            in: input.sessionIds,
+          },
+        },
+      });
+    }),
+  deleteAccount: adminProcedure
+    .input(
+      z.object({
+        accountId: z.string(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await db.account.deleteMany({
+        where: { id: input.accountId },
+      });
+    }),
+  deleteAccountsByMany: adminProcedure
+    .input(
+      z.object({
+        accountIds: z.array(z.string()),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await db.account.deleteMany({
+        where: {
+          id: {
+            in: input.accountIds,
+          },
         },
       });
     }),

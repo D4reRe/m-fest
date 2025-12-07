@@ -22,11 +22,7 @@ export const Navbar = () => {
   const { data: session, isPending } = authClient.useSession();
 
   const trpc = useTRPC();
-  const {
-    data,
-    isLoading: isLoadingUser,
-    isFetched,
-  } = useQuery({
+  const { data, isFetched } = useQuery({
     ...trpc.dashboard.getUser.queryOptions(),
     enabled: session?.user ? true : false,
   });
@@ -47,7 +43,7 @@ export const Navbar = () => {
         <div
           className={cn(
             "mx-auto w-full px-6 transition-all duration-300 lg:px-12 bg-background/50 backdrop-blur-lg",
-            isScrolled && "mt-2 max-w-6xl rounded-2xl border lg:px-5"
+            isScrolled && "mt-2 max-w-6xl rounded-2xl border lg:px-5",
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
@@ -93,7 +89,7 @@ export const Navbar = () => {
                       className={cn(
                         currentPath === item.href
                           ? "text-accent-foreground"
-                          : "text-muted-foreground hover:text-accent-foreground"
+                          : "text-muted-foreground hover:text-accent-foreground",
                       )}
                       prefetch
                     >
@@ -108,7 +104,7 @@ export const Navbar = () => {
                       className={cn(
                         currentPath === "/dashboard"
                           ? "text-accent-foreground"
-                          : "text-muted-foreground hover:text-accent-foreground"
+                          : "text-muted-foreground hover:text-accent-foreground",
                       )}
                       prefetch
                     >
@@ -140,7 +136,7 @@ export const Navbar = () => {
                         className={cn(
                           currentPath === "/dashboard"
                             ? "text-accent-foreground"
-                            : "text-muted-foreground hover:text-accent-foreground"
+                            : "text-muted-foreground hover:text-accent-foreground",
                         )}
                         prefetch
                       >

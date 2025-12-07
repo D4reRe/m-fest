@@ -150,8 +150,8 @@ export const dataNavSidebarAdmin = {
       icon: Key,
     },
     {
-      title: "Verify Documents",
-      url: "/admin/verify-documents",
+      title: "Documents",
+      url: "/admin/documents",
       icon: IconFileText,
     },
     {
@@ -211,8 +211,8 @@ export const adminMenus = [
     url: "/admin",
   },
   {
-    title: "Verify Documents",
-    url: "/admin/verify-documents",
+    title: "Documents",
+    url: "/admin/documents",
   },
   {
     title: "User",

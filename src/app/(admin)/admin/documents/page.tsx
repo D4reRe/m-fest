@@ -1,4 +1,4 @@
-import { DocumentsDataTable } from "@/components/admin/verify-documents/DocumentsDataTable";
+import { DocumentsDataTable } from "@/components/admin/documents/DocumentsDataTable";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

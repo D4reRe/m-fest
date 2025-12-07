@@ -53,7 +53,7 @@ export function UsersDataTable() {
   const { data: session } = authClient.useSession();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
   const [filterColumn, setFilterColumn] = React.useState<string>("email");
   const [columnVisibility, setColumnVisibility] =
@@ -65,57 +65,6 @@ export function UsersDataTable() {
     isLoading,
     isFetching,
   } = useQuery(trpc.admin.getUsers.queryOptions());
-  const updateUserRole = useMutation({
-    ...trpc.admin.updateUserRole.mutationOptions(),
-    onMutate: () => {
-      toast.loading("Updating user role...", {
-        id: "update-user-role",
-      });
-    },
-    onError: (error) => {
-      toast.dismiss("update-user-role");
-      toast.error("Failed to update user role", {
-        description: error.message,
-      });
-      console.log(error.message);
-    },
-    onSuccess() {
-      toast.success("User role updated successfully", {
-        id: "update-user-role",
-      });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.admin.getUsers.queryKey(),
-      });
-    },
-  });
-
-  const deleteUser = useMutation({
-    ...trpc.admin.deleteUser.mutationOptions(),
-    onMutate: () => {
-      toast.loading("Deleting user...", {
-        id: "delete-user",
-      });
-    },
-
-    onError: (error) => {
-      toast.dismiss("delete-user");
-      toast.error("Failed to delete user", {
-        description: error.message,
-      });
-      console.log(error.message);
-    },
-    onSuccess() {
-      toast.dismiss("delete-user");
-      toast.success(`User deleted successfully`);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.admin.getUsers.queryKey(),
-      });
-    },
-  });
   const unified = React.useMemo(() => {
     if (!users) return [];
 
@@ -196,7 +145,6 @@ export function UsersDataTable() {
       ),
       filterFn: "includesString",
     },
-
     {
       accessorKey: "email",
       accessorFn: (row) => {
@@ -401,7 +349,7 @@ export function UsersDataTable() {
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.id);
         const userRegisteredMember = user?.team_member.find(
-          (member) => member.userId === row.id
+          (member) => member.userId === row.id,
         );
         const registeredComp = userRegisteredMember?.team?.competition;
         const isTeamRegistered =
@@ -426,7 +374,7 @@ export function UsersDataTable() {
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.id);
         const userRegisteredTeam = user?.team_member.find(
-          (member) => member.userId === row.id
+          (member) => member.userId === row.id,
         );
         const userRegisteredTeamName = userRegisteredTeam?.team?.name;
         const isUserTeamRegistered =
@@ -465,7 +413,7 @@ export function UsersDataTable() {
               <Link
                 href={(identityCardUrl as string) ?? ""}
                 className={cn(
-                  identityCardUrl ? "underline italic font-bold" : ""
+                  identityCardUrl ? "underline italic font-bold" : "",
                 )}
                 target="_blank"
               >
@@ -649,6 +597,58 @@ export function UsersDataTable() {
     },
   });
 
+  const updateUserRole = useMutation({
+    ...trpc.admin.updateUserRole.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating user role...", {
+        id: "update-user-role",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("update-user-role");
+      toast.error("Failed to update user role", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess() {
+      toast.success("User role updated successfully", {
+        id: "update-user-role",
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+    },
+  });
+
+  const deleteUser = useMutation({
+    ...trpc.admin.deleteUser.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Deleting user...", {
+        id: "delete-user",
+      });
+    },
+
+    onError: (error) => {
+      toast.dismiss("delete-user");
+      toast.error("Failed to delete user", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess() {
+      toast.dismiss("delete-user");
+      toast.success(`User deleted successfully`);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+    },
+  });
+
   const deleteUserByMany = useMutation({
     ...trpc.admin.deleteUsersByMany.mutationOptions(),
     onMutate: () => {
@@ -817,7 +817,7 @@ export function UsersDataTable() {
             variant="outline"
             className={cn(
               "cursor-pointer w-fit",
-              isFetching && "cursor-not-allowed"
+              isFetching && "cursor-not-allowed",
             )}
             disabled={isFetching}
             onClick={() => queryClient.invalidateQueries()}
@@ -844,7 +844,7 @@ export function UsersDataTable() {
                           table.getFilteredSelectedRowModel().rows.length > 9,
                         "w-7":
                           table.getFilteredSelectedRowModel().rows.length > 99,
-                      }
+                      },
                     )}
                   >
                     <p>{table.getFilteredSelectedRowModel().rows.length}</p>
@@ -886,7 +886,7 @@ export function UsersDataTable() {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
                   );
@@ -905,7 +905,7 @@ export function UsersDataTable() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext()
+                        cell.getContext(),
                       )}
                     </TableCell>
                   ))}
