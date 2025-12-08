@@ -51,7 +51,7 @@ async function FetchUserRegisteredCompetitions() {
   });
   // console.log("Registered competitions: ", registeredCompetitions);
   const registeredCompetitionNames = registeredCompetitions.map(
-    (competition) => competition.competitionName
+    (competition) => competition.competitionName,
   );
   if (!registeredCompetitionNames.length) {
     return (
@@ -80,7 +80,7 @@ async function FetchUserRegisteredCompetitions() {
   }
   // console.log("Registered competition names: ", registeredCompetitionNames);
   const registeredCompetitionsList = competitions.filter((comp) =>
-    registeredCompetitionNames.includes(comp.abbreviation)
+    registeredCompetitionNames.includes(comp.abbreviation),
   );
   // console.log("Registered competitions: ", registeredCompetitionsList);
   return (
@@ -88,7 +88,7 @@ async function FetchUserRegisteredCompetitions() {
       {registeredCompetitionsList.map((comp) => (
         <Card
           key={comp.abbreviation}
-          className="w-full max-w-sm bg-white/5 flex flex-col"
+          className="w-full max-w-sm bg-white/5 flex flex-col backdrop-blur-sm"
         >
           <CardHeader className="flex flex-col justify-center items-center mb-auto">
             <CardTitle>{comp.abbreviation}</CardTitle>

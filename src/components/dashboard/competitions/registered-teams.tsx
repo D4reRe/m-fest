@@ -93,7 +93,7 @@ async function RegisteredTeams() {
       {teams.map((team) => {
         return (
           <Fragment key={team.id}>
-            <div className="p-6 border-2 rounded-lg my-12 ">
+            <div className="p-6 border-2 rounded-lg my-12 backdrop-blur-sm">
               <div className="flex items-center gap-3 mb-6">
                 <IconUsersGroup className="w-6 h-6 text-primary" />
                 <div className="flex flex-col ">

@@ -99,6 +99,99 @@ export function UsersDataTable() {
       enableHiding: false,
     },
     {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                Actions for <span className="font-bold">{item.name}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(item.id);
+                  toast.success("User ID copied to clipboard");
+                }}
+              >
+                Copy user ID
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => {
+                  navigator.clipboard.writeText(item.email);
+                  toast.success("Email copied to clipboard");
+                }}
+              >
+                Copy email
+              </DropdownMenuItem>
+
+              {session?.user.role === "SUPERADMIN" &&
+                item.role !== "SUPERADMIN" && (
+                  <>
+                    {userRoles
+                      .filter((role) => role !== item.role)
+                      .map((role) => (
+                        <DropdownMenuItem
+                          key={role}
+                          className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/60!"
+                          onClick={() =>
+                            updateUserRole.mutate({
+                              userId: item.id,
+                              role: role as Role,
+                            })
+                          }
+                        >
+                          Update role to {role}
+                        </DropdownMenuItem>
+                      ))}
+                  </>
+                )}
+              <DropdownMenuItem
+                className="cursor-pointer text-red-500"
+                onClick={() => deleteUser.mutate({ userId: item.id })}
+                variant="destructive"
+                disabled={item.id === session?.user.id}
+              >
+                {item.id === session?.user.id
+                  ? "You cannot delete yourself"
+                  : "Delete User"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <Link
+                  href={`/admin/users/${item.id}`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View User
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                {" "}
+                <Link
+                  href={`/admin/users/${item.id}#documents`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View Documents Detail
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
       accessorKey: "verified",
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.id);
@@ -482,100 +575,6 @@ export function UsersDataTable() {
         );
       },
     },
-
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const item = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>
-                Actions for <span className="font-bold">{item.name}</span>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(item.id);
-                  toast.success("User ID copied to clipboard");
-                }}
-              >
-                Copy user ID
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(item.email);
-                  toast.success("Email copied to clipboard");
-                }}
-              >
-                Copy email
-              </DropdownMenuItem>
-
-              {session?.user.role === "SUPERADMIN" &&
-                item.role !== "SUPERADMIN" && (
-                  <>
-                    {userRoles
-                      .filter((role) => role !== item.role)
-                      .map((role) => (
-                        <DropdownMenuItem
-                          key={role}
-                          className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/60!"
-                          onClick={() =>
-                            updateUserRole.mutate({
-                              userId: item.id,
-                              role: role as Role,
-                            })
-                          }
-                        >
-                          Update role to {role}
-                        </DropdownMenuItem>
-                      ))}
-                  </>
-                )}
-              <DropdownMenuItem
-                className="cursor-pointer text-red-500"
-                onClick={() => deleteUser.mutate({ userId: item.id })}
-                variant="destructive"
-                disabled={item.id === session?.user.id}
-              >
-                {item.id === session?.user.id
-                  ? "You cannot delete yourself"
-                  : "Delete User"}
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <Link
-                  href={`/admin/users/${item.id}`}
-                  target="_blank"
-                  className="w-full"
-                >
-                  View User
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                {" "}
-                <Link
-                  href={`/admin/users/${item.id}#documents`}
-                  target="_blank"
-                  className="w-full"
-                >
-                  View Documents Detail
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
   ];
 
   const table = useReactTable({
@@ -677,8 +676,8 @@ export function UsersDataTable() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <div className="flex gap-2">
+      <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center py-4">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full md:w-auto">
           <Input
             placeholder="Filter..."
             value={
@@ -874,7 +873,7 @@ export function UsersDataTable() {
         </div>
         <DataTableViewOptions table={table} />
       </div>
-      <div className="overflow-hidden rounded-md border mb-2">
+      <div className="w-full overflow-x-auto rounded-md border mb-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

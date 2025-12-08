@@ -99,7 +99,114 @@ export function DocumentsDataTable() {
       enableSorting: false,
       enableHiding: false,
     },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                Actions for{" "}
+                <span className="font-bold truncate">{item.user?.name}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() =>
+                  approveAllDocuments.mutate({ userId: item.userId })
+                }
+                className="cursor-pointer text-green-500 hover:text-green-500! hover:bg-green-900/60!"
+              >
+                Approve all documents
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  rejectAllDocuments.mutate({ userId: item.userId })
+                }
+                className="cursor-pointer"
+                variant="destructive"
+              >
+                Reject all documents
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/80!"
+                onClick={() => {
+                  resetUserDocuments.mutate({
+                    userId: item.userId,
+                    identityCardImageKey: item.identityCardImageKey,
+                    twibbonImageKey: item.twibbonImageKey,
+                    followIgImageKey: item.followIgImageKey,
+                  });
+                }}
+              >
+                Reset documents
+              </DropdownMenuItem>
 
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(item.userId);
+                  toast.success("User ID copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy user ID
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(item.user?.email as string);
+                  toast.success("Email copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy email
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="cursor-pointer"
+                variant="destructive"
+                onClick={() => {
+                  deleteUserDocuments.mutate({
+                    userId: item.userId,
+                    identityCardImageKey: item.identityCardImageKey,
+                    twibbonImageKey: item.twibbonImageKey,
+                    followIgImageKey: item.followIgImageKey,
+                  });
+                }}
+              >
+                Delete documents
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <Link
+                  href={`/admin/users/${item.userId}`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View User
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                {" "}
+                <Link
+                  href={`/admin/users/${item.userId}#documents`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View Documents Detail
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
     {
       accessorKey: "verifiedStatus",
       accessorFn: (row) => {
@@ -317,114 +424,6 @@ export function DocumentsDataTable() {
           >
             {followIgUrl ? "View" : "No File"}
           </Link>
-        );
-      },
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const item = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>
-                Actions for{" "}
-                <span className="font-bold truncate">{item.user?.name}</span>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() =>
-                  approveAllDocuments.mutate({ userId: item.userId })
-                }
-                className="cursor-pointer text-green-500 hover:text-green-500! hover:bg-green-900/60!"
-              >
-                Approve all documents
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() =>
-                  rejectAllDocuments.mutate({ userId: item.userId })
-                }
-                className="cursor-pointer"
-                variant="destructive"
-              >
-                Reject all documents
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/80!"
-                onClick={() => {
-                  resetUserDocuments.mutate({
-                    userId: item.userId,
-                    identityCardImageKey: item.identityCardImageKey,
-                    twibbonImageKey: item.twibbonImageKey,
-                    followIgImageKey: item.followIgImageKey,
-                  });
-                }}
-              >
-                Reset documents
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(item.userId);
-                  toast.success("User ID copied to clipboard");
-                }}
-                className="cursor-pointer"
-              >
-                Copy user ID
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(item.user?.email as string);
-                  toast.success("Email copied to clipboard");
-                }}
-                className="cursor-pointer"
-              >
-                Copy email
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                className="cursor-pointer"
-                variant="destructive"
-                onClick={() => {
-                  deleteUserDocuments.mutate({
-                    userId: item.userId,
-                    identityCardImageKey: item.identityCardImageKey,
-                    twibbonImageKey: item.twibbonImageKey,
-                    followIgImageKey: item.followIgImageKey,
-                  });
-                }}
-              >
-                Delete documents
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <Link
-                  href={`/admin/users/${item.userId}`}
-                  target="_blank"
-                  className="w-full"
-                >
-                  View User
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                {" "}
-                <Link
-                  href={`/admin/users/${item.userId}#documents`}
-                  target="_blank"
-                  className="w-full"
-                >
-                  View Documents Detail
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
         );
       },
     },
@@ -698,8 +697,8 @@ export function DocumentsDataTable() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <div className="flex gap-2">
+      <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center py-4">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full md:w-auto">
           <Input
             placeholder="Filter..."
             value={
@@ -915,7 +914,7 @@ export function DocumentsDataTable() {
 
         <DataTableViewOptions table={table} />
       </div>
-      <div className="overflow-hidden rounded-md border mb-2">
+      <div className="overflow-x-auto rounded-md border mb-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -25,14 +25,14 @@ export default function TableInvoices() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { data: invoices, isLoading: isLoadingInvoices } = useQuery(
-    trpc.dashboard.getUserInvoices.queryOptions()
+    trpc.dashboard.getUserInvoices.queryOptions(),
   );
   const queryClient = useQueryClient();
   async function refreshPayment(
     merchantOrderId: string,
     referenceDuitku: string,
     paymentUrl: string,
-    competition: string
+    competition: string,
   ) {
     setIsLoading(true);
     toast.loading("Checking payment status...", {
@@ -97,121 +97,126 @@ export default function TableInvoices() {
     return <Skeleton className="h-60 w-screen max-w-6xl mt-3 rounded-lg" />;
 
   return (
-    <Table aria-label="" className="w-full bg-transparent mt-5">
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>INVOICE ID</TableHead>
-          <TableHead>AMOUNT</TableHead>
-          <TableHead>COMPETITION</TableHead>
-          <TableHead>TEAM</TableHead>
-          <TableHead>INVOKED AT</TableHead>
-          <TableHead>ACTION</TableHead>
-          <TableHead>STATUS</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {invoices?.map((invoice) => {
-          return (
-            <TableRow key={invoice.id}>
-              <TableCell>{invoice.orderId}</TableCell>
-              <TableCell>{invoice.amount}</TableCell>
-              <TableCell>{invoice.team?.competition}</TableCell>
-              <TableCell>{invoice.team?.name}</TableCell>
-              <TableCell>
-                {new Date(invoice.createdAt).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                })}
-              </TableCell>
-              <TableCell>
-                {invoice.status === "SUCCESS" ? (
-                  <span>Payment Successfull</span>
-                ) : invoice.status === "PENDING" ? (
-                  <div className="flex items-center justify-between gap-3">
-                    <Link
-                      className="font-bold underline underline-offset-1 cursor-pointer"
-                      href={invoice.paymentUrl as string}
-                      target="_blank"
+    <div className="w-full overflow-x-auto">
+      <Table
+        aria-label=""
+        className="min-w-[900px] bg-transparent backdrop-blur-sm mt-5"
+      >
+        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead>INVOICE ID</TableHead>
+            <TableHead>AMOUNT</TableHead>
+            <TableHead>COMPETITION</TableHead>
+            <TableHead>TEAM</TableHead>
+            <TableHead>INVOKED AT</TableHead>
+            <TableHead>ACTION</TableHead>
+            <TableHead>STATUS</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {invoices?.map((invoice) => {
+            return (
+              <TableRow key={invoice.id}>
+                <TableCell>{invoice.orderId}</TableCell>
+                <TableCell>{invoice.amount}</TableCell>
+                <TableCell>{invoice.team?.competition}</TableCell>
+                <TableCell>{invoice.team?.name}</TableCell>
+                <TableCell>
+                  {new Date(invoice.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  })}
+                </TableCell>
+                <TableCell>
+                  {invoice.status === "SUCCESS" ? (
+                    <span>Payment Successfull</span>
+                  ) : invoice.status === "PENDING" ? (
+                    <div className="flex items-center justify-between gap-3">
+                      <Link
+                        className="font-bold underline underline-offset-1 cursor-pointer"
+                        href={invoice.paymentUrl as string}
+                        target="_blank"
+                      >
+                        Pay
+                      </Link>
+                      <Button
+                        variant={"ghost"}
+                        onClick={() =>
+                          refreshPayment(
+                            invoice.orderId,
+                            invoice.referenceDuitku as string,
+                            invoice.paymentUrl as string,
+                            invoice.competition as string,
+                          )
+                        }
+                        disabled={isLoading}
+                        className="size-6 hover:scale-105 transition-all cursor-pointer"
+                      >
+                        {isLoading ? (
+                          <IconRefresh className="animate-spin" />
+                        ) : (
+                          <RefreshCcw />
+                        )}
+                      </Button>
+                    </div>
+                  ) : invoice.status === "PROCESS" ? (
+                    <div className="flex items-center justify-between gap-3">
+                      <Link
+                        className="font-bold underline underline-offset-1 cursor-pointer"
+                        href={invoice.paymentUrl as string}
+                        target="_blank"
+                      >
+                        Pay
+                      </Link>
+                      <Button
+                        variant={"ghost"}
+                        onClick={() =>
+                          refreshPayment(
+                            invoice.orderId,
+                            invoice.referenceDuitku as string,
+                            invoice.paymentUrl as string,
+                            invoice.competition as string,
+                          )
+                        }
+                        disabled={isLoading}
+                        className="size-6 hover:scale-105 transition-all cursor-pointer"
+                      >
+                        {isLoading ? (
+                          <IconRefresh className="animate-spin" />
+                        ) : (
+                          <RefreshCcw />
+                        )}
+                      </Button>
+                    </div>
+                  ) : (
+                    <span>Payment Cancelled</span>
+                  )}
+                </TableCell>
+                <TableCell>
+                  {invoice.status === "SUCCESS" ? (
+                    <Badge
+                      variant={"secondary"}
+                      className="bg-green-700 text-white"
                     >
-                      Pay
-                    </Link>
-                    <Button
-                      variant={"ghost"}
-                      onClick={() =>
-                        refreshPayment(
-                          invoice.orderId,
-                          invoice.referenceDuitku as string,
-                          invoice.paymentUrl as string,
-                          invoice.competition as string
-                        )
-                      }
-                      disabled={isLoading}
-                      className="size-6 hover:scale-105 transition-all cursor-pointer"
-                    >
-                      {isLoading ? (
-                        <IconRefresh className="animate-spin" />
-                      ) : (
-                        <RefreshCcw />
-                      )}
-                    </Button>
-                  </div>
-                ) : invoice.status === "PROCESS" ? (
-                  <div className="flex items-center justify-between gap-3">
-                    <Link
-                      className="font-bold underline underline-offset-1 cursor-pointer"
-                      href={invoice.paymentUrl as string}
-                      target="_blank"
-                    >
-                      Pay
-                    </Link>
-                    <Button
-                      variant={"ghost"}
-                      onClick={() =>
-                        refreshPayment(
-                          invoice.orderId,
-                          invoice.referenceDuitku as string,
-                          invoice.paymentUrl as string,
-                          invoice.competition as string
-                        )
-                      }
-                      disabled={isLoading}
-                      className="size-6 hover:scale-105 transition-all cursor-pointer"
-                    >
-                      {isLoading ? (
-                        <IconRefresh className="animate-spin" />
-                      ) : (
-                        <RefreshCcw />
-                      )}
-                    </Button>
-                  </div>
-                ) : (
-                  <span>Payment Cancelled</span>
-                )}
-              </TableCell>
-              <TableCell>
-                {invoice.status === "SUCCESS" ? (
-                  <Badge
-                    variant={"secondary"}
-                    className="bg-green-700 text-white"
-                  >
-                    SUCCESS
-                  </Badge>
-                ) : invoice.status === "PENDING" ? (
-                  <Badge className="text-white bg-yellow-500">PENDING</Badge>
-                ) : invoice.status === "PROCESS" ? (
-                  <Badge className="text-white bg-blue-600">PROCESS</Badge>
-                ) : (
-                  <Badge variant={"destructive"}>CANCELLED</Badge>
-                )}
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+                      SUCCESS
+                    </Badge>
+                  ) : invoice.status === "PENDING" ? (
+                    <Badge className="text-white bg-yellow-500">PENDING</Badge>
+                  ) : invoice.status === "PROCESS" ? (
+                    <Badge className="text-white bg-blue-600">PROCESS</Badge>
+                  ) : (
+                    <Badge variant={"destructive"}>CANCELLED</Badge>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

@@ -106,6 +106,93 @@ export function TeamsDataTable() {
       enableHiding: false,
     },
     {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>
+                Actions for <span className="font-bold">{item.name}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => approveTeam.mutate({ teamId: item.id })}
+                className="cursor-pointer"
+              >
+                Approve team
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => rejectTeam.mutate({ teamId: item.id })}
+                className="cursor-pointer"
+              >
+                Reject team
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() =>
+                  deleteTeam.mutate({
+                    teamId: item.id,
+                    paymentId: item.paymentId,
+                  })
+                }
+                className="cursor-pointer"
+                variant="destructive"
+              >
+                Delete Team
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(item.id);
+                  toast.success("Team ID copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy team ID
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(item.leaderUserId as string);
+                  toast.success("Leader User ID copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy leader&apos;s user Id
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(item.leaderEmail as string);
+                  toast.success("Leader email copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy leader&apos;s email
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    item.leaderPhoneNumber as string,
+                  );
+                  toast.success("Leader phone number copied to clipboard");
+                }}
+                className="cursor-pointer"
+              >
+                Copy leader&apos;s phone number
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
       accessorKey: "id",
       accessorFn: (row) => {
         const team = teams?.find((team) => team.id === row.id);
@@ -330,93 +417,6 @@ export function TeamsDataTable() {
         );
       },
     },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const item = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>
-                Actions for <span className="font-bold">{item.name}</span>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => approveTeam.mutate({ teamId: item.id })}
-                className="cursor-pointer"
-              >
-                Approve team
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => rejectTeam.mutate({ teamId: item.id })}
-                className="cursor-pointer"
-              >
-                Reject team
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() =>
-                  deleteTeam.mutate({
-                    teamId: item.id,
-                    paymentId: item.paymentId,
-                  })
-                }
-                className="cursor-pointer"
-                variant="destructive"
-              >
-                Delete Team
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(item.id);
-                  toast.success("Team ID copied to clipboard");
-                }}
-                className="cursor-pointer"
-              >
-                Copy team ID
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(item.leaderUserId as string);
-                  toast.success("Leader User ID copied to clipboard");
-                }}
-                className="cursor-pointer"
-              >
-                Copy leader&apos;s user Id
-              </DropdownMenuItem>
-
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(item.leaderEmail as string);
-                  toast.success("Leader email copied to clipboard");
-                }}
-                className="cursor-pointer"
-              >
-                Copy leader&apos;s email
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  navigator.clipboard.writeText(
-                    item.leaderPhoneNumber as string,
-                  );
-                  toast.success("Leader phone number copied to clipboard");
-                }}
-                className="cursor-pointer"
-              >
-                Copy leader&apos;s phone number
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
   ];
 
   const table = useReactTable({
@@ -612,8 +612,8 @@ export function TeamsDataTable() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <div className="flex gap-2">
+      <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center py-4">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full md:w-auto">
           <Input
             placeholder="Filter..."
             value={
@@ -845,7 +845,7 @@ export function TeamsDataTable() {
         </div>
         <DataTableViewOptions table={table} />
       </div>
-      <div className="overflow-hidden rounded-md border mb-2">
+      <div className="overflow-x-auto rounded-md border mb-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

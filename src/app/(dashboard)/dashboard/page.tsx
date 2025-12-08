@@ -15,7 +15,7 @@ export default function DashboardHomePage() {
     <div className="min-h-screen bg-transparent">
       <main className="relative z-10">
         {/* Header */}
-        <div className="border-b border-border/20 backdrop-blur-sm">
+        <div className="border-b border-border/20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <h1 className="text-4xl font-bold text-foreground">Dashboard</h1>
             <p className="text-muted-foreground mt-1">General Overview</p>
@@ -26,7 +26,7 @@ export default function DashboardHomePage() {
         <div className="min-h-screen bg-transparent w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="space-y-8">
             {/* Profile Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 backdrop-blur-sm rounded-lg border">
               <div className="lg:col-span-1">
                 <UserProfile />
               </div>
@@ -36,7 +36,7 @@ export default function DashboardHomePage() {
             </div>
 
             {/* Events and Competitions */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 backdrop-blur-sm rounded-lg border">
               <Events />
               <Competitions />
             </div>

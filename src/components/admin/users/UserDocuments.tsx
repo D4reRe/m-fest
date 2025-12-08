@@ -18,7 +18,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: user, isFetched } = useQuery(
-    trpc.dashboard.getUserById.queryOptions({ userId })
+    trpc.dashboard.getUserById.queryOptions({ userId }),
   );
 
   const {
@@ -116,7 +116,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
 
       toast.dismiss("update-documents");
       toast.success(
-        `Document ${variables.type} verifed successfully for ${user?.name}`
+        `Document ${variables.type} verifed successfully for ${user?.name}`,
       );
     },
     onSettled: () => {
@@ -148,7 +148,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
 
       toast.dismiss("update-documents");
       toast.success(
-        `Document ${variables.type} unverifed successfully for ${user?.name}`
+        `Document ${variables.type} unverifed successfully for ${user?.name}`,
       );
     },
     onSettled: () => {
@@ -255,7 +255,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
               <Button
                 type="submit"
                 disabled
-                className="cursor-pointer"
+                className="cursor-pointer backdrop-blur-sm"
                 variant={"outline"}
               >
                 User has not submit the documents yet.
@@ -265,7 +265,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="cursor-pointer"
+                className="cursor-pointer backdrop-blur-sm"
                 variant={"outline"}
                 onClick={() => approveAllDocuments.mutate({ userId })}
               >
@@ -276,7 +276,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="cursor-pointer"
+                className="cursor-pointer backdrop-blur-sm"
                 variant={"outline"}
                 onClick={() => rejectAllDocuments.mutate({ userId })}
               >
@@ -288,7 +288,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
         {documents?.map((document) => {
           const { title, type, id } = document;
           return (
-            <main key={id} className="border rounded-lg p-5">
+            <main key={id} className="border rounded-lg p-5 backdrop-blur-sm">
               <div className="mb-6">
                 <div className="mb-8 w-full flex max-sm:flex-col justify-between items-center  ">
                   <h1 className="text-3xl max-sm:mb-4">{title}</h1>
@@ -368,7 +368,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
                           } at ${
                             document.createdAt
                               ? new Date(
-                                  document.createdAt
+                                  document.createdAt,
                                 ).toLocaleTimeString()
                               : ""
                           }`}
@@ -449,7 +449,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
           <Button
             type="submit"
             disabled
-            className="cursor-pointer w-full mt-5"
+            className="cursor-pointer w-full mt-5 backdrop-blur-sm"
             variant={"outline"}
           >
             User has not submit the documents yet.
@@ -459,7 +459,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
           <Button
             type="submit"
             disabled={isLoading}
-            className="cursor-pointer w-full mt-5"
+            className="cursor-pointer w-full mt-5 backdrop-blur-sm"
             variant={"outline"}
             onClick={() => approveUser.mutate({ userId })}
           >
@@ -470,7 +470,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
           <Button
             type="submit"
             disabled={isLoading}
-            className="cursor-pointer w-full mt-5"
+            className="cursor-pointer w-full mt-5 backdrop-blur-sm"
             variant={"outline"}
             onClick={() => rejectUser.mutate({ userId })}
           >

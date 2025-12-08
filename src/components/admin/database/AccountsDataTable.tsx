@@ -94,6 +94,54 @@ export default function AccountsDataTable() {
       enableHiding: false,
     },
     {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                variant="destructive"
+                className="cursor-pointer"
+                onClick={() => deleteAccount.mutate({ accountId: item.id })}
+              >
+                Delete Account
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <Link
+                  href={`/admin/users/${item.userId}`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View User
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                {" "}
+                <Link
+                  href={`/admin/users/${item.userId}#documents`}
+                  target="_blank"
+                  className="w-full"
+                >
+                  View Documents Detail
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
       accessorKey: "id",
       accessorFn: (row) => row.id,
       header: ({ column }) => {
@@ -290,54 +338,6 @@ export default function AccountsDataTable() {
         </div>
       ),
     },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const item = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                variant="destructive"
-                className="cursor-pointer"
-                onClick={() => deleteAccount.mutate({ accountId: item.id })}
-              >
-                Delete Account
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer">
-                <Link
-                  href={`/admin/users/${item.userId}`}
-                  target="_blank"
-                  className="w-full"
-                >
-                  View User
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                {" "}
-                <Link
-                  href={`/admin/users/${item.userId}#documents`}
-                  target="_blank"
-                  className="w-full"
-                >
-                  View Documents Detail
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
   ];
 
   const table = useReactTable({
@@ -415,8 +415,8 @@ export default function AccountsDataTable() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <div className="flex gap-2">
+      <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center py-4">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full md:w-auto">
           <Input
             placeholder="Filter..."
             value={
@@ -563,7 +563,7 @@ export default function AccountsDataTable() {
         </div>
         <DataTableViewOptions table={table} />
       </div>
-      <div className="overflow-hidden rounded-md border mb-2">
+      <div className="overflow-x-auto rounded-md border mb-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -44,11 +44,11 @@ async function FetchUserAvailableCompetitions() {
   });
   // console.log("Registered competitions: ", registeredCompetitions);
   const registeredCompetitionNames = registeredCompetitions.map(
-    (competition) => competition.competitionName
+    (competition) => competition.competitionName,
   );
   // console.log("Registered competition names: ", registeredCompetitionNames);
   const competitionsList = competitions.filter(
-    (comp) => !registeredCompetitionNames.includes(comp.abbreviation)
+    (comp) => !registeredCompetitionNames.includes(comp.abbreviation),
   );
   if (!competitionsList.length) {
     return (
@@ -81,7 +81,7 @@ async function FetchUserAvailableCompetitions() {
       {competitionsList.map((comp) => (
         <Card
           key={comp.abbreviation}
-          className="w-full max-w-sm bg-white/5 flex flex-col"
+          className="w-full max-w-sm bg-white/5 flex flex-col backdrop-blur-sm"
         >
           <CardHeader className="flex flex-col justify-center items-center mb-auto">
             <CardTitle>{comp.abbreviation}</CardTitle>

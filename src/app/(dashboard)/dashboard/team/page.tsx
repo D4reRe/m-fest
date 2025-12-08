@@ -122,7 +122,7 @@ async function FetchTeams() {
       {teams.map((team) => {
         return (
           <Fragment key={team.id}>
-            <div className="p-6 border-2 rounded-lg my-12 ">
+            <div className="p-6 border-2 rounded-lg my-12 backdrop-blur-sm">
               <div className="flex items-center gap-3 mb-6">
                 <IconUsersGroup className="w-6 h-6 text-primary" />
                 <div className="flex flex-col ">
@@ -130,7 +130,7 @@ async function FetchTeams() {
                     <span>{team.name}</span>
                     {team.members.some(
                       (member) =>
-                        member.userId === user.id && member.role === "Leader"
+                        member.userId === user.id && member.role === "Leader",
                     ) &&
                       !team.competition && (
                         <div className="flex items-center">

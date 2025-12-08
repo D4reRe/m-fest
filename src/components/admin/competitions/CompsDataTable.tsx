@@ -109,6 +109,47 @@ export function CompsDataTable() {
       enableHiding: false,
     },
     {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const item = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(item.id)}
+                className="cursor-pointer"
+              >
+                Copy registration ID
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  deleteCompRegistration.mutate({
+                    compRegistrationId: item.id,
+                    teamId: item.teamId as string,
+                    paymentId: item.paymentId as string,
+                  });
+                }}
+                className="cursor-pointer"
+                variant="destructive"
+              >
+                Delete registration
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+    {
       accessorKey: "id",
       accessorFn: (row) => {
         const registration = registrations?.find(
@@ -461,48 +502,6 @@ export function CompsDataTable() {
         );
       },
     },
-
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const item = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(item.id)}
-                className="cursor-pointer"
-              >
-                Copy registration ID
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => {
-                  deleteCompRegistration.mutate({
-                    compRegistrationId: item.id,
-                    teamId: item.teamId as string,
-                    paymentId: item.paymentId as string,
-                  });
-                }}
-                className="cursor-pointer"
-                variant="destructive"
-              >
-                Delete registration
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
   ];
 
   const table = useReactTable({
@@ -578,8 +577,8 @@ export function CompsDataTable() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <div className="flex gap-2">
+      <div className="flex flex-wrap sm:flex-nowrap gap-3 items-center py-4">
+        <div className="flex flex-wrap sm:flex-nowrap gap-2 w-full md:w-auto">
           <Input
             placeholder="Filter..."
             value={
@@ -796,7 +795,7 @@ export function CompsDataTable() {
         </div>
         <DataTableViewOptions table={table} />
       </div>
-      <div className="overflow-hidden rounded-md border mb-2">
+      <div className="overflow-x-auto rounded-md border mb-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

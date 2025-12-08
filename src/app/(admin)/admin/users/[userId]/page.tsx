@@ -51,7 +51,7 @@ export default function UserPage({
 async function FetchUser({ params }: { params: Promise<{ userId: string }> }) {
   const { userId: userIdParam } = await params;
   return (
-    <div className="border p-6 rounded-lg w-full">
+    <div className="border p-6 rounded-lg w-full backdrop-blur-sm">
       <div className="flex flex-col sm:flex-row">
         <div className="w-full sm:w-1/2">
           <div className="flex flex-col items-center">

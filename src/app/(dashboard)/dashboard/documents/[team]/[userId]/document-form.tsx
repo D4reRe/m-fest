@@ -102,17 +102,17 @@ function DocumentsForm({ userId }: { userId: string }) {
       setValue(
         "identityCard",
         documents?.find((document) => document.type === "identityCard")
-          ?.imageUrl ?? ""
+          ?.imageUrl ?? "",
       );
       setValue(
         "twibbon",
         documents?.find((document) => document.type === "twibbon")?.imageUrl ??
-          ""
+          "",
       );
       setValue(
         "followIg",
         documents?.find((document) => document.type === "followIg")?.imageUrl ??
-          ""
+          "",
       );
     }
   }, [documents, setValue, userId]);
@@ -154,7 +154,7 @@ function DocumentsForm({ userId }: { userId: string }) {
             uploadThingRoute,
           } = document;
           return (
-            <main key={id} className="border rounded-lg p-5">
+            <main key={id} className="border rounded-lg p-5 backdrop-blur-sm">
               <div className="mb-6">
                 <div className="mb-8 w-full flex max-sm:flex-col justify-between items-center  ">
                   <h1 className="text-3xl max-sm:mb-4">{title}</h1>
@@ -264,7 +264,7 @@ function DocumentsForm({ userId }: { userId: string }) {
                           } at ${
                             document.createdAt
                               ? new Date(
-                                  document.createdAt
+                                  document.createdAt,
                                 ).toLocaleTimeString()
                               : ""
                           }`}
@@ -289,7 +289,7 @@ function DocumentsForm({ userId }: { userId: string }) {
       <Button
         type="submit"
         disabled={isLoading || userVerificationStatus === "ACCEPTED"}
-        className="cursor-pointer w-full mt-5"
+        className="cursor-pointer w-full mt-5 backdrop-blur-sm"
         variant={"outline"}
       >
         {userVerificationStatus === "NOT_SUBMITTED"

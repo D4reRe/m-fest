@@ -55,7 +55,7 @@ function ProfileUpdateForm() {
   const { data: session } = authClient.useSession();
   const trpc = useTRPC();
   const { data: user, isLoading: isLoadingUser } = useQuery(
-    trpc.dashboard.getUser.queryOptions()
+    trpc.dashboard.getUser.queryOptions(),
   );
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -101,7 +101,7 @@ function ProfileUpdateForm() {
     const toastType = searchParams.get("notif");
     if (toastType === "incomplete_profile") {
       toast.info(
-        "Please complete your profile first before uploading documents & register to any competitions."
+        "Please complete your profile first before uploading documents & register to any competitions.",
       );
     }
   }, [searchParams]);

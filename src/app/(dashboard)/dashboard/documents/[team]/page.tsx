@@ -5,12 +5,13 @@ import { getUser } from "@/action/user.action";
 import { db } from "@/server/db";
 import { redirect } from "next/navigation";
 import MemberListSkeleton from "@/components/dashboard/documents/MemberListSkeleton";
+import type { Metadata } from "next";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ team: string }>;
-}) {
+}): Promise<Metadata> {
   const team = (await params).team;
   return {
     title: `${team.split("-").join(" ")} | Documents | Mechanical Festival 2026`,
@@ -76,7 +77,7 @@ async function FetchTeamMembers({
   }
   if (
     !team?.members.find(
-      (member) => member.userId === user.id && member.role === "Leader"
+      (member) => member.userId === user.id && member.role === "Leader",
     )
   )
     redirect("/dashboard/team");
