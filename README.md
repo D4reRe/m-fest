@@ -36,32 +36,56 @@ It serves as the official system for participants to register, create teams, and
 ### 🧑‍💻 Authentication
 
 - Secure login and registration using **Google** or **GitHub** OAuth.
-- User session management handled by **Auth.js**.
+- User session management handled by **Better-Auth**.
+- Secure session handling with Better-Auth.
+- User profile management including avatar upload using UploadThing.
 - Profile editing with avatar upload (via UploadThing).
+- Role-based control: USER, ADMIN, SUPERADMIN.
 
 ### 👥 Team Management
 
 - Create and edit teams with leader and member roles.
-- Dynamic team member forms with validation.
+- Teams have editable member lists with form validation.
 - Restriction rules: only unregistered teams can be edited or deleted.
-- Cascade deletion for related team members.
+- Leaders now have expanded capabilities:
+  - Register a team to competitions.
+  - Upload member's documents/requirements needed for verification.
+  - Track verification status directly from dashboard.
+
 
 ### 🏆 Competition Registration
 
-- Register teams to competitions.
+- Team can be registered into available competitions.
 - Payment integration using **Duitku POP**.
-- Only team leaders can initiate payments.
-- Real-time payment status updates (settlement, pending, failed).
+- Only team leaders are permitted to initiate registration.
+- Live transaction tracking with states: success, pending, failed.
 
 ### 💳 Payment System
 
 - Fully integrated **Duitku POP** payment gateway.
 - Handles success, pending, and error redirects.
+- Payment callbacks update invoice + team competition status in realtime
 - Displays payment status and transaction details in dashboard.
 
-### 🧾 Profile Management
+### 📄 Document Handling & Verification
+- Each member in a team may upload required verification documents.
+- Leader can upload documents on behalf of members.
+- Document verification flow built for Admin review.
 
-- Update user profile (name, email, institution, and profile picture).
+### 🛠 Admin System (Fully Functional)
+- Admin Features:
+
+| View                       | Action Capabilities           |
+| -------------------------- | ----------------------------- |
+| Users list                 | View user details & role      |
+| User document details page | Approve / reject individually |
+| Accounts, sessions, teams  | Delete or manage records      |
+| Team documents             | Bulk approve / bulk reject    |
+| Promote/demote roles (SUPERADMIN)       | Set role → `USER` ↔ `ADMIN`   |
+
+- Table powered by TanStack Table + ShadCN UI, supports search, filtering, column toggling.
+- Row actions allow bulk operations (approve all documents, delete multiple accounts, etc).
+- Real-time data handling with TanStack Query & TRPC mutations.
 
 ### ⚙️ Additional Features
 
@@ -138,299 +162,6 @@ bun run dev
 ```
 the app should be running on:
 http://localhost:3000
-```
-
-### 6. Project Structure
-
-```
-└── 📁src
-    └── 📁action
-        ├── register.action.ts
-        ├── uploadthing.action.ts
-        ├── user.action.ts
-    └── 📁app
-        └── 📁(admin)
-            └── 📁admin
-                └── 📁competitions
-                    ├── page.tsx
-                └── 📁database
-                    ├── page.tsx
-                └── 📁events
-                    ├── page.tsx
-                └── 📁payments
-                    ├── page.tsx
-                └── 📁teams
-                    ├── page.tsx
-                └── 📁users
-                    ├── page.tsx
-                └── 📁verify-documents
-                    ├── page.tsx
-                ├── layout.tsx
-                ├── page.tsx
-        └── 📁(dashboard)
-            └── 📁dashboard
-                └── 📁competitions
-                    └── 📁[comp]
-                        ├── page.tsx
-                    ├── page.tsx
-                └── 📁documents
-                    └── 📁[team]
-                        └── 📁[userId]
-                            ├── document-form.tsx
-                            ├── page.tsx
-                        ├── page.tsx
-                    ├── page.tsx
-                └── 📁events
-                    ├── page.tsx
-                └── 📁invoices
-                    ├── page.tsx
-                    ├── TableInvoices.tsx
-                └── 📁profile
-                    ├── page.tsx
-                    ├── profile-form.tsx
-                └── 📁team
-                    └── 📁create-team
-                        ├── page.tsx
-                        ├── team-form.tsx
-                    └── 📁edit-team
-                        └── 📁[team]
-                            ├── edit-team-form.tsx
-                            ├── page.tsx
-                        ├── page.tsx
-                    └── 📁register
-                        └── 📁[comp]
-                            ├── page.tsx
-                            ├── register-form.tsx
-                        ├── page.tsx
-                    ├── page.tsx
-                ├── layout.tsx
-                ├── page.tsx
-        └── 📁(general)
-            └── 📁(auth)
-                └── 📁login
-                    ├── LoginErrorHandler.tsx
-                    ├── page.tsx
-            └── 📁(competitions)
-                └── 📁competitions
-                    ├── CompetitionHero.tsx
-                    ├── CompetitionList.tsx
-                    ├── page.tsx
-            └── 📁events
-                └── 📁[event]
-                    ├── event-form.tsx
-                    ├── page.tsx
-                ├── page.tsx
-            └── 📁payment
-                └── 📁error
-                    ├── page.tsx
-                └── 📁status
-                    ├── page.tsx
-            ├── layout.tsx
-            ├── page.tsx
-        └── 📁api
-            └── 📁auth
-                └── 📁[...all]
-                    ├── route.ts
-            └── 📁payment
-                └── 📁callback
-                    ├── route.ts
-                └── 📁check
-                    ├── route.ts
-                └── 📁verify
-                    ├── route.ts
-                ├── route.ts
-            └── 📁routers
-                ├── admin.ts
-                ├── dashboard.ts
-            └── 📁team
-                └── 📁create-team
-                    ├── route.ts
-                └── 📁edit-team
-                    ├── route.ts
-            └── 📁trpc
-                └── 📁[trpc]
-                    ├── route.ts
-            └── 📁uploadthing
-                ├── core.ts
-                ├── route.ts
-            └── 📁user
-                └── 📁by-email
-                    ├── route.ts
-            └── 📁verify-document
-                ├── route.ts
-        ├── favicon.ico
-        ├── global-error.tsx
-        ├── globals.css
-        ├── help-button.tsx
-        ├── layout.tsx
-    └── 📁components
-        └── 📁admin
-            └── 📁competitions
-                ├── CompsDataTable.tsx
-            └── 📁data-overview
-                ├── DataOverview.tsx
-                ├── PaymentGraph.tsx
-            └── 📁payments
-                ├── PaymentsDataTable.tsx
-            └── 📁sidebar
-                ├── app-sidebar.tsx
-                ├── nav-documents.tsx
-                ├── nav-main.tsx
-                ├── nav-secondary.tsx
-                ├── nav-user.tsx
-                ├── PaymentsChartSkeleton.tsx
-                ├── site-header.tsx
-            └── 📁teams
-                ├── TeamsDataTable.tsx
-            └── 📁users
-                ├── UsersDataTable.tsx
-            └── 📁verify-documents
-                ├── DocumentsDataTable.tsx
-            ├── DashboardSkeleton.tsx
-            ├── DataTable.tsx
-        └── 📁auth
-            ├── auth-buttons.tsx
-        └── 📁contact
-            ├── ContactSection.tsx
-        └── 📁dashboard
-            └── 📁competitions
-                ├── CountdownClient.tsx
-                ├── registered-teams.tsx
-                ├── RegisteredCompetitionList.tsx
-                ├── SubmitForm.tsx
-                ├── SubmitFormSkeleton.tsx
-            └── 📁documents
-                ├── MemberList.tsx
-                ├── MemberListSkeleton.tsx
-                ├── TeamList.tsx
-            └── 📁edit-team
-                ├── TeamFormSkeleton.tsx
-            └── 📁profile
-                ├── ImageCropper.tsx
-                ├── PencilIcon.tsx
-                ├── ProfileFormSkeleton.tsx
-                ├── setCanvasPreview.ts
-                ├── UploadDialog.tsx
-            └── 📁sidebar
-                ├── app-sidebar.tsx
-                ├── nav-documents.tsx
-                ├── nav-main.tsx
-                ├── nav-secondary.tsx
-                ├── nav-user.tsx
-                ├── site-header.tsx
-            └── 📁team
-                ├── CompetitionListDashboard.tsx
-            ├── competition.tsx
-            ├── CompetitionListSkeleton.tsx
-            ├── deleteButton.tsx
-            ├── events.tsx
-            ├── team-member.tsx
-            ├── TeamFallback.tsx
-            ├── user-info.tsx
-            ├── user-profile.tsx
-        └── 📁document
-            ├── DocumentFormSkeleton.tsx
-            ├── ImageCropperDocument.tsx
-            ├── setCanvasPreview.ts
-            ├── UploadDocumentDialog.tsx
-        └── 📁events
-            ├── events-hero.tsx
-            ├── index.tsx
-        └── 📁general
-            ├── faqs.tsx
-            ├── footer.tsx
-            ├── hero-section.tsx
-            ├── Navbar.tsx
-            ├── UserProfile.tsx
-        └── 📁providers
-            ├── query-provider.tsx
-            ├── theme-provider.tsx
-        └── 📁register
-            ├── CompFormSkeleton.tsx
-        └── 📁timeline
-            ├── timeline-item.tsx
-            ├── timeline-test.tsx
-            ├── timeline.tsx
-        └── 📁ui
-            ├── accordion.tsx
-            ├── alert-dialog.tsx
-            ├── animated-group.tsx
-            ├── avatar.tsx
-            ├── badge.tsx
-            ├── blur-fade.tsx
-            ├── breadcrumb.tsx
-            ├── button.tsx
-            ├── calendar.tsx
-            ├── card.tsx
-            ├── chart.tsx
-            ├── checkbox.tsx
-            ├── collapsible.tsx
-            ├── confetti.tsx
-            ├── data-table-column-header.tsx
-            ├── data-table-pagination.tsx
-            ├── data-table-view-options.tsx
-            ├── data-table.tsx
-            ├── dialog.tsx
-            ├── drawer.tsx
-            ├── dropdown-menu.tsx
-            ├── empty.tsx
-            ├── field.tsx
-            ├── infinite-slider.tsx
-            ├── input.tsx
-            ├── label.tsx
-            ├── link-preview.tsx
-            ├── popover.tsx
-            ├── progress.tsx
-            ├── progressive-blur.tsx
-            ├── select.tsx
-            ├── separator.tsx
-            ├── sheet.tsx
-            ├── sidebar.tsx
-            ├── skeleton.tsx
-            ├── sonner.tsx
-            ├── table.tsx
-            ├── tabs.tsx
-            ├── text-effect.tsx
-            ├── timeline.tsx
-            ├── toggle-group.tsx
-            ├── toggle.tsx
-            ├── tooltip.tsx
-        ├── sponsor-item.tsx
-        ├── sponsors.tsx
-        ├── ToggleTheme.tsx
-    └── 📁constants
-        ├── constants.ts
-    └── 📁hooks
-        ├── use-mobile.ts
-    └── 📁lib
-        ├── auth-client.ts
-        ├── competition.ts
-        ├── event.ts
-        ├── profile.ts
-        ├── schema.ts
-        ├── utils.ts
-    └── 📁server
-        └── 📁api
-            ├── root.ts
-            ├── trpc.ts
-        └── 📁auth
-            ├── auth.ts
-        ├── db.ts
-        ├── uploadthing.ts
-    └── 📁store
-        ├── admin.store.ts
-        ├── dashboard.store.ts
-    └── 📁styles
-        ├── font.ts
-    └── 📁types
-        ├── types.ts
-    └── 📁utils
-        ├── trpc.ts
-        ├── uploadthing.ts
-    ├── env.ts
-    ├── instrumentation-client.ts
-    ├── instrumentation.ts
-    └── proxy.ts
 ```
 
 ### 📝 License
