@@ -21,8 +21,8 @@ export default function DatabasePage() {
           Database Management
         </h1>
       </div>
-      <Tabs defaultValue="account" className="mt-8 ">
-        <TabsList className="bg-white/5 border">
+      <Tabs defaultValue="account" className="mt-8 overflow-x-auto">
+        <TabsList className="bg-white/5 border overflow-x-auto flex flex-col h-64 mx-auto sm:h-10 sm:flex-row">
           <TabsTrigger value="account" className="cursor-pointer">
             Account
           </TabsTrigger>
