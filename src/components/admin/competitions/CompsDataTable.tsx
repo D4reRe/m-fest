@@ -13,7 +13,13 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { Loader2, MoreHorizontal, RefreshCw } from "lucide-react";
+import {
+  ArrowUpRightSquare,
+  BadgeCheckIcon,
+  Loader2,
+  MoreHorizontal,
+  RefreshCw,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -48,6 +54,7 @@ import type {
 import { toast } from "sonner";
 import Link from "next/link";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 type TeamMember = Prisma.TeamMemberGetPayload<{
   include: {
@@ -190,7 +197,72 @@ export function CompsDataTable() {
       header: ({ column }) => {
         return <DataTableColumnHeader column={column} title="Status Payment" />;
       },
-      cell: ({ row }) => <span>{row.getValue("statusOrder")}</span>,
+      cell: ({ row }) => (
+        <span>
+          {" "}
+          {row.getValue("statusOrder") === "PENDING" ? (
+            <Badge variant="secondary" className="bg-yellow-600 text-white">
+              Pending
+            </Badge>
+          ) : row.getValue("statusOrder") === "SUCCESS" ? (
+            <Badge
+              variant="secondary"
+              className="bg-green-500 text-white dark:bg-green-600"
+            >
+              <BadgeCheckIcon />
+              Success
+            </Badge>
+          ) : (
+            <Badge className="bg-red-500 text-white">No Payment Made</Badge>
+          )}
+        </span>
+      ),
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "teamStatus",
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Team Status" />;
+      },
+      accessorFn: (row) => {
+        const registration = registrations?.find(
+          (regis) => regis.id === row.id,
+        );
+        return registration?.teamStatus ?? "";
+      },
+      cell: ({ row }) => (
+        <span>
+          {row.getValue("teamStatus") === "PENDING" ? (
+            <Badge variant="secondary" className="bg-yellow-600 text-white">
+              Pending
+            </Badge>
+          ) : row.getValue("teamStatus") === "ACCEPTED" ? (
+            <Badge
+              variant="secondary"
+              className="bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <BadgeCheckIcon />
+              Verified
+            </Badge>
+          ) : (
+            <Badge className="bg-red-500 text-white">Not Verified</Badge>
+          )}
+        </span>
+      ),
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "teamName",
+      accessorFn: (row) => {
+        const registration = registrations?.find(
+          (regis) => regis.id === row.id,
+        );
+        return registration?.teamName ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Team Name" />;
+      },
+      cell: ({ row }) => <span className="">{row.getValue("teamName")}</span>,
       filterFn: "includesString",
     },
     {
@@ -211,6 +283,70 @@ export function CompsDataTable() {
         return <span className="capitalize">{compName}</span>;
       },
       filterFn: "includesString",
+    },
+    {
+      accessorKey: "members",
+      accessorFn: (row) => {
+        const registration = registrations?.find(
+          (regis) => regis.id === row.id,
+        );
+        return registration?.team?.members ?? [];
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Members" />;
+      },
+      cell: ({ row }) => {
+        const members = row.getValue("members") as TeamMember[];
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="w-fit h-fit border">
+                <span className="italic underline font-bold cursor-pointer">
+                  Members
+                </span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Members</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {members.map((member) => (
+                <DropdownMenuItem key={member.userId}>
+                  <Link
+                    href={`/admin/users/${member.userId}`}
+                    className="cursor-pointer"
+                    target="_blank"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative h-10 w-10">
+                        <Image
+                          src={member.user?.image as string}
+                          alt={member.user?.name as string}
+                          fill
+                          className="object-cover rounded-full"
+                        />
+                      </div>
+                      <p>{member.name}</p>
+                      {member.role === "Leader" ? (
+                        <Badge variant={"default"} className="-ml-2">
+                          {member.role}
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant={"outline"}
+                          className="-ml-2 bg-white/50"
+                        >
+                          {member.role}
+                        </Badge>
+                      )}
+                      <ArrowUpRightSquare className="w-4 h-4 text-gray-500" />
+                    </div>
+                  </Link>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
     },
     {
       accessorKey: "userImage",
@@ -307,21 +443,6 @@ export function CompsDataTable() {
       ),
       filterFn: "includesString",
     },
-
-    {
-      accessorKey: "teamName",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id,
-        );
-        return registration?.teamName ?? "";
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Team Name" />;
-      },
-      cell: ({ row }) => <span className="">{row.getValue("teamName")}</span>,
-      filterFn: "includesString",
-    },
     {
       accessorKey: "teamInstitution",
       header: ({ column }) => {
@@ -351,72 +472,6 @@ export function CompsDataTable() {
       },
       cell: ({ row }) => <span>{row.getValue("teamId")}</span>,
       filterFn: "includesString",
-    },
-    {
-      accessorKey: "teamStatus",
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Team Status" />;
-      },
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id,
-        );
-        return registration?.teamStatus ?? "";
-      },
-      cell: ({ row }) => <span>{row.getValue("teamStatus")}</span>,
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "members",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id,
-        );
-        return registration?.team?.members ?? [];
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Members" />;
-      },
-      cell: ({ row }) => {
-        const members = row.getValue("members") as TeamMember[];
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-fit h-fit border">
-                <span className="italic underline font-bold cursor-pointer">
-                  Members
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Members</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {members.map((member) => (
-                <DropdownMenuItem
-                  key={member.userId}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    navigator.clipboard.writeText(member.userId);
-                    toast.success("User ID copied to clipboard");
-                  }}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="relative h-10 w-10">
-                      <Image
-                        src={member.user?.image as string}
-                        alt={member.user?.name as string}
-                        fill
-                        className="object-cover rounded-full"
-                      />
-                    </div>
-                    <p>{member.name}</p>
-                  </div>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
     },
     {
       accessorKey: "submissionFileUrl",

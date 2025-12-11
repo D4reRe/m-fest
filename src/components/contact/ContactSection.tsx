@@ -10,7 +10,7 @@ const ContactSection = () => {
             <h2 className="text-3xl font-extrabold text-primary sm:text-4xl">
               Contact Us
             </h2>
-            <p className="mt-4 text-lg leading-6 text-muted-foreground ">
+            <p className="mt-4 text-lg leading-6 text-muted-foreground">
               Please don&apos;t hesitate to contact us!
             </p>
           </div>

@@ -13,7 +13,12 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { Loader2, MoreHorizontal, RefreshCw } from "lucide-react";
+import {
+  BadgeCheckIcon,
+  Loader2,
+  MoreHorizontal,
+  RefreshCw,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -44,6 +49,7 @@ import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
 import { toast } from "sonner";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 export function DocumentsDataTable() {
   const trpc = useTRPC();
@@ -57,20 +63,20 @@ export function DocumentsDataTable() {
   const [rowSelection, setRowSelection] = React.useState({});
   const queryClient = useQueryClient();
   const {
-    data: datas,
+    data: documents,
     isLoading,
     isFetching,
   } = useQuery(trpc.admin.getAllDocuments.queryOptions());
   const { data: users } = useQuery(trpc.admin.getUsers.queryOptions());
 
   const unified = React.useMemo(() => {
-    if (!datas || !users) return [];
+    if (!documents || !users) return [];
 
-    return datas.map((data) => ({
+    return documents.map((data) => ({
       ...data,
       user: users.find((user) => user.id === data.userId) ?? null,
     }));
-  }, [datas, users]);
+  }, [documents, users]);
 
   // type of array
   // type Unified = typeof unified
@@ -211,15 +217,50 @@ export function DocumentsDataTable() {
       accessorKey: "verifiedStatus",
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.userId);
-        return user?.verified ? "Verified" : "Not Verified";
+        if (
+          !user?.verified &&
+          documents?.find((document) => document.userId === row.userId)
+            ?.status === "PENDING"
+        ) {
+          return "Pending";
+        } else if (
+          user?.verified &&
+          documents?.find((document) => document.userId === row.userId)
+            ?.status === "ACCEPTED"
+        ) {
+          return "Verified";
+        } else {
+          return "Not Verified";
+        }
       },
       header: ({ column }) => {
         return (
           <DataTableColumnHeader column={column} title="Verified Status" />
         );
       },
-      cell: ({ getValue }) => (
-        <span className="capitalize">{getValue<string>()}</span>
+      cell: ({ getValue, row }) => (
+        <span>
+          {documents?.find(
+            (document) => document.userId === row.original.userId,
+          )?.status === "PENDING" ? (
+            <Badge variant="secondary" className="bg-yellow-600 text-white">
+              Pending
+            </Badge>
+          ) : getValue<string>() === "Verified" &&
+            documents?.find(
+              (document) => document.userId === row.original.userId,
+            )?.status === "ACCEPTED" ? (
+            <Badge
+              variant="secondary"
+              className="bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <BadgeCheckIcon />
+              Verified
+            </Badge>
+          ) : (
+            <Badge className="bg-red-500 text-white">Not Verified</Badge>
+          )}
+        </span>
       ),
       filterFn: "includesString",
     },
@@ -231,7 +272,17 @@ export function DocumentsDataTable() {
         );
       },
       cell: ({ row }) => (
-        <span className="capitalize">{row.getValue("status")}</span>
+        <span className="capitalize">
+          <Badge variant={"secondary"}>
+            {row.getValue("status") === "PENDING" ? (
+              <p className="text-sm text-yellow-500">Pending</p>
+            ) : row.getValue("status") === "ACCEPTED" ? (
+              <p className="text-sm text-green-500">Verified</p>
+            ) : (
+              <p className="text-sm text-red-500">Not Submitted</p>
+            )}
+          </Badge>
+        </span>
       ),
     },
 
@@ -375,7 +426,7 @@ export function DocumentsDataTable() {
       header: "Identity Card",
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
-        const identityCardUrl = datas?.find(
+        const identityCardUrl = documents?.find(
           (user) => user.userId === userId,
         )?.identityCardImageUrl;
         return (
@@ -394,7 +445,7 @@ export function DocumentsDataTable() {
       header: "Twibbon",
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
-        const twibbonUrl = datas?.find(
+        const twibbonUrl = documents?.find(
           (user) => user.userId === userId,
         )?.twibbonImageUrl;
         return (
@@ -413,7 +464,7 @@ export function DocumentsDataTable() {
       header: "Follow IG",
       cell: ({ row }) => {
         const userId = row.getValue("userId") as string;
-        const followIgUrl = datas?.find(
+        const followIgUrl = documents?.find(
           (user) => user.userId === userId,
         )?.followIgImageUrl;
         return (

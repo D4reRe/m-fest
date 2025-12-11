@@ -13,7 +13,12 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { Loader2, MoreHorizontal, RefreshCw } from "lucide-react";
+import {
+  BadgeCheckIcon,
+  Loader2,
+  MoreHorizontal,
+  RefreshCw,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -47,6 +52,7 @@ import { toast } from "sonner";
 import { authClient } from "@/lib/auth-client";
 import { userRoles } from "@/constants/constants";
 import type { Role } from "../../../../prisma/generated/prisma/enums";
+import { Badge } from "@/components/ui/badge";
 
 export function UsersDataTable() {
   const trpc = useTRPC();
@@ -195,12 +201,40 @@ export function UsersDataTable() {
       accessorKey: "verified",
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.id);
-        return user?.verified ? "Verified" : "Not Verified";
+        if (!user?.verified && row.documents?.status === "PENDING") {
+          return "Pending";
+        } else if (user?.verified && row.documents?.status === "ACCEPTED") {
+          return "Verified";
+        } else {
+          return "Not Verified";
+        }
       },
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Verified" />;
+        return (
+          <DataTableColumnHeader column={column} title="Verified Status" />
+        );
       },
-      cell: ({ row }) => <span>{row.getValue("verified")}</span>,
+      cell: ({ getValue, row }) => (
+        <span>
+          {row.original.documents?.status === "PENDING" ? (
+            <Badge variant="secondary" className="bg-yellow-600 text-white">
+              Pending
+            </Badge>
+          ) : getValue<string>() === "Verified" &&
+            row.original.documents?.status === "ACCEPTED" ? (
+            <Badge
+              variant="secondary"
+              className="bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <BadgeCheckIcon />
+              Verified
+            </Badge>
+          ) : (
+            <Badge className="bg-red-500 text-white">Not Verified</Badge>
+          )}
+        </span>
+      ),
+      filterFn: "includesString",
     },
     {
       accessorKey: "id",
