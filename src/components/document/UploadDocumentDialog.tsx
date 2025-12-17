@@ -105,7 +105,7 @@ export default function UploadDocumentDialog({
         res[0]?.ufsUrl as string,
         {
           shouldValidate: true,
-        }
+        },
       );
       queryClient.invalidateQueries({
         queryKey: trpc.dashboard.getDocumentsByUserId.queryKey({ userId }),
@@ -135,7 +135,7 @@ export default function UploadDocumentDialog({
     }
     if (
       !validExtensions.includes(
-        acceptedFiles[0]?.type.split("/").pop()?.toLowerCase() as string
+        acceptedFiles[0]?.type.split("/").pop()?.toLowerCase() as string,
       )
     ) {
       toast.error("Supported types: jpg, jpeg, png, & webp");

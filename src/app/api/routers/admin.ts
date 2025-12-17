@@ -692,6 +692,9 @@ export const adminRouter = router({
           identityCardStatus: "AWAITING_UPLOAD",
           twibbonStatus: "AWAITING_UPLOAD",
           followIgStatus: "AWAITING_UPLOAD",
+          twibbonVerified: false,
+          identityCardVerified: false,
+          followIgVerified: false,
           status: "NOT_SUBMITTED",
         },
       });
@@ -730,6 +733,9 @@ export const adminRouter = router({
           identityCardStatus: "AWAITING_UPLOAD",
           twibbonStatus: "AWAITING_UPLOAD",
           followIgStatus: "AWAITING_UPLOAD",
+          twibbonVerified: false,
+          identityCardVerified: false,
+          followIgVerified: false,
           status: "NOT_SUBMITTED",
         },
       });

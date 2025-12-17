@@ -6,6 +6,7 @@ import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { useState, type ReactNode } from "react";
 import { type AppRouter } from "@/server/api/root";
 import { TRPCProvider } from "@/utils/trpc";
+import superjson from "superjson";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -46,9 +47,10 @@ export default function QueryTanstackProvider({
       links: [
         httpBatchLink({
           url: "/api/trpc",
+          transformer: superjson,
         }),
       ],
-    })
+    }),
   );
 
   return (
