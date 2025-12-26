@@ -34,6 +34,7 @@ export type TeamMinAggregateOutputType = {
   leaderName: string | null
   leaderPhoneNumber: string | null
   teamInstitution: string | null
+  verificationDeadlineAt: Date | null
   teamStatus: $Enums.TeamStatus | null
   status: string | null
   createdAt: Date | null
@@ -50,6 +51,7 @@ export type TeamMaxAggregateOutputType = {
   leaderName: string | null
   leaderPhoneNumber: string | null
   teamInstitution: string | null
+  verificationDeadlineAt: Date | null
   teamStatus: $Enums.TeamStatus | null
   status: string | null
   createdAt: Date | null
@@ -66,6 +68,7 @@ export type TeamCountAggregateOutputType = {
   leaderName: number
   leaderPhoneNumber: number
   teamInstitution: number
+  verificationDeadlineAt: number
   teamStatus: number
   status: number
   createdAt: number
@@ -84,6 +87,7 @@ export type TeamMinAggregateInputType = {
   leaderName?: true
   leaderPhoneNumber?: true
   teamInstitution?: true
+  verificationDeadlineAt?: true
   teamStatus?: true
   status?: true
   createdAt?: true
@@ -100,6 +104,7 @@ export type TeamMaxAggregateInputType = {
   leaderName?: true
   leaderPhoneNumber?: true
   teamInstitution?: true
+  verificationDeadlineAt?: true
   teamStatus?: true
   status?: true
   createdAt?: true
@@ -116,6 +121,7 @@ export type TeamCountAggregateInputType = {
   leaderName?: true
   leaderPhoneNumber?: true
   teamInstitution?: true
+  verificationDeadlineAt?: true
   teamStatus?: true
   status?: true
   createdAt?: true
@@ -205,6 +211,7 @@ export type TeamGroupByOutputType = {
   leaderName: string | null
   leaderPhoneNumber: string | null
   teamInstitution: string | null
+  verificationDeadlineAt: Date | null
   teamStatus: $Enums.TeamStatus | null
   status: string | null
   createdAt: Date
@@ -242,6 +249,7 @@ export type TeamWhereInput = {
   leaderName?: Prisma.StringNullableFilter<"Team"> | string | null
   leaderPhoneNumber?: Prisma.StringNullableFilter<"Team"> | string | null
   teamInstitution?: Prisma.StringNullableFilter<"Team"> | string | null
+  verificationDeadlineAt?: Prisma.DateTimeNullableFilter<"Team"> | Date | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableFilter<"Team"> | $Enums.TeamStatus | null
   status?: Prisma.StringNullableFilter<"Team"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Team"> | Date | string
@@ -261,6 +269,7 @@ export type TeamOrderByWithRelationInput = {
   leaderName?: Prisma.SortOrderInput | Prisma.SortOrder
   leaderPhoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   teamInstitution?: Prisma.SortOrderInput | Prisma.SortOrder
+  verificationDeadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
   teamStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -283,6 +292,7 @@ export type TeamWhereUniqueInput = Prisma.AtLeast<{
   leaderName?: Prisma.StringNullableFilter<"Team"> | string | null
   leaderPhoneNumber?: Prisma.StringNullableFilter<"Team"> | string | null
   teamInstitution?: Prisma.StringNullableFilter<"Team"> | string | null
+  verificationDeadlineAt?: Prisma.DateTimeNullableFilter<"Team"> | Date | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableFilter<"Team"> | $Enums.TeamStatus | null
   status?: Prisma.StringNullableFilter<"Team"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Team"> | Date | string
@@ -302,6 +312,7 @@ export type TeamOrderByWithAggregationInput = {
   leaderName?: Prisma.SortOrderInput | Prisma.SortOrder
   leaderPhoneNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   teamInstitution?: Prisma.SortOrderInput | Prisma.SortOrder
+  verificationDeadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
   teamStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -324,6 +335,7 @@ export type TeamScalarWhereWithAggregatesInput = {
   leaderName?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
   leaderPhoneNumber?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
   teamInstitution?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
+  verificationDeadlineAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Team"> | Date | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableWithAggregatesFilter<"Team"> | $Enums.TeamStatus | null
   status?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Team"> | Date | string
@@ -339,6 +351,7 @@ export type TeamCreateInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -358,6 +371,7 @@ export type TeamUncheckedCreateInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -375,6 +389,7 @@ export type TeamUpdateInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -394,6 +409,7 @@ export type TeamUncheckedUpdateInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -412,6 +428,7 @@ export type TeamCreateManyInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -427,6 +444,7 @@ export type TeamUpdateManyMutationInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -443,6 +461,7 @@ export type TeamUncheckedUpdateManyInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -464,6 +483,7 @@ export type TeamCountOrderByAggregateInput = {
   leaderName?: Prisma.SortOrder
   leaderPhoneNumber?: Prisma.SortOrder
   teamInstitution?: Prisma.SortOrder
+  verificationDeadlineAt?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -480,6 +500,7 @@ export type TeamMaxOrderByAggregateInput = {
   leaderName?: Prisma.SortOrder
   leaderPhoneNumber?: Prisma.SortOrder
   teamInstitution?: Prisma.SortOrder
+  verificationDeadlineAt?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -496,6 +517,7 @@ export type TeamMinOrderByAggregateInput = {
   leaderName?: Prisma.SortOrder
   leaderPhoneNumber?: Prisma.SortOrder
   teamInstitution?: Prisma.SortOrder
+  verificationDeadlineAt?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -579,6 +601,7 @@ export type TeamCreateWithoutRegistrationInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -597,6 +620,7 @@ export type TeamUncheckedCreateWithoutRegistrationInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -629,6 +653,7 @@ export type TeamUpdateWithoutRegistrationInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -647,6 +672,7 @@ export type TeamUncheckedUpdateWithoutRegistrationInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -663,6 +689,7 @@ export type TeamCreateWithoutMembersInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -681,6 +708,7 @@ export type TeamUncheckedCreateWithoutMembersInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -713,6 +741,7 @@ export type TeamUpdateWithoutMembersInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -731,6 +760,7 @@ export type TeamUncheckedUpdateWithoutMembersInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -747,6 +777,7 @@ export type TeamCreateWithoutPaymentInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -764,6 +795,7 @@ export type TeamUncheckedCreateWithoutPaymentInput = {
   leaderName?: string | null
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
+  verificationDeadlineAt?: Date | string | null
   teamStatus?: $Enums.TeamStatus | null
   status?: string | null
   createdAt?: Date | string
@@ -797,6 +829,7 @@ export type TeamUpdateWithoutPaymentInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -814,6 +847,7 @@ export type TeamUncheckedUpdateWithoutPaymentInput = {
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -863,6 +897,7 @@ export type TeamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   leaderName?: boolean
   leaderPhoneNumber?: boolean
   teamInstitution?: boolean
+  verificationDeadlineAt?: boolean
   teamStatus?: boolean
   status?: boolean
   createdAt?: boolean
@@ -883,6 +918,7 @@ export type TeamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   leaderName?: boolean
   leaderPhoneNumber?: boolean
   teamInstitution?: boolean
+  verificationDeadlineAt?: boolean
   teamStatus?: boolean
   status?: boolean
   createdAt?: boolean
@@ -900,6 +936,7 @@ export type TeamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   leaderName?: boolean
   leaderPhoneNumber?: boolean
   teamInstitution?: boolean
+  verificationDeadlineAt?: boolean
   teamStatus?: boolean
   status?: boolean
   createdAt?: boolean
@@ -917,13 +954,14 @@ export type TeamSelectScalar = {
   leaderName?: boolean
   leaderPhoneNumber?: boolean
   teamInstitution?: boolean
+  verificationDeadlineAt?: boolean
   teamStatus?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TeamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "competition" | "paymentId" | "leaderUserId" | "leaderEmail" | "leaderName" | "leaderPhoneNumber" | "teamInstitution" | "teamStatus" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["team"]>
+export type TeamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "competition" | "paymentId" | "leaderUserId" | "leaderEmail" | "leaderName" | "leaderPhoneNumber" | "teamInstitution" | "verificationDeadlineAt" | "teamStatus" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["team"]>
 export type TeamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Team$membersArgs<ExtArgs>
   payment?: boolean | Prisma.Team$paymentArgs<ExtArgs>
@@ -954,6 +992,7 @@ export type $TeamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     leaderName: string | null
     leaderPhoneNumber: string | null
     teamInstitution: string | null
+    verificationDeadlineAt: Date | null
     teamStatus: $Enums.TeamStatus | null
     status: string | null
     createdAt: Date
@@ -1393,6 +1432,7 @@ export interface TeamFieldRefs {
   readonly leaderName: Prisma.FieldRef<"Team", 'String'>
   readonly leaderPhoneNumber: Prisma.FieldRef<"Team", 'String'>
   readonly teamInstitution: Prisma.FieldRef<"Team", 'String'>
+  readonly verificationDeadlineAt: Prisma.FieldRef<"Team", 'DateTime'>
   readonly teamStatus: Prisma.FieldRef<"Team", 'TeamStatus'>
   readonly status: Prisma.FieldRef<"Team", 'String'>
   readonly createdAt: Prisma.FieldRef<"Team", 'DateTime'>

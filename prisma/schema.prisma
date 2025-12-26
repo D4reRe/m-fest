@@ -195,9 +195,11 @@ model Team {
   leaderPhoneNumber String?
   teamInstitution   String?
 
+  verificationDeadlineAt DateTime?
   teamStatus TeamStatus? @default(NOT_REGISTERED)
   status     String?     @default("PENDING") // This is equivalent of statusOrder (payment)
   payment    Payment?    @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
+
 
   registration CompRegistration?
 

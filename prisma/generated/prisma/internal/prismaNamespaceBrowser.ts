@@ -177,6 +177,7 @@ export const TeamScalarFieldEnum = {
   leaderName: 'leaderName',
   leaderPhoneNumber: 'leaderPhoneNumber',
   teamInstitution: 'teamInstitution',
+  verificationDeadlineAt: 'verificationDeadlineAt',
   teamStatus: 'teamStatus',
   status: 'status',
   createdAt: 'createdAt',
