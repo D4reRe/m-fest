@@ -242,6 +242,33 @@ export const adminRouter = router({
                     verified: false,
                 },
             });
+            const imageKeys = await db.documents.findUnique({
+                where: {
+                    userId: input.userId,
+                },
+                select: {
+                    identityCardImageKey: true,
+                    twibbonImageKey: true,
+                    followIgImageKey: true,
+                },
+            });
+            const values = imageKeys
+                ? Object.values(imageKeys).filter(
+                      (value): value is string => value !== null,
+                  )
+                : [];
+            await deleteFiles(values);
+            await db.documents.update({
+                where: { userId: input.userId },
+                data: {
+                    identityCardImageKey: null,
+                    twibbonImageKey: null,
+                    followIgImageKey: null,
+                    identityCardImageUrl: null,
+                    twibbonImageUrl: null,
+                    followIgImageUrl: null,
+                },
+            });
         }),
     approveDocumentByType: adminProcedure
         .input(
@@ -273,6 +300,25 @@ export const adminRouter = router({
                     [`${input.type}Status`]: "AWAITING_UPLOAD",
                     [`${input.type}Verified`]: false,
                     status: "PENDING",
+                },
+            });
+            const imageKey = await db.documents.findUnique({
+                where: {
+                    userId: input.userId,
+                },
+                select: {
+                    [`${input.type}ImageKey`]: true,
+                },
+            });
+            const values: string[] = imageKey
+                ? Object.values(imageKey).filter((value) => value !== null)
+                : [];
+            await deleteFiles(values);
+            await db.documents.update({
+                where: { userId: input.userId },
+                data: {
+                    [`${input.type}ImageUrl`]: null,
+                    [`${input.type}ImageKey`]: null,
                 },
             });
         }),
@@ -331,9 +377,15 @@ export const adminRouter = router({
         .input(
             z.object({
                 userIds: z.array(z.string()),
+                identityCardImageKeys: z.array(z.string().nullable()),
+                twibbonImageKeys: z.array(z.string().nullable()),
+                followIgImageKeys: z.array(z.string().nullable()),
             }),
         )
         .mutation(async ({ input }) => {
+            await deleteFiles(input.identityCardImageKeys);
+            await deleteFiles(input.twibbonImageKeys);
+            await deleteFiles(input.followIgImageKeys);
             const documents = await db.documents.findMany({
                 where: { userId: { in: input.userIds } },
                 select: {
@@ -365,6 +417,12 @@ export const adminRouter = router({
                     followIgVerified: false,
                     identityCardVerified: false,
                     twibbonVerified: false,
+                    identityCardImageUrl: null,
+                    twibbonImageUrl: null,
+                    followIgImageUrl: null,
+                    identityCardImageKey: null,
+                    twibbonImageKey: null,
+                    followIgImageKey: null,
                 },
             });
             await db.user.updateMany({
@@ -377,6 +435,30 @@ export const adminRouter = router({
                     verified: false,
                 },
             });
+            // const selectedImageKeys = await db.documents.findMany({
+            //     where: {
+            //         userId: {
+            //             in: input.userIds,
+            //         },
+            //     },
+            //     select: {
+            //         identityCardImageKey: true,
+            //         twibbonImageKey: true,
+            //         followIgImageKey: true,
+            //     },
+            // });
+
+            // const arrayValues: string[] = [];
+            // selectedImageKeys.map((imageKeys) => {
+            //     const values = Object.values(imageKeys).filter(
+            //         (value): value is string => value !== null,
+            //     );
+            //     values.map((value) => {
+            //         arrayValues.push(value);
+            //     });
+            // });
+            // console.log(arrayValues);
+            // await deleteFiles(arrayValues);
         }),
     approveTeam: adminProcedure
         .input(

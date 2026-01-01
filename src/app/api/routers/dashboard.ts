@@ -1,5 +1,5 @@
 import { getUser } from "@/action/user.action";
-import { router, protectedProcedure } from "@/server/api/trpc";
+import { protectedProcedure, router } from "@/server/api/trpc";
 import { type Document, type User } from "@/types/types";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
