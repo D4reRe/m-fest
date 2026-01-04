@@ -139,6 +139,7 @@ model User {
   payments Payment[]
   accounts Account[]
   sessions Session[]
+  quizResults quizResult[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -303,4 +304,15 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model quizResult {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  score          Int
+  totalQuestions Int
+  timeSpent      Int
+  answers        Json     
+  createdAt      DateTime @default(now())
 }
