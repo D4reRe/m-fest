@@ -60,6 +60,11 @@ enum TeamStatus {
   ACCEPTED
 }
 
+enum QuizTypes {
+  MATHEMATICS
+  PHYSICS
+}
+
 model CompRegistration {
   id                String          @id @default(uuid())
   userId            String // Id User Leader
@@ -313,6 +318,7 @@ model quizResult {
   score          Int
   totalQuestions Int
   timeSpent      Int
-  answers        Json     
+  answers        Json
+  type           QuizTypes
   createdAt      DateTime @default(now())
 }
