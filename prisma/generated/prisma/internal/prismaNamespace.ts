@@ -393,7 +393,8 @@ export const ModelName = {
   Payment: 'Payment',
   Account: 'Account',
   Session: 'Session',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  quizResult: 'quizResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +410,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "compRegistration" | "eventRegistration" | "user" | "documents" | "team" | "teamMember" | "payment" | "account" | "session" | "verification"
+    modelProps: "compRegistration" | "eventRegistration" | "user" | "documents" | "team" | "teamMember" | "payment" | "account" | "session" | "verification" | "quizResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1153,6 +1154,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    quizResult: {
+      payload: Prisma.$quizResultPayload<ExtArgs>
+      fields: Prisma.quizResultFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.quizResultFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.quizResultFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>
+        }
+        findFirst: {
+          args: Prisma.quizResultFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.quizResultFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>
+        }
+        findMany: {
+          args: Prisma.quizResultFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>[]
+        }
+        create: {
+          args: Prisma.quizResultCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>
+        }
+        createMany: {
+          args: Prisma.quizResultCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.quizResultCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>[]
+        }
+        delete: {
+          args: Prisma.quizResultDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>
+        }
+        update: {
+          args: Prisma.quizResultUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>
+        }
+        deleteMany: {
+          args: Prisma.quizResultDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.quizResultUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.quizResultUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>[]
+        }
+        upsert: {
+          args: Prisma.quizResultUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$quizResultPayload>
+        }
+        aggregate: {
+          args: Prisma.QuizResultAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateQuizResult>
+        }
+        groupBy: {
+          args: Prisma.quizResultGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.QuizResultGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.quizResultCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.QuizResultCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1290,11 +1365,11 @@ export const TeamScalarFieldEnum = {
   leaderName: 'leaderName',
   leaderPhoneNumber: 'leaderPhoneNumber',
   teamInstitution: 'teamInstitution',
-  verificationDeadlineAt: 'verificationDeadlineAt',
   teamStatus: 'teamStatus',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  verificationDeadlineAt: 'verificationDeadlineAt'
 } as const
 
 export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
@@ -1303,13 +1378,13 @@ export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof Team
 export const TeamMemberScalarFieldEnum = {
   userId: 'userId',
   teamId: 'teamId',
-  teamName: 'teamName',
   name: 'name',
   email: 'email',
   institution: 'institution',
   role: 'role',
   joinDate: 'joinDate',
-  verified: 'verified'
+  verified: 'verified',
+  teamName: 'teamName'
 } as const
 
 export type TeamMemberScalarFieldEnum = (typeof TeamMemberScalarFieldEnum)[keyof typeof TeamMemberScalarFieldEnum]
@@ -1376,12 +1451,33 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
+export const QuizResultScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  score: 'score',
+  totalQuestions: 'totalQuestions',
+  timeSpent: 'timeSpent',
+  answers: 'answers',
+  createdAt: 'createdAt',
+  type: 'type'
+} as const
+
+export type QuizResultScalarFieldEnum = (typeof QuizResultScalarFieldEnum)[keyof typeof QuizResultScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1398,6 +1494,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1568,6 +1673,34 @@ export type ListEnumTeamRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$Pri
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'QuizTypes'
+ */
+export type EnumQuizTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuizTypes'>
+    
+
+
+/**
+ * Reference to a field of type 'QuizTypes[]'
+ */
+export type ListEnumQuizTypesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuizTypes[]'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1685,6 +1818,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   session?: Prisma.SessionOmit
   verification?: Prisma.VerificationOmit
+  quizResult?: Prisma.quizResultOmit
 }
 
 /* Types for Logging */

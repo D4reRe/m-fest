@@ -256,8 +256,8 @@ export type PaymentWhereInput = {
   referenceDuitku?: Prisma.StringNullableFilter<"Payment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   registration?: Prisma.XOR<Prisma.CompRegistrationNullableScalarRelationFilter, Prisma.CompRegistrationWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
 }
 
@@ -272,8 +272,8 @@ export type PaymentOrderByWithRelationInput = {
   referenceDuitku?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
   registration?: Prisma.CompRegistrationOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   team?: Prisma.TeamOrderByWithRelationInput
 }
 
@@ -291,8 +291,8 @@ export type PaymentWhereUniqueInput = Prisma.AtLeast<{
   referenceDuitku?: Prisma.StringNullableFilter<"Payment"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Payment"> | Date | string
-  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   registration?: Prisma.XOR<Prisma.CompRegistrationNullableScalarRelationFilter, Prisma.CompRegistrationWhereInput> | null
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
 }, "id" | "orderId">
 
@@ -340,8 +340,8 @@ export type PaymentCreateInput = {
   referenceDuitku?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutPaymentsInput
   registration?: Prisma.CompRegistrationCreateNestedOneWithoutPaymentInput
+  user?: Prisma.UserCreateNestedOneWithoutPaymentsInput
   team?: Prisma.TeamCreateNestedOneWithoutPaymentInput
 }
 
@@ -370,8 +370,8 @@ export type PaymentUpdateInput = {
   referenceDuitku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutPaymentsNestedInput
   registration?: Prisma.CompRegistrationUpdateOneWithoutPaymentNestedInput
+  user?: Prisma.UserUpdateOneWithoutPaymentsNestedInput
   team?: Prisma.TeamUpdateOneWithoutPaymentNestedInput
 }
 
@@ -727,8 +727,8 @@ export type PaymentCreateWithoutTeamInput = {
   referenceDuitku?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  user?: Prisma.UserCreateNestedOneWithoutPaymentsInput
   registration?: Prisma.CompRegistrationCreateNestedOneWithoutPaymentInput
+  user?: Prisma.UserCreateNestedOneWithoutPaymentsInput
 }
 
 export type PaymentUncheckedCreateWithoutTeamInput = {
@@ -771,8 +771,8 @@ export type PaymentUpdateWithoutTeamInput = {
   referenceDuitku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneWithoutPaymentsNestedInput
   registration?: Prisma.CompRegistrationUpdateOneWithoutPaymentNestedInput
+  user?: Prisma.UserUpdateOneWithoutPaymentsNestedInput
 }
 
 export type PaymentUncheckedUpdateWithoutTeamInput = {
@@ -854,8 +854,8 @@ export type PaymentSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   referenceDuitku?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  user?: boolean | Prisma.Payment$userArgs<ExtArgs>
   registration?: boolean | Prisma.Payment$registrationArgs<ExtArgs>
+  user?: boolean | Prisma.Payment$userArgs<ExtArgs>
   team?: boolean | Prisma.Payment$teamArgs<ExtArgs>
 }, ExtArgs["result"]["payment"]>
 
@@ -902,8 +902,8 @@ export type PaymentSelectScalar = {
 
 export type PaymentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "orderId" | "userId" | "status" | "competition" | "amount" | "paymentUrl" | "referenceDuitku" | "createdAt" | "updatedAt", ExtArgs["result"]["payment"]>
 export type PaymentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  user?: boolean | Prisma.Payment$userArgs<ExtArgs>
   registration?: boolean | Prisma.Payment$registrationArgs<ExtArgs>
+  user?: boolean | Prisma.Payment$userArgs<ExtArgs>
   team?: boolean | Prisma.Payment$teamArgs<ExtArgs>
 }
 export type PaymentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -916,8 +916,8 @@ export type PaymentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $PaymentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Payment"
   objects: {
-    user: Prisma.$UserPayload<ExtArgs> | null
     registration: Prisma.$CompRegistrationPayload<ExtArgs> | null
+    user: Prisma.$UserPayload<ExtArgs> | null
     team: Prisma.$TeamPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1325,8 +1325,8 @@ readonly fields: PaymentFieldRefs;
  */
 export interface Prisma__PaymentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  user<T extends Prisma.Payment$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   registration<T extends Prisma.Payment$registrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$registrationArgs<ExtArgs>>): Prisma.Prisma__CompRegistrationClient<runtime.Types.Result.GetResult<Prisma.$CompRegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.Payment$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   team<T extends Prisma.Payment$teamArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Payment$teamArgs<ExtArgs>>): Prisma.Prisma__TeamClient<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1763,25 +1763,6 @@ export type PaymentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Payment.user
- */
-export type Payment$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-}
-
-/**
  * Payment.registration
  */
 export type Payment$registrationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1798,6 +1779,25 @@ export type Payment$registrationArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   include?: Prisma.CompRegistrationInclude<ExtArgs> | null
   where?: Prisma.CompRegistrationWhereInput
+}
+
+/**
+ * Payment.user
+ */
+export type Payment$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**
