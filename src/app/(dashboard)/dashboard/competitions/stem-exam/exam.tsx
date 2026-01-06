@@ -1,14 +1,24 @@
 'use client'; // Wajib: Menandakan ini adalah Client Component
 
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, CheckCircle, Award, Timer, AlertCircle, Loader2, Trophy, List } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle, Award, Timer, AlertCircle, Loader2, Trophy, List, ArrowRight, Upload} from 'lucide-react';
 import { authClient } from "@/lib/auth-client";
-import { quizQuestions } from '@/lib/examQuestion';
+import { sessionsData } from '@/lib/examQuestion';
+import { useRouter } from 'next/navigation';
+import { UploadDropzone } from '@/utils/uploadthing';
 
 // Menerima prop 'user' yang dikirim dari Server Component (ExamPage)
 export default function ExamClient({ }) {
     const session  = authClient.useSession();
     const user = session.data?.user;
+    const router = useRouter(); 
+
+    // State Global
+    const [activeSession, setActiveSession] = useState<1 | 2 | 3>(1); // 1: Fisika, 2: MTK, 3: Esai
+
+    // Current Session Data
+    const currentSessionData = sessionsData[activeSession];
+    const quizQuestions = currentSessionData.questions;
 
     // --- 2. State Kuis ---
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -71,29 +81,14 @@ export default function ExamClient({ }) {
         });
 
         try {
-            const apiUrl = `${window.location.origin}/api/quiz`;
-            
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: user.id,   // Menggunakan ID dari prop user
-                    userName: user.name, // Menggunakan Nama dari prop user
-                    score: calculatedScore,
-                    totalQuestions: quizQuestions.length,
-                    timeSpent: INITIAL_TIME - timeLeft,
-                    answers: userAnswers,
-                }),
-            });
-
-            if (response.ok) {
-                setFinalScore(calculatedScore);
-                setShowScore(true);
-            } else {
-                console.warn("Gagal menyimpan ke server, menampilkan hasil lokal.");
-                setFinalScore(calculatedScore);
-                setShowScore(true);
-            }
+          await trpc.quiz.submit.mutateAsync({
+            userId: user.id,
+            score: calculatedScore,
+            totalQuestions: quizQuestions.length,
+            timeSpent: INITIAL_TIME - timeLeft,
+            answers: userAnswers.map(answer => answer !== null ? String(answer) : "null"),
+            type: currentSessionData.subject,
+        });
         } catch (error) {
             console.error("Kesalahan Koneksi:", error);
             setFinalScore(calculatedScore);
@@ -102,6 +97,32 @@ export default function ExamClient({ }) {
             setIsSaving(false);
         }
     };
+
+     // --- Fungsi Transisi Sesi (FIXED) ---
+    const handleNextSession = () => {
+        if (activeSession < 3) {
+            const nextSession = (activeSession + 1) as 1 | 2 | 3;
+            
+            // Ambil data soal untuk sesi berikutnya untuk reset jawaban
+            // @ts-ignore
+            const nextQuestions = sessionsData[nextSession]?.questions || [];
+
+            // PENTING: Reset semua state SECARA EKSPLISIT agar tidak lompat
+            setShowScore(false);           // Sembunyikan layar skor
+            setFinalScore(0);              // Reset skor
+            setCurrentQuestionIndex(0);    // Balik ke soal no 1
+            setTimeLeft(INITIAL_TIME);     // Reset waktu
+            setUserAnswers(Array(nextQuestions.length).fill(null)); // Kosongkan jawaban
+            
+            // Ubah sesi terakhir
+            setActiveSession(nextSession);
+        } else {
+            router.push('/dashboard');
+        }
+    };
+
+    if (!currentSessionData) return <div>Data sesi tidak ditemukan</div>;
+
 
     // --- 6. Tampilan (Render) ---
 
@@ -119,6 +140,7 @@ export default function ExamClient({ }) {
                                 <p className="text-[10px] text-blue-400 font-bold uppercase mt-1 tracking-widest truncate">
                                     {user?.name}
                                 </p>
+                                 <p className="text-lg font-black tracking-tight leading-loose">{currentSessionData.subject}</p>
                             </div>
                         </div>
 
@@ -162,30 +184,48 @@ export default function ExamClient({ }) {
 
                 {/* --- Area Konten Utama --- */}
                 <div className="flex-1 flex flex-col bg-white">
+                    {/* Tampilan Skor Akhir */}
                     {showScore ? (
-                        /* Tampilan Skor Akhir */
-                        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50 animate-in fade-in duration-500">
-                            <div className="bg-white p-12 rounded-3xl shadow-xl border border-slate-200 max-w-lg w-full">
-                                <div className="inline-block p-6 bg-yellow-100 rounded-full mb-6">
-                                    <Award className="w-16 h-16 text-yellow-600" />
-                                </div>
-                                <h2 className="text-4xl font-black text-slate-900 mb-2">Kuis Selesai!</h2>
-                                <p className="text-slate-500 mb-8 font-medium">Terima kasih, <strong>{user?.name}</strong>. Hasil Anda telah disimpan.</p>
-                                
-                                <div className="bg-slate-50 rounded-2xl p-6 mb-8 border border-slate-100">
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Skor Perolehan</p>
-                                    <p className="text-6xl font-black text-blue-600">{finalScore} / {quizQuestions.length}</p>
-                                </div>
-
-                                <button 
-                                    onClick={() => window.location.href = '/dashboard'}
-                                    className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition shadow-lg active:scale-95"
-                                >
-                                    Pergi ke Dashboard
-                                </button>
+                    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-50 animate-in fade-in duration-500 w-full h-full min-h-screen lg:min-h-[600px]">
+                        <div className="bg-white p-12 rounded-3xl shadow-xl border border-slate-200 max-w-lg w-full">
+                            <div className="inline-block p-6 bg-green-100 rounded-full mb-6">
+                                <Award className="w-16 h-16 text-green-600" />
                             </div>
+                            
+                            <h2 className="text-3xl font-black text-slate-900 mb-2">
+                                {activeSession === 3 ? "Seluruh Ujian Selesai!" : `Sesi ${currentSessionData.subject} Selesai!`}
+                            </h2>
+                            <p className="text-slate-500 mb-8 font-medium">
+                                Jawaban untuk <strong>{currentSessionData.subject}</strong> telah tersimpan.
+                            </p>
+                            
+                            {activeSession == 3 ? (
+                            <div className="bg-slate-50 rounded-2xl p-8 mb-8 border border-slate-100">
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Sesi ini sedang Dinilai</p>
+                            </div>
+                            ):(
+                            <div className="bg-slate-50 rounded-2xl p-8 mb-8 border border-slate-100">
+                                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Skor Sesi Ini</p>
+                                <p className="text-6xl font-black text-blue-600">
+                                    {finalScore} <span className="text-2xl text-slate-300 font-medium">/ {quizQuestions.length}</span>
+                                </p>
+                            </div>)}
+
+                            <button 
+                                onClick={handleNextSession}
+                                className={`w-full py-4 text-white rounded-xl font-bold transition shadow-lg hover:shadow-xl active:scale-[0.98] flex items-center justify-center gap-2
+                                    ${activeSession === 3 ? 'bg-slate-900 hover:bg-slate-800' : 'bg-blue-600 hover:bg-blue-700'}
+                                `}
+                            >
+                                {activeSession === 3 ? (
+                                    <>Selesai & Ke Dashboard <CheckCircle className="w-5 h-5" /></>
+                                ) : (
+                                    <>Lanjut ke Sesi {activeSession + 1} <ArrowRight className="w-5 h-5" /></>
+                                )}
+                            </button>
                         </div>
-                    ) : (
+                    </div>
+                ) : (
                         /* Tampilan Soal Aktif */
                         <div className="flex-1 flex flex-col p-6 lg:p-16 max-w-4xl mx-auto w-full animate-in slide-in-from-right-4 duration-300">
                             <div className="mb-10 flex justify-between items-center border-b border-slate-100 pb-6">
@@ -205,7 +245,15 @@ export default function ExamClient({ }) {
                                     {quizQuestions[currentQuestionIndex].questionText}
                                 </h3>
                             </div>
+                            
 
+                            {/* Opsi Jawaban */}
+                            {activeSession === 3 ? (
+                            <div className="space-y-4 mb-12 flex-1">
+                                <p className="text-slate-500 italic">Silahkan upload jawaban anda disini:</p>
+                                <UploadDropzone />
+                            </div>
+                            ):(
                             <div className="space-y-4 mb-12 flex-1">
                                 {quizQuestions[currentQuestionIndex].answerOptions.map((option, index) => (
                                     <button
@@ -226,7 +274,7 @@ export default function ExamClient({ }) {
                                         <span className="text-lg font-bold">{option.answerText}</span>
                                     </button>
                                 ))}
-                            </div>
+                            </div>)};
 
                             <div className="mt-auto pt-8 border-t border-slate-100 flex justify-between items-center">
                                 <button 

@@ -4,16 +4,17 @@ import { TRPCError } from "@trpc/server";
 import { User } from "lucide-react";
 import { quizTypes } from "@/constants/constants";
 import { QuizTypes } from "../../../../prisma/generated/prisma/client";
+import { createHTTPServer } from "@trpc/server/adapters/standalone";
 
-export const stemExamRouter = router({
-  submitExam: protectedProcedure
+export const stemRouter = router({
+  submit: protectedProcedure
     .input(
         z.object({
             userId: z.string(),
             score: z.number(),
             totalQuestions: z.number(),
             timeSpent: z.number(),
-            answers: z.array(z.string()),
+            answers: z.array(z.number().nullable()),
             type: z.enum(QuizTypes)
         })
     )
@@ -31,3 +32,11 @@ export const stemExamRouter = router({
                 return newResult;
             })
         });
+
+export type stemRouter = typeof stemRouter;
+
+const { listen } = createHTTPServer({
+    router: stemRouter,
+});
+
+listen(3000);
