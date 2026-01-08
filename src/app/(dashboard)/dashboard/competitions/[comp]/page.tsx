@@ -13,6 +13,7 @@ import { competitions } from "@/lib/competition";
 import { auth } from "@/server/auth/auth";
 import { db } from "@/server/db";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export async function generateMetadata({
@@ -135,6 +136,11 @@ async function FetchCompForm({
                                 Stay tuned for more information. We will notify
                                 you if the exam is available.
                             </p>
+                            <Button className="mt-2" variant={'outline'} asChild >
+                                <Link href={"stem-exam"}>
+                                Start Exam
+                                </Link>
+                            </Button>
                         </div>
                     </div>
                 </div>

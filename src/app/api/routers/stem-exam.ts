@@ -1,10 +1,7 @@
 import { protectedProcedure, router } from "@/server/api/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { User } from "lucide-react";
-import { quizTypes } from "@/constants/constants";
-import { QuizTypes } from "../../../../prisma/generated/prisma/client";
-import { createHTTPServer } from "@trpc/server/adapters/standalone";
+import { QuizTypes } from "../../../../prisma/generated/prisma/enums";
 
 export const stemRouter = router({
   submit: protectedProcedure
@@ -32,11 +29,3 @@ export const stemRouter = router({
                 return newResult;
             })
         });
-
-export type stemRouter = typeof stemRouter;
-
-const { listen } = createHTTPServer({
-    router: stemRouter,
-});
-
-listen(3000);

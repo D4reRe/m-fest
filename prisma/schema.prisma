@@ -8,6 +8,61 @@ datasource db {
   provider = "postgresql"
 }
 
+
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
+}
+
+enum TeamRole {
+  Leader
+  Member
+}
+
+enum Education {
+  SMA
+  SMK
+  D3
+  S1
+}
+
+enum CompetitionName {
+  PDC
+  IPPC
+  BCC
+  STEM
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum DocumentStatus {
+  AWAITING_UPLOAD
+  PENDING
+  VERIFIED
+}
+
+enum VerificationStatus {
+  NOT_SUBMITTED
+  PENDING
+  ACCEPTED
+}
+
+enum TeamStatus {
+  NOT_REGISTERED
+  PENDING
+  ACCEPTED
+}
+
+enum QuizTypes {
+  MATHEMATICS
+  PHYSICS
+}
+
 model CompRegistration {
   id                      String          @id @default(uuid())
   userId                  String
@@ -236,57 +291,4 @@ model quizResult {
   createdAt      DateTime  @default(now())
   type           QuizTypes
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-enum Role {
-  USER
-  ADMIN
-  SUPERADMIN
-}
-
-enum TeamRole {
-  Leader
-  Member
-}
-
-enum Education {
-  SMA
-  SMK
-  D3
-  S1
-}
-
-enum CompetitionName {
-  PDC
-  IPPC
-  BCC
-  STEM
-}
-
-enum Gender {
-  Male
-  Female
-}
-
-enum DocumentStatus {
-  AWAITING_UPLOAD
-  PENDING
-  VERIFIED
-}
-
-enum VerificationStatus {
-  NOT_SUBMITTED
-  PENDING
-  ACCEPTED
-}
-
-enum TeamStatus {
-  NOT_REGISTERED
-  PENDING
-  ACCEPTED
-}
-
-enum QuizTypes {
-  MATHEMATICS
-  PHYSICS
 }

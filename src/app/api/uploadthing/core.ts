@@ -501,6 +501,76 @@ export const ourFileRouter = {
         throw error;
       }
     }),
+  submitExam:  f({
+    "application/pdf": {
+      maxFileSize: "16MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
+      if (!session) {
+        console.log("Unauthorized user tried to upload");
+        throw new UploadThingError("Unauthorized");
+      }
+      return {
+        userId: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      };
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      console.log("Upload complete for user:", {
+        userId: metadata.userId,
+        name: metadata.name,
+        email: metadata.email,
+      });
+      console.log("file url", {
+        ufsUrl: file.ufsUrl,
+        fileKey: file.key,
+      });
+      try {
+        const comp = "PDC";
+        const thisRegisteredCompUser = await db.compRegistration.findFirst({
+          where: {
+            leaderUserId: metadata.userId,
+            competitionName: comp,
+            statusOrder: "SUCCESS",
+          },
+        });
+
+        console.log(thisRegisteredCompUser);
+
+        const previousFile = await db.compRegistration.findFirst({
+          where: {
+            leaderUserId: thisRegisteredCompUser?.leaderUserId as string,
+            competitionName: comp,
+          },
+          select: { submissionFileKey: true },
+        });
+        if (previousFile?.submissionFileKey) {
+          await deleteFiles(previousFile?.submissionFileKey);
+        }
+
+        await db.compRegistration.update({
+          where: {
+            teamId: thisRegisteredCompUser?.teamId as string,
+          },
+          data: {
+            submissionFileUrl: file.ufsUrl,
+            submissionFileKey: file.key,
+            submissionFileCreatedAt: new Date(),
+            submissionFileUploaded: true,
+          },
+        });
+        return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
+      } catch (error) {
+        console.error("Error in onUploadComplete:", error);
+        throw error;
+      }
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
