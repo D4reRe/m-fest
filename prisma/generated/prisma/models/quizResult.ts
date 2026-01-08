@@ -44,6 +44,8 @@ export type QuizResultMinAggregateOutputType = {
   score: number | null
   totalQuestions: number | null
   timeSpent: number | null
+  essayAnswerFileUrl: string | null
+  essayAnswerFileKey: string | null
   createdAt: Date | null
   type: $Enums.QuizTypes | null
 }
@@ -54,6 +56,8 @@ export type QuizResultMaxAggregateOutputType = {
   score: number | null
   totalQuestions: number | null
   timeSpent: number | null
+  essayAnswerFileUrl: string | null
+  essayAnswerFileKey: string | null
   createdAt: Date | null
   type: $Enums.QuizTypes | null
 }
@@ -65,6 +69,8 @@ export type QuizResultCountAggregateOutputType = {
   totalQuestions: number
   timeSpent: number
   answers: number
+  essayAnswerFileUrl: number
+  essayAnswerFileKey: number
   createdAt: number
   type: number
   _all: number
@@ -89,6 +95,8 @@ export type QuizResultMinAggregateInputType = {
   score?: true
   totalQuestions?: true
   timeSpent?: true
+  essayAnswerFileUrl?: true
+  essayAnswerFileKey?: true
   createdAt?: true
   type?: true
 }
@@ -99,6 +107,8 @@ export type QuizResultMaxAggregateInputType = {
   score?: true
   totalQuestions?: true
   timeSpent?: true
+  essayAnswerFileUrl?: true
+  essayAnswerFileKey?: true
   createdAt?: true
   type?: true
 }
@@ -110,6 +120,8 @@ export type QuizResultCountAggregateInputType = {
   totalQuestions?: true
   timeSpent?: true
   answers?: true
+  essayAnswerFileUrl?: true
+  essayAnswerFileKey?: true
   createdAt?: true
   type?: true
   _all?: true
@@ -208,6 +220,8 @@ export type QuizResultGroupByOutputType = {
   totalQuestions: number
   timeSpent: number
   answers: runtime.JsonValue
+  essayAnswerFileUrl: string | null
+  essayAnswerFileKey: string | null
   createdAt: Date
   type: $Enums.QuizTypes
   _count: QuizResultCountAggregateOutputType | null
@@ -242,6 +256,8 @@ export type quizResultWhereInput = {
   totalQuestions?: Prisma.IntFilter<"quizResult"> | number
   timeSpent?: Prisma.IntFilter<"quizResult"> | number
   answers?: Prisma.JsonFilter<"quizResult">
+  essayAnswerFileUrl?: Prisma.StringNullableFilter<"quizResult"> | string | null
+  essayAnswerFileKey?: Prisma.StringNullableFilter<"quizResult"> | string | null
   createdAt?: Prisma.DateTimeFilter<"quizResult"> | Date | string
   type?: Prisma.EnumQuizTypesFilter<"quizResult"> | $Enums.QuizTypes
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -254,6 +270,8 @@ export type quizResultOrderByWithRelationInput = {
   totalQuestions?: Prisma.SortOrder
   timeSpent?: Prisma.SortOrder
   answers?: Prisma.SortOrder
+  essayAnswerFileUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  essayAnswerFileKey?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -269,6 +287,8 @@ export type quizResultWhereUniqueInput = Prisma.AtLeast<{
   totalQuestions?: Prisma.IntFilter<"quizResult"> | number
   timeSpent?: Prisma.IntFilter<"quizResult"> | number
   answers?: Prisma.JsonFilter<"quizResult">
+  essayAnswerFileUrl?: Prisma.StringNullableFilter<"quizResult"> | string | null
+  essayAnswerFileKey?: Prisma.StringNullableFilter<"quizResult"> | string | null
   createdAt?: Prisma.DateTimeFilter<"quizResult"> | Date | string
   type?: Prisma.EnumQuizTypesFilter<"quizResult"> | $Enums.QuizTypes
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -281,6 +301,8 @@ export type quizResultOrderByWithAggregationInput = {
   totalQuestions?: Prisma.SortOrder
   timeSpent?: Prisma.SortOrder
   answers?: Prisma.SortOrder
+  essayAnswerFileUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  essayAnswerFileKey?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
   _count?: Prisma.quizResultCountOrderByAggregateInput
@@ -300,6 +322,8 @@ export type quizResultScalarWhereWithAggregatesInput = {
   totalQuestions?: Prisma.IntWithAggregatesFilter<"quizResult"> | number
   timeSpent?: Prisma.IntWithAggregatesFilter<"quizResult"> | number
   answers?: Prisma.JsonWithAggregatesFilter<"quizResult">
+  essayAnswerFileUrl?: Prisma.StringNullableWithAggregatesFilter<"quizResult"> | string | null
+  essayAnswerFileKey?: Prisma.StringNullableWithAggregatesFilter<"quizResult"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"quizResult"> | Date | string
   type?: Prisma.EnumQuizTypesWithAggregatesFilter<"quizResult"> | $Enums.QuizTypes
 }
@@ -310,6 +334,8 @@ export type quizResultCreateInput = {
   totalQuestions: number
   timeSpent: number
   answers: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: string | null
+  essayAnswerFileKey?: string | null
   createdAt?: Date | string
   type: $Enums.QuizTypes
   user: Prisma.UserCreateNestedOneWithoutQuizResultsInput
@@ -322,6 +348,8 @@ export type quizResultUncheckedCreateInput = {
   totalQuestions: number
   timeSpent: number
   answers: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: string | null
+  essayAnswerFileKey?: string | null
   createdAt?: Date | string
   type: $Enums.QuizTypes
 }
@@ -332,6 +360,8 @@ export type quizResultUpdateInput = {
   totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   timeSpent?: Prisma.IntFieldUpdateOperationsInput | number
   answers?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  essayAnswerFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumQuizTypesFieldUpdateOperationsInput | $Enums.QuizTypes
   user?: Prisma.UserUpdateOneRequiredWithoutQuizResultsNestedInput
@@ -344,6 +374,8 @@ export type quizResultUncheckedUpdateInput = {
   totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   timeSpent?: Prisma.IntFieldUpdateOperationsInput | number
   answers?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  essayAnswerFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumQuizTypesFieldUpdateOperationsInput | $Enums.QuizTypes
 }
@@ -355,6 +387,8 @@ export type quizResultCreateManyInput = {
   totalQuestions: number
   timeSpent: number
   answers: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: string | null
+  essayAnswerFileKey?: string | null
   createdAt?: Date | string
   type: $Enums.QuizTypes
 }
@@ -365,6 +399,8 @@ export type quizResultUpdateManyMutationInput = {
   totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   timeSpent?: Prisma.IntFieldUpdateOperationsInput | number
   answers?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  essayAnswerFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumQuizTypesFieldUpdateOperationsInput | $Enums.QuizTypes
 }
@@ -376,6 +412,8 @@ export type quizResultUncheckedUpdateManyInput = {
   totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   timeSpent?: Prisma.IntFieldUpdateOperationsInput | number
   answers?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  essayAnswerFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumQuizTypesFieldUpdateOperationsInput | $Enums.QuizTypes
 }
@@ -397,6 +435,8 @@ export type quizResultCountOrderByAggregateInput = {
   totalQuestions?: Prisma.SortOrder
   timeSpent?: Prisma.SortOrder
   answers?: Prisma.SortOrder
+  essayAnswerFileUrl?: Prisma.SortOrder
+  essayAnswerFileKey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
 }
@@ -413,6 +453,8 @@ export type quizResultMaxOrderByAggregateInput = {
   score?: Prisma.SortOrder
   totalQuestions?: Prisma.SortOrder
   timeSpent?: Prisma.SortOrder
+  essayAnswerFileUrl?: Prisma.SortOrder
+  essayAnswerFileKey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
 }
@@ -423,6 +465,8 @@ export type quizResultMinOrderByAggregateInput = {
   score?: Prisma.SortOrder
   totalQuestions?: Prisma.SortOrder
   timeSpent?: Prisma.SortOrder
+  essayAnswerFileUrl?: Prisma.SortOrder
+  essayAnswerFileKey?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   type?: Prisma.SortOrder
 }
@@ -485,6 +529,8 @@ export type quizResultCreateWithoutUserInput = {
   totalQuestions: number
   timeSpent: number
   answers: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: string | null
+  essayAnswerFileKey?: string | null
   createdAt?: Date | string
   type: $Enums.QuizTypes
 }
@@ -495,6 +541,8 @@ export type quizResultUncheckedCreateWithoutUserInput = {
   totalQuestions: number
   timeSpent: number
   answers: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: string | null
+  essayAnswerFileKey?: string | null
   createdAt?: Date | string
   type: $Enums.QuizTypes
 }
@@ -535,6 +583,8 @@ export type quizResultScalarWhereInput = {
   totalQuestions?: Prisma.IntFilter<"quizResult"> | number
   timeSpent?: Prisma.IntFilter<"quizResult"> | number
   answers?: Prisma.JsonFilter<"quizResult">
+  essayAnswerFileUrl?: Prisma.StringNullableFilter<"quizResult"> | string | null
+  essayAnswerFileKey?: Prisma.StringNullableFilter<"quizResult"> | string | null
   createdAt?: Prisma.DateTimeFilter<"quizResult"> | Date | string
   type?: Prisma.EnumQuizTypesFilter<"quizResult"> | $Enums.QuizTypes
 }
@@ -545,6 +595,8 @@ export type quizResultCreateManyUserInput = {
   totalQuestions: number
   timeSpent: number
   answers: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: string | null
+  essayAnswerFileKey?: string | null
   createdAt?: Date | string
   type: $Enums.QuizTypes
 }
@@ -555,6 +607,8 @@ export type quizResultUpdateWithoutUserInput = {
   totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   timeSpent?: Prisma.IntFieldUpdateOperationsInput | number
   answers?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  essayAnswerFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumQuizTypesFieldUpdateOperationsInput | $Enums.QuizTypes
 }
@@ -565,6 +619,8 @@ export type quizResultUncheckedUpdateWithoutUserInput = {
   totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   timeSpent?: Prisma.IntFieldUpdateOperationsInput | number
   answers?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  essayAnswerFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumQuizTypesFieldUpdateOperationsInput | $Enums.QuizTypes
 }
@@ -575,6 +631,8 @@ export type quizResultUncheckedUpdateManyWithoutUserInput = {
   totalQuestions?: Prisma.IntFieldUpdateOperationsInput | number
   timeSpent?: Prisma.IntFieldUpdateOperationsInput | number
   answers?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  essayAnswerFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  essayAnswerFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   type?: Prisma.EnumQuizTypesFieldUpdateOperationsInput | $Enums.QuizTypes
 }
@@ -588,6 +646,8 @@ export type quizResultSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   totalQuestions?: boolean
   timeSpent?: boolean
   answers?: boolean
+  essayAnswerFileUrl?: boolean
+  essayAnswerFileKey?: boolean
   createdAt?: boolean
   type?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -600,6 +660,8 @@ export type quizResultSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   totalQuestions?: boolean
   timeSpent?: boolean
   answers?: boolean
+  essayAnswerFileUrl?: boolean
+  essayAnswerFileKey?: boolean
   createdAt?: boolean
   type?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -612,6 +674,8 @@ export type quizResultSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   totalQuestions?: boolean
   timeSpent?: boolean
   answers?: boolean
+  essayAnswerFileUrl?: boolean
+  essayAnswerFileKey?: boolean
   createdAt?: boolean
   type?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -624,11 +688,13 @@ export type quizResultSelectScalar = {
   totalQuestions?: boolean
   timeSpent?: boolean
   answers?: boolean
+  essayAnswerFileUrl?: boolean
+  essayAnswerFileKey?: boolean
   createdAt?: boolean
   type?: boolean
 }
 
-export type quizResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "score" | "totalQuestions" | "timeSpent" | "answers" | "createdAt" | "type", ExtArgs["result"]["quizResult"]>
+export type quizResultOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "score" | "totalQuestions" | "timeSpent" | "answers" | "essayAnswerFileUrl" | "essayAnswerFileKey" | "createdAt" | "type", ExtArgs["result"]["quizResult"]>
 export type quizResultInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -651,6 +717,8 @@ export type $quizResultPayload<ExtArgs extends runtime.Types.Extensions.Internal
     totalQuestions: number
     timeSpent: number
     answers: runtime.JsonValue
+    essayAnswerFileUrl: string | null
+    essayAnswerFileKey: string | null
     createdAt: Date
     type: $Enums.QuizTypes
   }, ExtArgs["result"]["quizResult"]>
@@ -1083,6 +1151,8 @@ export interface quizResultFieldRefs {
   readonly totalQuestions: Prisma.FieldRef<"quizResult", 'Int'>
   readonly timeSpent: Prisma.FieldRef<"quizResult", 'Int'>
   readonly answers: Prisma.FieldRef<"quizResult", 'Json'>
+  readonly essayAnswerFileUrl: Prisma.FieldRef<"quizResult", 'String'>
+  readonly essayAnswerFileKey: Prisma.FieldRef<"quizResult", 'String'>
   readonly createdAt: Prisma.FieldRef<"quizResult", 'DateTime'>
   readonly type: Prisma.FieldRef<"quizResult", 'QuizTypes'>
 }

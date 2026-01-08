@@ -271,6 +271,8 @@ export const QuizResultScalarFieldEnum = {
   totalQuestions: 'totalQuestions',
   timeSpent: 'timeSpent',
   answers: 'answers',
+  essayAnswerFileUrl: 'essayAnswerFileUrl',
+  essayAnswerFileKey: 'essayAnswerFileKey',
   createdAt: 'createdAt',
   type: 'type'
 } as const
