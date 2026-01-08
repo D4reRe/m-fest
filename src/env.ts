@@ -19,6 +19,8 @@ export const env = createEnv({
     UPLOADTHING_TOKEN: z.string().min(1),
     UPLOADTHING_API: z.string().min(1),
     UPLOADTHING_APP_ID: z.string().min(1),
+    SEB_EXAM_KEY_HASH: z.string().min(1),
+    SEB_CONFIG_KEY: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_BASE_URL: z.string().min(1),
@@ -41,6 +43,8 @@ export const env = createEnv({
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
     UPLOADTHING_API: process.env.UPLOADTHING_API,
     UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
+    SEB_EXAM_KEY_HASH: process.env.SEB_EXAM_KEY_HASH,
+    SEB_CONFIG_KEY: process.env.SEB_CONFIG_KEY,
     NEXT_PUBLIC_BASE_URL: process.env.NEXT_PUBLIC_BASE_URL,
   },
   // For Next.js >= 13.4.4, you only need to destructure client variables:

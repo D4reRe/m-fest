@@ -18,7 +18,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { data: user, isFetched } = useQuery(
-    trpc.dashboard.getUserById.queryOptions({ userId }),
+    trpc.dashboard.getUserById.queryOptions({ userId })
   );
 
   const {
@@ -116,10 +116,13 @@ export default function UserDocuments({ userId }: { userId: string }) {
 
       toast.dismiss("update-documents");
       toast.success(
-        `Document ${variables.type} verifed successfully for ${user?.name}`,
+        `Document ${variables.type} verifed successfully for ${user?.name}`
       );
     },
     onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUserById.queryKey({ userId }),
+      });
       queryClient.invalidateQueries({
         queryKey: trpc.dashboard.getDocumentsByUserId.queryKey({ userId }),
       });
@@ -148,10 +151,13 @@ export default function UserDocuments({ userId }: { userId: string }) {
 
       toast.dismiss("update-documents");
       toast.success(
-        `Document ${variables.type} unverifed successfully for ${user?.name}`,
+        `Document ${variables.type} unverifed successfully for ${user?.name}`
       );
     },
     onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUserById.queryKey({ userId }),
+      });
       queryClient.invalidateQueries({
         queryKey: trpc.dashboard.getDocumentsByUserId.queryKey({ userId }),
       });
@@ -368,7 +374,7 @@ export default function UserDocuments({ userId }: { userId: string }) {
                           } at ${
                             document.createdAt
                               ? new Date(
-                                  document.createdAt,
+                                  document.createdAt
                                 ).toLocaleTimeString()
                               : ""
                           }`}
