@@ -1,31 +1,40 @@
 import { protectedProcedure, router } from "@/server/api/trpc";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
-import { QuizTypes } from "../../../../prisma/generated/prisma/enums";
+import { stemExamSubmitSchema } from "@/lib/schema";
 
 export const stemRouter = router({
-  submit: protectedProcedure
+  getUserById: protectedProcedure
     .input(
-        z.object({
-            userId: z.string(),
-            score: z.number(),
-            totalQuestions: z.number(),
-            timeSpent: z.number(),
-            answers: z.array(z.number().nullable()),
-            type: z.enum(QuizTypes)
-        })
+      z.object({
+        userId: z.string(),
+      })
     )
+    .query(async ({ input, ctx }) => {
+      const user = await ctx.db.user.findUnique({
+        where: { id: input.userId },
+        include: {
+          quizResults: true,
+          registration: true,
+        },
+      });
+      return user;
+    }),
+  submitExam: protectedProcedure
+    .input(stemExamSubmitSchema)
     .mutation(async ({ ctx, input }) => {
-        const newResult = await ctx.db.quizResult.create({
-            data: {
-                userId: input.userId,
-                score: input.score,
-                totalQuestions: input.totalQuestions,
-                timeSpent: input.timeSpent,
-                answers: input.answers,
-                type: input.type
-            }
-                });
-                return newResult;
-            })
-        });
+      const newResult = await ctx.db.quizResult.create({
+        data: {
+          userId: input.userId,
+          score: input.score,
+          totalQuestions: input.totalQuestions,
+          timeSpent: input.timeSpent,
+          answers: input.answers,
+          type: input.type,
+          essayAnswerFileUrl: input.essayAnswerFileUrl ?? undefined,
+          essayAnswerFileKey: input.essayAnswerFileKey ?? undefined,
+        },
+      });
+      return newResult;
+    }),
+});

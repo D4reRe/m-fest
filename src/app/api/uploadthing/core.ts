@@ -501,7 +501,7 @@ export const ourFileRouter = {
         throw error;
       }
     }),
-  submitExam:  f({
+  submitExam: f({
     "application/pdf": {
       maxFileSize: "16MB",
       maxFileCount: 1,
@@ -532,39 +532,6 @@ export const ourFileRouter = {
         fileKey: file.key,
       });
       try {
-        const comp = "PDC";
-        const thisRegisteredCompUser = await db.compRegistration.findFirst({
-          where: {
-            leaderUserId: metadata.userId,
-            competitionName: comp,
-            statusOrder: "SUCCESS",
-          },
-        });
-
-        console.log(thisRegisteredCompUser);
-
-        const previousFile = await db.compRegistration.findFirst({
-          where: {
-            leaderUserId: thisRegisteredCompUser?.leaderUserId as string,
-            competitionName: comp,
-          },
-          select: { submissionFileKey: true },
-        });
-        if (previousFile?.submissionFileKey) {
-          await deleteFiles(previousFile?.submissionFileKey);
-        }
-
-        await db.compRegistration.update({
-          where: {
-            teamId: thisRegisteredCompUser?.teamId as string,
-          },
-          data: {
-            submissionFileUrl: file.ufsUrl,
-            submissionFileKey: file.key,
-            submissionFileCreatedAt: new Date(),
-            submissionFileUploaded: true,
-          },
-        });
         return { fileUrl: file.ufsUrl, uploadedBy: metadata.userId };
       } catch (error) {
         console.error("Error in onUploadComplete:", error);

@@ -14,7 +14,7 @@ export const env = createEnv({
     DUITKU_MERCHANT_ID: z.string().min(1),
     DUITKU_API_KEY: z.string().min(1),
     DATABASE_URL: z.url(),
-    DIRECT_URL: z.url(),
+    DIRECT_URL: z.url().optional(),
     NODE_ENV: z.enum(["development", "production"]).default("development"),
     UPLOADTHING_TOKEN: z.string().min(1),
     UPLOADTHING_API: z.string().min(1),

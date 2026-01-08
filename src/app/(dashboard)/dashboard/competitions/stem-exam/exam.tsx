@@ -1,6 +1,6 @@
 "use client"; // Wajib: Menandakan ini adalah Client Component
 
-import React, { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -17,11 +17,11 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { sessionsData } from "@/lib/examQuestion";
 import { useRouter } from "next/navigation";
-import { UploadDropzone } from "@/utils/uploadthing";
 import { useTRPC } from "@/utils/trpc";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { QuizTypes } from "../../../../../../prisma/generated/prisma/enums";
+import SubmitExamForm from "@/components/dashboard/competitions/EssaySubmitForm";
 
 // Menerima prop 'user' yang dikirim dari Server Component (ExamPage)
 export default function ExamClient({}) {
@@ -47,12 +47,19 @@ export default function ExamClient({}) {
   const [showScore, setShowScore] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+  const [essayAnswerFileUrl, setEssayAnswerFileUrl] = useState<string | null>(
+    null
+  );
+  const [essayAnswerFileKey, setEssayAnswerFileKey] = useState<string | null>(
+    null
+  );
 
-  const INITIAL_TIME = 300; // 5 Menit
+  // const INITIAL_TIME = 300; // 5 Menit
+  const INITIAL_TIME = 86400; // 24 Hours
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
 
   const submitExamMutation = useMutation({
-    ...trpc.stemExam.submit.mutationOptions(),
+    ...trpc.stemExam.submitExam.mutationOptions(),
     onMutate: () => {
       setIsLoading(true);
       toast.loading("Submitting...", {
@@ -62,7 +69,9 @@ export default function ExamClient({}) {
     onSuccess: () => {
       setIsLoading(false);
       toast.dismiss("submit-exam");
-      toast.success("Submitted Successfully");
+      toast.success(
+        `Submitted Answers for ${currentSessionData.subject} Successfully`
+      );
     },
     onError: (error) => {
       setIsLoading(false);
@@ -74,7 +83,7 @@ export default function ExamClient({}) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: trpc.stemExam.submit.mutationKey(),
+        queryKey: trpc.stemExam.submitExam.mutationKey(),
       });
     },
   });
@@ -122,6 +131,8 @@ export default function ExamClient({}) {
         answer !== null ? Number(answer) : null
       ),
       type: currentSessionData.subject as QuizTypes,
+      essayAnswerFileUrl: essayAnswerFileUrl ?? undefined,
+      essayAnswerFileKey: essayAnswerFileKey ?? undefined,
     };
     try {
       submitExamMutation.mutate(submissionData);
@@ -142,7 +153,14 @@ export default function ExamClient({}) {
     handleNextSession,
     submitExamMutation,
     timeLeft,
+    essayAnswerFileUrl,
+    essayAnswerFileKey,
   ]);
+
+  // Check if user is registered in STEM
+  const { data: sessionUser } = useQuery(
+    trpc.stemExam.getUserById.queryOptions({ userId: user?.id as string })
+  );
 
   // --- 3. Logika Timer ---
   useEffect(() => {
@@ -186,11 +204,29 @@ export default function ExamClient({}) {
   const goToPrev = () =>
     currentQuestionIndex > 0 && setCurrentQuestionIndex((prev) => prev - 1);
 
-  // --- 5. Logika Submit ke API ---
+  if (sessionUser?.registration[0]?.competitionName !== "STEM") {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <div className="text-3xl font-bold">{`NON-STEM participants are not allowed to participate in STEM's exam.`}</div>
+      </div>
+    );
+  }
+  if (!currentSessionData) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <div className="text-3xl font-bold">{`No Session data found.`}</div>
+      </div>
+    );
+  }
 
-  if (!currentSessionData) return <div>Data sesi tidak ditemukan</div>;
   // --- 6. Tampilan (Render) ---
-
+  if (sessionUser?.quizResults.length > 3) {
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <div className="text-3xl font-bold">{`You have already taken the exam.`}</div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-transparent backdrop-blur-lg flex items-start justify-center p-0 lg:p-8 font-sans">
       <div className="w-full max-w-full lg:max-w-7xl bg-transparent shadow-2xl lg:rounded-2xl border border-slate-200 min-h-screen lg:min-h-0 overflow-hidden flex flex-col lg:flex-row mx-auto">
@@ -280,24 +316,24 @@ export default function ExamClient({}) {
 
                 <h2 className="text-3xl font-black text-slate-900 mb-2">
                   {activeSession === 3
-                    ? "Seluruh Ujian Selesai!"
-                    : `Sesi ${currentSessionData.subject} Selesai!`}
+                    ? "Exam Completed!"
+                    : `Session ${currentSessionData.subject} Completed!`}
                 </h2>
                 <p className="text-slate-500 mb-8 font-medium">
-                  Jawaban untuk <strong>{currentSessionData.subject}</strong>{" "}
-                  telah tersimpan.
+                  Answer for <strong>{currentSessionData.subject}</strong> has
+                  been saved.
                 </p>
 
                 {activeSession == 3 ? (
                   <div className="bg-slate-50 rounded-2xl p-8 mb-8 border border-slate-100">
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
-                      Sesi ini sedang Dinilai
+                      This session is being graded
                     </p>
                   </div>
                 ) : (
                   <div className="bg-slate-50 rounded-2xl p-8 mb-8 border border-slate-100">
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
-                      Skor Sesi Ini
+                      Score for this session
                     </p>
                     <p className="text-6xl font-black text-blue-600">
                       {finalScore}{" "}
@@ -320,11 +356,12 @@ export default function ExamClient({}) {
                 >
                   {activeSession === 3 ? (
                     <>
-                      Selesai & Ke Dashboard <CheckCircle className="w-5 h-5" />
+                      Finish & Go to Dashboard{" "}
+                      <CheckCircle className="w-5 h-5" />
                     </>
                   ) : (
                     <>
-                      Lanjut ke Sesi {activeSession + 1}{" "}
+                      Go to Session {activeSession + 1}{" "}
                       <ArrowRight className="w-5 h-5" />
                     </>
                   )}
@@ -359,9 +396,15 @@ export default function ExamClient({}) {
               {activeSession === 3 ? (
                 <div className="space-y-4 mb-12 flex-1">
                   <p className="text-slate-500 italic">
-                    Silahkan upload jawaban anda disini:
+                    Please upload your answer here:
                   </p>
-                  <UploadDropzone endpoint={"submitExam"} />
+                  <SubmitExamForm
+                    userId={user?.id as string}
+                    essayAnswerFileUrl={essayAnswerFileUrl}
+                    essayAnswerFileKey={essayAnswerFileKey}
+                    setEssayAnswerFileUrl={setEssayAnswerFileUrl}
+                    setEssayAnswerFileKey={setEssayAnswerFileKey}
+                  />
                 </div>
               ) : (
                 <div className="space-y-4 mb-12 flex-1">
@@ -419,12 +462,9 @@ export default function ExamClient({}) {
                     <ChevronRight className="w-5 h-5" />
                   </button>
                 ) : (
-                  <div className="text-right">
-                    <span className="text-[10px] text-slate-400 uppercase font-black mb-1 block">
-                      Done?
-                    </span>
+                  <div className="flex flex-col justify-center items-center">
                     <span
-                      className="text-xs text-blue-600 font-bold bg-blue-50 px-3 py-1 rounded-lg cursor-pointer"
+                      className="text-base text-blue-600 font-bold bg-blue-50 px-3 py-1 rounded-lg cursor-pointer"
                       onClick={handleSubmitQuiz}
                     >
                       Submit Now

@@ -61,6 +61,7 @@ enum TeamStatus {
 enum QuizTypes {
   MATHEMATICS
   PHYSICS
+  ESSAY
 }
 
 model CompRegistration {
@@ -282,13 +283,15 @@ model Verification {
 }
 
 model quizResult {
-  id             String    @id @default(cuid())
-  userId         String
-  score          Int
-  totalQuestions Int
-  timeSpent      Int
-  answers        Json
-  createdAt      DateTime  @default(now())
-  type           QuizTypes
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                  String    @id @default(cuid())
+  userId              String
+  score               Int
+  totalQuestions      Int
+  timeSpent           Int
+  answers             Json
+  essayAnswerFileUrl  String?
+  essayAnswerFileKey  String?
+  createdAt           DateTime  @default(now())
+  type                QuizTypes
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
