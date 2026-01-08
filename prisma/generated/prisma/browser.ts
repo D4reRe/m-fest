@@ -67,3 +67,8 @@ export type Session = Prisma.SessionModel
  * 
  */
 export type Verification = Prisma.VerificationModel
+/**
+ * Model quizResult
+ * 
+ */
+export type quizResult = Prisma.quizResultModel

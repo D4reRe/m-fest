@@ -1,42 +1,68 @@
-export const quizQuestions = [
-    {
-        questionText: "Apa fungsi utama dari Next.js dalam sebuah aplikasi React?",
-        answerOptions: [
-            { answerText: "Hanya untuk manajemen styling CSS", isCorrect: false },
-            { answerText: "Server-Side Rendering (SSR) dan routing berbasis file", isCorrect: true },
-            { answerText: "Sebagai pustaka state management global", isCorrect: false },
-        ],
+export const sessionsData = {
+    1: {
+        subject: "PHYSICS",
+        questions: [
+            {
+                questionText: "Hukum Newton yang menyatakan bahwa 'Setiap aksi ada reaksi yang sama besar dan berlawanan arah' adalah...",
+                answerOptions: [
+                    { answerText: "Hukum Newton I", isCorrect: false },
+                    { answerText: "Hukum Newton II", isCorrect: false },
+                    { answerText: "Hukum Newton III", isCorrect: true },
+                ],
+            },
+            {
+                questionText: "Rumus energi kinetik adalah...",
+                answerOptions: [
+                    { answerText: "Ek = m.g.h", isCorrect: false },
+                    { answerText: "Ek = 1/2 m.v²", isCorrect: true },
+                    { answerText: "Ek = F.s", isCorrect: false },
+                ],
+            }
+        ]
     },
-    {
-        questionText: "Bagaimana cara mendefinisikan rute dinamis seperti `/posts/1` di Next.js Pages Router?",
-        answerOptions: [
-            { answerText: "Menggunakan nama file `[id].js`", isCorrect: true },
-            { answerText: "Menggunakan nama file `id.js`", isCorrect: false },
-            { answerText: "Menggunakan nama file `post-id.js`", isCorrect: false },
-        ],
+    2: {
+        subject: "MATHEMATICS",
+        questions: [
+            {
+                questionText: "Jika f(x) = 2x + 3, maka turunan pertama f'(x) adalah...",
+                answerOptions: [
+                    { answerText: "2", isCorrect: true },
+                    { answerText: "2x", isCorrect: false },
+                    { answerText: "3", isCorrect: false },
+                ],
+            },
+            {
+                questionText: "Nilai dari sin(90°) adalah...",
+                answerOptions: [
+                    { answerText: "0", isCorrect: false },
+                    { answerText: "1", isCorrect: true },
+                    { answerText: "0.5", isCorrect: false },
+                ],
+            }
+        ]
     },
-    {
-        questionText: "Apa hook React yang ideal digunakan untuk mengambil data (data fetching) setelah komponen dipasang?",
-        answerOptions: [
-            { answerText: "useState", isCorrect: false },
-            { answerText: "useMemo", isCorrect: false },
-            { answerText: "useEffect", isCorrect: true },
-        ],
-    },
-    {
-        questionText: "Di React, elemen apa yang harus dimiliki oleh setiap item dalam daftar (list) yang dibuat dengan `map`?",
-        answerOptions: [
-            { answerText: "Properti `ref`", isCorrect: false },
-            { answerText: "Properti `key`", isCorrect: true },
-            { answerText: "Properti `index`", isCorrect: false },
-        ],
-    },
-    {
-        questionText: "Apa perintah yang benar untuk menjalankan mode pengembangan (development mode) Next.js?",
-        answerOptions: [
-            { answerText: "npm run start", isCorrect: false },
-            { answerText: "npm run build", isCorrect: false },
-            { answerText: "npm run dev", isCorrect: true },
-        ],
-    },
-];
+    3: {
+        subject: "Esai & Logika",
+        // Catatan: Karena backend tRPC saat ini menerima array angka (index), 
+        // saya menggunakan format Pilihan Ganda untuk 'Logika Esai' agar kompatibel.
+        // Jika backend mendukung string, UI ini bisa diubah menjadi Textarea.
+        questions: [
+            {
+                questionText: "Manakah argumen yang paling logis untuk mendukung penggunaan energi terbarukan?",
+                answerOptions: [
+                    { answerText: "Karena lebih murah tanpa memikirkan dampak lingkungan", isCorrect: false },
+                    { answerText: "Mengurangi emisi karbon dan menjaga keberlanjutan sumber daya", isCorrect: true },
+                    { answerText: "Agar terlihat modern saja", isCorrect: false },
+                ],
+            },
+            {
+                questionText: "Apa langkah pertama dalam metode ilmiah?",
+                answerOptions: [
+                    { answerText: "Eksperimen", isCorrect: false },
+                    { answerText: "Observasi", isCorrect: true },
+                    { answerText: "Kesimpulan", isCorrect: false },
+                ],
+            }
+        ]
+    }
+};
