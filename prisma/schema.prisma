@@ -301,6 +301,7 @@ model quizResult {
   totalQuestions      Int
   timeSpent           Int
   answers             Json
+  essayAnswer         String?
   essayAnswerFileUrl  String?
   essayAnswerFileKey  String?
   createdAt           DateTime  @default(now())

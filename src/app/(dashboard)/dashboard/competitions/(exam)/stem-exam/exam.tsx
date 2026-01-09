@@ -14,11 +14,12 @@ import {
 import { sessionsData } from "@/lib/examQuestion";
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/utils/trpc";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { QuizTypes } from "../../../../prisma/generated/prisma/enums";
+import type { QuizTypes } from "../../../../../../../prisma/generated/prisma/enums";
 import SubmitExamForm from "@/components/dashboard/competitions/EssaySubmitForm";
-import type { User } from "../../../../prisma/generated/prisma/client";
+import type { User } from "../../../../../../../prisma/generated/prisma/client";
+import { Input, Label } from "@heroui/react";
 
 // Menerima prop 'user' yang dikirim dari Server Component (ExamPage)
 export default function ExamClient({ user }: { user: User }) {
@@ -42,6 +43,7 @@ export default function ExamClient({ user }: { user: User }) {
   const [showScore, setShowScore] = useState(false);
   const [finalScore, setFinalScore] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+  const [essayAnswer, setEssayAnswer] = useState<string | null>(null);
   const [essayAnswerFileUrl, setEssayAnswerFileUrl] = useState<string | null>(
     null
   );
@@ -63,9 +65,7 @@ export default function ExamClient({ user }: { user: User }) {
     onSuccess: () => {
       setIsLoading(false);
       toast.dismiss("submit-exam");
-      toast.success(
-        `Submitted Answers for ${currentSessionData.subject} Successfully`
-      );
+      toast.success(`Submitted Answers Successfully`);
     },
     onError: (error) => {
       setIsLoading(false);
@@ -101,7 +101,7 @@ export default function ExamClient({ user }: { user: User }) {
     } else {
       router.push("/dashboard");
     }
-  }, [activeSession, router]);
+  }, [activeSession, router, INITIAL_TIME]);
 
   const handleSubmitQuiz = useCallback(async () => {
     if (isSaving || !user) return;
@@ -125,30 +125,36 @@ export default function ExamClient({ user }: { user: User }) {
         answer !== null ? Number(answer) : null
       ),
       type: currentSessionData.subject as QuizTypes,
+      essayAnswer: essayAnswer ?? undefined,
       essayAnswerFileUrl: essayAnswerFileUrl ?? undefined,
       essayAnswerFileKey: essayAnswerFileKey ?? undefined,
     };
-    try {
-      submitExamMutation.mutate(submissionData);
-    } catch (error) {
-      console.error("Kesalahan Koneksi:", error);
-      setFinalScore(calculatedScore);
-      setShowScore(true);
-    } finally {
-      setIsSaving(false);
-      handleNextSession();
-    }
+    submitExamMutation.mutate(submissionData, {
+      onError(error) {
+        toast.error("Failed to submit exam", {
+          description: error.message,
+        });
+      },
+      onSuccess: () => {
+        setFinalScore(calculatedScore);
+        setShowScore(true);
+      },
+      onSettled: () => {
+        setIsSaving(false);
+      },
+    });
   }, [
     isSaving,
     user,
     userAnswers,
     quizQuestions,
     currentSessionData,
-    handleNextSession,
     submitExamMutation,
     timeLeft,
     essayAnswerFileUrl,
     essayAnswerFileKey,
+    INITIAL_TIME,
+    essayAnswer,
   ]);
 
   // --- 3. Logika Timer ---
@@ -363,15 +369,38 @@ export default function ExamClient({ user }: { user: User }) {
               {activeSession === 3 ? (
                 <div className="space-y-4 mb-12 flex-1">
                   <p className="text-slate-500 italic">
-                    Please upload your answer here:
+                    Please upload your answer here and write your final answer
+                    below.
                   </p>
-                  <SubmitExamForm
-                    userId={user?.id as string}
-                    essayAnswerFileUrl={essayAnswerFileUrl}
-                    essayAnswerFileKey={essayAnswerFileKey}
-                    setEssayAnswerFileUrl={setEssayAnswerFileUrl}
-                    setEssayAnswerFileKey={setEssayAnswerFileKey}
-                  />
+                  <div className="flex flex-col">
+                    <Label
+                      htmlFor="essay-final-answer"
+                      className="mb-2 text-black"
+                    >
+                      Final Answer
+                    </Label>
+                    <Input
+                      id="essay-final-answer"
+                      placeholder="Write your final answer here"
+                      type="text"
+                      className={"bg-slate-400 text-slate-900"}
+                      value={essayAnswer ?? ""}
+                      onChange={(e) => {
+                        setEssayAnswer(e.target.value);
+                      }}
+                      onBlur={(e) => {
+                        setEssayAnswer(e.target.value.trim());
+                        toast.success("Final Answer saved!");
+                      }}
+                    />
+                    <SubmitExamForm
+                      userId={user?.id as string}
+                      essayAnswerFileUrl={essayAnswerFileUrl}
+                      essayAnswerFileKey={essayAnswerFileKey}
+                      setEssayAnswerFileUrl={setEssayAnswerFileUrl}
+                      setEssayAnswerFileKey={setEssayAnswerFileKey}
+                    />
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-4 mb-12 flex-1">

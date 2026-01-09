@@ -1,182 +1,1647 @@
 import { env } from "@/env";
 
-export function getSebConfig(token: string) {
+export function getSebConfig() {
   if (env.NODE_ENV === "development") {
     return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-    <key>additionalDictionaries</key>
-    <array></array>
-    <key>additionalResources</key>
-    <array></array>
-    <key>allowApplicationLog</key>
-    <false />
-    <key>allowAudioCapture</key>
-    <false />
-    <key>allowBrowsingBackForward</key>
-    <false />
-    <key>allowCustomDownUploadLocation</key>
+    <key>originatorVersion</key>
+    <string>SEB_Win_2.1.1</string>
+    <key>startURL</key>
+    <string>http://localhost:3000/login</string>
+    <key>startResource</key>
+    <string />
+    <key>sebServerURL</key>
+    <string />
+    <key>hashedAdminPassword</key>
+    <string />
+    <key>allowQuit</key>
     <true />
-    <key>allowDeveloperConsole</key>
+    <key>ignoreExitKeys</key>
+    <true />
+    <key>hashedQuitPassword</key>
+    <string />
+    <key>exitKey1</key>
+    <integer>2</integer>
+    <key>exitKey2</key>
+    <integer>10</integer>
+    <key>exitKey3</key>
+    <integer>5</integer>
+    <key>sebMode</key>
+    <integer>0</integer>
+    <key>browserMessagingSocket</key>
+    <string>ws://localhost:8706</string>
+    <key>browserMessagingPingTime</key>
+    <integer>120000</integer>
+    <key>sebConfigPurpose</key>
+    <integer>0</integer>
+    <key>allowPreferencesWindow</key>
+    <true />
+    <key>useAsymmetricOnlyEncryption</key>
     <false />
-    <key>allowDictation</key>
+    <key>browserViewMode</key>
+    <integer>1</integer>
+    <key>browserWindowAllowAddressBar</key>
+    <false />
+    <key>newBrowserWindowAllowAddressBar</key>
+    <false />
+    <key>mainBrowserWindowWidth</key>
+    <string>100%</string>
+    <key>mainBrowserWindowHeight</key>
+    <string>100%</string>
+    <key>mainBrowserWindowPositioning</key>
+    <integer>1</integer>
+    <key>enableBrowserWindowToolbar</key>
+    <false />
+    <key>hideBrowserWindowToolbar</key>
+    <false />
+    <key>showMenuBar</key>
+    <false />
+    <key>showTaskBar</key>
+    <true />
+    <key>showSideMenu</key>
+    <true />
+    <key>taskBarHeight</key>
+    <integer>40</integer>
+    <key>touchOptimized</key>
+    <false />
+    <key>enableZoomText</key>
+    <true />
+    <key>enableZoomPage</key>
+    <true />
+    <key>zoomMode</key>
+    <integer>0</integer>
+    <key>allowSpellCheck</key>
     <false />
     <key>allowDictionaryLookup</key>
     <false />
-    <key>allowDisplayMirroring</key>
-    <false />
-    <key>allowDownloads</key>
-    <true />
-    <key>allowedDisplayBuiltin</key>
-    <true />
-    <key>allowedDisplayBuiltinEnforce</key>
-    <false />
-    <key>allowedDisplaysIgnoreFailure</key>
-    <false />
-    <key>allowedDisplaysMaxNumber</key>
-    <integer>1</integer>
-    <key>allowFind</key>
-    <true />
-    <key>allowFlashFullscreen</key>
-    <false />
-    <key>allowPDFPlugIn</key>
-    <false />
-    <key>allowPDFReaderToolbar</key>
-    <false />
-    <key>allowPreferencesWindow</key>
-    <true />
-    <key>allowPrint</key>
-    <false />
-    <key>allowQuit</key>
-    <true />
-    <key>allowScreenSharing</key>
-    <false />
-    <key>allowSiri</key>
-    <false />
-    <key>allowSpellCheck</key>
-    <false />
     <key>allowSpellCheckDictionary</key>
     <array></array>
-    <key>allowStickyKeys</key>
-    <false />
-    <key>allowSwitchToApplications</key>
-    <false />
-    <key>allowUploads</key>
+    <key>additionalDictionaries</key>
+    <array></array>
+    <key>showReloadButton</key>
     <true />
-    <key>allowUserAppFolderInstall</key>
-    <false />
-    <key>allowVideoCapture</key>
-    <false />
-    <key>allowVirtualMachine</key>
-    <false />
-    <key>allowWlan</key>
+    <key>showTime</key>
     <true />
+    <key>showInputLanguage</key>
+    <true />
+    <key>enableTouchExit</key>
+    <false />
+    <key>oskBehavior</key>
+    <integer>2</integer>
     <key>audioControlEnabled</key>
     <true />
     <key>audioMute</key>
     <false />
-    <key>audioSetVolumeLevel</key>
-    <false />
     <key>audioVolumeLevel</key>
     <integer>25</integer>
-    <key>backgroundOpenSEBConfig</key>
+    <key>audioSetVolumeLevel</key>
+    <false />
+    <key>allowDeveloperConsole</key>
     <false />
     <key>batteryChargeThresholdCritical</key>
     <real>0.1</real>
     <key>batteryChargeThresholdLow</key>
     <real>0.2</real>
-    <key>blacklistURLFilter</key>
-    <string />
-    <key>blockPopUpWindows</key>
-    <false />
-    <key>browserExamKey</key>
-    <string />
-    <key>browserMessagingPingTime</key>
-    <integer>120000</integer>
-    <key>browserMessagingSocket</key>
-    <string>ws://localhost:8706</string>
     <key>browserScreenKeyboard</key>
     <false />
-    <key>browserShowFileSystemElementPath</key>
-    <true />
-    <key>browserURLSalt</key>
-    <true />
-    <key>browserUserAgent</key>
-    <string />
-    <key>browserUserAgentMac</key>
+    <key>newBrowserWindowByLinkPolicy</key>
+    <integer>2</integer>
+    <key>newBrowserWindowByScriptPolicy</key>
+    <integer>2</integer>
+    <key>newBrowserWindowByLinkBlockForeign</key>
+    <false />
+    <key>newBrowserWindowByScriptBlockForeign</key>
+    <false />
+    <key>newBrowserWindowByLinkWidth</key>
+    <string>1000</string>
+    <key>newBrowserWindowByLinkHeight</key>
+    <string>100%</string>
+    <key>newBrowserWindowByLinkPositioning</key>
+    <integer>2</integer>
+    <key>newBrowserWindowShowURL</key>
     <integer>0</integer>
-    <key>browserUserAgentMacCustom</key>
-    <string />
+    <key>browserWindowShowURL</key>
+    <integer>0</integer>
+    <key>enablePlugIns</key>
+    <true />
+    <key>enableJava</key>
+    <false />
+    <key>enableJavaScript</key>
+    <true />
+    <key>blockPopUpWindows</key>
+    <false />
+    <key>allowVideoCapture</key>
+    <false />
+    <key>allowAudioCapture</key>
+    <false />
+    <key>allowBrowsingBackForward</key>
+    <false />
+    <key>newBrowserWindowNavigation</key>
+    <true />
+    <key>removeBrowserProfile</key>
+    <true />
+    <key>removeLocalStorage</key>
+    <false />
+    <key>enableSebBrowser</key>
+    <true />
+    <key>browserWindowAllowReload</key>
+    <true />
+    <key>newBrowserWindowAllowReload</key>
+    <true />
+    <key>showReloadWarning</key>
+    <true />
+    <key>newBrowserWindowShowReloadWarning</key>
+    <false />
     <key>browserUserAgentWinDesktopMode</key>
     <integer>0</integer>
     <key>browserUserAgentWinDesktopModeCustom</key>
     <string />
     <key>browserUserAgentWinTouchMode</key>
     <integer>0</integer>
-    <key>browserUserAgentWinTouchModeCustom</key>
-    <string />
     <key>browserUserAgentWinTouchModeIPad</key>
     <string>Mozilla/5.0 (iPad; CPU OS 11_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.3 Mobile/15E216 Safari/605.1.15</string>
-    <key>browserViewMode</key>
-    <integer>1</integer>
-    <key>browserWindowAllowAddressBar</key>
-    <true />
-    <key>browserWindowAllowReload</key>
-    <true />
-    <key>browserWindowShowURL</key>
+    <key>browserUserAgentWinTouchModeCustom</key>
+    <string />
+    <key>browserUserAgent</key>
+    <string />
+    <key>browserUserAgentMac</key>
     <integer>0</integer>
+    <key>browserUserAgentMacCustom</key>
+    <string />
     <key>browserWindowTitleSuffix</key>
     <string />
-    <key>chooseFileToUploadPolicy</key>
-    <integer>0</integer>
-    <key>clipboardPolicy</key>
-    <integer>2</integer>
-    <key>createNewDesktop</key>
-    <true />
-    <key>detectStoppedProcess</key>
-    <true />
-    <key>disableSessionChangeLockScreen</key>
+    <key>allowPDFReaderToolbar</key>
     <false />
-    <key>displayAlwaysOn</key>
+    <key>allowFind</key>
     <true />
-    <key>downloadAndOpenSebConfig</key>
-    <true />
+    <key>allowPrint</key>
+    <false />
+    <key>allowCustomDownUploadLocation</key>
+    <false />
     <key>downloadDirectoryOSX</key>
     <string>~/Downloads</string>
     <key>downloadDirectoryWin</key>
     <string />
+    <key>openDownloads</key>
+    <false />
+    <key>chooseFileToUploadPolicy</key>
+    <integer>0</integer>
     <key>downloadPDFFiles</key>
     <false />
+    <key>allowPDFPlugIn</key>
+    <false />
+    <key>downloadAndOpenSebConfig</key>
+    <true />
+    <key>backgroundOpenSEBConfig</key>
+    <false />
+    <key>useTemporaryDownUploadDirectory</key>
+    <false />
+    <key>browserShowFileSystemElementPath</key>
+    <true />
+    <key>allowDownloads</key>
+    <true />
+    <key>allowUploads</key>
+    <true />
+    <key>examKeySalt</key>
+    <data>ZzLkjkSdf+F/K6ZqJ1WgsjBdJ7SbUEhs7tVQBM6UegA=</data>
+    <key>examSessionClearCookiesOnEnd</key>
+    <true />
+    <key>examSessionClearCookiesOnStart</key>
+    <true />
+    <key>browserExamKey</key>
+    <string />
+    <key>browserURLSalt</key>
+    <true />
+    <key>sendBrowserExamKey</key>
+    <true />
+    <key>quitURL</key>
+    <string />
+    <key>quitURLConfirm</key>
+    <true />
+    <key>restartExamURL</key>
+    <string />
+    <key>restartExamUseStartURL</key>
+    <false />
+    <key>restartExamText</key>
+    <string />
+    <key>restartExamPasswordProtected</key>
+    <true />
+    <key>examSessionReconfigureAllow</key>
+    <false />
+    <key>examSessionReconfigureConfigURL</key>
+    <string />
+    <key>quitURLRestart</key>
+    <false />
+    <key>startURLAppendQueryParameter</key>
+    <false />
+    <key>additionalResources</key>
+    <array></array>
+    <key>monitorProcesses</key>
+    <true />
+    <key>allowSwitchToApplications</key>
+    <true />
+    <key>allowFlashFullscreen</key>
+    <false />
+    <key>permittedProcesses</key>
+    <array>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>autostart</key>
+        <false />
+        <key>iconInTaskbar</key>
+        <true />
+        <key>runInBackground</key>
+        <true />
+        <key>allowUserToChooseApp</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>title</key>
+        <string>Zoom</string>
+        <key>description</key>
+        <string />
+        <key>executable</key>
+        <string>Zoom.exe</string>
+        <key>originalName</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>path</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>arguments</key>
+        <array></array>
+        <key>signature</key>
+        <string />
+      </dict>
+    </array>
+    <key>prohibitedProcesses</key>
+    <array>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Guilded.exe</string>
+        <key>originalName</key>
+        <string>Guilded.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>sethc.exe</string>
+        <key>originalName</key>
+        <string>sethc.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>vlc.exe</string>
+        <key>originalName</key>
+        <string>vlc.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Microsoft.Media.Player.exe</string>
+        <key>originalName</key>
+        <string>Microsoft.Media.Player.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>spotify.exe</string>
+        <key>originalName</key>
+        <string>spotify.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>obs32.exe</string>
+        <key>originalName</key>
+        <string>obs32.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>obs64.exe</string>
+        <key>originalName</key>
+        <string>obs64.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>pcmontask.exe</string>
+        <key>originalName</key>
+        <string>pcmontask.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>PCMonitorSrv.exe</string>
+        <key>originalName</key>
+        <string>PCMonitorSrv.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>strwinclt.exe</string>
+        <key>originalName</key>
+        <string>strwinclt.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>SRServer.exe</string>
+        <key>originalName</key>
+        <string>SRServer.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>remoting_host.exe</string>
+        <key>originalName</key>
+        <string>remoting_host.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CiscoWebExStart.exe</string>
+        <key>originalName</key>
+        <string>CiscoWebExStart.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CiscoCollabHost.exe</string>
+        <key>originalName</key>
+        <string>CiscoCollabHost.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>AA_v3.exe</string>
+        <key>originalName</key>
+        <string>AA_v3.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>ptoneclk.exe</string>
+        <key>originalName</key>
+        <string>ptoneclk.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>webexmta.exe</string>
+        <key>originalName</key>
+        <string>webexmta.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>MS-Teams.exe</string>
+        <key>originalName</key>
+        <string>MS-Teams.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Teams.exe</string>
+        <key>originalName</key>
+        <string>Teams.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>join.me.sentinel.exe</string>
+        <key>originalName</key>
+        <string>join.me.sentinel.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>join.me.exe</string>
+        <key>originalName</key>
+        <string>join.me.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>g2mstart.exe</string>
+        <key>originalName</key>
+        <string>g2mstart.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>g2mlauncher.exe</string>
+        <key>originalName</key>
+        <string>g2mlauncher.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>g2mcomm.exe</string>
+        <key>originalName</key>
+        <string>g2mcomm.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Telegram.exe</string>
+        <key>originalName</key>
+        <string>Telegram.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Zoom.exe</string>
+        <key>originalName</key>
+        <string>Zoom.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Element.exe</string>
+        <key>originalName</key>
+        <string>Element.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>slack.exe</string>
+        <key>originalName</key>
+        <string>slack.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CamtasiaUtl.exe</string>
+        <key>originalName</key>
+        <string>CamtasiaUtl.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CamRecorder.exe</string>
+        <key>originalName</key>
+        <string>CamRecorder.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CamPlay.exe</string>
+        <key>originalName</key>
+        <string>CamPlay.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Camtasia_Studio.exe</string>
+        <key>originalName</key>
+        <string>Camtasia_Studio.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CamtasiaStudio.exe</string>
+        <key>originalName</key>
+        <string>CamtasiaStudio.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Camtasia.exe</string>
+        <key>originalName</key>
+        <string>Camtasia.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>DiscordCanary.exe</string>
+        <key>originalName</key>
+        <string>DiscordCanary.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>DiscordPTB.exe</string>
+        <key>originalName</key>
+        <string>DiscordPTB.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Discord.exe</string>
+        <key>originalName</key>
+        <string>Discord.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>RPCSuite.exe</string>
+        <key>originalName</key>
+        <string>RPCSuite.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>RPCService.exe</string>
+        <key>originalName</key>
+        <string>RPCService.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>RemotePCDesktop.exe</string>
+        <key>originalName</key>
+        <string>RemotePCDesktop.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>beamyourscreen-host.exe</string>
+        <key>originalName</key>
+        <string>beamyourscreen-host.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>AeroAdmin.exe</string>
+        <key>originalName</key>
+        <string>AeroAdmin.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Mikogo-host.exe</string>
+        <key>originalName</key>
+        <string>Mikogo-host.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>chromoting.exe</string>
+        <key>originalName</key>
+        <string>chromoting.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>vncserverui.exe</string>
+        <key>originalName</key>
+        <string>vncserverui.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>vncviewer.exe</string>
+        <key>originalName</key>
+        <string>vncviewer.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>vncserver.exe</string>
+        <key>originalName</key>
+        <string>vncserver.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>TeamViewer.exe</string>
+        <key>originalName</key>
+        <string>TeamViewer.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>GotoMeetingWinStore.exe</string>
+        <key>originalName</key>
+        <string>GotoMeetingWinStore.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>SkypeHost.exe</string>
+        <key>originalName</key>
+        <string>SkypeHost.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>SkypeApp.exe</string>
+        <key>originalName</key>
+        <string>SkypeApp.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Skype.exe</string>
+        <key>originalName</key>
+        <string>Skype.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+    </array>
+    <key>enableURLFilter</key>
+    <false />
+    <key>enableURLContentFilter</key>
+    <false />
+    <key>URLFilterRules</key>
+    <array></array>
+    <key>URLFilterEnable</key>
+    <false />
+    <key>URLFilterEnableContentFilter</key>
+    <false />
+    <key>blacklistURLFilter</key>
+    <string />
+    <key>whitelistURLFilter</key>
+    <string />
+    <key>urlFilterTrustedContent</key>
+    <true />
+    <key>urlFilterRegex</key>
+    <true />
     <key>embeddedCertificates</key>
     <array></array>
-    <key>enableAltEsc</key>
+    <key>pinEmbeddedCertificates</key>
     <false />
-    <key>enableAltF4</key>
-    <false />
-    <key>enableAltMouseWheel</key>
-    <false />
-    <key>enableAltTab</key>
+    <key>proxySettingsPolicy</key>
+    <integer>0</integer>
+    <key>proxies</key>
+    <dict>
+      <key>ExceptionsList</key>
+      <array></array>
+      <key>ExcludeSimpleHostnames</key>
+      <false />
+      <key>AutoDiscoveryEnabled</key>
+      <false />
+      <key>AutoConfigurationEnabled</key>
+      <false />
+      <key>AutoConfigurationJavaScript</key>
+      <string />
+      <key>AutoConfigurationURL</key>
+      <string />
+      <key>FTPPassive</key>
+      <true />
+      <key>HTTPEnable</key>
+      <false />
+      <key>HTTPPort</key>
+      <integer>80</integer>
+      <key>HTTPProxy</key>
+      <string />
+      <key>HTTPRequiresPassword</key>
+      <false />
+      <key>HTTPUsername</key>
+      <string />
+      <key>HTTPPassword</key>
+      <string />
+      <key>HTTPSEnable</key>
+      <false />
+      <key>HTTPSPort</key>
+      <integer>443</integer>
+      <key>HTTPSProxy</key>
+      <string />
+      <key>HTTPSRequiresPassword</key>
+      <false />
+      <key>HTTPSUsername</key>
+      <string />
+      <key>HTTPSPassword</key>
+      <string />
+      <key>FTPEnable</key>
+      <false />
+      <key>FTPPort</key>
+      <integer>21</integer>
+      <key>FTPProxy</key>
+      <string />
+      <key>FTPRequiresPassword</key>
+      <false />
+      <key>FTPUsername</key>
+      <string />
+      <key>FTPPassword</key>
+      <string />
+      <key>SOCKSEnable</key>
+      <false />
+      <key>SOCKSPort</key>
+      <integer>1080</integer>
+      <key>SOCKSProxy</key>
+      <string />
+      <key>SOCKSRequiresPassword</key>
+      <false />
+      <key>SOCKSUsername</key>
+      <string />
+      <key>SOCKSPassword</key>
+      <string />
+      <key>RTSPEnable</key>
+      <false />
+      <key>RTSPPort</key>
+      <integer>554</integer>
+      <key>RTSPProxy</key>
+      <string />
+      <key>RTSPRequiresPassword</key>
+      <false />
+      <key>RTSPUsername</key>
+      <string />
+      <key>RTSPPassword</key>
+      <string />
+    </dict>
+    <key>sebServicePolicy</key>
+    <integer>1</integer>
+    <key>sebServiceIgnore</key>
     <true />
+    <key>allowVirtualMachine</key>
+    <false />
+    <key>allowScreenSharing</key>
+    <false />
+    <key>enablePrivateClipboard</key>
+    <true />
+    <key>createNewDesktop</key>
+    <true />
+    <key>killExplorerShell</key>
+    <false />
+    <key>enableLogging</key>
+    <true />
+    <key>allowApplicationLog</key>
+    <false />
+    <key>showApplicationLogButton</key>
+    <false />
+    <key>logDirectoryOSX</key>
+    <string />
+    <key>logDirectoryWin</key>
+    <string />
+    <key>allowWlan</key>
+    <false />
+    <key>lockOnMessageSocketClose</key>
+    <true />
+    <key>minMacOSVersion</key>
+    <integer>4</integer>
     <key>enableAppSwitcherCheck</key>
     <true />
-    <key>enableBrowserWindowToolbar</key>
+    <key>forceAppFolderInstall</key>
     <true />
+    <key>allowUserAppFolderInstall</key>
+    <false />
+    <key>allowSiri</key>
+    <false />
+    <key>allowDictation</key>
+    <false />
+    <key>detectStoppedProcess</key>
+    <true />
+    <key>allowDisplayMirroring</key>
+    <false />
+    <key>allowedDisplaysMaxNumber</key>
+    <integer>1</integer>
+    <key>allowedDisplayBuiltin</key>
+    <true />
+    <key>allowedDisplayBuiltinEnforce</key>
+    <false />
+    <key>allowedDisplaysIgnoreFailure</key>
+    <false />
     <key>enableChromeNotifications</key>
     <false />
-    <key>enableCtrlEsc</key>
+    <key>enableWindowsUpdate</key>
+    <false />
+    <key>clipboardPolicy</key>
+    <integer>2</integer>
+    <key>disableSessionChangeLockScreen</key>
     <false />
     <key>enableCursorVerification</key>
     <true />
+    <key>enableSessionVerification</key>
+    <true />
+    <key>lockScreenBackgroundColor</key>
+    <string>#ff0000</string>
+    <key>allowStickyKeys</key>
+    <false />
+    <key>insideSebEnableSwitchUser</key>
+    <false />
+    <key>insideSebEnableLockThisComputer</key>
+    <false />
+    <key>insideSebEnableChangeAPassword</key>
+    <false />
+    <key>insideSebEnableStartTaskManager</key>
+    <false />
+    <key>insideSebEnableLogOff</key>
+    <false />
+    <key>insideSebEnableShutDown</key>
+    <false />
+    <key>insideSebEnableEaseOfAccess</key>
+    <false />
+    <key>insideSebEnableVmWareClientShade</key>
+    <false />
+    <key>insideSebEnableNetworkConnectionSelector</key>
+    <false />
+    <key>setVmwareConfiguration</key>
+    <false />
+    <key>enableFindPrinter</key>
+    <false />
+    <key>hookKeys</key>
+    <true />
     <key>enableEsc</key>
     <true />
+    <key>enableCtrlEsc</key>
+    <false />
+    <key>enableAltEsc</key>
+    <false />
+    <key>enableAltTab</key>
+    <true />
+    <key>enableAltF4</key>
+    <false />
+    <key>enableStartMenu</key>
+    <false />
+    <key>enableMiddleMouse</key>
+    <false />
+    <key>enableRightMouse</key>
+    <true />
+    <key>enablePrintScreen</key>
+    <false />
+    <key>enableAltMouseWheel</key>
+    <false />
     <key>enableF1</key>
-    <true />
-    <key>enableF10</key>
-    <true />
-    <key>enableF11</key>
-    <true />
-    <key>enableF12</key>
     <true />
     <key>enableF2</key>
     <true />
@@ -194,1627 +1659,1661 @@ export function getSebConfig(token: string) {
     <true />
     <key>enableF9</key>
     <true />
-    <key>enableFindPrinter</key>
-    <false />
-    <key>enableJava</key>
-    <false />
-    <key>enableJavaScript</key>
+    <key>enableF10</key>
     <true />
-    <key>enableLogging</key>
+    <key>enableF11</key>
     <true />
-    <key>enableMiddleMouse</key>
-    <false />
-    <key>enablePlugIns</key>
+    <key>enableF12</key>
     <true />
-    <key>enablePrintScreen</key>
-    <false />
-    <key>enablePrivateClipboard</key>
+    <key>displayAlwaysOn</key>
     <true />
-    <key>enableRightMouse</key>
-    <true />
-    <key>enableSebBrowser</key>
-    <true />
-    <key>enableSessionVerification</key>
-    <true />
-    <key>enableStartMenu</key>
-    <false />
-    <key>enableTouchExit</key>
-    <false />
-    <key>enableURLContentFilter</key>
-    <false />
-    <key>enableURLFilter</key>
-    <false />
-    <key>enableWindowsUpdate</key>
-    <false />
-    <key>enableZoomPage</key>
-    <true />
-    <key>enableZoomText</key>
-    <true />
-    <key>examKeySalt</key>
-    <data>Oxq/gOXAFMaj97N0A0cz7xDpqE/rt1FxmFr4iGEkrQY=</data>
-    <key>examSessionClearCookiesOnEnd</key>
-    <true />
-    <key>examSessionClearCookiesOnStart</key>
-    <true />
-    <key>examSessionReconfigureAllow</key>
-    <false />
-    <key>examSessionReconfigureConfigURL</key>
-    <string />
-    <key>exitKey1</key>
-    <integer>2</integer>
-    <key>exitKey2</key>
-    <integer>10</integer>
-    <key>exitKey3</key>
-    <integer>5</integer>
-    <key>forceAppFolderInstall</key>
-    <true />
-    <key>hashedAdminPassword</key>
-    <string />
-    <key>hashedQuitPassword</key>
-    <string />
-    <key>hideBrowserWindowToolbar</key>
-    <false />
-    <key>hookKeys</key>
-    <true />
-    <key>ignoreExitKeys</key>
-    <true />
-    <key>insideSebEnableChangeAPassword</key>
-    <false />
-    <key>insideSebEnableEaseOfAccess</key>
-    <false />
-    <key>insideSebEnableLockThisComputer</key>
-    <false />
-    <key>insideSebEnableLogOff</key>
-    <false />
-    <key>insideSebEnableNetworkConnectionSelector</key>
-    <false />
-    <key>insideSebEnableShutDown</key>
-    <false />
-    <key>insideSebEnableStartTaskManager</key>
-    <false />
-    <key>insideSebEnableSwitchUser</key>
-    <false />
-    <key>insideSebEnableVmWareClientShade</key>
-    <false />
-    <key>killExplorerShell</key>
-    <false />
-    <key>lockOnMessageSocketClose</key>
-    <true />
-    <key>lockScreenBackgroundColor</key>
-    <string>#ff0000</string>
-    <key>logDirectoryOSX</key>
-    <string />
-    <key>logDirectoryWin</key>
-    <string />
-    <key>mainBrowserWindowHeight</key>
-    <string>100%</string>
-    <key>mainBrowserWindowPositioning</key>
-    <integer>1</integer>
-    <key>mainBrowserWindowWidth</key>
-    <string>100%</string>
-    <key>minMacOSVersion</key>
-    <integer>4</integer>
-    <key>monitorProcesses</key>
-    <true />
-    <key>newBrowserWindowAllowAddressBar</key>
-    <true />
-    <key>newBrowserWindowAllowReload</key>
-    <true />
-    <key>newBrowserWindowByLinkBlockForeign</key>
-    <false />
-    <key>newBrowserWindowByLinkHeight</key>
-    <string>100%</string>
-    <key>newBrowserWindowByLinkPolicy</key>
-    <integer>2</integer>
-    <key>newBrowserWindowByLinkPositioning</key>
-    <integer>2</integer>
-    <key>newBrowserWindowByLinkWidth</key>
-    <string>1000</string>
-    <key>newBrowserWindowByScriptBlockForeign</key>
-    <false />
-    <key>newBrowserWindowByScriptPolicy</key>
-    <integer>2</integer>
-    <key>newBrowserWindowNavigation</key>
-    <true />
-    <key>newBrowserWindowShowReloadWarning</key>
-    <false />
-    <key>newBrowserWindowShowURL</key>
-    <integer>0</integer>
-    <key>openDownloads</key>
-    <false />
-    <key>originatorVersion</key>
-    <string>SEB_Win_2.1.1</string>
-    <key>oskBehavior</key>
-    <integer>2</integer>
-    <key>permittedProcesses</key>
-    <array></array>
-    <key>pinEmbeddedCertificates</key>
-    <false />
-    <key>prohibitedProcesses</key>
-    <array>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Guilded.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Guilded.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>sethc.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>sethc.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>vlc.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>vlc.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Microsoft.Media.Player.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Microsoft.Media.Player.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>spotify.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>spotify.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>obs32.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>obs32.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>obs64.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>obs64.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>pcmontask.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>pcmontask.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>PCMonitorSrv.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>PCMonitorSrv.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>strwinclt.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>strwinclt.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>SRServer.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>SRServer.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>remoting_host.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>remoting_host.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CiscoWebExStart.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CiscoWebExStart.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CiscoCollabHost.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CiscoCollabHost.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>AA_v3.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>AA_v3.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>ptoneclk.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>ptoneclk.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>webexmta.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>webexmta.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>MS-Teams.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>MS-Teams.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Teams.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Teams.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>join.me.sentinel.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>join.me.sentinel.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>join.me.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>join.me.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>g2mstart.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>g2mstart.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>g2mlauncher.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>g2mlauncher.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>g2mcomm.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>g2mcomm.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Telegram.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Telegram.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Zoom.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Zoom.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Element.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Element.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>slack.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>slack.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CamtasiaUtl.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CamtasiaUtl.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CamRecorder.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CamRecorder.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CamPlay.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CamPlay.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Camtasia_Studio.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Camtasia_Studio.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CamtasiaStudio.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CamtasiaStudio.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Camtasia.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Camtasia.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>DiscordCanary.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>DiscordCanary.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>DiscordPTB.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>DiscordPTB.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Discord.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Discord.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>RPCSuite.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>RPCSuite.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>RPCService.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>RPCService.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>RemotePCDesktop.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>RemotePCDesktop.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>beamyourscreen-host.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>beamyourscreen-host.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>AeroAdmin.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>AeroAdmin.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Mikogo-host.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Mikogo-host.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>chromoting.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>chromoting.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>vncserverui.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>vncserverui.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>vncviewer.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>vncviewer.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>vncserver.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>vncserver.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>TeamViewer.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>TeamViewer.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>GotoMeetingWinStore.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>GotoMeetingWinStore.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>SkypeHost.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>SkypeHost.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>SkypeApp.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>SkypeApp.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Skype.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Skype.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-    </array>
-    <key>proxies</key>
-    <dict>
-      <key>AutoConfigurationEnabled</key>
-      <false />
-      <key>AutoConfigurationJavaScript</key>
-      <string />
-      <key>AutoConfigurationURL</key>
-      <string />
-      <key>AutoDiscoveryEnabled</key>
-      <false />
-      <key>ExceptionsList</key>
-      <array></array>
-      <key>ExcludeSimpleHostnames</key>
-      <false />
-      <key>FTPEnable</key>
-      <false />
-      <key>FTPPassive</key>
-      <true />
-      <key>FTPPassword</key>
-      <string />
-      <key>FTPPort</key>
-      <integer>21</integer>
-      <key>FTPProxy</key>
-      <string />
-      <key>FTPRequiresPassword</key>
-      <false />
-      <key>FTPUsername</key>
-      <string />
-      <key>HTTPEnable</key>
-      <false />
-      <key>HTTPPassword</key>
-      <string />
-      <key>HTTPPort</key>
-      <integer>80</integer>
-      <key>HTTPProxy</key>
-      <string />
-      <key>HTTPRequiresPassword</key>
-      <false />
-      <key>HTTPSEnable</key>
-      <false />
-      <key>HTTPSPassword</key>
-      <string />
-      <key>HTTPSPort</key>
-      <integer>443</integer>
-      <key>HTTPSProxy</key>
-      <string />
-      <key>HTTPSRequiresPassword</key>
-      <false />
-      <key>HTTPSUsername</key>
-      <string />
-      <key>HTTPUsername</key>
-      <string />
-      <key>RTSPEnable</key>
-      <false />
-      <key>RTSPPassword</key>
-      <string />
-      <key>RTSPPort</key>
-      <integer>554</integer>
-      <key>RTSPProxy</key>
-      <string />
-      <key>RTSPRequiresPassword</key>
-      <false />
-      <key>RTSPUsername</key>
-      <string />
-      <key>SOCKSEnable</key>
-      <false />
-      <key>SOCKSPassword</key>
-      <string />
-      <key>SOCKSPort</key>
-      <integer>1080</integer>
-      <key>SOCKSProxy</key>
-      <string />
-      <key>SOCKSRequiresPassword</key>
-      <false />
-      <key>SOCKSUsername</key>
-      <string />
-    </dict>
-    <key>proxySettingsPolicy</key>
-    <integer>0</integer>
-    <key>quitURL</key>
-    <string />
-    <key>quitURLConfirm</key>
-    <true />
-    <key>quitURLRestart</key>
-    <false />
-    <key>removeBrowserProfile</key>
-    <true />
-    <key>removeLocalStorage</key>
-    <false />
-    <key>restartExamPasswordProtected</key>
-    <true />
-    <key>restartExamText</key>
-    <string>http://localhost:3000/stem-exam?token=${token}</string>
-    <key>restartExamURL</key>
-    <string />
-    <key>restartExamUseStartURL</key>
-    <true />
-    <key>sebConfigPurpose</key>
-    <integer>0</integer>
-    <key>sebMode</key>
-    <integer>0</integer>
-    <key>sebServerURL</key>
-    <string />
-    <key>sebServiceIgnore</key>
-    <true />
-    <key>sebServicePolicy</key>
-    <integer>1</integer>
-    <key>sendBrowserExamKey</key>
-    <true />
-    <key>setVmwareConfiguration</key>
-    <false />
-    <key>showApplicationLogButton</key>
-    <false />
-    <key>showInputLanguage</key>
-    <true />
-    <key>showMenuBar</key>
-    <false />
-    <key>showReloadButton</key>
-    <true />
-    <key>showReloadWarning</key>
-    <true />
-    <key>showSideMenu</key>
-    <true />
-    <key>showTaskBar</key>
-    <true />
-    <key>showTime</key>
-    <true />
-    <key>startResource</key>
-    <string />
-    <key>startURL</key>
-    <string>http://localhost:3000/stem-exam?token=${token}</string>
-    <key>startURLAppendQueryParameter</key>
-    <false />
     <key>systemAlwaysOn</key>
     <true />
-    <key>taskBarHeight</key>
-    <integer>40</integer>
-    <key>touchOptimized</key>
-    <false />
-    <key>URLFilterEnable</key>
-    <false />
-    <key>URLFilterEnableContentFilter</key>
-    <false />
-    <key>urlFilterRegex</key>
-    <true />
-    <key>URLFilterRules</key>
-    <array></array>
-    <key>urlFilterTrustedContent</key>
-    <true />
-    <key>useAsymmetricOnlyEncryption</key>
-    <false />
-    <key>useTemporaryDownUploadDirectory</key>
-    <false />
-    <key>whitelistURLFilter</key>
-    <string />
-    <key>zoomMode</key>
-    <integer>0</integer>
   </dict>
 </plist>`;
   }
 
   // if Node env is production
-  return `
-  <?xml version="1.0" encoding="utf-8"?>
+  return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-    <key>additionalDictionaries</key>
-    <array></array>
-    <key>additionalResources</key>
-    <array></array>
-    <key>allowApplicationLog</key>
-    <false />
-    <key>allowAudioCapture</key>
-    <false />
-    <key>allowBrowsingBackForward</key>
-    <false />
-    <key>allowCustomDownUploadLocation</key>
+    <key>originatorVersion</key>
+    <string>SEB_Win_2.1.1</string>
+    <key>startURL</key>
+    <string>https://m-fest-xi.vercel.app/login</string>
+    <key>startResource</key>
+    <string />
+    <key>sebServerURL</key>
+    <string />
+    <key>hashedAdminPassword</key>
+    <string />
+    <key>allowQuit</key>
     <true />
-    <key>allowDeveloperConsole</key>
+    <key>ignoreExitKeys</key>
+    <true />
+    <key>hashedQuitPassword</key>
+    <string />
+    <key>exitKey1</key>
+    <integer>2</integer>
+    <key>exitKey2</key>
+    <integer>10</integer>
+    <key>exitKey3</key>
+    <integer>5</integer>
+    <key>sebMode</key>
+    <integer>0</integer>
+    <key>browserMessagingSocket</key>
+    <string>ws://localhost:8706</string>
+    <key>browserMessagingPingTime</key>
+    <integer>120000</integer>
+    <key>sebConfigPurpose</key>
+    <integer>0</integer>
+    <key>allowPreferencesWindow</key>
+    <true />
+    <key>useAsymmetricOnlyEncryption</key>
     <false />
-    <key>allowDictation</key>
+    <key>browserViewMode</key>
+    <integer>1</integer>
+    <key>browserWindowAllowAddressBar</key>
+    <false />
+    <key>newBrowserWindowAllowAddressBar</key>
+    <false />
+    <key>mainBrowserWindowWidth</key>
+    <string>100%</string>
+    <key>mainBrowserWindowHeight</key>
+    <string>100%</string>
+    <key>mainBrowserWindowPositioning</key>
+    <integer>1</integer>
+    <key>enableBrowserWindowToolbar</key>
+    <false />
+    <key>hideBrowserWindowToolbar</key>
+    <false />
+    <key>showMenuBar</key>
+    <false />
+    <key>showTaskBar</key>
+    <true />
+    <key>showSideMenu</key>
+    <true />
+    <key>taskBarHeight</key>
+    <integer>40</integer>
+    <key>touchOptimized</key>
+    <false />
+    <key>enableZoomText</key>
+    <true />
+    <key>enableZoomPage</key>
+    <true />
+    <key>zoomMode</key>
+    <integer>0</integer>
+    <key>allowSpellCheck</key>
     <false />
     <key>allowDictionaryLookup</key>
     <false />
-    <key>allowDisplayMirroring</key>
-    <false />
-    <key>allowDownloads</key>
-    <true />
-    <key>allowedDisplayBuiltin</key>
-    <true />
-    <key>allowedDisplayBuiltinEnforce</key>
-    <false />
-    <key>allowedDisplaysIgnoreFailure</key>
-    <false />
-    <key>allowedDisplaysMaxNumber</key>
-    <integer>1</integer>
-    <key>allowFind</key>
-    <true />
-    <key>allowFlashFullscreen</key>
-    <false />
-    <key>allowPDFPlugIn</key>
-    <false />
-    <key>allowPDFReaderToolbar</key>
-    <false />
-    <key>allowPreferencesWindow</key>
-    <true />
-    <key>allowPrint</key>
-    <false />
-    <key>allowQuit</key>
-    <true />
-    <key>allowScreenSharing</key>
-    <false />
-    <key>allowSiri</key>
-    <false />
-    <key>allowSpellCheck</key>
-    <false />
     <key>allowSpellCheckDictionary</key>
     <array></array>
-    <key>allowStickyKeys</key>
-    <false />
-    <key>allowSwitchToApplications</key>
-    <false />
-    <key>allowUploads</key>
+    <key>additionalDictionaries</key>
+    <array></array>
+    <key>showReloadButton</key>
     <true />
-    <key>allowUserAppFolderInstall</key>
-    <false />
-    <key>allowVideoCapture</key>
-    <false />
-    <key>allowVirtualMachine</key>
-    <false />
-    <key>allowWlan</key>
+    <key>showTime</key>
     <true />
+    <key>showInputLanguage</key>
+    <true />
+    <key>enableTouchExit</key>
+    <false />
+    <key>oskBehavior</key>
+    <integer>2</integer>
     <key>audioControlEnabled</key>
     <true />
     <key>audioMute</key>
     <false />
-    <key>audioSetVolumeLevel</key>
-    <false />
     <key>audioVolumeLevel</key>
     <integer>25</integer>
-    <key>backgroundOpenSEBConfig</key>
+    <key>audioSetVolumeLevel</key>
+    <false />
+    <key>allowDeveloperConsole</key>
     <false />
     <key>batteryChargeThresholdCritical</key>
     <real>0.1</real>
     <key>batteryChargeThresholdLow</key>
     <real>0.2</real>
-    <key>blacklistURLFilter</key>
-    <string />
-    <key>blockPopUpWindows</key>
-    <false />
-    <key>browserExamKey</key>
-    <string />
-    <key>browserMessagingPingTime</key>
-    <integer>120000</integer>
-    <key>browserMessagingSocket</key>
-    <string>ws://localhost:8706</string>
     <key>browserScreenKeyboard</key>
     <false />
-    <key>browserShowFileSystemElementPath</key>
-    <true />
-    <key>browserURLSalt</key>
-    <true />
-    <key>browserUserAgent</key>
-    <string />
-    <key>browserUserAgentMac</key>
+    <key>newBrowserWindowByLinkPolicy</key>
+    <integer>2</integer>
+    <key>newBrowserWindowByScriptPolicy</key>
+    <integer>2</integer>
+    <key>newBrowserWindowByLinkBlockForeign</key>
+    <false />
+    <key>newBrowserWindowByScriptBlockForeign</key>
+    <false />
+    <key>newBrowserWindowByLinkWidth</key>
+    <string>1000</string>
+    <key>newBrowserWindowByLinkHeight</key>
+    <string>100%</string>
+    <key>newBrowserWindowByLinkPositioning</key>
+    <integer>2</integer>
+    <key>newBrowserWindowShowURL</key>
     <integer>0</integer>
-    <key>browserUserAgentMacCustom</key>
-    <string />
+    <key>browserWindowShowURL</key>
+    <integer>0</integer>
+    <key>enablePlugIns</key>
+    <true />
+    <key>enableJava</key>
+    <false />
+    <key>enableJavaScript</key>
+    <true />
+    <key>blockPopUpWindows</key>
+    <false />
+    <key>allowVideoCapture</key>
+    <false />
+    <key>allowAudioCapture</key>
+    <false />
+    <key>allowBrowsingBackForward</key>
+    <false />
+    <key>newBrowserWindowNavigation</key>
+    <true />
+    <key>removeBrowserProfile</key>
+    <true />
+    <key>removeLocalStorage</key>
+    <false />
+    <key>enableSebBrowser</key>
+    <true />
+    <key>browserWindowAllowReload</key>
+    <true />
+    <key>newBrowserWindowAllowReload</key>
+    <true />
+    <key>showReloadWarning</key>
+    <true />
+    <key>newBrowserWindowShowReloadWarning</key>
+    <false />
     <key>browserUserAgentWinDesktopMode</key>
     <integer>0</integer>
     <key>browserUserAgentWinDesktopModeCustom</key>
     <string />
     <key>browserUserAgentWinTouchMode</key>
     <integer>0</integer>
-    <key>browserUserAgentWinTouchModeCustom</key>
-    <string />
     <key>browserUserAgentWinTouchModeIPad</key>
     <string>Mozilla/5.0 (iPad; CPU OS 11_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/11.3 Mobile/15E216 Safari/605.1.15</string>
-    <key>browserViewMode</key>
-    <integer>1</integer>
-    <key>browserWindowAllowAddressBar</key>
-    <true />
-    <key>browserWindowAllowReload</key>
-    <true />
-    <key>browserWindowShowURL</key>
+    <key>browserUserAgentWinTouchModeCustom</key>
+    <string />
+    <key>browserUserAgent</key>
+    <string />
+    <key>browserUserAgentMac</key>
     <integer>0</integer>
+    <key>browserUserAgentMacCustom</key>
+    <string />
     <key>browserWindowTitleSuffix</key>
     <string />
-    <key>chooseFileToUploadPolicy</key>
-    <integer>0</integer>
-    <key>clipboardPolicy</key>
-    <integer>2</integer>
-    <key>createNewDesktop</key>
-    <true />
-    <key>detectStoppedProcess</key>
-    <true />
-    <key>disableSessionChangeLockScreen</key>
+    <key>allowPDFReaderToolbar</key>
     <false />
-    <key>displayAlwaysOn</key>
+    <key>allowFind</key>
     <true />
-    <key>downloadAndOpenSebConfig</key>
-    <true />
+    <key>allowPrint</key>
+    <false />
+    <key>allowCustomDownUploadLocation</key>
+    <false />
     <key>downloadDirectoryOSX</key>
     <string>~/Downloads</string>
     <key>downloadDirectoryWin</key>
     <string />
+    <key>openDownloads</key>
+    <false />
+    <key>chooseFileToUploadPolicy</key>
+    <integer>0</integer>
     <key>downloadPDFFiles</key>
     <false />
+    <key>allowPDFPlugIn</key>
+    <false />
+    <key>downloadAndOpenSebConfig</key>
+    <true />
+    <key>backgroundOpenSEBConfig</key>
+    <false />
+    <key>useTemporaryDownUploadDirectory</key>
+    <false />
+    <key>browserShowFileSystemElementPath</key>
+    <true />
+    <key>allowDownloads</key>
+    <true />
+    <key>allowUploads</key>
+    <true />
+    <key>examKeySalt</key>
+    <data>ZzLkjkSdf+F/K6ZqJ1WgsjBdJ7SbUEhs7tVQBM6UegA=</data>
+    <key>examSessionClearCookiesOnEnd</key>
+    <true />
+    <key>examSessionClearCookiesOnStart</key>
+    <true />
+    <key>browserExamKey</key>
+    <string />
+    <key>browserURLSalt</key>
+    <true />
+    <key>sendBrowserExamKey</key>
+    <true />
+    <key>quitURL</key>
+    <string />
+    <key>quitURLConfirm</key>
+    <true />
+    <key>restartExamURL</key>
+    <string />
+    <key>restartExamUseStartURL</key>
+    <false />
+    <key>restartExamText</key>
+    <string />
+    <key>restartExamPasswordProtected</key>
+    <true />
+    <key>examSessionReconfigureAllow</key>
+    <false />
+    <key>examSessionReconfigureConfigURL</key>
+    <string />
+    <key>quitURLRestart</key>
+    <false />
+    <key>startURLAppendQueryParameter</key>
+    <false />
+    <key>additionalResources</key>
+    <array></array>
+    <key>monitorProcesses</key>
+    <true />
+    <key>allowSwitchToApplications</key>
+    <true />
+    <key>allowFlashFullscreen</key>
+    <false />
+    <key>permittedProcesses</key>
+    <array>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>autostart</key>
+        <false />
+        <key>iconInTaskbar</key>
+        <true />
+        <key>runInBackground</key>
+        <true />
+        <key>allowUserToChooseApp</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>title</key>
+        <string>Zoom</string>
+        <key>description</key>
+        <string />
+        <key>executable</key>
+        <string>Zoom.exe</string>
+        <key>originalName</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>path</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>arguments</key>
+        <array></array>
+        <key>signature</key>
+        <string />
+      </dict>
+    </array>
+    <key>prohibitedProcesses</key>
+    <array>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Guilded.exe</string>
+        <key>originalName</key>
+        <string>Guilded.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>sethc.exe</string>
+        <key>originalName</key>
+        <string>sethc.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>vlc.exe</string>
+        <key>originalName</key>
+        <string>vlc.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Microsoft.Media.Player.exe</string>
+        <key>originalName</key>
+        <string>Microsoft.Media.Player.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>spotify.exe</string>
+        <key>originalName</key>
+        <string>spotify.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>obs32.exe</string>
+        <key>originalName</key>
+        <string>obs32.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>obs64.exe</string>
+        <key>originalName</key>
+        <string>obs64.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>pcmontask.exe</string>
+        <key>originalName</key>
+        <string>pcmontask.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>PCMonitorSrv.exe</string>
+        <key>originalName</key>
+        <string>PCMonitorSrv.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>strwinclt.exe</string>
+        <key>originalName</key>
+        <string>strwinclt.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>SRServer.exe</string>
+        <key>originalName</key>
+        <string>SRServer.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>remoting_host.exe</string>
+        <key>originalName</key>
+        <string>remoting_host.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CiscoWebExStart.exe</string>
+        <key>originalName</key>
+        <string>CiscoWebExStart.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CiscoCollabHost.exe</string>
+        <key>originalName</key>
+        <string>CiscoCollabHost.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>AA_v3.exe</string>
+        <key>originalName</key>
+        <string>AA_v3.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>ptoneclk.exe</string>
+        <key>originalName</key>
+        <string>ptoneclk.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>webexmta.exe</string>
+        <key>originalName</key>
+        <string>webexmta.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>MS-Teams.exe</string>
+        <key>originalName</key>
+        <string>MS-Teams.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Teams.exe</string>
+        <key>originalName</key>
+        <string>Teams.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>join.me.sentinel.exe</string>
+        <key>originalName</key>
+        <string>join.me.sentinel.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>join.me.exe</string>
+        <key>originalName</key>
+        <string>join.me.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>g2mstart.exe</string>
+        <key>originalName</key>
+        <string>g2mstart.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>g2mlauncher.exe</string>
+        <key>originalName</key>
+        <string>g2mlauncher.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>g2mcomm.exe</string>
+        <key>originalName</key>
+        <string>g2mcomm.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Telegram.exe</string>
+        <key>originalName</key>
+        <string>Telegram.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Zoom.exe</string>
+        <key>originalName</key>
+        <string>Zoom.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Element.exe</string>
+        <key>originalName</key>
+        <string>Element.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>slack.exe</string>
+        <key>originalName</key>
+        <string>slack.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CamtasiaUtl.exe</string>
+        <key>originalName</key>
+        <string>CamtasiaUtl.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CamRecorder.exe</string>
+        <key>originalName</key>
+        <string>CamRecorder.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CamPlay.exe</string>
+        <key>originalName</key>
+        <string>CamPlay.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Camtasia_Studio.exe</string>
+        <key>originalName</key>
+        <string>Camtasia_Studio.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>CamtasiaStudio.exe</string>
+        <key>originalName</key>
+        <string>CamtasiaStudio.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Camtasia.exe</string>
+        <key>originalName</key>
+        <string>Camtasia.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>DiscordCanary.exe</string>
+        <key>originalName</key>
+        <string>DiscordCanary.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>DiscordPTB.exe</string>
+        <key>originalName</key>
+        <string>DiscordPTB.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Discord.exe</string>
+        <key>originalName</key>
+        <string>Discord.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>RPCSuite.exe</string>
+        <key>originalName</key>
+        <string>RPCSuite.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>RPCService.exe</string>
+        <key>originalName</key>
+        <string>RPCService.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>RemotePCDesktop.exe</string>
+        <key>originalName</key>
+        <string>RemotePCDesktop.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>beamyourscreen-host.exe</string>
+        <key>originalName</key>
+        <string>beamyourscreen-host.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>AeroAdmin.exe</string>
+        <key>originalName</key>
+        <string>AeroAdmin.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Mikogo-host.exe</string>
+        <key>originalName</key>
+        <string>Mikogo-host.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>chromoting.exe</string>
+        <key>originalName</key>
+        <string>chromoting.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>vncserverui.exe</string>
+        <key>originalName</key>
+        <string>vncserverui.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>vncviewer.exe</string>
+        <key>originalName</key>
+        <string>vncviewer.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>vncserver.exe</string>
+        <key>originalName</key>
+        <string>vncserver.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>TeamViewer.exe</string>
+        <key>originalName</key>
+        <string>TeamViewer.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>GotoMeetingWinStore.exe</string>
+        <key>originalName</key>
+        <string>GotoMeetingWinStore.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>SkypeHost.exe</string>
+        <key>originalName</key>
+        <string>SkypeHost.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>SkypeApp.exe</string>
+        <key>originalName</key>
+        <string>SkypeApp.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+      <dict>
+        <key>active</key>
+        <true />
+        <key>currentUser</key>
+        <true />
+        <key>strongKill</key>
+        <false />
+        <key>os</key>
+        <integer>1</integer>
+        <key>executable</key>
+        <string>Skype.exe</string>
+        <key>originalName</key>
+        <string>Skype.exe</string>
+        <key>description</key>
+        <string />
+        <key>identifier</key>
+        <string />
+        <key>windowHandlingProcess</key>
+        <string />
+        <key>user</key>
+        <string />
+      </dict>
+    </array>
+    <key>enableURLFilter</key>
+    <false />
+    <key>enableURLContentFilter</key>
+    <false />
+    <key>URLFilterRules</key>
+    <array></array>
+    <key>URLFilterEnable</key>
+    <false />
+    <key>URLFilterEnableContentFilter</key>
+    <false />
+    <key>blacklistURLFilter</key>
+    <string />
+    <key>whitelistURLFilter</key>
+    <string />
+    <key>urlFilterTrustedContent</key>
+    <true />
+    <key>urlFilterRegex</key>
+    <true />
     <key>embeddedCertificates</key>
     <array></array>
-    <key>enableAltEsc</key>
+    <key>pinEmbeddedCertificates</key>
     <false />
-    <key>enableAltF4</key>
-    <false />
-    <key>enableAltMouseWheel</key>
-    <false />
-    <key>enableAltTab</key>
+    <key>proxySettingsPolicy</key>
+    <integer>0</integer>
+    <key>proxies</key>
+    <dict>
+      <key>ExceptionsList</key>
+      <array></array>
+      <key>ExcludeSimpleHostnames</key>
+      <false />
+      <key>AutoDiscoveryEnabled</key>
+      <false />
+      <key>AutoConfigurationEnabled</key>
+      <false />
+      <key>AutoConfigurationJavaScript</key>
+      <string />
+      <key>AutoConfigurationURL</key>
+      <string />
+      <key>FTPPassive</key>
+      <true />
+      <key>HTTPEnable</key>
+      <false />
+      <key>HTTPPort</key>
+      <integer>80</integer>
+      <key>HTTPProxy</key>
+      <string />
+      <key>HTTPRequiresPassword</key>
+      <false />
+      <key>HTTPUsername</key>
+      <string />
+      <key>HTTPPassword</key>
+      <string />
+      <key>HTTPSEnable</key>
+      <false />
+      <key>HTTPSPort</key>
+      <integer>443</integer>
+      <key>HTTPSProxy</key>
+      <string />
+      <key>HTTPSRequiresPassword</key>
+      <false />
+      <key>HTTPSUsername</key>
+      <string />
+      <key>HTTPSPassword</key>
+      <string />
+      <key>FTPEnable</key>
+      <false />
+      <key>FTPPort</key>
+      <integer>21</integer>
+      <key>FTPProxy</key>
+      <string />
+      <key>FTPRequiresPassword</key>
+      <false />
+      <key>FTPUsername</key>
+      <string />
+      <key>FTPPassword</key>
+      <string />
+      <key>SOCKSEnable</key>
+      <false />
+      <key>SOCKSPort</key>
+      <integer>1080</integer>
+      <key>SOCKSProxy</key>
+      <string />
+      <key>SOCKSRequiresPassword</key>
+      <false />
+      <key>SOCKSUsername</key>
+      <string />
+      <key>SOCKSPassword</key>
+      <string />
+      <key>RTSPEnable</key>
+      <false />
+      <key>RTSPPort</key>
+      <integer>554</integer>
+      <key>RTSPProxy</key>
+      <string />
+      <key>RTSPRequiresPassword</key>
+      <false />
+      <key>RTSPUsername</key>
+      <string />
+      <key>RTSPPassword</key>
+      <string />
+    </dict>
+    <key>sebServicePolicy</key>
+    <integer>1</integer>
+    <key>sebServiceIgnore</key>
     <true />
+    <key>allowVirtualMachine</key>
+    <false />
+    <key>allowScreenSharing</key>
+    <false />
+    <key>enablePrivateClipboard</key>
+    <true />
+    <key>createNewDesktop</key>
+    <true />
+    <key>killExplorerShell</key>
+    <false />
+    <key>enableLogging</key>
+    <true />
+    <key>allowApplicationLog</key>
+    <false />
+    <key>showApplicationLogButton</key>
+    <false />
+    <key>logDirectoryOSX</key>
+    <string />
+    <key>logDirectoryWin</key>
+    <string />
+    <key>allowWlan</key>
+    <false />
+    <key>lockOnMessageSocketClose</key>
+    <true />
+    <key>minMacOSVersion</key>
+    <integer>4</integer>
     <key>enableAppSwitcherCheck</key>
     <true />
-    <key>enableBrowserWindowToolbar</key>
+    <key>forceAppFolderInstall</key>
     <true />
+    <key>allowUserAppFolderInstall</key>
+    <false />
+    <key>allowSiri</key>
+    <false />
+    <key>allowDictation</key>
+    <false />
+    <key>detectStoppedProcess</key>
+    <true />
+    <key>allowDisplayMirroring</key>
+    <false />
+    <key>allowedDisplaysMaxNumber</key>
+    <integer>1</integer>
+    <key>allowedDisplayBuiltin</key>
+    <true />
+    <key>allowedDisplayBuiltinEnforce</key>
+    <false />
+    <key>allowedDisplaysIgnoreFailure</key>
+    <false />
     <key>enableChromeNotifications</key>
     <false />
-    <key>enableCtrlEsc</key>
+    <key>enableWindowsUpdate</key>
+    <false />
+    <key>clipboardPolicy</key>
+    <integer>2</integer>
+    <key>disableSessionChangeLockScreen</key>
     <false />
     <key>enableCursorVerification</key>
     <true />
+    <key>enableSessionVerification</key>
+    <true />
+    <key>lockScreenBackgroundColor</key>
+    <string>#ff0000</string>
+    <key>allowStickyKeys</key>
+    <false />
+    <key>insideSebEnableSwitchUser</key>
+    <false />
+    <key>insideSebEnableLockThisComputer</key>
+    <false />
+    <key>insideSebEnableChangeAPassword</key>
+    <false />
+    <key>insideSebEnableStartTaskManager</key>
+    <false />
+    <key>insideSebEnableLogOff</key>
+    <false />
+    <key>insideSebEnableShutDown</key>
+    <false />
+    <key>insideSebEnableEaseOfAccess</key>
+    <false />
+    <key>insideSebEnableVmWareClientShade</key>
+    <false />
+    <key>insideSebEnableNetworkConnectionSelector</key>
+    <false />
+    <key>setVmwareConfiguration</key>
+    <false />
+    <key>enableFindPrinter</key>
+    <false />
+    <key>hookKeys</key>
+    <true />
     <key>enableEsc</key>
     <true />
+    <key>enableCtrlEsc</key>
+    <false />
+    <key>enableAltEsc</key>
+    <false />
+    <key>enableAltTab</key>
+    <true />
+    <key>enableAltF4</key>
+    <false />
+    <key>enableStartMenu</key>
+    <false />
+    <key>enableMiddleMouse</key>
+    <false />
+    <key>enableRightMouse</key>
+    <true />
+    <key>enablePrintScreen</key>
+    <false />
+    <key>enableAltMouseWheel</key>
+    <false />
     <key>enableF1</key>
-    <true />
-    <key>enableF10</key>
-    <true />
-    <key>enableF11</key>
-    <true />
-    <key>enableF12</key>
     <true />
     <key>enableF2</key>
     <true />
@@ -1832,1446 +3331,16 @@ export function getSebConfig(token: string) {
     <true />
     <key>enableF9</key>
     <true />
-    <key>enableFindPrinter</key>
-    <false />
-    <key>enableJava</key>
-    <false />
-    <key>enableJavaScript</key>
+    <key>enableF10</key>
     <true />
-    <key>enableLogging</key>
+    <key>enableF11</key>
     <true />
-    <key>enableMiddleMouse</key>
-    <false />
-    <key>enablePlugIns</key>
+    <key>enableF12</key>
     <true />
-    <key>enablePrintScreen</key>
-    <false />
-    <key>enablePrivateClipboard</key>
+    <key>displayAlwaysOn</key>
     <true />
-    <key>enableRightMouse</key>
-    <true />
-    <key>enableSebBrowser</key>
-    <true />
-    <key>enableSessionVerification</key>
-    <true />
-    <key>enableStartMenu</key>
-    <false />
-    <key>enableTouchExit</key>
-    <false />
-    <key>enableURLContentFilter</key>
-    <false />
-    <key>enableURLFilter</key>
-    <false />
-    <key>enableWindowsUpdate</key>
-    <false />
-    <key>enableZoomPage</key>
-    <true />
-    <key>enableZoomText</key>
-    <true />
-    <key>examKeySalt</key>
-    <data>Oxq/gOXAFMaj97N0A0cz7xDpqE/rt1FxmFr4iGEkrQY=</data>
-    <key>examSessionClearCookiesOnEnd</key>
-    <true />
-    <key>examSessionClearCookiesOnStart</key>
-    <true />
-    <key>examSessionReconfigureAllow</key>
-    <false />
-    <key>examSessionReconfigureConfigURL</key>
-    <string />
-    <key>exitKey1</key>
-    <integer>2</integer>
-    <key>exitKey2</key>
-    <integer>10</integer>
-    <key>exitKey3</key>
-    <integer>5</integer>
-    <key>forceAppFolderInstall</key>
-    <true />
-    <key>hashedAdminPassword</key>
-    <string />
-    <key>hashedQuitPassword</key>
-    <string />
-    <key>hideBrowserWindowToolbar</key>
-    <false />
-    <key>hookKeys</key>
-    <true />
-    <key>ignoreExitKeys</key>
-    <true />
-    <key>insideSebEnableChangeAPassword</key>
-    <false />
-    <key>insideSebEnableEaseOfAccess</key>
-    <false />
-    <key>insideSebEnableLockThisComputer</key>
-    <false />
-    <key>insideSebEnableLogOff</key>
-    <false />
-    <key>insideSebEnableNetworkConnectionSelector</key>
-    <false />
-    <key>insideSebEnableShutDown</key>
-    <false />
-    <key>insideSebEnableStartTaskManager</key>
-    <false />
-    <key>insideSebEnableSwitchUser</key>
-    <false />
-    <key>insideSebEnableVmWareClientShade</key>
-    <false />
-    <key>killExplorerShell</key>
-    <false />
-    <key>lockOnMessageSocketClose</key>
-    <true />
-    <key>lockScreenBackgroundColor</key>
-    <string>#ff0000</string>
-    <key>logDirectoryOSX</key>
-    <string />
-    <key>logDirectoryWin</key>
-    <string />
-    <key>mainBrowserWindowHeight</key>
-    <string>100%</string>
-    <key>mainBrowserWindowPositioning</key>
-    <integer>1</integer>
-    <key>mainBrowserWindowWidth</key>
-    <string>100%</string>
-    <key>minMacOSVersion</key>
-    <integer>4</integer>
-    <key>monitorProcesses</key>
-    <true />
-    <key>newBrowserWindowAllowAddressBar</key>
-    <true />
-    <key>newBrowserWindowAllowReload</key>
-    <true />
-    <key>newBrowserWindowByLinkBlockForeign</key>
-    <false />
-    <key>newBrowserWindowByLinkHeight</key>
-    <string>100%</string>
-    <key>newBrowserWindowByLinkPolicy</key>
-    <integer>2</integer>
-    <key>newBrowserWindowByLinkPositioning</key>
-    <integer>2</integer>
-    <key>newBrowserWindowByLinkWidth</key>
-    <string>1000</string>
-    <key>newBrowserWindowByScriptBlockForeign</key>
-    <false />
-    <key>newBrowserWindowByScriptPolicy</key>
-    <integer>2</integer>
-    <key>newBrowserWindowNavigation</key>
-    <true />
-    <key>newBrowserWindowShowReloadWarning</key>
-    <false />
-    <key>newBrowserWindowShowURL</key>
-    <integer>0</integer>
-    <key>openDownloads</key>
-    <false />
-    <key>originatorVersion</key>
-    <string>SEB_Win_2.1.1</string>
-    <key>oskBehavior</key>
-    <integer>2</integer>
-    <key>permittedProcesses</key>
-    <array></array>
-    <key>pinEmbeddedCertificates</key>
-    <false />
-    <key>prohibitedProcesses</key>
-    <array>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Guilded.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Guilded.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>sethc.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>sethc.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>vlc.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>vlc.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Microsoft.Media.Player.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Microsoft.Media.Player.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>spotify.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>spotify.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>obs32.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>obs32.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>obs64.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>obs64.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>pcmontask.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>pcmontask.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>PCMonitorSrv.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>PCMonitorSrv.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>strwinclt.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>strwinclt.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>SRServer.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>SRServer.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>remoting_host.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>remoting_host.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CiscoWebExStart.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CiscoWebExStart.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CiscoCollabHost.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CiscoCollabHost.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>AA_v3.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>AA_v3.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>ptoneclk.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>ptoneclk.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>webexmta.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>webexmta.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>MS-Teams.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>MS-Teams.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Teams.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Teams.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>join.me.sentinel.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>join.me.sentinel.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>join.me.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>join.me.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>g2mstart.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>g2mstart.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>g2mlauncher.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>g2mlauncher.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>g2mcomm.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>g2mcomm.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Telegram.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Telegram.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Zoom.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Zoom.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Element.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Element.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>slack.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>slack.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CamtasiaUtl.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CamtasiaUtl.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CamRecorder.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CamRecorder.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CamPlay.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CamPlay.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Camtasia_Studio.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Camtasia_Studio.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>CamtasiaStudio.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>CamtasiaStudio.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Camtasia.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Camtasia.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>DiscordCanary.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>DiscordCanary.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>DiscordPTB.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>DiscordPTB.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Discord.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Discord.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>RPCSuite.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>RPCSuite.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>RPCService.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>RPCService.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>RemotePCDesktop.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>RemotePCDesktop.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>beamyourscreen-host.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>beamyourscreen-host.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>AeroAdmin.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>AeroAdmin.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Mikogo-host.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Mikogo-host.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>chromoting.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>chromoting.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>vncserverui.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>vncserverui.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>vncviewer.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>vncviewer.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>vncserver.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>vncserver.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>TeamViewer.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>TeamViewer.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>GotoMeetingWinStore.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>GotoMeetingWinStore.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>SkypeHost.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>SkypeHost.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>SkypeApp.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>SkypeApp.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-      <dict>
-        <key>active</key>
-        <true />
-        <key>currentUser</key>
-        <true />
-        <key>description</key>
-        <string />
-        <key>executable</key>
-        <string>Skype.exe</string>
-        <key>identifier</key>
-        <string />
-        <key>originalName</key>
-        <string>Skype.exe</string>
-        <key>os</key>
-        <integer>1</integer>
-        <key>strongKill</key>
-        <false />
-        <key>user</key>
-        <string />
-        <key>windowHandlingProcess</key>
-        <string />
-      </dict>
-    </array>
-    <key>proxies</key>
-    <dict>
-      <key>AutoConfigurationEnabled</key>
-      <false />
-      <key>AutoConfigurationJavaScript</key>
-      <string />
-      <key>AutoConfigurationURL</key>
-      <string />
-      <key>AutoDiscoveryEnabled</key>
-      <false />
-      <key>ExceptionsList</key>
-      <array></array>
-      <key>ExcludeSimpleHostnames</key>
-      <false />
-      <key>FTPEnable</key>
-      <false />
-      <key>FTPPassive</key>
-      <true />
-      <key>FTPPassword</key>
-      <string />
-      <key>FTPPort</key>
-      <integer>21</integer>
-      <key>FTPProxy</key>
-      <string />
-      <key>FTPRequiresPassword</key>
-      <false />
-      <key>FTPUsername</key>
-      <string />
-      <key>HTTPEnable</key>
-      <false />
-      <key>HTTPPassword</key>
-      <string />
-      <key>HTTPPort</key>
-      <integer>80</integer>
-      <key>HTTPProxy</key>
-      <string />
-      <key>HTTPRequiresPassword</key>
-      <false />
-      <key>HTTPSEnable</key>
-      <false />
-      <key>HTTPSPassword</key>
-      <string />
-      <key>HTTPSPort</key>
-      <integer>443</integer>
-      <key>HTTPSProxy</key>
-      <string />
-      <key>HTTPSRequiresPassword</key>
-      <false />
-      <key>HTTPSUsername</key>
-      <string />
-      <key>HTTPUsername</key>
-      <string />
-      <key>RTSPEnable</key>
-      <false />
-      <key>RTSPPassword</key>
-      <string />
-      <key>RTSPPort</key>
-      <integer>554</integer>
-      <key>RTSPProxy</key>
-      <string />
-      <key>RTSPRequiresPassword</key>
-      <false />
-      <key>RTSPUsername</key>
-      <string />
-      <key>SOCKSEnable</key>
-      <false />
-      <key>SOCKSPassword</key>
-      <string />
-      <key>SOCKSPort</key>
-      <integer>1080</integer>
-      <key>SOCKSProxy</key>
-      <string />
-      <key>SOCKSRequiresPassword</key>
-      <false />
-      <key>SOCKSUsername</key>
-      <string />
-    </dict>
-    <key>proxySettingsPolicy</key>
-    <integer>0</integer>
-    <key>quitURL</key>
-    <string />
-    <key>quitURLConfirm</key>
-    <true />
-    <key>quitURLRestart</key>
-    <false />
-    <key>removeBrowserProfile</key>
-    <true />
-    <key>removeLocalStorage</key>
-    <false />
-    <key>restartExamPasswordProtected</key>
-    <true />
-    <key>restartExamText</key>
-    <string>https://m-fest-xi.vercel.app/stem-exam?token=${token}</string>
-    <key>restartExamURL</key>
-    <string />
-    <key>restartExamUseStartURL</key>
-    <true />
-    <key>sebConfigPurpose</key>
-    <integer>0</integer>
-    <key>sebMode</key>
-    <integer>0</integer>
-    <key>sebServerURL</key>
-    <string />
-    <key>sebServiceIgnore</key>
-    <true />
-    <key>sebServicePolicy</key>
-    <integer>1</integer>
-    <key>sendBrowserExamKey</key>
-    <true />
-    <key>setVmwareConfiguration</key>
-    <false />
-    <key>showApplicationLogButton</key>
-    <false />
-    <key>showInputLanguage</key>
-    <true />
-    <key>showMenuBar</key>
-    <false />
-    <key>showReloadButton</key>
-    <true />
-    <key>showReloadWarning</key>
-    <true />
-    <key>showSideMenu</key>
-    <true />
-    <key>showTaskBar</key>
-    <true />
-    <key>showTime</key>
-    <true />
-    <key>startResource</key>
-    <string />
-    <key>startURL</key>
-    <string>https://m-fest-xi.vercel.app/stem-exam?token=${token}</string>
-    <key>startURLAppendQueryParameter</key>
-    <false />
     <key>systemAlwaysOn</key>
     <true />
-    <key>taskBarHeight</key>
-    <integer>40</integer>
-    <key>touchOptimized</key>
-    <false />
-    <key>URLFilterEnable</key>
-    <false />
-    <key>URLFilterEnableContentFilter</key>
-    <false />
-    <key>urlFilterRegex</key>
-    <true />
-    <key>URLFilterRules</key>
-    <array></array>
-    <key>urlFilterTrustedContent</key>
-    <true />
-    <key>useAsymmetricOnlyEncryption</key>
-    <false />
-    <key>useTemporaryDownUploadDirectory</key>
-    <false />
-    <key>whitelistURLFilter</key>
-    <string />
-    <key>zoomMode</key>
-    <integer>0</integer>
   </dict>
 </plist>`;
 }

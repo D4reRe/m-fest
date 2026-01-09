@@ -23,6 +23,7 @@ export const stemRouter = router({
   submitExam: protectedProcedure
     .input(stemExamSubmitSchema)
     .mutation(async ({ ctx, input }) => {
+      console.log(input);
       const newResult = await ctx.db.quizResult.create({
         data: {
           userId: input.userId,
@@ -31,6 +32,7 @@ export const stemRouter = router({
           timeSpent: input.timeSpent,
           answers: input.answers,
           type: input.type,
+          essayAnswer: input.essayAnswer ?? undefined,
           essayAnswerFileUrl: input.essayAnswerFileUrl ?? undefined,
           essayAnswerFileKey: input.essayAnswerFileKey ?? undefined,
         },

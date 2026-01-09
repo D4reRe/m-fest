@@ -15,6 +15,7 @@ import { db } from "@/server/db";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Button as HeroButton } from "@heroui/react";
 
 export async function generateMetadata({
   params,
@@ -135,8 +136,18 @@ async function FetchCompForm({
               </p>
               <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
                 <Button className="" variant={"outline"} asChild>
-                  <Link href={"/entry-exam"}>Start Exam</Link>
+                  <Link href={"entry-exam"}>Start Exam</Link>
                 </Button>
+                <HeroButton
+                  variant="primary"
+                  className={
+                    "rounded-sm bg-white/5 border-1 hover:bg-white/10 "
+                  }
+                >
+                  <Link href={`/api/exam-config`} download>
+                    Download SEB Config
+                  </Link>
+                </HeroButton>
               </div>
             </div>
           </div>

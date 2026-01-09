@@ -1,16 +1,10 @@
 import { env } from "@/env";
 import { getSebConfig } from "@/lib/seb-config";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
-  const token = req.nextUrl.searchParams.get("token");
-
-  if (!token) {
-    return new Response("Invalid token", { status: 400 });
-  }
-
+export async function GET() {
   if (env.NODE_ENV === "development") {
-    const sebConfig = getSebConfig(token);
+    const sebConfig = getSebConfig();
 
     return new NextResponse(sebConfig, {
       headers: {
@@ -21,7 +15,7 @@ export async function GET(req: NextRequest) {
   }
 
   // if Node env is production
-  const sebConfig = getSebConfig(token);
+  const sebConfig = getSebConfig();
 
   return new NextResponse(sebConfig, {
     headers: {

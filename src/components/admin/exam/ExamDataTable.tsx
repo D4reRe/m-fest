@@ -301,6 +301,22 @@ export function ExamDataTable() {
       },
     },
     {
+      accessorKey: "essayAnswer",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return examSubmission?.essayAnswer ?? "Not an essay type";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Essay Answer" />;
+      },
+      cell: ({ row }) => {
+        const essayAnswer = row.getValue("essayAnswer") as string;
+        return <span>{essayAnswer}</span>;
+      },
+    },
+    {
       accessorKey: "essayAnswerFileUrl",
       accessorFn: (row) => {
         const examSubmission = examSubmissions?.find(
@@ -557,6 +573,16 @@ export function ExamDataTable() {
                   }}
                 >
                   Type
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setFilterColumn("essayAnswer");
+                    table.getColumn("essayAnswer")?.setFilterValue("");
+                    table.resetColumnFilters();
+                  }}
+                >
+                  Essay Answer
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"

@@ -1,11 +1,27 @@
 import { auth } from "@/server/auth/auth";
 import { db } from "@/server/db";
 import { Button } from "@heroui/react";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+export const metadata: Metadata = {
+  title: "Entry Exam | Mechanical Festival 2026",
+  description: "Entry Exam",
+};
+
 export default async function EntryExamPage() {
+  const sebKey = await headers().then((h) =>
+    h.get("x-safeexambrowser-configkeyhash")
+  );
+  console.log("SEB Key for this client exam: ", sebKey);
+
+  if (!sebKey) {
+    console.log("SEB key not found, user is not using SEB");
+    redirect("use-seb");
+  }
+
   const session = await auth.api.getSession({
     headers: await headers(),
   });
@@ -40,25 +56,15 @@ export default async function EntryExamPage() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-4xl font-bold">Ready to start your exam</h1>
-      <p className="text-lg">
-        Open the exam using Safe Exam Browser{" "}
-        <a
-          href="https://www.safeexambrowser.org/download"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-        >
-          here
-        </a>
-        .
+      <p className="text-lg font-bold">
+        Closed Book Exam & Cheating is prohibited, you will be disqualified if
+        caught.
       </p>
       <Button
         variant="primary"
         className={"rounded-sm bg-white/5 border-1 hover:bg-white/10 mt-2"}
       >
-        <Link href={`/api/exam-config?token=${token}`} download>
-          Download SEB Config
-        </Link>
+        <Link href={`stem-exam?token=${token}`}>Start Exam</Link>
       </Button>
     </div>
   );
