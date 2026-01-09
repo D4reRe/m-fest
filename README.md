@@ -52,7 +52,6 @@ It serves as the official system for participants to register, create teams, and
   - Upload member's documents/requirements needed for verification.
   - Track verification status directly from dashboard.
 
-
 ### 🏆 Competition Registration
 
 - Team can be registered into available competitions.
@@ -68,20 +67,22 @@ It serves as the official system for participants to register, create teams, and
 - Displays payment status and transaction details in dashboard.
 
 ### 📄 Document Handling & Verification
+
 - Each member in a team may upload required verification documents.
 - Leader can upload documents on behalf of members.
 - Document verification flow built for Admin review.
 
 ### 🛠 Admin System (Fully Functional)
+
 - Admin Features:
 
-| View                       | Action Capabilities           |
-| -------------------------- | ----------------------------- |
-| Users list                 | View user details & role      |
-| User document details page | Approve / reject individually |
-| Accounts, sessions, teams  | Delete or manage records      |
-| Team documents             | Bulk approve / bulk reject    |
-| Promote/demote roles (SUPERADMIN)       | Set role → `USER` ↔ `ADMIN`   |
+| View                              | Action Capabilities           |
+| --------------------------------- | ----------------------------- |
+| Users list                        | View user details & role      |
+| User document details page        | Approve / reject individually |
+| Accounts, sessions, teams         | Delete or manage records      |
+| Team documents                    | Bulk approve / bulk reject    |
+| Promote/demote roles (SUPERADMIN) | Set role → `USER` ↔ `ADMIN`   |
 
 - Table powered by TanStack Table + ShadCN UI, supports search, filtering, column toggling.
 - Row actions allow bulk operations (approve all documents, delete multiple accounts, etc).
@@ -100,14 +101,14 @@ It serves as the official system for participants to register, create teams, and
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/mechfest-2026.git
-cd mechfest-2026
+git clone https://github.com/EnvoyX/m-fest.git
+cd m-fest
 ```
 
 ### 2. Install dependancies
 
 ```bash
-bun install
+npm install
 ```
 
 ### 3. Setup enviroment variables
@@ -149,11 +150,11 @@ SENTRY_AUTH_TOKEN=""
 ### 4 Initialize Prisma
 
 ```bash
-npx prisma generate
 npx prisma db push
+npx prisma generate
 ```
 
-### 5. Run the development server
+### 5. Run the development server (using bun for faster dev server)
 
 ```bash
 bun run dev
