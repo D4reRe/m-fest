@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build && bunx prisma generate",
+    "build": "next build && npx prisma generate",
     "start": "next start",
     "lint": "eslint",
     "migrate": "npx prisma generate && dotenv -e .env -- npx prisma migrate dev"
