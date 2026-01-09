@@ -8,25 +8,20 @@ import {
   Award,
   Timer,
   AlertCircle,
-  Loader2,
-  Trophy,
   List,
   ArrowRight,
-  Upload,
 } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
 import { sessionsData } from "@/lib/examQuestion";
 import { useRouter } from "next/navigation";
 import { useTRPC } from "@/utils/trpc";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { QuizTypes } from "../../../../../../prisma/generated/prisma/enums";
+import type { QuizTypes } from "../../../../prisma/generated/prisma/enums";
 import SubmitExamForm from "@/components/dashboard/competitions/EssaySubmitForm";
+import type { User } from "../../../../prisma/generated/prisma/client";
 
 // Menerima prop 'user' yang dikirim dari Server Component (ExamPage)
-export default function ExamClient({}) {
-  const session = authClient.useSession();
-  const user = session.data?.user;
+export default function ExamClient({ user }: { user: User }) {
   const router = useRouter();
   const trpc = useTRPC();
   const queryClient = useQueryClient();
@@ -54,8 +49,7 @@ export default function ExamClient({}) {
     null
   );
 
-  // const INITIAL_TIME = 300; // 5 Menit
-  const INITIAL_TIME = 86400; // 24 Hours
+  const INITIAL_TIME = 3 * 60 * 60; // 3 Hours
   const [timeLeft, setTimeLeft] = useState(INITIAL_TIME);
 
   const submitExamMutation = useMutation({
@@ -157,11 +151,6 @@ export default function ExamClient({}) {
     essayAnswerFileKey,
   ]);
 
-  // Check if user is registered in STEM
-  const { data: sessionUser } = useQuery(
-    trpc.stemExam.getUserById.queryOptions({ userId: user?.id as string })
-  );
-
   // --- 3. Logika Timer ---
   useEffect(() => {
     // Hentikan timer jika skor sudah muncul (kuis selesai)
@@ -204,29 +193,7 @@ export default function ExamClient({}) {
   const goToPrev = () =>
     currentQuestionIndex > 0 && setCurrentQuestionIndex((prev) => prev - 1);
 
-  if (sessionUser?.registration[0]?.competitionName !== "STEM") {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <div className="text-3xl font-bold">{`NON-STEM participants are not allowed to participate in STEM's exam.`}</div>
-      </div>
-    );
-  }
-  if (!currentSessionData) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <div className="text-3xl font-bold">{`No Session data found.`}</div>
-      </div>
-    );
-  }
-
   // --- 6. Tampilan (Render) ---
-  if (sessionUser?.quizResults.length > 3) {
-    return (
-      <div className="flex justify-center items-center h-screen w-full">
-        <div className="text-3xl font-bold">{`You have already taken the exam.`}</div>
-      </div>
-    );
-  }
   return (
     <div className="min-h-screen bg-transparent backdrop-blur-lg flex items-start justify-center p-0 lg:p-8 font-sans">
       <div className="w-full max-w-full lg:max-w-7xl bg-transparent shadow-2xl lg:rounded-2xl border border-slate-200 min-h-screen lg:min-h-0 overflow-hidden flex flex-col lg:flex-row mx-auto">

@@ -90,6 +90,11 @@ export type Session = Prisma.SessionModel
  */
 export type Verification = Prisma.VerificationModel
 /**
+ * Model ExamSession
+ * 
+ */
+export type ExamSession = Prisma.ExamSessionModel
+/**
  * Model quizResult
  * 
  */

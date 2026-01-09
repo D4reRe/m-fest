@@ -135,6 +135,7 @@ model User {
   quizResults       quizResult[]
   sessions          Session[]
   team_member       TeamMember[]
+  examSession       ExamSession[]
 
   @@index([id])
   @@index([email])
@@ -281,6 +282,17 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model ExamSession {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  used      Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
 
 model quizResult {
   id                  String    @id @default(cuid())
