@@ -43,6 +43,7 @@ export const stemExamSubmitSchema = z.object({
   totalQuestions: z.number(),
   timeSpent: z.number(),
   answers: z.array(z.number().nullable()),
+  essayAnswer: z.string().min(1, "Essay final answer is required").optional(),
   essayAnswerFileUrl: z.url().min(1, "File URL is required").optional(),
   essayAnswerFileKey: z.string().min(1, "File key is required").optional(),
   type: z.enum(QuizTypes),

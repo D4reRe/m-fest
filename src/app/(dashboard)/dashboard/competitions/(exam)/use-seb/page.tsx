@@ -1,3 +1,8 @@
+export const metadata = {
+  title: "SEB Required | Mechanical Festival 2026",
+  description: "SEB Required",
+};
+
 export default function UseSEBWarningPage() {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -16,12 +21,7 @@ export default function UseSEBWarningPage() {
       </p>
       <p className="text-lg">
         You can also download SEB Config for exam from{" "}
-        <a
-          href="https://drive.google.com/drive/folders/1GYYeL0uK1E7wnMBD1NwJCRDWec-hVFpW?usp=sharing"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline"
-        >
+        <a href="/api/exam-config" className="underline" download>
           here
         </a>
       </p>

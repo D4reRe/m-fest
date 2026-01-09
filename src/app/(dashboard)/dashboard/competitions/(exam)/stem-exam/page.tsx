@@ -1,9 +1,8 @@
-import ExamClient from "@/app/(exam)/stem-exam/exam";
+import ExamClient from "@/app/(dashboard)/dashboard/competitions/(exam)/stem-exam/exam";
 import { db } from "@/server/db";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import type { User } from "../../../../prisma/generated/prisma/client";
+import type { User } from "../../../../../../../prisma/generated/prisma/client";
 
 export const metadata: Metadata = {
   title: "STEM Exam | Mechanical Festival 2026",
@@ -15,20 +14,10 @@ export default async function StemExamPage({
 }: {
   searchParams: Promise<{ token: string }>;
 }) {
-  const sebKey = await headers().then((h) =>
-    h.get("x-safeexambrowser-configkeyhash")
-  );
-  console.log("SEB Key for this client exam: ", sebKey);
-
-  if (!sebKey) {
-    console.log("SEB key not found, user is not using SEB");
-    redirect("/use-seb");
-  }
-
   const token = (await searchParams).token;
   if (!token) {
     console.log("Token not found");
-    redirect("/entry-exam");
+    redirect("entry-exam");
   }
 
   const examSession = await db.examSession.findUnique({
@@ -46,12 +35,12 @@ export default async function StemExamPage({
 
   if (user?.registration[0]?.competitionName !== "STEM") {
     console.log("User is not registered for STEM");
-    redirect("/entry-exam");
+    redirect("/dashboard");
   }
 
   if (!examSession || examSession.used || examSession.expiresAt < new Date()) {
     console.log("Exam session not found");
-    redirect("/entry-exam");
+    redirect("entry-exam");
   }
 
   return <ExamClient user={user as User} />;

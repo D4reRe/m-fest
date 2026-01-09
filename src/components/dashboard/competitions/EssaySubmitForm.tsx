@@ -16,9 +16,9 @@ import { type Json } from "@uploadthing/shared";
 import { useDropzone } from "@uploadthing/react";
 import { Upload, FileText } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { SubmitFormSkeleton } from "./SubmitFormSkeleton";
 import { useTRPC } from "@/utils/trpc";
 import { Button } from "@heroui/react";
+import EssaySubmitFormSkeleton from "./EssaySubmitFormSkeleton";
 
 function usePreventRefreshUserDuringUpload(isLoading: boolean) {
   useEffect(() => {
@@ -158,7 +158,7 @@ export default function SubmitExamForm({
     onDrop,
   });
 
-  if (isLoadingUser) return <SubmitFormSkeleton />;
+  if (isLoadingUser) return <EssaySubmitFormSkeleton />;
 
   return (
     <main className="flex items-center justify-center p-6">
