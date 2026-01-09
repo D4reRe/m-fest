@@ -1,7 +1,6 @@
 import CountdownClient from "@/components/dashboard/competitions/CountdownClient";
 import SubmitForm from "@/components/dashboard/competitions/SubmitForm";
 import { Button } from "@/components/ui/button";
-import { Button as HeroButton } from "@heroui/react";
 import { LinkPreview } from "@/components/ui/link-preview";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -136,21 +135,8 @@ async function FetchCompForm({
               </p>
               <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
                 <Button className="" variant={"outline"} asChild>
-                  <Link href={"stem-exam"}>Start Exam</Link>
+                  <Link href={"/entry-exam"}>Start Exam</Link>
                 </Button>
-                <HeroButton
-                  variant="primary"
-                  className={"rounded-sm bg-white/5 border-1 hover:bg-white/10"}
-                >
-                  <Link
-                    href={
-                      "https://drive.google.com/drive/folders/1GYYeL0uK1E7wnMBD1NwJCRDWec-hVFpW?usp=sharing"
-                    }
-                    target="_blank"
-                  >
-                    Download SEB Config
-                  </Link>
-                </HeroButton>
               </div>
             </div>
           </div>

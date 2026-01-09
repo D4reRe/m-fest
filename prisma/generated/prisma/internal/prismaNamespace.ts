@@ -394,6 +394,7 @@ export const ModelName = {
   Account: 'Account',
   Session: 'Session',
   Verification: 'Verification',
+  ExamSession: 'ExamSession',
   quizResult: 'quizResult'
 } as const
 
@@ -410,7 +411,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "compRegistration" | "eventRegistration" | "user" | "documents" | "team" | "teamMember" | "payment" | "account" | "session" | "verification" | "quizResult"
+    modelProps: "compRegistration" | "eventRegistration" | "user" | "documents" | "team" | "teamMember" | "payment" | "account" | "session" | "verification" | "examSession" | "quizResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1154,6 +1155,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ExamSession: {
+      payload: Prisma.$ExamSessionPayload<ExtArgs>
+      fields: Prisma.ExamSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ExamSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ExamSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.ExamSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ExamSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>
+        }
+        findMany: {
+          args: Prisma.ExamSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>[]
+        }
+        create: {
+          args: Prisma.ExamSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>
+        }
+        createMany: {
+          args: Prisma.ExamSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ExamSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.ExamSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>
+        }
+        update: {
+          args: Prisma.ExamSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.ExamSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ExamSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ExamSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.ExamSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ExamSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.ExamSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateExamSession>
+        }
+        groupBy: {
+          args: Prisma.ExamSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExamSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ExamSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ExamSessionCountAggregateOutputType> | number
+        }
+      }
+    }
     quizResult: {
       payload: Prisma.$quizResultPayload<ExtArgs>
       fields: Prisma.quizResultFieldRefs
@@ -1449,6 +1524,18 @@ export const VerificationScalarFieldEnum = {
 } as const
 
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
+
+
+export const ExamSessionScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  used: 'used',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ExamSessionScalarFieldEnum = (typeof ExamSessionScalarFieldEnum)[keyof typeof ExamSessionScalarFieldEnum]
 
 
 export const QuizResultScalarFieldEnum = {
@@ -1820,6 +1907,7 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   session?: Prisma.SessionOmit
   verification?: Prisma.VerificationOmit
+  examSession?: Prisma.ExamSessionOmit
   quizResult?: Prisma.quizResultOmit
 }
 
