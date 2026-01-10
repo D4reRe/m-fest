@@ -1,8 +1,8 @@
 import { env } from "@/env";
 
 export function getSebConfig() {
-    if (env.NODE_ENV === "development") {
-        return `<?xml version="1.0" encoding="utf-8"?>
+  if (env.NODE_ENV === "development") {
+    return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
@@ -1671,11 +1671,11 @@ export function getSebConfig() {
     <true />
   </dict>
 </plist>`;
-    }
-
-    else if (env.NODE_ENV === "staging") {
-        // if Node env is staging
-        return `<?xml version="1.0" encoding="utf-8"?>
+  } else if (
+    env.NODE_ENV === "production" &&
+    env.NEXT_PUBLIC_BASE_URL.includes("vercel")
+  ) {
+    return `<?xml version="1.0" encoding="utf-8"?>
   <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
   <plist version="1.0">
     <dict>
@@ -3344,9 +3344,9 @@ export function getSebConfig() {
       <true />
     </dict>
   </plist>`;
-    }
+  }
 
-    return `<?xml version="1.0" encoding="utf-8"?>
+  return `<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -5014,7 +5014,5 @@ export function getSebConfig() {
   <key>systemAlwaysOn</key>
   <true />
 </dict>
-</plist>`
-
-
+</plist>`;
 }
