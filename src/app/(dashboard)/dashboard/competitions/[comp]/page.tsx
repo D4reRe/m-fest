@@ -55,7 +55,13 @@ async function FetchCompForm({
   });
   const team = await db.team.findFirst({
     where: {
-      leaderUserId: session?.user.id,
+      members: {
+        some: {
+          user: {
+            id: session?.user.id,
+          },
+        },
+      },
     },
   });
 
@@ -140,9 +146,7 @@ async function FetchCompForm({
                 </Button>
                 <HeroButton
                   variant="primary"
-                  className={
-                    "rounded-sm bg-white/5 border-1 hover:bg-white/10 "
-                  }
+                  className={"rounded-sm bg-white/5 border hover:bg-white/10 "}
                 >
                   <Link href={`/api/exam-config`} download>
                     Download SEB Config

@@ -70,7 +70,7 @@ export function CompsDataTable() {
   const trpc = useTRPC();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [filterColumn, setFilterColumn] = React.useState<string>("id");
   const [columnVisibility, setColumnVisibility] =
@@ -160,7 +160,7 @@ export function CompsDataTable() {
       accessorKey: "id",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.id ?? "";
       },
@@ -176,7 +176,7 @@ export function CompsDataTable() {
       accessorKey: "paymentId",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.paymentId ?? "";
       },
@@ -190,7 +190,7 @@ export function CompsDataTable() {
       accessorKey: "statusOrder",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.statusOrder ?? "";
       },
@@ -226,7 +226,7 @@ export function CompsDataTable() {
       },
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.teamStatus ?? "";
       },
@@ -255,7 +255,7 @@ export function CompsDataTable() {
       accessorKey: "teamName",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.teamName ?? "";
       },
@@ -269,7 +269,7 @@ export function CompsDataTable() {
       accessorKey: "competitionName",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.competitionName ?? "";
       },
@@ -288,7 +288,7 @@ export function CompsDataTable() {
       accessorKey: "members",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.team?.members ?? [];
       },
@@ -325,7 +325,7 @@ export function CompsDataTable() {
                           className="object-cover rounded-full"
                         />
                       </div>
-                      <p>{member.name}</p>
+                      <p>{member.user?.name}</p>
                       {member.role === "Leader" ? (
                         <Badge variant={"default"} className="-ml-2">
                           {member.role}
@@ -353,7 +353,7 @@ export function CompsDataTable() {
       accessorFn: (row) => {
         const regis = registrations?.find((regis) => regis.id === row.id);
         const data = regis?.team?.members.find(
-          (member) => member.role === "Leader",
+          (member) => member.role === "Leader"
         );
         return data?.user?.image ?? "";
       },
@@ -387,7 +387,7 @@ export function CompsDataTable() {
       accessorKey: "leaderUserId",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.leaderUserId ?? "";
       },
@@ -401,7 +401,7 @@ export function CompsDataTable() {
       accessorKey: "leaderEmail",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.leaderEmail ?? "";
       },
@@ -415,7 +415,7 @@ export function CompsDataTable() {
       accessorKey: "leaderName",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.leaderName ?? "";
       },
@@ -429,7 +429,7 @@ export function CompsDataTable() {
       accessorKey: "leaderPhoneNumber",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.leaderPhoneNumber ?? "";
       },
@@ -452,7 +452,7 @@ export function CompsDataTable() {
       },
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.teamInstitution ?? "";
       },
@@ -463,7 +463,7 @@ export function CompsDataTable() {
       accessorKey: "teamId",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.teamId ?? "";
       },
@@ -477,7 +477,7 @@ export function CompsDataTable() {
       accessorKey: "submissionFileUrl",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.submissionFileUrl ?? "";
       },
@@ -494,7 +494,7 @@ export function CompsDataTable() {
               <Link
                 href={(submissionFileUrl as string) ?? ""}
                 className={cn(
-                  submissionFileUrl ? "underline italic font-bold" : "",
+                  submissionFileUrl ? "underline italic font-bold" : ""
                 )}
                 target="_blank"
               >
@@ -511,7 +511,7 @@ export function CompsDataTable() {
       accessorKey: "submissionFileUploaded",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.submissionFileUploaded ?? false;
       },
@@ -525,7 +525,7 @@ export function CompsDataTable() {
       },
       cell: ({ row }) => {
         const submissionFileUploaded = row.getValue(
-          "submissionFileUploaded",
+          "submissionFileUploaded"
         ) as boolean | null;
         return (
           <>{submissionFileUploaded ? <span>Yes</span> : <span>No</span>}</>
@@ -536,7 +536,7 @@ export function CompsDataTable() {
       accessorKey: "submissionFileSubmitted",
       accessorFn: (row) => {
         const registration = registrations?.find(
-          (regis) => regis.id === row.id,
+          (regis) => regis.id === row.id
         );
         return registration?.submissionFileSubmitted ?? false;
       },
@@ -550,7 +550,7 @@ export function CompsDataTable() {
       },
       cell: ({ row }) => {
         const submissionFileSubmitted = row.getValue(
-          "submissionFileSubmitted",
+          "submissionFileSubmitted"
         ) as boolean;
         return (
           <>{submissionFileSubmitted ? <span>Yes</span> : <span>No</span>}</>
@@ -619,7 +619,7 @@ export function CompsDataTable() {
     onSuccess(data, variables) {
       toast.dismiss("delete-registrations");
       toast.success(
-        `Deleted ${variables.compRegistrationIds.length} registrations successfully`,
+        `Deleted ${variables.compRegistrationIds.length} registrations successfully`
       );
     },
     onSettled: () => {
@@ -782,7 +782,7 @@ export function CompsDataTable() {
             variant="outline"
             className={cn(
               "cursor-pointer w-fit",
-              isFetching && "cursor-not-allowed",
+              isFetching && "cursor-not-allowed"
             )}
             disabled={isFetching}
             onClick={() => queryClient.invalidateQueries()}
@@ -809,7 +809,7 @@ export function CompsDataTable() {
                           table.getFilteredSelectedRowModel().rows.length > 9,
                         "w-7":
                           table.getFilteredSelectedRowModel().rows.length > 99,
-                      },
+                      }
                     )}
                   >
                     <p>{table.getFilteredSelectedRowModel().rows.length}</p>
@@ -862,7 +862,7 @@ export function CompsDataTable() {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -881,7 +881,7 @@ export function CompsDataTable() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}

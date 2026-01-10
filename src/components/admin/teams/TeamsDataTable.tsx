@@ -336,7 +336,7 @@ export function TeamsDataTable() {
                           className="object-cover rounded-full"
                         />
                       </div>
-                      <p>{member.name}</p>
+                      <p>{member.user?.name}</p>
                       {member.role === "Leader" ? (
                         <Badge variant={"default"} className="-ml-2">
                           {member.role}

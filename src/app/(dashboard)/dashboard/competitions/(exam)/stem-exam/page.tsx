@@ -30,11 +30,32 @@ export default async function StemExamPage({
     },
     include: {
       registration: true,
+      team_member: {
+        include: {
+          user: true,
+          team: true,
+        },
+      },
     },
   });
 
-  if (user?.registration[0]?.competitionName !== "STEM") {
+  if (
+    user?.registration[0]?.competitionName !== "STEM" &&
+    user?.id === user?.team_member[0]?.team.leaderUserId
+  ) {
     console.log("User is not registered for STEM");
+    redirect("/dashboard");
+  }
+
+  // Member check if their team is accepted and registered
+  if (
+    user?.team_member[0]?.team.competition !== "STEM" ||
+    user?.team_member[0]?.team.teamStatus !== "ACCEPTED" ||
+    user?.team_member[0]?.team.status !== "SUCCESS" ||
+    !user.team_member[0] ||
+    !user.team_member[0].team
+  ) {
+    console.log("Member's team is not accepted and not registered");
     redirect("/dashboard");
   }
 

@@ -12,15 +12,15 @@ export const metadata: Metadata = {
 };
 
 export default async function EntryExamPage() {
-  const sebKey = await headers().then((h) =>
-    h.get("x-safeexambrowser-configkeyhash")
-  );
-  console.log("SEB Key for this client exam: ", sebKey);
+  // const sebKey = await headers().then((h) =>
+  //   h.get("x-safeexambrowser-configkeyhash")
+  // );
+  // console.log("SEB Key for this client exam: ", sebKey);
 
-  if (!sebKey) {
-    console.log("SEB key not found, user is not using SEB");
-    redirect("use-seb");
-  }
+  // if (!sebKey) {
+  //   console.log("SEB key not found, user is not using SEB");
+  //   redirect("use-seb");
+  // }
 
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -36,11 +36,33 @@ export default async function EntryExamPage() {
     },
     include: {
       registration: true,
+      team_member: {
+        include: {
+          user: true,
+          team: true,
+        },
+      },
     },
   });
 
-  if (user?.registration[0]?.competitionName !== "STEM") {
-    console.log("User is not registered for STEM");
+  // Leader check if registered for STEM
+  if (
+    user?.registration[0]?.competitionName !== "STEM" &&
+    user?.id === user?.team_member[0]?.team.leaderUserId
+  ) {
+    console.log("User as the leader is not registered for STEM");
+    redirect("/dashboard");
+  }
+
+  // Member check if their team is accepted and registered
+  if (
+    user?.team_member[0]?.team.competition !== "STEM" ||
+    user?.team_member[0]?.team.teamStatus !== "ACCEPTED" ||
+    user?.team_member[0]?.team.status !== "SUCCESS" ||
+    !user.team_member[0] ||
+    !user.team_member[0].team
+  ) {
+    console.log("Member's team is not accepted and not registered");
     redirect("/dashboard");
   }
 
@@ -62,7 +84,7 @@ export default async function EntryExamPage() {
       </p>
       <Button
         variant="primary"
-        className={"rounded-sm bg-white/5 border-1 hover:bg-white/10 mt-2"}
+        className={"rounded-sm bg-white/5 border hover:bg-white/10 mt-2"}
       >
         <Link href={`stem-exam?token=${token}`}>Start Exam</Link>
       </Button>
