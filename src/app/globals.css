@@ -9,8 +9,6 @@
 @theme {
   --breakpoint-xs: 525px;
   --breakpoint-xxl: 1400px;
-  --background-image-light: url("/lightbg.png");
-  --background-image-dark: url("/darkbg.png");
 }
 
 @theme inline {
@@ -23,7 +21,6 @@
   --font-onest: var(--font-next-onest);
   --font-roboto: var(--font-next-roboto);
   --font-title: var(--font-montserrat);
-  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -102,7 +99,6 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --active-bg: var(--background-image-light);
 }
 
 .dark {
@@ -137,8 +133,6 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --site-bg: url("/darkbg.png");
-  --active-bg: var(--background-image-dark);
 }
 
 @layer base {
@@ -213,15 +207,4 @@
   .object-smooth {
     image-rendering: smooth;
   }
-}
-
-@utility themed-bg-layer {
-  position: fixed;
-  inset: 0;
-  z-index: -1; /* Behind everything */
-  background-image: var(--active-bg);
-  background-size: cover;
-  background-position: center;
-  pointer-events: none; /* Don't block clicks */
-  transition: background-image 0.5s ease;
 }

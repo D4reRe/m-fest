@@ -1,5 +1,7 @@
 import { montserrat, onest, roboto } from "@/styles/font";
+// @ts-expect-error global.css exist
 import "./globals.css";
+// @ts-expect-error lenis.css exist
 import "lenis/dist/lenis.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -17,21 +19,20 @@ export default function RootLayout({
       <body
         className={`${montserrat.variable} ${roboto.variable} ${onest.className} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="themed-bg-layer" />
-          <ReactLenis root>
-            <QueryTanstackProvider>
+        <ReactLenis root>
+          <QueryTanstackProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
               <NextTopLoader showSpinner={false} height={3} />
               {children}
               <Toaster />
-            </QueryTanstackProvider>
-          </ReactLenis>
-        </ThemeProvider>
+            </ThemeProvider>
+          </QueryTanstackProvider>
+        </ReactLenis>
       </body>
     </html>
   );

@@ -14,11 +14,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         } as React.CSSProperties
       }
       // className={`min-h-screen`}
-      className={`min-h-screen theme-bg bg-cover bg-center bg-fixed bg-repeat`}
+      className={`min-h-screen bg-[url("/landing.webp")] bg-cover bg-center bg-fixed bg-repeat`}
     >
       <AppSidebar variant="inset" />
       <SidebarInset
-        className={`min-h-screen theme-bg bg-cover bg-center bg-fixed bg-repeat`}
+        className={`min-h-screen bg-[url("/landing.webp")] bg-cover bg-center bg-fixed bg-repeat`}
       >
         {/* <SidebarInset className="bg-card"> */}
         <SiteHeader />

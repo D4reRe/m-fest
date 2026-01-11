@@ -12,7 +12,6 @@ import { menuItems } from "@/constants/constants";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/utils/trpc";
 import { authClient } from "@/lib/auth-client";
-import { ModeToggle } from "../ToggleTheme";
 
 export const Navbar = () => {
   const [menuState, setMenuState] = useState(false);
@@ -43,7 +42,8 @@ export const Navbar = () => {
       >
         <div
           className={cn(
-            "mx-auto w-[90%] px-6 transition-all duration-300 lg:px-12 rounded-full bg-[#2F2031] my-5"
+            "mx-auto w-full px-6 transition-all duration-300 lg:px-12 bg-background/50 backdrop-blur-lg",
+            isScrolled && "mt-2 max-w-6xl rounded-2xl border lg:px-5",
           )}
         >
           <div className="relative flex flex-wrap items-center justify-between gap-6 py-3 lg:gap-0 lg:py-4">
@@ -57,8 +57,8 @@ export const Navbar = () => {
                 <Image
                   src="/logo.svg"
                   alt="Mechanical Festival 2025"
-                  width={94}
-                  height={35}
+                  width={80}
+                  height={80}
                   loading="lazy"
                 />
                 <Image
@@ -81,7 +81,7 @@ export const Navbar = () => {
             </div>
 
             <div className="absolute inset-0 m-auto hidden size-fit lg:block">
-              <ul className="flex gap-25 text-sm font-body">
+              <ul className="flex gap-8 text-sm">
                 {menuItems.map((item, index) => (
                   <li key={index}>
                     <Link
@@ -89,7 +89,7 @@ export const Navbar = () => {
                       className={cn(
                         currentPath === item.href
                           ? "text-accent-foreground"
-                          : "text-muted-foreground hover:text-accent-foreground"
+                          : "text-muted-foreground hover:text-accent-foreground",
                       )}
                       prefetch
                     >
@@ -104,7 +104,7 @@ export const Navbar = () => {
                       className={cn(
                         currentPath === "/dashboard"
                           ? "text-accent-foreground"
-                          : "text-muted-foreground hover:text-accent-foreground"
+                          : "text-muted-foreground hover:text-accent-foreground",
                       )}
                       prefetch
                     >
@@ -136,7 +136,7 @@ export const Navbar = () => {
                         className={cn(
                           currentPath === "/dashboard"
                             ? "text-accent-foreground"
-                            : "text-muted-foreground hover:text-accent-foreground"
+                            : "text-muted-foreground hover:text-accent-foreground",
                         )}
                         prefetch
                       >
@@ -229,7 +229,6 @@ export const Navbar = () => {
                         <span>Login</span>
                       </Link>
                     </Button>
-                    <ModeToggle></ModeToggle>
                   </>
                 )}
               </div>
