@@ -329,6 +329,7 @@ export const dashboardRouter = router({
           teamId: thisRegisteredCompUser?.teamId as string,
         },
         data: {
+          submissionFileName: input.fileName,
           submissionFileUrl: input.fileUrl,
           submissionFileUploaded: true,
           submissionFileCreatedAt: new Date(),

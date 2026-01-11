@@ -95,6 +95,7 @@ export const CompRegistrationScalarFieldEnum = {
   statusOrder: 'statusOrder',
   teamStatus: 'teamStatus',
   competitionName: 'competitionName',
+  submissionFileName: 'submissionFileName',
   submissionFileUrl: 'submissionFileUrl',
   submissionFileKey: 'submissionFileKey',
   submissionFileCreatedAt: 'submissionFileCreatedAt',

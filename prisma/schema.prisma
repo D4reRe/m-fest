@@ -78,6 +78,7 @@ model CompRegistration {
   statusOrder             String?         @default("PENDING")
   teamStatus              TeamStatus?
   competitionName         CompetitionName
+  submissionFileName      String?
   submissionFileUrl       String?
   submissionFileKey       String?
   submissionFileCreatedAt DateTime        @default(now())

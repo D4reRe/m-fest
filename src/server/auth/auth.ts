@@ -23,7 +23,7 @@ const options = {
     },
   },
   session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    expiresIn: 60 * 60 * 24, // 1 day
     updateAge: 60 * 60 * 24, // 1 day
     cookieCache: {
       enabled: true,
@@ -35,8 +35,16 @@ const options = {
   trustedOrigins: [
     "http://localhost:3000",
     "https://m-fest-xi.vercel.app",
+    "https://mfest-itb.com/",
     "https://mfest2026-jg5xl.ondigitalocean.app",
   ],
+  rateLimit: {
+    // in development is disabled by default
+    // this is the default rate limit configuration
+    enabled: env.NODE_ENV === "development" ? false : true,
+    window: 60, // time window in seconds
+    max: 100, // max requests in the window
+  },
   plugins: [
     //...plugins
   ],

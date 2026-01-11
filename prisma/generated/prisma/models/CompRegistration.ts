@@ -38,6 +38,7 @@ export type CompRegistrationMinAggregateOutputType = {
   statusOrder: string | null
   teamStatus: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName | null
+  submissionFileName: string | null
   submissionFileUrl: string | null
   submissionFileKey: string | null
   submissionFileCreatedAt: Date | null
@@ -62,6 +63,7 @@ export type CompRegistrationMaxAggregateOutputType = {
   statusOrder: string | null
   teamStatus: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName | null
+  submissionFileName: string | null
   submissionFileUrl: string | null
   submissionFileKey: string | null
   submissionFileCreatedAt: Date | null
@@ -86,6 +88,7 @@ export type CompRegistrationCountAggregateOutputType = {
   statusOrder: number
   teamStatus: number
   competitionName: number
+  submissionFileName: number
   submissionFileUrl: number
   submissionFileKey: number
   submissionFileCreatedAt: number
@@ -112,6 +115,7 @@ export type CompRegistrationMinAggregateInputType = {
   statusOrder?: true
   teamStatus?: true
   competitionName?: true
+  submissionFileName?: true
   submissionFileUrl?: true
   submissionFileKey?: true
   submissionFileCreatedAt?: true
@@ -136,6 +140,7 @@ export type CompRegistrationMaxAggregateInputType = {
   statusOrder?: true
   teamStatus?: true
   competitionName?: true
+  submissionFileName?: true
   submissionFileUrl?: true
   submissionFileKey?: true
   submissionFileCreatedAt?: true
@@ -160,6 +165,7 @@ export type CompRegistrationCountAggregateInputType = {
   statusOrder?: true
   teamStatus?: true
   competitionName?: true
+  submissionFileName?: true
   submissionFileUrl?: true
   submissionFileKey?: true
   submissionFileCreatedAt?: true
@@ -257,6 +263,7 @@ export type CompRegistrationGroupByOutputType = {
   statusOrder: string | null
   teamStatus: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName: string | null
   submissionFileUrl: string | null
   submissionFileKey: string | null
   submissionFileCreatedAt: Date
@@ -302,6 +309,7 @@ export type CompRegistrationWhereInput = {
   statusOrder?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableFilter<"CompRegistration"> | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFilter<"CompRegistration"> | $Enums.CompetitionName
+  submissionFileName?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileUrl?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileKey?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
@@ -329,6 +337,7 @@ export type CompRegistrationOrderByWithRelationInput = {
   statusOrder?: Prisma.SortOrderInput | Prisma.SortOrder
   teamStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   competitionName?: Prisma.SortOrder
+  submissionFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   submissionFileUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   submissionFileKey?: Prisma.SortOrderInput | Prisma.SortOrder
   submissionFileCreatedAt?: Prisma.SortOrder
@@ -359,6 +368,7 @@ export type CompRegistrationWhereUniqueInput = Prisma.AtLeast<{
   statusOrder?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableFilter<"CompRegistration"> | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFilter<"CompRegistration"> | $Enums.CompetitionName
+  submissionFileName?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileUrl?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileKey?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
@@ -386,6 +396,7 @@ export type CompRegistrationOrderByWithAggregationInput = {
   statusOrder?: Prisma.SortOrderInput | Prisma.SortOrder
   teamStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   competitionName?: Prisma.SortOrder
+  submissionFileName?: Prisma.SortOrderInput | Prisma.SortOrder
   submissionFileUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   submissionFileKey?: Prisma.SortOrderInput | Prisma.SortOrder
   submissionFileCreatedAt?: Prisma.SortOrder
@@ -416,6 +427,7 @@ export type CompRegistrationScalarWhereWithAggregatesInput = {
   statusOrder?: Prisma.StringNullableWithAggregatesFilter<"CompRegistration"> | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableWithAggregatesFilter<"CompRegistration"> | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameWithAggregatesFilter<"CompRegistration"> | $Enums.CompetitionName
+  submissionFileName?: Prisma.StringNullableWithAggregatesFilter<"CompRegistration"> | string | null
   submissionFileUrl?: Prisma.StringNullableWithAggregatesFilter<"CompRegistration"> | string | null
   submissionFileKey?: Prisma.StringNullableWithAggregatesFilter<"CompRegistration"> | string | null
   submissionFileCreatedAt?: Prisma.DateTimeWithAggregatesFilter<"CompRegistration"> | Date | string
@@ -437,6 +449,7 @@ export type CompRegistrationCreateInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -464,6 +477,7 @@ export type CompRegistrationUncheckedCreateInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -485,6 +499,7 @@ export type CompRegistrationUpdateInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -512,6 +527,7 @@ export type CompRegistrationUncheckedUpdateInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -536,6 +552,7 @@ export type CompRegistrationCreateManyInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -557,6 +574,7 @@ export type CompRegistrationUpdateManyMutationInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -581,6 +599,7 @@ export type CompRegistrationUncheckedUpdateManyInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -605,6 +624,7 @@ export type CompRegistrationCountOrderByAggregateInput = {
   statusOrder?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   competitionName?: Prisma.SortOrder
+  submissionFileName?: Prisma.SortOrder
   submissionFileUrl?: Prisma.SortOrder
   submissionFileKey?: Prisma.SortOrder
   submissionFileCreatedAt?: Prisma.SortOrder
@@ -629,6 +649,7 @@ export type CompRegistrationMaxOrderByAggregateInput = {
   statusOrder?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   competitionName?: Prisma.SortOrder
+  submissionFileName?: Prisma.SortOrder
   submissionFileUrl?: Prisma.SortOrder
   submissionFileKey?: Prisma.SortOrder
   submissionFileCreatedAt?: Prisma.SortOrder
@@ -653,6 +674,7 @@ export type CompRegistrationMinOrderByAggregateInput = {
   statusOrder?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   competitionName?: Prisma.SortOrder
+  submissionFileName?: Prisma.SortOrder
   submissionFileUrl?: Prisma.SortOrder
   submissionFileKey?: Prisma.SortOrder
   submissionFileCreatedAt?: Prisma.SortOrder
@@ -819,6 +841,7 @@ export type CompRegistrationCreateWithoutUserInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -844,6 +867,7 @@ export type CompRegistrationUncheckedCreateWithoutUserInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -897,6 +921,7 @@ export type CompRegistrationScalarWhereInput = {
   statusOrder?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableFilter<"CompRegistration"> | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFilter<"CompRegistration"> | $Enums.CompetitionName
+  submissionFileName?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileUrl?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileKey?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
@@ -918,6 +943,7 @@ export type CompRegistrationCreateWithoutTeamInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -943,6 +969,7 @@ export type CompRegistrationUncheckedCreateWithoutTeamInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -980,6 +1007,7 @@ export type CompRegistrationUpdateWithoutTeamInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1005,6 +1033,7 @@ export type CompRegistrationUncheckedUpdateWithoutTeamInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1026,6 +1055,7 @@ export type CompRegistrationCreateWithoutPaymentInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -1051,6 +1081,7 @@ export type CompRegistrationUncheckedCreateWithoutPaymentInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -1088,6 +1119,7 @@ export type CompRegistrationUpdateWithoutPaymentInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1113,6 +1145,7 @@ export type CompRegistrationUncheckedUpdateWithoutPaymentInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1136,6 +1169,7 @@ export type CompRegistrationCreateManyUserInput = {
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
+  submissionFileName?: string | null
   submissionFileUrl?: string | null
   submissionFileKey?: string | null
   submissionFileCreatedAt?: Date | string
@@ -1157,6 +1191,7 @@ export type CompRegistrationUpdateWithoutUserInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1182,6 +1217,7 @@ export type CompRegistrationUncheckedUpdateWithoutUserInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1205,6 +1241,7 @@ export type CompRegistrationUncheckedUpdateManyWithoutUserInput = {
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
+  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1231,6 +1268,7 @@ export type CompRegistrationSelect<ExtArgs extends runtime.Types.Extensions.Inte
   statusOrder?: boolean
   teamStatus?: boolean
   competitionName?: boolean
+  submissionFileName?: boolean
   submissionFileUrl?: boolean
   submissionFileKey?: boolean
   submissionFileCreatedAt?: boolean
@@ -1258,6 +1296,7 @@ export type CompRegistrationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   statusOrder?: boolean
   teamStatus?: boolean
   competitionName?: boolean
+  submissionFileName?: boolean
   submissionFileUrl?: boolean
   submissionFileKey?: boolean
   submissionFileCreatedAt?: boolean
@@ -1285,6 +1324,7 @@ export type CompRegistrationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   statusOrder?: boolean
   teamStatus?: boolean
   competitionName?: boolean
+  submissionFileName?: boolean
   submissionFileUrl?: boolean
   submissionFileKey?: boolean
   submissionFileCreatedAt?: boolean
@@ -1312,6 +1352,7 @@ export type CompRegistrationSelectScalar = {
   statusOrder?: boolean
   teamStatus?: boolean
   competitionName?: boolean
+  submissionFileName?: boolean
   submissionFileUrl?: boolean
   submissionFileKey?: boolean
   submissionFileCreatedAt?: boolean
@@ -1322,7 +1363,7 @@ export type CompRegistrationSelectScalar = {
   updatedAt?: boolean
 }
 
-export type CompRegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "leaderUserId" | "leaderEmail" | "leaderName" | "leaderPhoneNumber" | "teamInstitution" | "teamName" | "teamId" | "paymentId" | "statusOrder" | "teamStatus" | "competitionName" | "submissionFileUrl" | "submissionFileKey" | "submissionFileCreatedAt" | "submissionFileUploaded" | "submissionFileSubmitted" | "mentor" | "createdAt" | "updatedAt", ExtArgs["result"]["compRegistration"]>
+export type CompRegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "leaderUserId" | "leaderEmail" | "leaderName" | "leaderPhoneNumber" | "teamInstitution" | "teamName" | "teamId" | "paymentId" | "statusOrder" | "teamStatus" | "competitionName" | "submissionFileName" | "submissionFileUrl" | "submissionFileKey" | "submissionFileCreatedAt" | "submissionFileUploaded" | "submissionFileSubmitted" | "mentor" | "createdAt" | "updatedAt", ExtArgs["result"]["compRegistration"]>
 export type CompRegistrationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
   team?: boolean | Prisma.CompRegistration$teamArgs<ExtArgs>
@@ -1360,6 +1401,7 @@ export type $CompRegistrationPayload<ExtArgs extends runtime.Types.Extensions.In
     statusOrder: string | null
     teamStatus: $Enums.TeamStatus | null
     competitionName: $Enums.CompetitionName
+    submissionFileName: string | null
     submissionFileUrl: string | null
     submissionFileKey: string | null
     submissionFileCreatedAt: Date
@@ -1807,6 +1849,7 @@ export interface CompRegistrationFieldRefs {
   readonly statusOrder: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly teamStatus: Prisma.FieldRef<"CompRegistration", 'TeamStatus'>
   readonly competitionName: Prisma.FieldRef<"CompRegistration", 'CompetitionName'>
+  readonly submissionFileName: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly submissionFileUrl: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly submissionFileKey: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly submissionFileCreatedAt: Prisma.FieldRef<"CompRegistration", 'DateTime'>

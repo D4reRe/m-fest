@@ -30,6 +30,7 @@ export const documentsSchema = z.object({
 export type documentsSchema = z.infer<typeof documentsSchema>;
 
 export const submitFileSchema = z.object({
+  fileName: z.string().min(1, "File name is required"),
   fileUrl: z.string().min(1, "File is required"),
   competitionName: z.string().min(1, "Competition name is required"),
   leaderUserId: z.string().min(1, "Leader user id is required"),
