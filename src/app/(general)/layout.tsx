@@ -10,8 +10,7 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <main
-      className={`min-h-screen bg-[url("/landing.webp")] bg-cover bg-center bg-fixed bg-repeat`}
+    <main className={`min-h-screen bg-black bg-cover bg-center bg-fixed bg-repeat`}
     >
       <Navbar />
       {children}
