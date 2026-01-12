@@ -60,7 +60,9 @@ export const ModelName = {
   Payment: 'Payment',
   Account: 'Account',
   Session: 'Session',
-  Verification: 'Verification'
+  Verification: 'Verification',
+  ExamSession: 'ExamSession',
+  quizResult: 'quizResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -93,6 +95,7 @@ export const CompRegistrationScalarFieldEnum = {
   statusOrder: 'statusOrder',
   teamStatus: 'teamStatus',
   competitionName: 'competitionName',
+  submissionFileName: 'submissionFileName',
   submissionFileUrl: 'submissionFileUrl',
   submissionFileKey: 'submissionFileKey',
   submissionFileCreatedAt: 'submissionFileCreatedAt',
@@ -177,11 +180,11 @@ export const TeamScalarFieldEnum = {
   leaderName: 'leaderName',
   leaderPhoneNumber: 'leaderPhoneNumber',
   teamInstitution: 'teamInstitution',
-  verificationDeadlineAt: 'verificationDeadlineAt',
   teamStatus: 'teamStatus',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  verificationDeadlineAt: 'verificationDeadlineAt'
 } as const
 
 export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
@@ -190,13 +193,13 @@ export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof Team
 export const TeamMemberScalarFieldEnum = {
   userId: 'userId',
   teamId: 'teamId',
-  teamName: 'teamName',
   name: 'name',
   email: 'email',
   institution: 'institution',
   role: 'role',
   joinDate: 'joinDate',
-  verified: 'verified'
+  verified: 'verified',
+  teamName: 'teamName'
 } as const
 
 export type TeamMemberScalarFieldEnum = (typeof TeamMemberScalarFieldEnum)[keyof typeof TeamMemberScalarFieldEnum]
@@ -263,12 +266,48 @@ export const VerificationScalarFieldEnum = {
 export type VerificationScalarFieldEnum = (typeof VerificationScalarFieldEnum)[keyof typeof VerificationScalarFieldEnum]
 
 
+export const ExamSessionScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  userId: 'userId',
+  used: 'used',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ExamSessionScalarFieldEnum = (typeof ExamSessionScalarFieldEnum)[keyof typeof ExamSessionScalarFieldEnum]
+
+
+export const QuizResultScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  score: 'score',
+  totalQuestions: 'totalQuestions',
+  timeSpent: 'timeSpent',
+  answers: 'answers',
+  essayAnswer: 'essayAnswer',
+  essayAnswerFileUrl: 'essayAnswerFileUrl',
+  essayAnswerFileKey: 'essayAnswerFileKey',
+  createdAt: 'createdAt',
+  type: 'type'
+} as const
+
+export type QuizResultScalarFieldEnum = (typeof QuizResultScalarFieldEnum)[keyof typeof QuizResultScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: 'JsonNull'
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -285,4 +324,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: 'DbNull',
+  JsonNull: 'JsonNull',
+  AnyNull: 'AnyNull'
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

@@ -1,16 +1,14 @@
 generator client {
-  // ESM-first
-  provider   = "prisma-client" // rust-free and ESM
-  // Rust-free
-  engineType = "client"
-  // No generation into node_modules
+  provider   = "prisma-client"
   output     = "./generated/prisma"
+  engineType = "client"
 }
 
-// Ignore this error for Prisma 7
 datasource db {
   provider = "postgresql"
 }
+
+
 
 enum Role {
   USER
@@ -60,36 +58,38 @@ enum TeamStatus {
   ACCEPTED
 }
 
-model CompRegistration {
-  id                String          @id @default(uuid())
-  userId            String // Id User Leader
-  leaderUserId      String?
-  leaderEmail       String?
-  leaderName        String?
-  leaderPhoneNumber String?
-  teamInstitution   String?
-  teamName          String?
-  teamId            String?         @unique // Specific Team to register
-  paymentId         String          @unique // Specific Payment to register
-  statusOrder       String?         @default("PENDING")
-  teamStatus        TeamStatus?
-  competitionName   CompetitionName
+enum QuizTypes {
+  MATHEMATICS
+  PHYSICS
+  ESSAY
+}
 
+model CompRegistration {
+  id                      String          @id @default(uuid())
+  userId                  String
+  leaderUserId            String?
+  leaderEmail             String?
+  leaderName              String?
+  leaderPhoneNumber       String?
+  teamInstitution         String?
+  teamName                String?
+  teamId                  String?         @unique
+  paymentId               String          @unique
+  statusOrder             String?         @default("PENDING")
+  teamStatus              TeamStatus?
+  competitionName         CompetitionName
+  submissionFileName      String?
   submissionFileUrl       String?
   submissionFileKey       String?
-  submissionFileCreatedAt DateTime @default(now())
-  submissionFileUploaded  Boolean  @default(false)
-  submissionFileSubmitted Boolean  @default(false)
-
-  // STEM
-  mentor String?
-
-  user    User?   @relation(fields: [userId], references: [id], onDelete: Cascade) // Leader
-  team    Team?   @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  payment Payment @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  submissionFileCreatedAt DateTime        @default(now())
+  submissionFileUploaded  Boolean         @default(false)
+  submissionFileSubmitted Boolean         @default(false)
+  mentor                  String?
+  createdAt               DateTime        @default(now())
+  updatedAt               DateTime        @updatedAt
+  payment                 Payment         @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
+  team                    Team?           @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user                    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([teamId])
@@ -98,84 +98,73 @@ model CompRegistration {
 }
 
 model EventRegistration {
-  id         String @id @default(uuid())
+  id         String   @id @default(uuid())
   event_name String
   userId     String
-
-  user User? @relation(fields: [userId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@map("event_registration")
 }
 
 model User {
-  id            String  @id
-  name          String
-  email         String
-  emailVerified Boolean
-  image         String?
-  imageKey      String?
-
-  gender      Gender?
-  phoneNumber String?
-  domicile    String?
-  institution String?
-  major       String?
-  education   Education?
-  semester    Int?
-  birthDate   DateTime?
-  role        Role       @default(USER)
-
-  verified  Boolean    @default(false)
-  documents Documents?
-
-  team_member       TeamMember[]
+  id                String              @id
+  name              String
+  email             String              @unique
+  emailVerified     Boolean
+  image             String?
+  imageKey          String?
+  gender            Gender?
+  phoneNumber       String?
+  domicile          String?
+  institution       String?
+  major             String?
+  education         Education?
+  semester          Int?
+  birthDate         DateTime?
+  role              Role                @default(USER)
+  verified          Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  accounts          Account[]
   registration      CompRegistration[]
+  documents         Documents?
   eventRegistration EventRegistration[]
+  payments          Payment[]
+  quizResults       quizResult[]
+  sessions          Session[]
+  team_member       TeamMember[]
+  examSession       ExamSession[]
 
-  payments Payment[]
-  accounts Account[]
-  sessions Session[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([email])
   @@index([id])
   @@index([email])
   @@map("user")
 }
 
 model Documents {
-  id                   String  @id @default(cuid())
-  userId               String  @unique
-  identityCardImageUrl String?
-  twibbonImageUrl      String?
-  followIgImageUrl     String?
-
-  identityCardImageKey String?
-  twibbonImageKey      String?
-  followIgImageKey     String?
-
-  identityCardCreatedAt DateTime? @default(now())
-  twibbonCreatedAt      DateTime? @default(now())
-  followIgCreatedAt     DateTime? @default(now())
-
-  identityCardStatus DocumentStatus? @default(AWAITING_UPLOAD)
-  twibbonStatus      DocumentStatus? @default(AWAITING_UPLOAD)
-  followIgStatus     DocumentStatus? @default(AWAITING_UPLOAD)
-
-  identityCardVerified Boolean? @default(false)
-  twibbonVerified      Boolean? @default(false)
-  followIgVerified     Boolean? @default(false)
-
-  status    VerificationStatus @default(NOT_SUBMITTED)
-  user      User               @relation(fields: [userId], references: [id])
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  id                    String             @id @default(cuid())
+  userId                String             @unique
+  identityCardImageUrl  String?
+  twibbonImageUrl       String?
+  followIgImageUrl      String?
+  identityCardImageKey  String?
+  twibbonImageKey       String?
+  followIgImageKey      String?
+  identityCardCreatedAt DateTime?          @default(now())
+  twibbonCreatedAt      DateTime?          @default(now())
+  followIgCreatedAt     DateTime?          @default(now())
+  identityCardStatus    DocumentStatus?    @default(AWAITING_UPLOAD)
+  twibbonStatus         DocumentStatus?    @default(AWAITING_UPLOAD)
+  followIgStatus        DocumentStatus?    @default(AWAITING_UPLOAD)
+  identityCardVerified  Boolean?           @default(false)
+  twibbonVerified       Boolean?           @default(false)
+  followIgVerified      Boolean?           @default(false)
+  status                VerificationStatus @default(NOT_SUBMITTED)
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime           @updatedAt
+  user                  User               @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([id])
@@ -183,28 +172,23 @@ model Documents {
 }
 
 model Team {
-  id          String           @id @default(cuid())
-  name        String?          @unique
-  competition CompetitionName?
-  paymentId   String?          @unique
-  members     TeamMember[]
-
-  leaderUserId      String?
-  leaderEmail       String?
-  leaderName        String?
-  leaderPhoneNumber String?
-  teamInstitution   String?
-
+  id                     String            @id @default(cuid())
+  name                   String?           @unique
+  competition            CompetitionName?
+  paymentId              String?           @unique
+  leaderUserId           String?
+  leaderEmail            String?
+  leaderName             String?
+  leaderPhoneNumber      String?
+  teamInstitution        String?
+  teamStatus             TeamStatus?       @default(NOT_REGISTERED)
+  status                 String?           @default("PENDING")
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
   verificationDeadlineAt DateTime?
-  teamStatus TeamStatus? @default(NOT_REGISTERED)
-  status     String?     @default("PENDING") // This is equivalent of statusOrder (payment)
-  payment    Payment?    @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
-
-
-  registration CompRegistration?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  registration           CompRegistration?
+  payment                Payment?          @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
+  members                TeamMember[]
 
   @@index([name])
   @@index([paymentId])
@@ -214,21 +198,17 @@ model Team {
 }
 
 model TeamMember {
-  userId   String
-  teamId   String
-  teamName String?
-
+  userId      String
+  teamId      String
   name        String?
   email       String?
   institution String?
-
-  role     TeamRole? // Leader or Member
-  joinDate DateTime? @default(now())
-
-  verified Boolean @default(false)
-
-  user User? @relation(fields: [userId], references: [id])
-  team Team? @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  role        TeamRole?
+  joinDate    DateTime? @default(now())
+  verified    Boolean   @default(false)
+  teamName    String?
+  team        Team      @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id])
 
   @@id([userId, teamId])
   @@index([userId])
@@ -239,17 +219,17 @@ model TeamMember {
 model Payment {
   id              String            @id @default(cuid())
   orderId         String            @unique
-  user            User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String?
   status          String?           @default("PENDING")
   competition     String?
-  registration    CompRegistration?
-  team            Team?
   amount          Int
   paymentUrl      String?
   referenceDuitku String?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
+  registration    CompRegistration?
+  user            User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team            Team?
 
   @@index([userId])
   @@index([orderId])
@@ -261,7 +241,6 @@ model Account {
   accountId             String
   providerId            String
   userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
   idToken               String?
@@ -271,6 +250,7 @@ model Account {
   password              String?
   createdAt             DateTime
   updatedAt             DateTime
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("account")
@@ -279,7 +259,7 @@ model Account {
 model Session {
   id        String   @id
   expiresAt DateTime
-  token     String
+  token     String   @unique
   createdAt DateTime
   updatedAt DateTime
   ipAddress String?
@@ -287,7 +267,6 @@ model Session {
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([token])
   @@index([userId])
   @@index([token])
   @@map("session")
@@ -303,4 +282,30 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model ExamSession {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  used      Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+
+model quizResult {
+  id                  String    @id @default(cuid())
+  userId              String
+  score               Int
+  totalQuestions      Int
+  timeSpent           Int
+  answers             Json
+  essayAnswer         String?
+  essayAnswerFileUrl  String?
+  essayAnswerFileKey  String?
+  createdAt           DateTime  @default(now())
+  type                QuizTypes
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

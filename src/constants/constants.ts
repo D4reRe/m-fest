@@ -2,6 +2,7 @@ import {
   IconConfetti,
   IconDashboard,
   IconDatabase,
+  IconFileAnalytics,
   IconFileText,
   IconHelp,
   IconInvoice,
@@ -20,6 +21,7 @@ export const MIN_DIMENSION = 150;
 export const competitionsName = ["BCC", "IPPC", "PDC", "STEM"];
 export const adminRoles = ["ADMIN", "SUPERADMIN"];
 export const userRoles = ["USER", "ADMIN", "SUPERADMIN"];
+export const quizTypes = ["MATHEMATICS", "PHYSICS", "ESSAY"];
 export const acceptedFiles = [".png", ".jpeg", ".jpg", ".webp"];
 export const submissionOpenDate = "Ferbuary 1st 2026";
 export const submissionDeadlinePDC = "March 6th 2026";
@@ -170,6 +172,11 @@ export const dataNavSidebarAdmin = {
       icon: IconListDetails,
     },
     {
+      title: "Exam Submission",
+      url: "/admin/exam",
+      icon: IconFileAnalytics,
+    },
+    {
       title: "Events",
       url: "/admin/events",
       icon: IconConfetti,
@@ -225,6 +232,10 @@ export const adminMenus = [
   {
     title: "Competitions",
     url: "/admin/competitions",
+  },
+  {
+    title: "Exam Submission",
+    url: "/admin/exam",
   },
   {
     title: "Events",

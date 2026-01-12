@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { QuizTypes } from "../../prisma/generated/prisma/enums";
 
 export const profileSchema = z.object({
   name: z.string().min(5),
@@ -29,9 +30,24 @@ export const documentsSchema = z.object({
 export type documentsSchema = z.infer<typeof documentsSchema>;
 
 export const submitFileSchema = z.object({
+  fileName: z.string().min(1, "File name is required"),
   fileUrl: z.string().min(1, "File is required"),
   competitionName: z.string().min(1, "Competition name is required"),
   leaderUserId: z.string().min(1, "Leader user id is required"),
 });
 
 export type submitFileSchema = z.infer<typeof submitFileSchema>;
+
+export const stemExamSubmitSchema = z.object({
+  userId: z.string(),
+  score: z.number(),
+  totalQuestions: z.number(),
+  timeSpent: z.number(),
+  answers: z.array(z.number().nullable()),
+  essayAnswer: z.string().min(1, "Essay final answer is required").optional(),
+  essayAnswerFileUrl: z.url().min(1, "File URL is required").optional(),
+  essayAnswerFileKey: z.string().min(1, "File key is required").optional(),
+  type: z.enum(QuizTypes),
+});
+
+export type stemExamSubmitSchema = z.infer<typeof stemExamSubmitSchema>;

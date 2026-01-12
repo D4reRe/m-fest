@@ -13,19 +13,12 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import {
-  ArrowUpRightSquare,
-  BadgeCheckIcon,
-  Loader2,
-  MoreHorizontal,
-  RefreshCw,
-} from "lucide-react";
+import { Loader2, MoreHorizontal, RefreshCw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -47,26 +40,11 @@ import { cn } from "@/lib/utils";
 import { DataTableColumnHeader } from "@/components/ui/data-table-column-header";
 import { DataTablePagination } from "@/components/ui/data-table-pagination";
 import { DataTableViewOptions } from "@/components/ui/data-table-view-options";
-import type {
-  CompetitionName,
-  Prisma,
-} from "../../../../prisma/generated/prisma/browser";
 import { toast } from "sonner";
 import Link from "next/link";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
 
-type TeamMember = Prisma.TeamMemberGetPayload<{
-  include: {
-    user: {
-      include: {
-        documents: true;
-      };
-    };
-  };
-}>;
-
-export function CompsDataTable() {
+export function ExamDataTable() {
   const trpc = useTRPC();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -78,15 +56,15 @@ export function CompsDataTable() {
   const [rowSelection, setRowSelection] = React.useState({});
   const queryClient = useQueryClient();
   const {
-    data: registrations,
+    data: examSubmissions,
     isLoading,
     isFetching,
-  } = useQuery(trpc.admin.getRegistrations.queryOptions());
+  } = useQuery(trpc.admin.getExamSubmissions.queryOptions());
   const unified = React.useMemo(() => {
-    if (!registrations) return [];
+    if (!examSubmissions) return [];
 
-    return registrations;
-  }, [registrations]);
+    return examSubmissions;
+  }, [examSubmissions]);
 
   // type of array
   // type Unified = typeof unified
@@ -136,20 +114,18 @@ export function CompsDataTable() {
                 onClick={() => navigator.clipboard.writeText(item.id)}
                 className="cursor-pointer"
               >
-                Copy registration ID
+                Copy quiz ID
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
-                  deleteCompRegistration.mutate({
-                    compRegistrationId: item.id,
-                    teamId: item.teamId as string,
-                    paymentId: item.paymentId as string,
+                  deleteExamSubmission.mutate({
+                    quizId: item.id,
                   });
                 }}
                 className="cursor-pointer"
                 variant="destructive"
               >
-                Delete registration
+                Delete Exam Submission
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -159,211 +135,46 @@ export function CompsDataTable() {
     {
       accessorKey: "id",
       accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
         );
-        return registration?.id ?? "";
+        return examSubmission?.id ?? "";
       },
       header: ({ column }) => {
-        return (
-          <DataTableColumnHeader column={column} title="Registration Id" />
-        );
+        return <DataTableColumnHeader column={column} title="Quiz Id" />;
       },
       cell: ({ row }) => <span>{row.getValue("id")}</span>,
       filterFn: "includesString",
     },
     {
-      accessorKey: "paymentId",
+      accessorKey: "userId",
       accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
         );
-        return registration?.paymentId ?? "";
+        return examSubmission?.userId ?? "";
       },
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Payment Id" />;
+        return <DataTableColumnHeader column={column} title="User Id" />;
       },
-      cell: ({ row }) => <span>{row.getValue("paymentId")}</span>,
+      cell: ({ row }) => <span>{row.getValue("userId")}</span>,
       filterFn: "includesString",
     },
     {
-      accessorKey: "statusOrder",
+      accessorKey: "image",
       accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
         );
-        return registration?.statusOrder ?? "";
+        return examSubmission?.user.image ?? "";
       },
       header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Status Payment" />;
-      },
-      cell: ({ row }) => (
-        <span>
-          {" "}
-          {row.getValue("statusOrder") === "PENDING" ? (
-            <Badge variant="secondary" className="bg-yellow-600 text-white">
-              Pending
-            </Badge>
-          ) : row.getValue("statusOrder") === "SUCCESS" ? (
-            <Badge
-              variant="secondary"
-              className="bg-green-500 text-white dark:bg-green-600"
-            >
-              <BadgeCheckIcon />
-              Success
-            </Badge>
-          ) : (
-            <Badge className="bg-red-500 text-white">No Payment Made</Badge>
-          )}
-        </span>
-      ),
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "teamStatus",
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Team Status" />;
-      },
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.teamStatus ?? "";
-      },
-      cell: ({ row }) => (
-        <span>
-          {row.getValue("teamStatus") === "PENDING" ? (
-            <Badge variant="secondary" className="bg-yellow-600 text-white">
-              Pending
-            </Badge>
-          ) : row.getValue("teamStatus") === "ACCEPTED" ? (
-            <Badge
-              variant="secondary"
-              className="bg-blue-500 text-white dark:bg-blue-600"
-            >
-              <BadgeCheckIcon />
-              Verified
-            </Badge>
-          ) : (
-            <Badge className="bg-red-500 text-white">Not Verified</Badge>
-          )}
-        </span>
-      ),
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "teamName",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.teamName ?? "";
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Team Name" />;
-      },
-      cell: ({ row }) => <span className="">{row.getValue("teamName")}</span>,
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "competitionName",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.competitionName ?? "";
-      },
-      header: ({ column }) => {
-        return (
-          <DataTableColumnHeader column={column} title="Competition Name" />
-        );
+        return <DataTableColumnHeader column={column} title="Image" />;
       },
       cell: ({ row }) => {
-        const compName = row.getValue("competitionName") as CompetitionName;
-        return <span className="capitalize">{compName}</span>;
-      },
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "members",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.team?.members ?? [];
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Members" />;
-      },
-      cell: ({ row }) => {
-        const members = row.getValue("members") as TeamMember[];
+        const imageUrl = row.getValue("image") as string;
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-fit h-fit border">
-                <span className="italic underline font-bold cursor-pointer">
-                  Members
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Members</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {members.map((member) => (
-                <DropdownMenuItem key={member.userId}>
-                  <Link
-                    href={`/admin/users/${member.userId}`}
-                    className="cursor-pointer"
-                    target="_blank"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="relative h-10 w-10">
-                        <Image
-                          src={member.user?.image as string}
-                          alt={member.user?.name as string}
-                          fill
-                          className="object-cover rounded-full"
-                        />
-                      </div>
-                      <p>{member.user?.name}</p>
-                      {member.role === "Leader" ? (
-                        <Badge variant={"default"} className="-ml-2">
-                          {member.role}
-                        </Badge>
-                      ) : (
-                        <Badge
-                          variant={"outline"}
-                          className="-ml-2 bg-white/50"
-                        >
-                          {member.role}
-                        </Badge>
-                      )}
-                      <ArrowUpRightSquare className="w-4 h-4 text-gray-500" />
-                    </div>
-                  </Link>
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
-    {
-      accessorKey: "userImage",
-      accessorFn: (row) => {
-        const regis = registrations?.find((regis) => regis.id === row.id);
-        const data = regis?.team?.members.find(
-          (member) => member.role === "Leader"
-        );
-        return data?.user?.image ?? "";
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Leader Image" />;
-      },
-      cell: ({ row }) => {
-        const imageUrl = row.getValue("userImage") as string;
-        return (
-          <div className="flex justify-center">
+          <>
             {imageUrl ? (
               <Link href={imageUrl} target="_blank">
                 <div className="w-10 h-10 relative">
@@ -378,184 +189,202 @@ export function CompsDataTable() {
             ) : (
               <div className="w-10 h-10 rounded-full bg-gray-300" />
             )}
-          </div>
-        );
-      },
-    },
-
-    {
-      accessorKey: "leaderUserId",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.leaderUserId ?? "";
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Leader User Id" />;
-      },
-      cell: ({ row }) => <span>{row.getValue("leaderUserId")}</span>,
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "leaderEmail",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.leaderEmail ?? "";
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Leader Email" />;
-      },
-      cell: ({ row }) => <span>{row.getValue("leaderEmail")}</span>,
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "leaderName",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.leaderName ?? "";
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Leader Name" />;
-      },
-      cell: ({ row }) => <span>{row.getValue("leaderName")}</span>,
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "leaderPhoneNumber",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.leaderPhoneNumber ?? "";
-      },
-      header: ({ column }) => {
-        return (
-          <DataTableColumnHeader column={column} title="Leader Phone Number" />
-        );
-      },
-      cell: ({ row }) => (
-        <span className="capitalize">{row.getValue("leaderPhoneNumber")}</span>
-      ),
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "teamInstitution",
-      header: ({ column }) => {
-        return (
-          <DataTableColumnHeader column={column} title="Team Institution" />
-        );
-      },
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.teamInstitution ?? "";
-      },
-      cell: ({ row }) => <span>{row.getValue("teamInstitution")}</span>,
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "teamId",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.teamId ?? "";
-      },
-      header: ({ column }) => {
-        return <DataTableColumnHeader column={column} title="Team Id" />;
-      },
-      cell: ({ row }) => <span>{row.getValue("teamId")}</span>,
-      filterFn: "includesString",
-    },
-    {
-      accessorKey: "submissionFileUrl",
-      accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
-        );
-        return registration?.submissionFileUrl ?? "";
-      },
-      header: ({ column }) => {
-        return (
-          <DataTableColumnHeader column={column} title="Submission File" />
-        );
-      },
-      cell: ({ row }) => {
-        const submissionFileUrl = row.getValue("submissionFileUrl") as string;
-        return (
-          <>
-            {submissionFileUrl ? (
-              <Link
-                href={(submissionFileUrl as string) ?? ""}
-                className={cn(
-                  submissionFileUrl ? "underline italic font-bold" : ""
-                )}
-                target="_blank"
-              >
-                {submissionFileUrl ? "View" : "No File"}
-              </Link>
-            ) : (
-              <span>No File</span>
-            )}
           </>
         );
       },
     },
     {
-      accessorKey: "submissionFileUploaded",
+      accessorKey: "userName",
       accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
         );
-        return registration?.submissionFileUploaded ?? false;
+        return examSubmission?.user.name ?? "";
       },
       header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="User Name" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("userName")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "userEmail",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return examSubmission?.user.email ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="User Email" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("userEmail")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "score",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return examSubmission?.score ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Score" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("score")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "totalQuestions",
+      header: ({ column }) => {
         return (
-          <DataTableColumnHeader
-            column={column}
-            title="Submission File Uploaded"
-          />
+          <DataTableColumnHeader column={column} title="Total Questions" />
         );
       },
-      cell: ({ row }) => {
-        const submissionFileUploaded = row.getValue(
-          "submissionFileUploaded"
-        ) as boolean | null;
-        return (
-          <>{submissionFileUploaded ? <span>Yes</span> : <span>No</span>}</>
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
         );
+        return examSubmission?.totalQuestions ?? "";
+      },
+      cell: ({ row }) => <span>{row.getValue("totalQuestions")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "timeSpent",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return examSubmission?.timeSpent ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Time Spent" />;
+      },
+      cell: ({ row }) => <span className="">{row.getValue("timeSpent")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "answers",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return (
+          examSubmission?.answers?.toString() ?? "Not a multiple choice answer"
+        );
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Answers" />;
+      },
+      cell: ({ row }) => {
+        const compName = row.getValue("answers") as string;
+        return <span className="capitalize">{compName}</span>;
+      },
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "type",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return examSubmission?.type ?? "";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Type" />;
+      },
+      cell: ({ row }) => {
+        const type = row.getValue("type") as string;
+        return <span className="capitalize">{type}</span>;
       },
     },
     {
-      accessorKey: "submissionFileSubmitted",
+      accessorKey: "essayAnswer",
       accessorFn: (row) => {
-        const registration = registrations?.find(
-          (regis) => regis.id === row.id
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
         );
-        return registration?.submissionFileSubmitted ?? false;
+        return examSubmission?.essayAnswer ?? "Not an essay type";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Essay Answer" />;
+      },
+      cell: ({ row }) => {
+        const essayAnswer = row.getValue("essayAnswer") as string;
+        return <span>{essayAnswer}</span>;
+      },
+    },
+    {
+      accessorKey: "essayAnswerFileUrl",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return examSubmission?.essayAnswerFileUrl ?? "Not an essay type";
       },
       header: ({ column }) => {
         return (
           <DataTableColumnHeader
             column={column}
-            title="Submission File Submitted"
+            title="Essay Answer File Url"
+          />
+        );
+      },
+      cell: ({ row }) => (
+        <span>
+          {row.getValue("essayAnswerFileUrl") !== "Not an essay type" ? (
+            <Link
+              href={row.getValue("essayAnswerFileUrl")}
+              target="_blank"
+              className="underline italic font-bold"
+            >
+              View
+            </Link>
+          ) : (
+            <span>No File</span>
+          )}
+        </span>
+      ),
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "essayAnswerFileKey",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return examSubmission?.essayAnswerFileKey ?? "Not an essay type";
+      },
+      header: ({ column }) => {
+        return (
+          <DataTableColumnHeader
+            column={column}
+            title="Essay Answer File Key"
           />
         );
       },
       cell: ({ row }) => {
-        const submissionFileSubmitted = row.getValue(
-          "submissionFileSubmitted"
-        ) as boolean;
-        return (
-          <>{submissionFileSubmitted ? <span>Yes</span> : <span>No</span>}</>
-        );
+        const fileKey = row.getValue("essayAnswerFileKey") as string;
+        return <span>{fileKey}</span>;
       },
+    },
+    {
+      accessorKey: "createdAt",
+      accessorFn: (row) => {
+        const examSubmission = examSubmissions?.find(
+          (examSubmission) => examSubmission.id === row.id
+        );
+        return examSubmission?.createdAt
+          ? new Date(examSubmission.createdAt).toLocaleString()
+          : "Not set";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Created At" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("createdAt")}</span>,
+      filterFn: "includesString",
     },
   ];
 
@@ -578,53 +407,53 @@ export function CompsDataTable() {
     },
   });
 
-  const deleteCompRegistration = useMutation({
-    ...trpc.admin.deleteCompRegistration.mutationOptions(),
+  const deleteExamSubmission = useMutation({
+    ...trpc.admin.deleteExamSubmission.mutationOptions(),
     onMutate: () => {
-      toast.loading("Deleting registration...", {
-        id: "delete-registration",
+      toast.loading("Deleting exam submission...", {
+        id: "delete-exam-submission",
       });
     },
     onError: (error) => {
-      toast.dismiss("delete-registration");
-      toast.error("Failed to delete registration", {
+      toast.dismiss("delete-exam-submission");
+      toast.error("Failed to delete exam submission", {
         description: error.message,
       });
       console.log(error.message);
     },
     onSuccess() {
-      toast.dismiss("delete-registration");
-      toast.success(`Deleted registration successfully`);
+      toast.dismiss("delete-exam-submission");
+      toast.success(`Deleted exam submission successfully`);
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: trpc.admin.getRegistrations.queryKey(),
+        queryKey: trpc.admin.getExamSubmissions.queryKey(),
       });
     },
   });
-  const deleteCompRegistrationByMany = useMutation({
-    ...trpc.admin.deleteCompRegistrationByMany.mutationOptions(),
+  const deleteExamSubmissionByMany = useMutation({
+    ...trpc.admin.deleteExamSubmissionByMany.mutationOptions(),
     onMutate: () => {
-      toast.loading("Deleting registrations...", {
-        id: "delete-registrations",
+      toast.loading("Deleting exam submissions...", {
+        id: "delete-exam-submissions",
       });
     },
     onError: (error) => {
-      toast.dismiss("delete-registrations");
-      toast.error("Failed to delete registrations", {
+      toast.dismiss("delete-exam-submissions");
+      toast.error("Failed to delete exam submissions", {
         description: error.message,
       });
       console.log(error.message);
     },
     onSuccess(data, variables) {
-      toast.dismiss("delete-registrations");
+      toast.dismiss("delete-exam-submissions");
       toast.success(
-        `Deleted ${variables.compRegistrationIds.length} registrations successfully`
+        `Deleted ${variables.quizIds.length} exam submissions successfully`
       );
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: trpc.admin.getRegistrations.queryKey(),
+        queryKey: trpc.admin.getExamSubmissions.queryKey(),
       });
       table.resetRowSelection();
     },
@@ -663,117 +492,117 @@ export function CompsDataTable() {
                     table.resetColumnFilters();
                   }}
                 >
-                  Registration ID
+                  Exam Submission ID
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("competitionName");
-                    table.getColumn("competitionName")?.setFilterValue("");
+                    setFilterColumn("userId");
+                    table.getColumn("userId")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Competition
+                  User Id
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("paymentId");
-                    table.getColumn("paymentId")?.setFilterValue("");
+                    setFilterColumn("userName");
+                    table.getColumn("userName")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Payment ID
+                  User Name
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("leaderUserId");
-                    table.getColumn("leaderUserId")?.setFilterValue("");
+                    setFilterColumn("userEmail");
+                    table.getColumn("userEmail")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  LeaderUserId
+                  User Email
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("leaderName");
-                    table.getColumn("leaderName")?.setFilterValue("");
+                    setFilterColumn("score");
+                    table.getColumn("score")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Leader Name
+                  Score
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("leaderEmail");
-                    table.getColumn("leaderEmail")?.setFilterValue("");
+                    setFilterColumn("totalQuestions");
+                    table.getColumn("totalQuestions")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Leader Email
+                  Total Questions
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("leaderPhoneNumber");
-                    table.getColumn("leaderPhoneNumber")?.setFilterValue("");
+                    setFilterColumn("timeSpent");
+                    table.getColumn("timeSpent")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Leader Phone Number
+                  Time Spent
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("teamName");
-                    table.getColumn("teamName")?.setFilterValue("");
+                    setFilterColumn("answers");
+                    table.getColumn("answers")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Team Name
+                  Answers
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("teamInstitution");
-                    table.getColumn("teamInstitution")?.setFilterValue("");
+                    setFilterColumn("type");
+                    table.getColumn("type")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Team Institution
+                  Type
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("teamId");
-                    table.getColumn("teamId")?.setFilterValue("");
+                    setFilterColumn("essayAnswer");
+                    table.getColumn("essayAnswer")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Team Id
+                  Essay Answer
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("statusOrder");
-                    table.getColumn("statusOrder")?.setFilterValue("");
+                    setFilterColumn("essayAnswerFileUrl");
+                    table.getColumn("essayAnswerFileUrl")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Status Payment
+                  Essay Answer File Url
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="cursor-pointer"
                   onClick={() => {
-                    setFilterColumn("teamStatus");
-                    table.getColumn("teamStatus")?.setFilterValue("");
+                    setFilterColumn("essayAnswerFileKey");
+                    table.getColumn("essayAnswerFileKey")?.setFilterValue("");
                     table.resetColumnFilters();
                   }}
                 >
-                  Team Status
+                  Essay Answer File Key
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -824,25 +653,17 @@ export function CompsDataTable() {
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => {
-                    const teamIds = table
-                      .getFilteredSelectedRowModel()
-                      .rows.map((row) => row.original.teamId);
-                    const compRegistrationIds = table
+                    const quizIds = table
                       .getFilteredSelectedRowModel()
                       .rows.map((row) => row.original.id);
-                    const paymentIds = table
-                      .getFilteredSelectedRowModel()
-                      .rows.map((row) => row.original.paymentId);
-                    deleteCompRegistrationByMany.mutate({
-                      teamIds: teamIds as string[],
-                      compRegistrationIds,
-                      paymentIds: paymentIds as string[],
+                    deleteExamSubmissionByMany.mutate({
+                      quizIds,
                     });
                   }}
                   className="cursor-pointer"
                 >
                   Delete {table.getFilteredSelectedRowModel().rows.length}{" "}
-                  registrations
+                  submissions
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -79,3 +79,12 @@ export const TeamStatus = {
 } as const
 
 export type TeamStatus = (typeof TeamStatus)[keyof typeof TeamStatus]
+
+
+export const QuizTypes = {
+  MATHEMATICS: 'MATHEMATICS',
+  PHYSICS: 'PHYSICS',
+  ESSAY: 'ESSAY'
+} as const
+
+export type QuizTypes = (typeof QuizTypes)[keyof typeof QuizTypes]

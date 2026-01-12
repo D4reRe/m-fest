@@ -1,3 +1,4 @@
+import { teamEditLimiter } from "@/lib/ratelimit";
 import { db } from "@/server/db";
 import { NextResponse } from "next/server";
 
@@ -27,6 +28,21 @@ export async function POST(req: Request) {
     });
     if (!authUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const ip = req.headers.get("x-forwarded-for")?.split(",")[0] ?? "unknown";
+    const key = authUser ? `user:${userId}` : `ip:${ip}`;
+    const { success, reset } = await teamEditLimiter.limit(key);
+    if (!success) {
+      return NextResponse.json(
+        {
+          error: `Too many requests, please try again after ${Math.ceil(
+            (reset - Date.now()) / 1000
+          )} seconds`,
+          resetAt: reset,
+        },
+        { status: 429 }
+      );
     }
 
     // Current team from database
@@ -226,10 +242,10 @@ export async function POST(req: Request) {
           member.role === "Leader"
             ? userId
             : member.role === "Member"
-              ? submittedMemberProfiles.find(
-                  (memberProfile) => memberProfile.email === member.email
-                )?.userId
-              : undefined,
+            ? submittedMemberProfiles.find(
+                (memberProfile) => memberProfile.email === member.email
+              )?.userId
+            : undefined,
       })),
     });
     console.log("Add members: ", addMembers);
@@ -254,10 +270,10 @@ export async function POST(req: Request) {
               member.role === "Leader"
                 ? userId
                 : member.role === "Member"
-                  ? submittedMemberProfiles.find(
-                      (memberProfile) => memberProfile.email === member.email
-                    )?.userId
-                  : undefined,
+                ? submittedMemberProfiles.find(
+                    (memberProfile) => memberProfile.email === member.email
+                  )?.userId
+                : undefined,
           },
         })
       )

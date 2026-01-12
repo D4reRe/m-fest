@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { env } from "@/env";
 import { db } from "@/server/db";
-import { SuccessPageProps } from "@/types/types";
+import type { SuccessPageProps } from "@/types/types";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 

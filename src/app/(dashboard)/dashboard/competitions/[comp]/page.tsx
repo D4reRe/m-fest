@@ -13,7 +13,9 @@ import { competitions } from "@/lib/competition";
 import { auth } from "@/server/auth/auth";
 import { db } from "@/server/db";
 import { headers } from "next/headers";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Button as HeroButton } from "@heroui/react";
 
 export async function generateMetadata({
   params,
@@ -53,7 +55,13 @@ async function FetchCompForm({
   });
   const team = await db.team.findFirst({
     where: {
-      leaderUserId: session?.user.id,
+      members: {
+        some: {
+          user: {
+            id: session?.user.id,
+          },
+        },
+      },
     },
   });
 
@@ -63,7 +71,7 @@ async function FetchCompForm({
 
   if (comp === "STEM") {
     return (
-      // Proctor Exam Here
+      // Tryout Exam Here
       <section className="min-h-screen bg-transparent w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="p-6 flex flex-col sm:flex-row">
           <div>
@@ -75,24 +83,24 @@ async function FetchCompForm({
                 {comp.toUpperCase() === "BCC"
                   ? "Business Case Competition"
                   : comp.toUpperCase() === "IPPC"
-                    ? "Innovative Poster and Paper Competition"
-                    : comp.toUpperCase() === "PDC"
-                      ? "Pipeline Design Competition"
-                      : comp.toUpperCase() === "STEM"
-                        ? "Science, Technology, Engineering, and Mathematics (STEM) Competition"
-                        : null}{" "}
+                  ? "Innovative Poster and Paper Competition"
+                  : comp.toUpperCase() === "PDC"
+                  ? "Pipeline Design Competition"
+                  : comp.toUpperCase() === "STEM"
+                  ? "Science, Technology, Engineering, and Mathematics (STEM) Competition"
+                  : null}{" "}
                 2026
               </span>
               <span>
                 {comp.toUpperCase() === "BCC"
                   ? submissionOpenDate
                   : comp.toUpperCase() === "IPPC"
-                    ? new Date().toDateString()
-                    : comp.toUpperCase() === "PDC"
-                      ? submissionOpenDate
-                      : comp.toUpperCase() === "STEM"
-                        ? "1 Ferbuary 2026"
-                        : null}
+                  ? new Date().toDateString()
+                  : comp.toUpperCase() === "PDC"
+                  ? submissionOpenDate
+                  : comp.toUpperCase() === "STEM"
+                  ? "1 Ferbuary 2026"
+                  : null}
               </span>
             </div>
             <Separator orientation="horizontal" />
@@ -132,6 +140,19 @@ async function FetchCompForm({
                 Stay tuned for more information. We will notify you if the exam
                 is available.
               </p>
+              <div className="flex flex-col sm:flex-row items-center gap-4 mt-2">
+                <Button className="" variant={"outline"} asChild>
+                  <Link href={"entry-exam"}>Start Exam</Link>
+                </Button>
+                <HeroButton
+                  variant="primary"
+                  className={"rounded-sm bg-white/5 border hover:bg-white/10 "}
+                >
+                  <Link href={`/api/exam-config`} download>
+                    Download SEB Config
+                  </Link>
+                </HeroButton>
+              </div>
             </div>
           </div>
         </div>
@@ -150,24 +171,24 @@ async function FetchCompForm({
               {comp.toUpperCase() === "BCC"
                 ? "Business Case Competition"
                 : comp.toUpperCase() === "IPPC"
-                  ? "Innovative Poster and Paper Competition"
-                  : comp.toUpperCase() === "PDC"
-                    ? "Pipeline Design Competition"
-                    : comp.toUpperCase() === "STEM"
-                      ? "Science, Technology, Engineering, and Mathematics (STEM) Competition"
-                      : null}{" "}
+                ? "Innovative Poster and Paper Competition"
+                : comp.toUpperCase() === "PDC"
+                ? "Pipeline Design Competition"
+                : comp.toUpperCase() === "STEM"
+                ? "Science, Technology, Engineering, and Mathematics (STEM) Competition"
+                : null}{" "}
               2026
             </span>
             <span>
               {comp.toUpperCase() === "BCC"
                 ? submissionOpenDate
                 : comp.toUpperCase() === "IPPC"
-                  ? new Date().toDateString()
-                  : comp.toUpperCase() === "PDC"
-                    ? submissionOpenDate
-                    : comp.toUpperCase() === "STEM"
-                      ? "1 Ferbuary 2026"
-                      : null}
+                ? new Date().toDateString()
+                : comp.toUpperCase() === "PDC"
+                ? submissionOpenDate
+                : comp.toUpperCase() === "STEM"
+                ? "1 Ferbuary 2026"
+                : null}
             </span>
           </div>
           <Separator orientation="horizontal" />
@@ -209,12 +230,12 @@ async function FetchCompForm({
               {comp.toUpperCase() === "BCC"
                 ? submissionDeadlineBCC
                 : comp.toUpperCase() === "IPPC"
-                  ? submissionDeadlineIPPC
-                  : comp.toUpperCase() === "PDC"
-                    ? submissionDeadlinePDC
-                    : comp.toUpperCase() === "STEM"
-                      ? ""
-                      : null}{" "}
+                ? submissionDeadlineIPPC
+                : comp.toUpperCase() === "PDC"
+                ? submissionDeadlinePDC
+                : comp.toUpperCase() === "STEM"
+                ? ""
+                : null}{" "}
               at 23.59
             </p>
             <div className="mt-6">

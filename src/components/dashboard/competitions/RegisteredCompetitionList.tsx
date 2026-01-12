@@ -38,22 +38,37 @@ export default function RegisteredCompetitionList() {
 
 async function FetchUserRegisteredCompetitions() {
   const user = (await getUser()) as User;
-  const registeredCompetitions = await db.compRegistration.findMany({
+
+  const registeredCompetition = await db.compRegistration.findFirst({
     where: {
-      userId: user.id,
       statusOrder: "SUCCESS",
+      team: {
+        members: {
+          some: {
+            userId: user.id,
+          },
+        },
+      },
+    },
+    include: {
+      team: {
+        include: {
+          members: true,
+        },
+      },
     },
   });
   const team = await db.team.findFirst({
     where: {
-      leaderUserId: user.id,
+      members: {
+        some: {
+          userId: user.id,
+        },
+      },
     },
   });
-  // console.log("Registered competitions: ", registeredCompetitions);
-  const registeredCompetitionNames = registeredCompetitions.map(
-    (competition) => competition.competitionName,
-  );
-  if (!registeredCompetitionNames.length) {
+
+  if (!registeredCompetition) {
     return (
       <div className="flex flex-col items-center justify-center py-16">
         <Empty>
@@ -78,11 +93,9 @@ async function FetchUserRegisteredCompetitions() {
       </div>
     );
   }
-  // console.log("Registered competition names: ", registeredCompetitionNames);
-  const registeredCompetitionsList = competitions.filter((comp) =>
-    registeredCompetitionNames.includes(comp.abbreviation),
+  const registeredCompetitionsList = competitions.filter(
+    (comp) => registeredCompetition.competitionName === comp.abbreviation
   );
-  // console.log("Registered competitions: ", registeredCompetitionsList);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4 items-stretch my-2">
       {registeredCompetitionsList.map((comp) => (
@@ -122,7 +135,15 @@ async function FetchUserRegisteredCompetitions() {
                 variant="default"
                 size="sm"
                 className="gap-1 pr-1.5 cursor-pointer"
-                disabled={team?.teamStatus === "ACCEPTED" ? false : true}
+                disabled={
+                  comp.abbreviation === "STEM"
+                    ? false
+                    : team?.leaderUserId === user.id
+                    ? team?.teamStatus === "ACCEPTED"
+                      ? false
+                      : true
+                    : true
+                }
               >
                 <Link
                   href={`/dashboard/competitions/${comp.abbreviation.toUpperCase()}`}
@@ -130,9 +151,13 @@ async function FetchUserRegisteredCompetitions() {
                   className="flex items-center gap-2"
                 >
                   <span>
-                    {team?.teamStatus === "ACCEPTED"
-                      ? "View Details"
-                      : "Team status is pending"}
+                    {comp.abbreviation === "STEM"
+                      ? "Enter Exam"
+                      : team?.leaderUserId === user.id
+                      ? team?.teamStatus === "ACCEPTED"
+                        ? "View Details"
+                        : "Team status is pending"
+                      : "Only leader can access"}
                   </span>
                   <ChevronRight className="size-4" />
                 </Link>
