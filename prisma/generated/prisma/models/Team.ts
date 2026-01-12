@@ -29,6 +29,7 @@ export type TeamMinAggregateOutputType = {
   name: string | null
   competition: $Enums.CompetitionName | null
   paymentId: string | null
+  paymentProofUrl: string | null
   leaderUserId: string | null
   leaderEmail: string | null
   leaderName: string | null
@@ -46,6 +47,7 @@ export type TeamMaxAggregateOutputType = {
   name: string | null
   competition: $Enums.CompetitionName | null
   paymentId: string | null
+  paymentProofUrl: string | null
   leaderUserId: string | null
   leaderEmail: string | null
   leaderName: string | null
@@ -63,6 +65,7 @@ export type TeamCountAggregateOutputType = {
   name: number
   competition: number
   paymentId: number
+  paymentProofUrl: number
   leaderUserId: number
   leaderEmail: number
   leaderName: number
@@ -82,6 +85,7 @@ export type TeamMinAggregateInputType = {
   name?: true
   competition?: true
   paymentId?: true
+  paymentProofUrl?: true
   leaderUserId?: true
   leaderEmail?: true
   leaderName?: true
@@ -99,6 +103,7 @@ export type TeamMaxAggregateInputType = {
   name?: true
   competition?: true
   paymentId?: true
+  paymentProofUrl?: true
   leaderUserId?: true
   leaderEmail?: true
   leaderName?: true
@@ -116,6 +121,7 @@ export type TeamCountAggregateInputType = {
   name?: true
   competition?: true
   paymentId?: true
+  paymentProofUrl?: true
   leaderUserId?: true
   leaderEmail?: true
   leaderName?: true
@@ -206,6 +212,7 @@ export type TeamGroupByOutputType = {
   name: string | null
   competition: $Enums.CompetitionName | null
   paymentId: string | null
+  paymentProofUrl: string | null
   leaderUserId: string | null
   leaderEmail: string | null
   leaderName: string | null
@@ -244,6 +251,7 @@ export type TeamWhereInput = {
   name?: Prisma.StringNullableFilter<"Team"> | string | null
   competition?: Prisma.EnumCompetitionNameNullableFilter<"Team"> | $Enums.CompetitionName | null
   paymentId?: Prisma.StringNullableFilter<"Team"> | string | null
+  paymentProofUrl?: Prisma.StringNullableFilter<"Team"> | string | null
   leaderUserId?: Prisma.StringNullableFilter<"Team"> | string | null
   leaderEmail?: Prisma.StringNullableFilter<"Team"> | string | null
   leaderName?: Prisma.StringNullableFilter<"Team"> | string | null
@@ -255,7 +263,6 @@ export type TeamWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Team"> | Date | string
   verificationDeadlineAt?: Prisma.DateTimeNullableFilter<"Team"> | Date | string | null
   registration?: Prisma.XOR<Prisma.CompRegistrationNullableScalarRelationFilter, Prisma.CompRegistrationWhereInput> | null
-  payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
   members?: Prisma.TeamMemberListRelationFilter
 }
 
@@ -264,6 +271,7 @@ export type TeamOrderByWithRelationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   competition?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   leaderUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   leaderEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   leaderName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -275,7 +283,6 @@ export type TeamOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   verificationDeadlineAt?: Prisma.SortOrderInput | Prisma.SortOrder
   registration?: Prisma.CompRegistrationOrderByWithRelationInput
-  payment?: Prisma.PaymentOrderByWithRelationInput
   members?: Prisma.TeamMemberOrderByRelationAggregateInput
 }
 
@@ -287,6 +294,7 @@ export type TeamWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.TeamWhereInput[]
   NOT?: Prisma.TeamWhereInput | Prisma.TeamWhereInput[]
   competition?: Prisma.EnumCompetitionNameNullableFilter<"Team"> | $Enums.CompetitionName | null
+  paymentProofUrl?: Prisma.StringNullableFilter<"Team"> | string | null
   leaderUserId?: Prisma.StringNullableFilter<"Team"> | string | null
   leaderEmail?: Prisma.StringNullableFilter<"Team"> | string | null
   leaderName?: Prisma.StringNullableFilter<"Team"> | string | null
@@ -298,7 +306,6 @@ export type TeamWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Team"> | Date | string
   verificationDeadlineAt?: Prisma.DateTimeNullableFilter<"Team"> | Date | string | null
   registration?: Prisma.XOR<Prisma.CompRegistrationNullableScalarRelationFilter, Prisma.CompRegistrationWhereInput> | null
-  payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
   members?: Prisma.TeamMemberListRelationFilter
 }, "id" | "name" | "paymentId">
 
@@ -307,6 +314,7 @@ export type TeamOrderByWithAggregationInput = {
   name?: Prisma.SortOrderInput | Prisma.SortOrder
   competition?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   leaderUserId?: Prisma.SortOrderInput | Prisma.SortOrder
   leaderEmail?: Prisma.SortOrderInput | Prisma.SortOrder
   leaderName?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -330,6 +338,7 @@ export type TeamScalarWhereWithAggregatesInput = {
   name?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
   competition?: Prisma.EnumCompetitionNameNullableWithAggregatesFilter<"Team"> | $Enums.CompetitionName | null
   paymentId?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
+  paymentProofUrl?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
   leaderUserId?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
   leaderEmail?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
   leaderName?: Prisma.StringNullableWithAggregatesFilter<"Team"> | string | null
@@ -346,6 +355,8 @@ export type TeamCreateInput = {
   id?: string
   name?: string | null
   competition?: $Enums.CompetitionName | null
+  paymentId?: string | null
+  paymentProofUrl?: string | null
   leaderUserId?: string | null
   leaderEmail?: string | null
   leaderName?: string | null
@@ -357,7 +368,6 @@ export type TeamCreateInput = {
   updatedAt?: Date | string
   verificationDeadlineAt?: Date | string | null
   registration?: Prisma.CompRegistrationCreateNestedOneWithoutTeamInput
-  payment?: Prisma.PaymentCreateNestedOneWithoutTeamInput
   members?: Prisma.TeamMemberCreateNestedManyWithoutTeamInput
 }
 
@@ -366,6 +376,7 @@ export type TeamUncheckedCreateInput = {
   name?: string | null
   competition?: $Enums.CompetitionName | null
   paymentId?: string | null
+  paymentProofUrl?: string | null
   leaderUserId?: string | null
   leaderEmail?: string | null
   leaderName?: string | null
@@ -384,6 +395,8 @@ export type TeamUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
+  paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -395,7 +408,6 @@ export type TeamUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   registration?: Prisma.CompRegistrationUpdateOneWithoutTeamNestedInput
-  payment?: Prisma.PaymentUpdateOneWithoutTeamNestedInput
   members?: Prisma.TeamMemberUpdateManyWithoutTeamNestedInput
 }
 
@@ -404,6 +416,7 @@ export type TeamUncheckedUpdateInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -423,6 +436,7 @@ export type TeamCreateManyInput = {
   name?: string | null
   competition?: $Enums.CompetitionName | null
   paymentId?: string | null
+  paymentProofUrl?: string | null
   leaderUserId?: string | null
   leaderEmail?: string | null
   leaderName?: string | null
@@ -439,6 +453,8 @@ export type TeamUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
+  paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -456,6 +472,7 @@ export type TeamUncheckedUpdateManyInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -478,6 +495,7 @@ export type TeamCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   competition?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
   leaderUserId?: Prisma.SortOrder
   leaderEmail?: Prisma.SortOrder
   leaderName?: Prisma.SortOrder
@@ -495,6 +513,7 @@ export type TeamMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   competition?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
   leaderUserId?: Prisma.SortOrder
   leaderEmail?: Prisma.SortOrder
   leaderName?: Prisma.SortOrder
@@ -512,6 +531,7 @@ export type TeamMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   competition?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
   leaderUserId?: Prisma.SortOrder
   leaderEmail?: Prisma.SortOrder
   leaderName?: Prisma.SortOrder
@@ -563,42 +583,12 @@ export type TeamUpdateOneRequiredWithoutMembersNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TeamUpdateToOneWithWhereWithoutMembersInput, Prisma.TeamUpdateWithoutMembersInput>, Prisma.TeamUncheckedUpdateWithoutMembersInput>
 }
 
-export type TeamCreateNestedOneWithoutPaymentInput = {
-  create?: Prisma.XOR<Prisma.TeamCreateWithoutPaymentInput, Prisma.TeamUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.TeamCreateOrConnectWithoutPaymentInput
-  connect?: Prisma.TeamWhereUniqueInput
-}
-
-export type TeamUncheckedCreateNestedOneWithoutPaymentInput = {
-  create?: Prisma.XOR<Prisma.TeamCreateWithoutPaymentInput, Prisma.TeamUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.TeamCreateOrConnectWithoutPaymentInput
-  connect?: Prisma.TeamWhereUniqueInput
-}
-
-export type TeamUpdateOneWithoutPaymentNestedInput = {
-  create?: Prisma.XOR<Prisma.TeamCreateWithoutPaymentInput, Prisma.TeamUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.TeamCreateOrConnectWithoutPaymentInput
-  upsert?: Prisma.TeamUpsertWithoutPaymentInput
-  disconnect?: Prisma.TeamWhereInput | boolean
-  delete?: Prisma.TeamWhereInput | boolean
-  connect?: Prisma.TeamWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TeamUpdateToOneWithWhereWithoutPaymentInput, Prisma.TeamUpdateWithoutPaymentInput>, Prisma.TeamUncheckedUpdateWithoutPaymentInput>
-}
-
-export type TeamUncheckedUpdateOneWithoutPaymentNestedInput = {
-  create?: Prisma.XOR<Prisma.TeamCreateWithoutPaymentInput, Prisma.TeamUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.TeamCreateOrConnectWithoutPaymentInput
-  upsert?: Prisma.TeamUpsertWithoutPaymentInput
-  disconnect?: Prisma.TeamWhereInput | boolean
-  delete?: Prisma.TeamWhereInput | boolean
-  connect?: Prisma.TeamWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.TeamUpdateToOneWithWhereWithoutPaymentInput, Prisma.TeamUpdateWithoutPaymentInput>, Prisma.TeamUncheckedUpdateWithoutPaymentInput>
-}
-
 export type TeamCreateWithoutRegistrationInput = {
   id?: string
   name?: string | null
   competition?: $Enums.CompetitionName | null
+  paymentId?: string | null
+  paymentProofUrl?: string | null
   leaderUserId?: string | null
   leaderEmail?: string | null
   leaderName?: string | null
@@ -609,7 +599,6 @@ export type TeamCreateWithoutRegistrationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   verificationDeadlineAt?: Date | string | null
-  payment?: Prisma.PaymentCreateNestedOneWithoutTeamInput
   members?: Prisma.TeamMemberCreateNestedManyWithoutTeamInput
 }
 
@@ -618,6 +607,7 @@ export type TeamUncheckedCreateWithoutRegistrationInput = {
   name?: string | null
   competition?: $Enums.CompetitionName | null
   paymentId?: string | null
+  paymentProofUrl?: string | null
   leaderUserId?: string | null
   leaderEmail?: string | null
   leaderName?: string | null
@@ -651,6 +641,8 @@ export type TeamUpdateWithoutRegistrationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
+  paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -661,7 +653,6 @@ export type TeamUpdateWithoutRegistrationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  payment?: Prisma.PaymentUpdateOneWithoutTeamNestedInput
   members?: Prisma.TeamMemberUpdateManyWithoutTeamNestedInput
 }
 
@@ -670,6 +661,7 @@ export type TeamUncheckedUpdateWithoutRegistrationInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -687,6 +679,8 @@ export type TeamCreateWithoutMembersInput = {
   id?: string
   name?: string | null
   competition?: $Enums.CompetitionName | null
+  paymentId?: string | null
+  paymentProofUrl?: string | null
   leaderUserId?: string | null
   leaderEmail?: string | null
   leaderName?: string | null
@@ -698,7 +692,6 @@ export type TeamCreateWithoutMembersInput = {
   updatedAt?: Date | string
   verificationDeadlineAt?: Date | string | null
   registration?: Prisma.CompRegistrationCreateNestedOneWithoutTeamInput
-  payment?: Prisma.PaymentCreateNestedOneWithoutTeamInput
 }
 
 export type TeamUncheckedCreateWithoutMembersInput = {
@@ -706,6 +699,7 @@ export type TeamUncheckedCreateWithoutMembersInput = {
   name?: string | null
   competition?: $Enums.CompetitionName | null
   paymentId?: string | null
+  paymentProofUrl?: string | null
   leaderUserId?: string | null
   leaderEmail?: string | null
   leaderName?: string | null
@@ -739,6 +733,8 @@ export type TeamUpdateWithoutMembersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
+  paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -750,7 +746,6 @@ export type TeamUpdateWithoutMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   registration?: Prisma.CompRegistrationUpdateOneWithoutTeamNestedInput
-  payment?: Prisma.PaymentUpdateOneWithoutTeamNestedInput
 }
 
 export type TeamUncheckedUpdateWithoutMembersInput = {
@@ -758,6 +753,7 @@ export type TeamUncheckedUpdateWithoutMembersInput = {
   name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
   paymentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentProofUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -769,94 +765,6 @@ export type TeamUncheckedUpdateWithoutMembersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   registration?: Prisma.CompRegistrationUncheckedUpdateOneWithoutTeamNestedInput
-}
-
-export type TeamCreateWithoutPaymentInput = {
-  id?: string
-  name?: string | null
-  competition?: $Enums.CompetitionName | null
-  leaderUserId?: string | null
-  leaderEmail?: string | null
-  leaderName?: string | null
-  leaderPhoneNumber?: string | null
-  teamInstitution?: string | null
-  teamStatus?: $Enums.TeamStatus | null
-  status?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  verificationDeadlineAt?: Date | string | null
-  registration?: Prisma.CompRegistrationCreateNestedOneWithoutTeamInput
-  members?: Prisma.TeamMemberCreateNestedManyWithoutTeamInput
-}
-
-export type TeamUncheckedCreateWithoutPaymentInput = {
-  id?: string
-  name?: string | null
-  competition?: $Enums.CompetitionName | null
-  leaderUserId?: string | null
-  leaderEmail?: string | null
-  leaderName?: string | null
-  leaderPhoneNumber?: string | null
-  teamInstitution?: string | null
-  teamStatus?: $Enums.TeamStatus | null
-  status?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  verificationDeadlineAt?: Date | string | null
-  registration?: Prisma.CompRegistrationUncheckedCreateNestedOneWithoutTeamInput
-  members?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutTeamInput
-}
-
-export type TeamCreateOrConnectWithoutPaymentInput = {
-  where: Prisma.TeamWhereUniqueInput
-  create: Prisma.XOR<Prisma.TeamCreateWithoutPaymentInput, Prisma.TeamUncheckedCreateWithoutPaymentInput>
-}
-
-export type TeamUpsertWithoutPaymentInput = {
-  update: Prisma.XOR<Prisma.TeamUpdateWithoutPaymentInput, Prisma.TeamUncheckedUpdateWithoutPaymentInput>
-  create: Prisma.XOR<Prisma.TeamCreateWithoutPaymentInput, Prisma.TeamUncheckedCreateWithoutPaymentInput>
-  where?: Prisma.TeamWhereInput
-}
-
-export type TeamUpdateToOneWithWhereWithoutPaymentInput = {
-  where?: Prisma.TeamWhereInput
-  data: Prisma.XOR<Prisma.TeamUpdateWithoutPaymentInput, Prisma.TeamUncheckedUpdateWithoutPaymentInput>
-}
-
-export type TeamUpdateWithoutPaymentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
-  leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  registration?: Prisma.CompRegistrationUpdateOneWithoutTeamNestedInput
-  members?: Prisma.TeamMemberUpdateManyWithoutTeamNestedInput
-}
-
-export type TeamUncheckedUpdateWithoutPaymentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  competition?: Prisma.NullableEnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName | null
-  leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
-  status?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verificationDeadlineAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  registration?: Prisma.CompRegistrationUncheckedUpdateOneWithoutTeamNestedInput
-  members?: Prisma.TeamMemberUncheckedUpdateManyWithoutTeamNestedInput
 }
 
 
@@ -895,6 +803,7 @@ export type TeamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   competition?: boolean
   paymentId?: boolean
+  paymentProofUrl?: boolean
   leaderUserId?: boolean
   leaderEmail?: boolean
   leaderName?: boolean
@@ -906,7 +815,6 @@ export type TeamSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   verificationDeadlineAt?: boolean
   registration?: boolean | Prisma.Team$registrationArgs<ExtArgs>
-  payment?: boolean | Prisma.Team$paymentArgs<ExtArgs>
   members?: boolean | Prisma.Team$membersArgs<ExtArgs>
   _count?: boolean | Prisma.TeamCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["team"]>
@@ -916,6 +824,7 @@ export type TeamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   competition?: boolean
   paymentId?: boolean
+  paymentProofUrl?: boolean
   leaderUserId?: boolean
   leaderEmail?: boolean
   leaderName?: boolean
@@ -926,7 +835,6 @@ export type TeamSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   verificationDeadlineAt?: boolean
-  payment?: boolean | Prisma.Team$paymentArgs<ExtArgs>
 }, ExtArgs["result"]["team"]>
 
 export type TeamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -934,6 +842,7 @@ export type TeamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   competition?: boolean
   paymentId?: boolean
+  paymentProofUrl?: boolean
   leaderUserId?: boolean
   leaderEmail?: boolean
   leaderName?: boolean
@@ -944,7 +853,6 @@ export type TeamSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   createdAt?: boolean
   updatedAt?: boolean
   verificationDeadlineAt?: boolean
-  payment?: boolean | Prisma.Team$paymentArgs<ExtArgs>
 }, ExtArgs["result"]["team"]>
 
 export type TeamSelectScalar = {
@@ -952,6 +860,7 @@ export type TeamSelectScalar = {
   name?: boolean
   competition?: boolean
   paymentId?: boolean
+  paymentProofUrl?: boolean
   leaderUserId?: boolean
   leaderEmail?: boolean
   leaderName?: boolean
@@ -964,25 +873,19 @@ export type TeamSelectScalar = {
   verificationDeadlineAt?: boolean
 }
 
-export type TeamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "competition" | "paymentId" | "leaderUserId" | "leaderEmail" | "leaderName" | "leaderPhoneNumber" | "teamInstitution" | "teamStatus" | "status" | "createdAt" | "updatedAt" | "verificationDeadlineAt", ExtArgs["result"]["team"]>
+export type TeamOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "competition" | "paymentId" | "paymentProofUrl" | "leaderUserId" | "leaderEmail" | "leaderName" | "leaderPhoneNumber" | "teamInstitution" | "teamStatus" | "status" | "createdAt" | "updatedAt" | "verificationDeadlineAt", ExtArgs["result"]["team"]>
 export type TeamInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   registration?: boolean | Prisma.Team$registrationArgs<ExtArgs>
-  payment?: boolean | Prisma.Team$paymentArgs<ExtArgs>
   members?: boolean | Prisma.Team$membersArgs<ExtArgs>
   _count?: boolean | Prisma.TeamCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type TeamIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  payment?: boolean | Prisma.Team$paymentArgs<ExtArgs>
-}
-export type TeamIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  payment?: boolean | Prisma.Team$paymentArgs<ExtArgs>
-}
+export type TeamIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type TeamIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $TeamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Team"
   objects: {
     registration: Prisma.$CompRegistrationPayload<ExtArgs> | null
-    payment: Prisma.$PaymentPayload<ExtArgs> | null
     members: Prisma.$TeamMemberPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -990,6 +893,7 @@ export type $TeamPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string | null
     competition: $Enums.CompetitionName | null
     paymentId: string | null
+    paymentProofUrl: string | null
     leaderUserId: string | null
     leaderEmail: string | null
     leaderName: string | null
@@ -1395,7 +1299,6 @@ readonly fields: TeamFieldRefs;
 export interface Prisma__TeamClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   registration<T extends Prisma.Team$registrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Team$registrationArgs<ExtArgs>>): Prisma.Prisma__CompRegistrationClient<runtime.Types.Result.GetResult<Prisma.$CompRegistrationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  payment<T extends Prisma.Team$paymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Team$paymentArgs<ExtArgs>>): Prisma.Prisma__PaymentClient<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   members<T extends Prisma.Team$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Team$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1430,6 +1333,7 @@ export interface TeamFieldRefs {
   readonly name: Prisma.FieldRef<"Team", 'String'>
   readonly competition: Prisma.FieldRef<"Team", 'CompetitionName'>
   readonly paymentId: Prisma.FieldRef<"Team", 'String'>
+  readonly paymentProofUrl: Prisma.FieldRef<"Team", 'String'>
   readonly leaderUserId: Prisma.FieldRef<"Team", 'String'>
   readonly leaderEmail: Prisma.FieldRef<"Team", 'String'>
   readonly leaderName: Prisma.FieldRef<"Team", 'String'>
@@ -1689,10 +1593,6 @@ export type TeamCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    */
   data: Prisma.TeamCreateManyInput | Prisma.TeamCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TeamIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1763,10 +1663,6 @@ export type TeamUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * Limit how many Teams to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.TeamIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1852,25 +1748,6 @@ export type Team$registrationArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   include?: Prisma.CompRegistrationInclude<ExtArgs> | null
   where?: Prisma.CompRegistrationWhereInput
-}
-
-/**
- * Team.payment
- */
-export type Team$paymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Payment
-   */
-  select?: Prisma.PaymentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Payment
-   */
-  omit?: Prisma.PaymentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PaymentInclude<ExtArgs> | null
-  where?: Prisma.PaymentWhereInput
 }
 
 /**

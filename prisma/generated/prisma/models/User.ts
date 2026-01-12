@@ -324,7 +324,6 @@ export type UserWhereInput = {
   registration?: Prisma.CompRegistrationListRelationFilter
   documents?: Prisma.XOR<Prisma.DocumentsNullableScalarRelationFilter, Prisma.DocumentsWhereInput> | null
   eventRegistration?: Prisma.EventRegistrationListRelationFilter
-  payments?: Prisma.PaymentListRelationFilter
   quizResults?: Prisma.QuizResultListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   team_member?: Prisma.TeamMemberListRelationFilter
@@ -354,7 +353,6 @@ export type UserOrderByWithRelationInput = {
   registration?: Prisma.CompRegistrationOrderByRelationAggregateInput
   documents?: Prisma.DocumentsOrderByWithRelationInput
   eventRegistration?: Prisma.EventRegistrationOrderByRelationAggregateInput
-  payments?: Prisma.PaymentOrderByRelationAggregateInput
   quizResults?: Prisma.quizResultOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   team_member?: Prisma.TeamMemberOrderByRelationAggregateInput
@@ -387,7 +385,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   registration?: Prisma.CompRegistrationListRelationFilter
   documents?: Prisma.XOR<Prisma.DocumentsNullableScalarRelationFilter, Prisma.DocumentsWhereInput> | null
   eventRegistration?: Prisma.EventRegistrationListRelationFilter
-  payments?: Prisma.PaymentListRelationFilter
   quizResults?: Prisma.QuizResultListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   team_member?: Prisma.TeamMemberListRelationFilter
@@ -467,7 +464,6 @@ export type UserCreateInput = {
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -497,7 +493,6 @@ export type UserUncheckedCreateInput = {
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -527,7 +522,6 @@ export type UserUpdateInput = {
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -557,7 +551,6 @@ export type UserUncheckedUpdateInput = {
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -703,11 +696,6 @@ export type UserSumOrderByAggregateInput = {
   semester?: Prisma.SortOrder
 }
 
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
-}
-
 export type UserCreateNestedOneWithoutRegistrationInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutRegistrationInput, Prisma.UserUncheckedCreateWithoutRegistrationInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutRegistrationInput
@@ -788,22 +776,6 @@ export type UserUpdateOneRequiredWithoutTeam_memberNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTeam_memberInput, Prisma.UserUpdateWithoutTeam_memberInput>, Prisma.UserUncheckedUpdateWithoutTeam_memberInput>
 }
 
-export type UserCreateNestedOneWithoutPaymentsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutPaymentsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPaymentsInput
-  upsert?: Prisma.UserUpsertWithoutPaymentsInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPaymentsInput, Prisma.UserUpdateWithoutPaymentsInput>, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
-}
-
 export type UserCreateNestedOneWithoutAccountsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAccountsInput, Prisma.UserUncheckedCreateWithoutAccountsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAccountsInput
@@ -882,7 +854,6 @@ export type UserCreateWithoutRegistrationInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -911,7 +882,6 @@ export type UserUncheckedCreateWithoutRegistrationInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -956,7 +926,6 @@ export type UserUpdateWithoutRegistrationInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -985,7 +954,6 @@ export type UserUncheckedUpdateWithoutRegistrationInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1014,7 +982,6 @@ export type UserCreateWithoutEventRegistrationInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -1043,7 +1010,6 @@ export type UserUncheckedCreateWithoutEventRegistrationInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1088,7 +1054,6 @@ export type UserUpdateWithoutEventRegistrationInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -1117,7 +1082,6 @@ export type UserUncheckedUpdateWithoutEventRegistrationInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1146,7 +1110,6 @@ export type UserCreateWithoutDocumentsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -1175,7 +1138,6 @@ export type UserUncheckedCreateWithoutDocumentsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1220,7 +1182,6 @@ export type UserUpdateWithoutDocumentsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -1249,7 +1210,6 @@ export type UserUncheckedUpdateWithoutDocumentsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1279,7 +1239,6 @@ export type UserCreateWithoutTeam_memberInput = {
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   examSession?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
@@ -1308,7 +1267,6 @@ export type UserUncheckedCreateWithoutTeam_memberInput = {
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   examSession?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1353,7 +1311,6 @@ export type UserUpdateWithoutTeam_memberInput = {
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   examSession?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
@@ -1382,141 +1339,8 @@ export type UserUncheckedUpdateWithoutTeam_memberInput = {
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  examSession?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutPaymentsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified: boolean
-  image?: string | null
-  imageKey?: string | null
-  gender?: $Enums.Gender | null
-  phoneNumber?: string | null
-  domicile?: string | null
-  institution?: string | null
-  major?: string | null
-  education?: $Enums.Education | null
-  semester?: number | null
-  birthDate?: Date | string | null
-  role?: $Enums.Role
-  verified?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
-  registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
-  documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
-  eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
-  team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
-  examSession?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutPaymentsInput = {
-  id: string
-  name: string
-  email: string
-  emailVerified: boolean
-  image?: string | null
-  imageKey?: string | null
-  gender?: $Enums.Gender | null
-  phoneNumber?: string | null
-  domicile?: string | null
-  institution?: string | null
-  major?: string | null
-  education?: $Enums.Education | null
-  semester?: number | null
-  birthDate?: Date | string | null
-  role?: $Enums.Role
-  verified?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
-  registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
-  documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
-  eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
-  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
-  team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
-  examSession?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutPaymentsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
-}
-
-export type UserUpsertWithoutPaymentsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPaymentsInput, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPaymentsInput, Prisma.UserUncheckedCreateWithoutPaymentsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutPaymentsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPaymentsInput, Prisma.UserUncheckedUpdateWithoutPaymentsInput>
-}
-
-export type UserUpdateWithoutPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  domicile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  major?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  education?: Prisma.NullableEnumEducationFieldUpdateOperationsInput | $Enums.Education | null
-  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
-  registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
-  documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
-  eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
-  team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
-  examSession?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutPaymentsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  imageKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gender?: Prisma.NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-  phoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  domicile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  institution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  major?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  education?: Prisma.NullableEnumEducationFieldUpdateOperationsInput | $Enums.Education | null
-  semester?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  birthDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  verified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
-  registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
-  eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
-  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
-  team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   examSession?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
@@ -1542,7 +1366,6 @@ export type UserCreateWithoutAccountsInput = {
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -1571,7 +1394,6 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1616,7 +1438,6 @@ export type UserUpdateWithoutAccountsInput = {
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -1645,7 +1466,6 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1675,7 +1495,6 @@ export type UserCreateWithoutSessionsInput = {
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   examSession?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
@@ -1704,7 +1523,6 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   examSession?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
@@ -1749,7 +1567,6 @@ export type UserUpdateWithoutSessionsInput = {
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   examSession?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
@@ -1778,7 +1595,6 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   examSession?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -1807,7 +1623,6 @@ export type UserCreateWithoutExamSessionInput = {
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
@@ -1836,7 +1651,6 @@ export type UserUncheckedCreateWithoutExamSessionInput = {
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   quizResults?: Prisma.quizResultUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
@@ -1881,7 +1695,6 @@ export type UserUpdateWithoutExamSessionInput = {
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
@@ -1910,7 +1723,6 @@ export type UserUncheckedUpdateWithoutExamSessionInput = {
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   quizResults?: Prisma.quizResultUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -1939,7 +1751,6 @@ export type UserCreateWithoutQuizResultsInput = {
   registration?: Prisma.CompRegistrationCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberCreateNestedManyWithoutUserInput
   examSession?: Prisma.ExamSessionCreateNestedManyWithoutUserInput
@@ -1968,7 +1779,6 @@ export type UserUncheckedCreateWithoutQuizResultsInput = {
   registration?: Prisma.CompRegistrationUncheckedCreateNestedManyWithoutUserInput
   documents?: Prisma.DocumentsUncheckedCreateNestedOneWithoutUserInput
   eventRegistration?: Prisma.EventRegistrationUncheckedCreateNestedManyWithoutUserInput
-  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   team_member?: Prisma.TeamMemberUncheckedCreateNestedManyWithoutUserInput
   examSession?: Prisma.ExamSessionUncheckedCreateNestedManyWithoutUserInput
@@ -2013,7 +1823,6 @@ export type UserUpdateWithoutQuizResultsInput = {
   registration?: Prisma.CompRegistrationUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUpdateManyWithoutUserNestedInput
   examSession?: Prisma.ExamSessionUpdateManyWithoutUserNestedInput
@@ -2042,7 +1851,6 @@ export type UserUncheckedUpdateWithoutQuizResultsInput = {
   registration?: Prisma.CompRegistrationUncheckedUpdateManyWithoutUserNestedInput
   documents?: Prisma.DocumentsUncheckedUpdateOneWithoutUserNestedInput
   eventRegistration?: Prisma.EventRegistrationUncheckedUpdateManyWithoutUserNestedInput
-  payments?: Prisma.PaymentUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   team_member?: Prisma.TeamMemberUncheckedUpdateManyWithoutUserNestedInput
   examSession?: Prisma.ExamSessionUncheckedUpdateManyWithoutUserNestedInput
@@ -2057,7 +1865,6 @@ export type UserCountOutputType = {
   accounts: number
   registration: number
   eventRegistration: number
-  payments: number
   quizResults: number
   sessions: number
   team_member: number
@@ -2068,7 +1875,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   registration?: boolean | UserCountOutputTypeCountRegistrationArgs
   eventRegistration?: boolean | UserCountOutputTypeCountEventRegistrationArgs
-  payments?: boolean | UserCountOutputTypeCountPaymentsArgs
   quizResults?: boolean | UserCountOutputTypeCountQuizResultsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   team_member?: boolean | UserCountOutputTypeCountTeam_memberArgs
@@ -2104,13 +1910,6 @@ export type UserCountOutputTypeCountRegistrationArgs<ExtArgs extends runtime.Typ
  */
 export type UserCountOutputTypeCountEventRegistrationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EventRegistrationWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PaymentWhereInput
 }
 
 /**
@@ -2165,7 +1964,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   registration?: boolean | Prisma.User$registrationArgs<ExtArgs>
   documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
   eventRegistration?: boolean | Prisma.User$eventRegistrationArgs<ExtArgs>
-  payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   quizResults?: boolean | Prisma.User$quizResultsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   team_member?: boolean | Prisma.User$team_memberArgs<ExtArgs>
@@ -2242,7 +2040,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   registration?: boolean | Prisma.User$registrationArgs<ExtArgs>
   documents?: boolean | Prisma.User$documentsArgs<ExtArgs>
   eventRegistration?: boolean | Prisma.User$eventRegistrationArgs<ExtArgs>
-  payments?: boolean | Prisma.User$paymentsArgs<ExtArgs>
   quizResults?: boolean | Prisma.User$quizResultsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   team_member?: boolean | Prisma.User$team_memberArgs<ExtArgs>
@@ -2259,7 +2056,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     registration: Prisma.$CompRegistrationPayload<ExtArgs>[]
     documents: Prisma.$DocumentsPayload<ExtArgs> | null
     eventRegistration: Prisma.$EventRegistrationPayload<ExtArgs>[]
-    payments: Prisma.$PaymentPayload<ExtArgs>[]
     quizResults: Prisma.$quizResultPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     team_member: Prisma.$TeamMemberPayload<ExtArgs>[]
@@ -2682,7 +2478,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   registration<T extends Prisma.User$registrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$registrationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CompRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   documents<T extends Prisma.User$documentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$documentsArgs<ExtArgs>>): Prisma.Prisma__DocumentsClient<runtime.Types.Result.GetResult<Prisma.$DocumentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   eventRegistration<T extends Prisma.User$eventRegistrationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$eventRegistrationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventRegistrationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  payments<T extends Prisma.User$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   quizResults<T extends Prisma.User$quizResultsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$quizResultsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$quizResultPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   team_member<T extends Prisma.User$team_memberArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$team_memberArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TeamMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3210,30 +3005,6 @@ export type User$eventRegistrationArgs<ExtArgs extends runtime.Types.Extensions.
   take?: number
   skip?: number
   distinct?: Prisma.EventRegistrationScalarFieldEnum | Prisma.EventRegistrationScalarFieldEnum[]
-}
-
-/**
- * User.payments
- */
-export type User$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Payment
-   */
-  select?: Prisma.PaymentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Payment
-   */
-  omit?: Prisma.PaymentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PaymentInclude<ExtArgs> | null
-  where?: Prisma.PaymentWhereInput
-  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
-  cursor?: Prisma.PaymentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**

@@ -102,7 +102,6 @@ export const adminRouter = router({
             },
           },
         },
-        payment: true,
       },
     });
     return totalRegistration;
@@ -111,19 +110,18 @@ export const adminRouter = router({
     const totalEventRegistration = await db.eventRegistration.findMany();
     return totalEventRegistration;
   }),
-  getInvoices: adminProcedure.query(async () => {
-    const invoices = await db.payment.findMany({
-      include: {
-        user: true,
-        team: true,
-        registration: true,
-      },
-    });
-    return invoices;
-  }),
   getAllDocuments: adminProcedure.query(async () => {
     const verifications = await db.documents.findMany();
     return verifications;
+  }),
+  getInvoices: adminProcedure.query(async () => {
+    const invoices = await db.compRegistration.findMany({
+      select: {
+        paymentFee: true,
+        createdAt: true,
+      },
+    });
+    return invoices;
   }),
   approveUser: adminProcedure
     .input(
@@ -513,11 +511,6 @@ export const adminRouter = router({
           where: { teamId: input.teamId },
         });
       }
-      if (input.paymentId) {
-        await db.payment.delete({
-          where: { orderId: input.paymentId },
-        });
-      }
     }),
   approveTeamsByMany: adminProcedure
     .input(
@@ -604,17 +597,6 @@ export const adminRouter = router({
           },
         },
       });
-      // Only delete payments that are not null
-      const validPaymentIds = input.paymentIds.filter(
-        (paymentId) => paymentId !== null
-      );
-      await db.payment.deleteMany({
-        where: {
-          orderId: {
-            in: validPaymentIds,
-          },
-        },
-      });
     }),
   updateUserRole: superAdminProcedure
     .input(
@@ -625,12 +607,107 @@ export const adminRouter = router({
     )
     .mutation(async ({ input, ctx }) => {
       if (ctx.session.user.id === input.userId) {
-        throw new Error("You cannot update your own role");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot update your own role",
+        });
       }
       await db.user.update({
         where: { id: input.userId },
         data: {
           role: input.role,
+        },
+      });
+    }),
+  updateUserRoleByMany: superAdminProcedure
+    .input(
+      z.object({
+        userIds: z.array(z.string()),
+        role: z.enum(["USER", "ADMIN", "SUPERADMIN"]),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (
+        ctx.session.user.id ===
+        input.userIds.find((userId) => userId === ctx.session.user.id)
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot update your own role",
+        });
+      }
+      await db.user.updateMany({
+        where: {
+          id: {
+            in: input.userIds,
+          },
+        },
+        data: {
+          role: input.role,
+        },
+      });
+    }),
+  approveCompRegistration: adminProcedure
+    .input(
+      z.object({
+        compRegistrationId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.db.compRegistration.update({
+        where: { id: input.compRegistrationId },
+        data: {
+          isVerified: true,
+        },
+      });
+    }),
+  approveCompRegistrationByMany: adminProcedure
+    .input(
+      z.object({
+        compRegistrationIds: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.db.compRegistration.updateMany({
+        where: {
+          id: {
+            in: input.compRegistrationIds,
+          },
+        },
+        data: {
+          isVerified: true,
+        },
+      });
+    }),
+  rejectCompRegistration: adminProcedure
+    .input(
+      z.object({
+        compRegistrationId: z.string(),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.db.compRegistration.update({
+        where: { id: input.compRegistrationId },
+        data: {
+          isVerified: false,
+        },
+      });
+    }),
+  rejectCompRegistrationByMany: adminProcedure
+    .input(
+      z.object({
+        compRegistrationIds: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      await ctx.db.compRegistration.updateMany({
+        where: {
+          id: {
+            in: input.compRegistrationIds,
+          },
+        },
+        data: {
+          isVerified: false,
         },
       });
     }),
@@ -654,9 +731,6 @@ export const adminRouter = router({
           teamStatus: "NOT_REGISTERED",
           status: "PENDING",
         },
-      });
-      await db.payment.delete({
-        where: { orderId: input.paymentId },
       });
     }),
   deleteCompRegistrationByMany: adminProcedure
@@ -688,23 +762,32 @@ export const adminRouter = router({
           status: "PENDING",
         },
       });
-      await db.payment.deleteMany({
-        where: {
-          orderId: {
-            in: input.paymentIds,
-          },
-        },
-      });
     }),
   deleteUser: adminProcedure
     .input(
       z.object({
         userId: z.string(),
+        role: z.enum(["USER", "ADMIN", "SUPERADMIN"]),
       })
     )
     .mutation(async ({ input, ctx }) => {
       if (input.userId === ctx.session.user.id) {
-        throw new Error("You cannot delete yourself");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot delete yourself",
+        });
+      }
+      if (input.role === "SUPERADMIN") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot delete a superadmin",
+        });
+      }
+      if (input.role === "ADMIN" && ctx.session.user.role !== "SUPERADMIN") {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot delete an admin",
+        });
       }
       await db.user.delete({
         where: { id: input.userId },
@@ -720,12 +803,33 @@ export const adminRouter = router({
     .input(
       z.object({
         userIds: z.array(z.string()),
+        roles: z.array(z.enum(["USER", "ADMIN", "SUPERADMIN"])),
       })
     )
     .mutation(async ({ input, ctx }) => {
       if (input.userIds.includes(ctx.session.user.id as string)) {
-        throw new Error("You cannot delete yourself");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot delete yourself",
+        });
       }
+
+      if (input.roles.includes("SUPERADMIN")) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot delete a superadmin",
+        });
+      }
+      if (
+        input.roles.includes("ADMIN") &&
+        ctx.session.user.role !== "SUPERADMIN"
+      ) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "You cannot delete an admin",
+        });
+      }
+
       await db.user.deleteMany({
         where: {
           id: {
@@ -916,9 +1020,6 @@ export const adminRouter = router({
           },
         });
       }
-      await db.payment.delete({
-        where: { id: input.invoiceId },
-      });
     }),
   deleteInvoicesByMany: adminProcedure
     .input(
@@ -946,13 +1047,6 @@ export const adminRouter = router({
           competition: null,
           teamStatus: "NOT_REGISTERED",
           status: "PENDING",
-        },
-      });
-      await db.payment.deleteMany({
-        where: {
-          id: {
-            in: input.invoiceIds,
-          },
         },
       });
     }),

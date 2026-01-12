@@ -228,37 +228,6 @@ export const dashboardRouter = router({
         status: userDocuments.status,
       };
     }),
-  getUserInvoices: protectedProcedure.query(async ({ ctx }) => {
-    const user = await getUser();
-    if (!user) {
-      console.log("User not found");
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "User not found",
-      });
-    }
-    const invoices = await ctx.db.payment.findMany({
-      where: {
-        userId: user?.id,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        team: true,
-        registration: true,
-        user: true,
-      },
-    });
-
-    if (!invoices) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "No invoices found",
-      });
-    }
-    return invoices;
-  }),
   getUserRegisteredComp: protectedProcedure
     .input(
       z.object({

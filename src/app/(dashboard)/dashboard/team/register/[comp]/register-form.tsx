@@ -8,11 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { competitions } from "@/lib/competition";
-import {
-  type RegisterFormProps,
-  type ResultTransaction,
-  type TeamMember,
-} from "@/types/types";
+import { type RegisterFormProps, type TeamMember } from "@/types/types";
 import {
   Field,
   FieldContent,
@@ -27,9 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTRPC } from "@/utils/trpc";
-import { getCallbackUrl, getReturnUrl } from "@/lib/utils";
 
 function RegisterForm({
   comp,
@@ -47,9 +42,41 @@ function RegisterForm({
   const [teamName, setTeamName] = useState<string>("");
   const router = useRouter();
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { data: user, isFetched } = useQuery(
     trpc.dashboard.getUser.queryOptions()
   );
+  const register = useMutation({
+    ...trpc.register.registerTeam.mutationOptions(),
+    onMutate: () => {
+      setIsLoading(true);
+      toast.loading("Registering team...", {
+        id: "registering-team",
+      });
+    },
+    onSuccess: () => {
+      setIsLoading(false);
+      toast.dismiss("registering-team");
+      toast.success("Team registered successfully!");
+    },
+    onError: (error) => {
+      setIsLoading(false);
+      toast.dismiss("registering-team");
+      toast.error("Failed to register team", {
+        description: error.message,
+      });
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUser.queryKey(),
+      });
+      queryClient.invalidateQueries({
+        queryKey: trpc.dashboard.getUserRegisteredComp.queryKey({ comp }),
+      });
+      router.refresh();
+      router.push("/dashboard/competitions");
+    },
+  });
 
   useEffect(() => {
     if (isFetched) {
@@ -79,8 +106,14 @@ function RegisterForm({
     leaderPhoneNumber: z
       .string()
       .regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
-    teamName: z.enum(teamNames as string[]),
+    teamName: z.enum(teamNames as string[], {
+      error: "Team name is required",
+    }),
     teamInstitution: z.string().min(5, "Team's institution is required"),
+    paymentProofUrl: z
+      .string()
+      .min(1, "Please upload a payment proof") // Triggers if empty
+      .url("Please provide a valid URL link"), // Triggers if format is wrong
   });
   type registerSchema = z.infer<typeof registerSchema>;
 
@@ -94,9 +127,15 @@ function RegisterForm({
     leaderPhoneNumber: z
       .string()
       .regex(/^(\+?\d{9,15})$/, "Invalid phone number"),
-    teamName: z.enum(stemTeamNames as string[]),
+    teamName: z.enum(stemTeamNames as string[], {
+      error: "Team name is required",
+    }),
     teamInstitution: z.string().min(5, "Team's institution is required"),
-    mentor: z.string().min(1),
+    paymentProofUrl: z
+      .string()
+      .min(1, "Please provide a payment proof") // Triggers if empty
+      .url("Please provide a valid URL link"), // Triggers if format is wrong
+    mentor: z.string().min(1, "Mentor name is required"),
   });
 
   type stemRegisterSchema = z.infer<typeof stemRegisterSchema>;
@@ -105,7 +144,8 @@ function RegisterForm({
     control,
     handleSubmit,
     reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
+    setError,
   } = useForm<registerSchema>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -113,10 +153,10 @@ function RegisterForm({
         comp.toUpperCase() === "BCC"
           ? "BCC"
           : comp.toUpperCase() === "IPPC"
-            ? "IPPC"
-            : comp.toUpperCase() === "PDC"
-              ? "PDC"
-              : undefined,
+          ? "IPPC"
+          : comp.toUpperCase() === "PDC"
+          ? "PDC"
+          : undefined,
       leaderName: user?.name as string,
       leaderEmail: user?.email as string,
       leaderPhoneNumber: user?.phoneNumber ?? "",
@@ -129,7 +169,8 @@ function RegisterForm({
     control: stemControl,
     handleSubmit: stemHandleSubmit,
     reset: stemReset,
-    formState: { isSubmitting: stemIsSubmitting },
+    formState: { isSubmitting: stemIsSubmitting, errors: stemErrors },
+    setError: stemSetError,
   } = useForm<stemRegisterSchema>({
     resolver: zodResolver(stemRegisterSchema),
     defaultValues: {
@@ -151,10 +192,10 @@ function RegisterForm({
             comp.toUpperCase() === "BCC"
               ? "BCC"
               : comp.toUpperCase() === "IPPC"
-                ? "IPPC"
-                : comp.toUpperCase() === "PDC"
-                  ? "PDC"
-                  : undefined,
+              ? "IPPC"
+              : comp.toUpperCase() === "PDC"
+              ? "PDC"
+              : undefined,
           leaderName: user?.name as string,
           leaderEmail: user?.email as string,
           leaderPhoneNumber: user?.phoneNumber ?? "",
@@ -180,19 +221,6 @@ function RegisterForm({
       }, 500);
     }
   }, [stemReset, user, comp, teamInstitution, teamName]);
-
-  useEffect(() => {
-    const duitkuPopScript = "https://app-sandbox.duitku.com/lib/js/duitku.js";
-
-    const script = document.createElement("script");
-    script.src = duitkuPopScript;
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
 
   const stemIsRegistered = userRegisteredCompetitions.some(
     (competition) => competition.competitionName === "STEM"
@@ -252,253 +280,6 @@ function RegisterForm({
     const randomPart = Math.random().toString(36).substring(2, 10); // random chars
     return `FEE-${timestamp}-${randomPart}`.toUpperCase();
   }
-
-  const checkout = async (formData: registerSchema, comp: string) => {
-    const submittedData = {
-      competitionName: formData.competitionName,
-      team: formData.teamName,
-      userId: user?.id,
-      teamId: userTeams.find((team) => team.name === formData.teamName)?.id,
-      leaderUserId: user?.id,
-      leaderName: formData.leaderName,
-      leaderEmail: formData.leaderEmail,
-      leaderPhoneNumber: formData.leaderPhoneNumber,
-      teamInstitution: formData.teamInstitution,
-    };
-
-    const checkOutData = {
-      paymentAmount: competitions.find(
-        (c) => c.abbreviation === comp.toUpperCase()
-      )?.fee1,
-      merchantOrderId: generateFeeId(),
-      productDetails: `${
-        competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
-      }`,
-      email: user?.email,
-      callbackUrl: getCallbackUrl(),
-      returnUrl: getReturnUrl(),
-      expiryPeriod: 60,
-      customerVaName: user?.name,
-      phoneNumber: user?.phoneNumber,
-      brand: "Mechanical Festival 2026",
-      category: "Competition Registration Fee",
-      merchant_name: "Himpunan Mahasiswa Mesin ITB",
-      submittedData: submittedData,
-      quantity: 1,
-    };
-
-    setIsLoading(true);
-    toast.loading("Checking out...", { id: "checking-out" });
-
-    const response = await fetch("/api/payment/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(checkOutData),
-    });
-    const InvoiceData = await response.json();
-
-    if (response.ok) {
-      // @ts-expect-error snap global object
-      window.checkout.process(InvoiceData.reference, {
-        defaultLanguage: "en",
-        successEvent: async function (result: ResultTransaction) {
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              result,
-              submittedData,
-              InvoiceData,
-              checkOutData,
-            }),
-          });
-          toast.dismiss("checking-out");
-          // console.log("Payment success:", result);
-          toast.success("Payment Successful!");
-          toast.dismiss("register-team");
-          toast.success("Your team have registered successfully!");
-          router.refresh();
-          setTimeout(() => {
-            router.push("/dashboard/competitions");
-          }, 500);
-        },
-        pendingEvent: async (result: ResultTransaction) => {
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              result,
-              submittedData,
-              InvoiceData,
-              checkOutData,
-            }),
-          });
-          toast.dismiss("checking-out");
-          // console.log("Payment pending:", result);
-          toast.info("Payment Pending. Please complete the transaction.");
-          toast.dismiss("register-team");
-          toast.info(
-            "Please complete the transaction to complete the registration. "
-          );
-
-          // console.log("Payment pending:", result);
-          router.replace("/dashboard/invoices");
-        },
-        errorEvent: () => {
-          toast.dismiss("checking-out");
-          toast.dismiss("register-team");
-          toast.error("Payment Failed. Please try again.");
-          // console.log("Payment error:", result);
-        },
-        closeEvent: () => {
-          toast.dismiss("checking-out");
-          toast.warning("Payment window closed before completing transaction.");
-          toast.dismiss("register-team");
-          toast.warning("Your registration is not completed yet.");
-          // console.log("Payment popup closed.");
-        },
-      });
-    }
-    if (!response.ok) {
-      setIsLoading(false);
-      toast.dismiss("checking-out");
-      toast.error("Failed to checkout, please try again.");
-      const err = await response.json();
-      toast.error(err.error);
-      return;
-    }
-    toast.dismiss("checking-out");
-    setIsLoading(false);
-  };
-  const checkoutStem = async (formData: stemRegisterSchema, comp: string) => {
-    const submittedData = {
-      competitionName: formData.competitionName,
-      team: formData.teamName,
-      userId: user?.id,
-      teamId: userTeams.find((team) => team.name === formData.teamName)?.id,
-      leaderUserId: user?.id,
-      leaderName: formData.leaderName,
-      leaderEmail: formData.leaderEmail,
-      leaderPhoneNumber: formData.leaderPhoneNumber,
-      teamInstitution: formData.teamInstitution,
-      mentor: formData.mentor,
-    };
-
-    const checkOutData = {
-      paymentAmount: competitions.find(
-        (c) => c.abbreviation === comp.toUpperCase()
-      )?.fee1,
-      merchantOrderId: generateFeeId(),
-      productDetails: `${
-        competitions.find((c) => c.abbreviation === comp.toUpperCase())?.title
-      }`,
-      email: user?.email,
-      callbackUrl: getCallbackUrl(),
-      returnUrl: getReturnUrl(),
-      expiryPeriod: 60,
-      customerVaName: user?.name,
-      phoneNumber: user?.phoneNumber,
-      brand: "Mechanical Festival 2026",
-      category: "Competition Registration Fee",
-      merchant_name: "Himpunan Mahasiswa Mesin ITB",
-      submittedData: submittedData,
-      quantity: 1,
-    };
-
-    setIsLoading(true);
-    toast.loading("Checking out...", { id: "checking-out" });
-
-    const response = await fetch("/api/payment/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(checkOutData),
-    });
-    const InvoiceData = await response.json();
-
-    if (response.ok) {
-      // @ts-expect-error snap global object
-      window.checkout.process(InvoiceData.reference, {
-        defaultLanguage: "en",
-        successEvent: async function (result: ResultTransaction) {
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              result,
-              submittedData,
-              InvoiceData,
-              checkOutData,
-            }),
-          });
-          toast.dismiss("checking-out");
-          console.log("Payment success:", result);
-          toast.success("Payment Successful!");
-          toast.dismiss("register-team");
-          toast.success("You have registered successfully!");
-          router.refresh();
-          setTimeout(() => {
-            router.push("/dashboard/competitions");
-          }, 500);
-        },
-        pendingEvent: async (result: ResultTransaction) => {
-          await fetch("/api/payment/verify", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              result,
-              submittedData,
-              InvoiceData,
-              checkOutData,
-            }),
-          });
-          toast.dismiss("checking-out");
-          console.log("Payment pending:", result);
-          toast.info("Payment Pending. Please complete the transaction.");
-          toast.dismiss("register-team");
-          toast.info(
-            "Please complete the transaction to complete the registration. "
-          );
-
-          // console.log("Payment pending:", result);
-          router.replace("/dashboard/invoices");
-        },
-        errorEvent: () => {
-          toast.dismiss("checking-out");
-          toast.dismiss("register-team");
-          toast.error("Payment Failed. Please try again.");
-        },
-        closeEvent: () => {
-          toast.dismiss("checking-out");
-          toast.warning("Payment window closed before completing transaction.");
-          toast.dismiss("register-team");
-          toast.warning("Your registration is not completed yet.");
-          // console.log("Payment popup closed.");
-        },
-      });
-    }
-    if (!response.ok) {
-      setIsLoading(false);
-      toast.dismiss("checking-out");
-      toast.error("Failed to checkout, please try again.");
-      const err = await response.json();
-      toast.error(err.error);
-      return;
-    }
-    toast.dismiss("checking-out");
-    setIsLoading(false);
-  };
 
   async function onSubmit(formData: registerSchema) {
     setIsLoading(true);
@@ -573,8 +354,24 @@ function RegisterForm({
       return;
     }
 
+    register.mutate({
+      competitionName: formData.competitionName,
+      teamName: formData.teamName,
+      userId: user?.id as string,
+      teamId: userTeams.find((team) => team.name === formData.teamName)
+        ?.id as string,
+      leaderUserId: user?.id as string,
+      leaderName: formData.leaderName,
+      leaderEmail: formData.leaderEmail,
+      leaderPhoneNumber: formData.leaderPhoneNumber,
+      teamInstitution: formData.teamInstitution,
+      paymentId: generateFeeId(),
+      paymentFee: competitions.find(
+        (competition) => competition.abbreviation === comp.toUpperCase()
+      )?.fee1 as number,
+      paymentProofUrl: formData.paymentProofUrl,
+    });
     toast.dismiss("register-team");
-    await checkout(formData, comp);
     setIsLoading(false);
     return;
   }
@@ -651,8 +448,26 @@ function RegisterForm({
       return;
     }
 
+    register.mutate({
+      competitionName: formData.competitionName,
+      teamName: formData.teamName,
+      userId: user?.id as string,
+      teamId: userTeams.find((team) => team.name === formData.teamName)
+        ?.id as string,
+      leaderUserId: user?.id as string,
+      leaderName: formData.leaderName,
+      leaderEmail: formData.leaderEmail,
+      leaderPhoneNumber: formData.leaderPhoneNumber,
+      teamInstitution: formData.teamInstitution,
+      paymentId: generateFeeId(),
+      paymentFee: competitions.find(
+        (competition) => competition.abbreviation === comp.toUpperCase()
+      )?.fee1 as number,
+      paymentProofUrl: formData.paymentProofUrl,
+      mentor: formData.mentor,
+    });
+
     toast.dismiss("register-team");
-    await checkoutStem(formData, comp);
     setIsLoading(false);
     return;
   }
@@ -707,7 +522,7 @@ function RegisterForm({
                       </SelectContent>
                     </Select>
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={[stemErrors.teamName]} />
                     )}
                   </Field>
                 )}
@@ -731,7 +546,7 @@ function RegisterForm({
                       aria-invalid={fieldState.invalid}
                     />
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={[stemErrors.mentor]} />
                     )}
                   </Field>
                 )}
@@ -774,7 +589,7 @@ function RegisterForm({
                     </SelectContent>
                   </Select>
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[stemErrors.competitionName]} />
                   )}
                 </Field>
               )}
@@ -800,7 +615,7 @@ function RegisterForm({
                     readOnly
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[stemErrors.leaderName]} />
                   )}
                 </Field>
               )}
@@ -826,7 +641,7 @@ function RegisterForm({
                     readOnly
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[stemErrors.leaderEmail]} />
                   )}
                 </Field>
               )}
@@ -854,7 +669,7 @@ function RegisterForm({
                     readOnly
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[stemErrors.leaderPhoneNumber]} />
                   )}
                 </Field>
               )}
@@ -880,7 +695,34 @@ function RegisterForm({
                     readOnly
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[stemErrors.teamInstitution]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="paymentProofUrl"
+              control={stemControl}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">
+                      Payment Proof Link
+                    </FieldLabel>
+                  </FieldContent>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Insert payment proof link here"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[stemErrors.paymentProofUrl]} />
                   )}
                 </Field>
               )}
@@ -948,7 +790,7 @@ function RegisterForm({
                       </SelectContent>
                     </Select>
                     {fieldState.invalid && (
-                      <FieldError errors={[fieldState.error]} />
+                      <FieldError errors={[errors.teamName]} />
                     )}
                   </Field>
                 )}
@@ -991,7 +833,7 @@ function RegisterForm({
                     </SelectContent>
                   </Select>
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[errors.competitionName]} />
                   )}
                 </Field>
               )}
@@ -1017,7 +859,7 @@ function RegisterForm({
                     readOnly
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[errors.leaderName]} />
                   )}
                 </Field>
               )}
@@ -1043,7 +885,7 @@ function RegisterForm({
                     readOnly
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[errors.leaderEmail]} />
                   )}
                 </Field>
               )}
@@ -1071,7 +913,7 @@ function RegisterForm({
                     readOnly
                   />
                   {fieldState.invalid && (
-                    <FieldError errors={[fieldState.error]} />
+                    <FieldError errors={[errors.leaderPhoneNumber]} />
                   )}
                 </Field>
               )}
@@ -1095,6 +937,33 @@ function RegisterForm({
                     aria-invalid={fieldState.invalid}
                     disabled
                     readOnly
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[errors.teamInstitution]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+          <div className="space-y-2">
+            <Controller
+              name="paymentProofUrl"
+              control={control}
+              render={({ field, fieldState }) => (
+                <Field
+                  orientation="responsive"
+                  data-invalid={fieldState.invalid}
+                >
+                  <FieldContent>
+                    <FieldLabel htmlFor="form-rhf">
+                      Payment Proof Link
+                    </FieldLabel>
+                  </FieldContent>
+                  <Input
+                    {...field}
+                    id={field.name}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="Insert payment proof link here"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />

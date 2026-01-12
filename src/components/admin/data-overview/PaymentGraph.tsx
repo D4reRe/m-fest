@@ -33,7 +33,7 @@ export function PaymentsChartLine() {
   const chartData =
     invoices?.map((invoice) => ({
       date: invoice.createdAt,
-      payments: invoice.amount,
+      payments: invoice.paymentFee,
     })) ?? [];
 
   return (
@@ -52,7 +52,7 @@ export function PaymentsChartLine() {
             </span>
             <span className="text-lg leading-none font-bold sm:text-3xl">
               {invoices?.length
-                ? invoices.reduce((acc, invoice) => acc + invoice.amount, 0)
+                ? invoices.reduce((acc, invoice) => acc + invoice.paymentFee, 0)
                 : "No payments data yet"}
             </span>
           </div>
@@ -63,8 +63,10 @@ export function PaymentsChartLine() {
             <span className="text-lg leading-none font-bold sm:text-3xl">
               {invoices?.length
                 ? (
-                    invoices.reduce((acc, invoice) => acc + invoice.amount, 0) /
-                    chartData.length
+                    invoices.reduce(
+                      (acc, invoice) => acc + invoice.paymentFee,
+                      0
+                    ) / chartData.length
                   ).toFixed(3)
                 : "No payments data yet"}
             </span>

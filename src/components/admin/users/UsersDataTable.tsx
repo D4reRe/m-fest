@@ -59,7 +59,7 @@ export function UsersDataTable() {
   const { data: session } = authClient.useSession();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
+    []
   );
   const [filterColumn, setFilterColumn] = React.useState<string>("email");
   const [columnVisibility, setColumnVisibility] =
@@ -164,7 +164,12 @@ export function UsersDataTable() {
                 )}
               <DropdownMenuItem
                 className="cursor-pointer text-red-500"
-                onClick={() => deleteUser.mutate({ userId: item.id })}
+                onClick={() =>
+                  deleteUser.mutate({
+                    userId: item.id,
+                    role: item.role as Role,
+                  })
+                }
                 variant="destructive"
                 disabled={item.id === session?.user.id}
               >
@@ -476,7 +481,7 @@ export function UsersDataTable() {
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.id);
         const userRegisteredMember = user?.team_member.find(
-          (member) => member.userId === row.id,
+          (member) => member.userId === row.id
         );
         const registeredComp = userRegisteredMember?.team?.competition;
         const isTeamRegistered =
@@ -501,7 +506,7 @@ export function UsersDataTable() {
       accessorFn: (row) => {
         const user = users?.find((user) => user.id === row.id);
         const userRegisteredTeam = user?.team_member.find(
-          (member) => member.userId === row.id,
+          (member) => member.userId === row.id
         );
         const userRegisteredTeamName = userRegisteredTeam?.team?.name;
         const isUserTeamRegistered =
@@ -540,7 +545,7 @@ export function UsersDataTable() {
               <Link
                 href={(identityCardUrl as string) ?? ""}
                 className={cn(
-                  identityCardUrl ? "underline italic font-bold" : "",
+                  identityCardUrl ? "underline italic font-bold" : ""
                 )}
                 target="_blank"
               >
@@ -653,6 +658,33 @@ export function UsersDataTable() {
       queryClient.invalidateQueries({
         queryKey: trpc.admin.getUsers.queryKey(),
       });
+    },
+  });
+  const updateUserRoleByMany = useMutation({
+    ...trpc.admin.updateUserRoleByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Updating users role...", {
+        id: "update-user-role",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("update-user-role");
+      toast.error("Failed to update users role", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("update-user-role");
+      toast.success(
+        `User role updated successfully for ${variables.userIds.length} users`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getUsers.queryKey(),
+      });
+      table.resetRowSelection();
     },
   });
 
@@ -850,7 +882,7 @@ export function UsersDataTable() {
             variant="outline"
             className={cn(
               "cursor-pointer w-fit",
-              isFetching && "cursor-not-allowed",
+              isFetching && "cursor-not-allowed"
             )}
             disabled={isFetching}
             onClick={() => queryClient.invalidateQueries()}
@@ -877,7 +909,7 @@ export function UsersDataTable() {
                           table.getFilteredSelectedRowModel().rows.length > 9,
                         "w-7":
                           table.getFilteredSelectedRowModel().rows.length > 99,
-                      },
+                      }
                     )}
                   >
                     <p>{table.getFilteredSelectedRowModel().rows.length}</p>
@@ -889,13 +921,44 @@ export function UsersDataTable() {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {session?.user.role === "SUPERADMIN" && (
+                  <>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        const userIds = table
+                          .getFilteredSelectedRowModel()
+                          .rows.map((row) => row.original.id);
+                        updateUserRoleByMany.mutate({ userIds, role: "USER" });
+                      }}
+                      className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/60!"
+                    >
+                      Update {table.getFilteredSelectedRowModel().rows.length}{" "}
+                      user's role to USER
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={() => {
+                        const userIds = table
+                          .getFilteredSelectedRowModel()
+                          .rows.map((row) => row.original.id);
+                        updateUserRoleByMany.mutate({ userIds, role: "ADMIN" });
+                      }}
+                      className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/60!"
+                    >
+                      Update {table.getFilteredSelectedRowModel().rows.length}{" "}
+                      user's role to ADMIN
+                    </DropdownMenuItem>
+                  </>
+                )}
                 <DropdownMenuItem
                   variant="destructive"
                   onClick={() => {
                     const userIds = table
                       .getFilteredSelectedRowModel()
                       .rows.map((row) => row.original.id);
-                    deleteUserByMany.mutate({ userIds });
+                    const roles = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.role);
+                    deleteUserByMany.mutate({ userIds, roles });
                   }}
                   className="cursor-pointer"
                 >
@@ -919,7 +982,7 @@ export function UsersDataTable() {
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -938,7 +1001,7 @@ export function UsersDataTable() {
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
