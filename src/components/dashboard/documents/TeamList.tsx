@@ -39,10 +39,15 @@ async function FetchUserTeams() {
     const user = (await getUser()) as User;
     const teams = await db.team.findMany({
         where: {
-            leaderUserId: user.id,
+            members: {
+                some: {
+                    userId: user.id,
+                },
+            },
         },
         select: {
             id: true,
+            leaderUserId: true,
             name: true,
             competition: true,
             members: true,
@@ -120,17 +125,28 @@ async function FetchUserTeams() {
                         {team.members.length} members
                     </p>
                     <Button
-                        className="mt-4 text-sm md:text-xs lg:text-sm"
+                        className={cn("mt-4 text-sm md:text-xs lg:text-sm", {
+                            "text-black bg-muted-foreground cursor-not-allowed pointer-events-none":
+                                user.id !== team.leaderUserId,
+                        })}
                         size={"sm"}
+                        disabled={user.id !== team.leaderUserId}
                         asChild
                     >
                         <Link
                             // href={`/dashboard/documents/${team.name?.split(" ").join("-")}`}
-                            href={`/dashboard/documents/${team.id}`}
+                            href={
+                                user.id === team.leaderUserId
+                                    ? `/dashboard/documents/${team.id}`
+                                    : ""
+                            }
+                            className="cursor-not-allowed"
                         >
-                            {team.teamStatus === "ACCEPTED"
-                                ? "View Documents"
-                                : "Verify Members"}
+                            {user.id === team.leaderUserId
+                                ? team.teamStatus === "ACCEPTED"
+                                    ? "View Documents"
+                                    : "Verify Members"
+                                : "Leader Only"}
                         </Link>
                     </Button>
                 </div>
