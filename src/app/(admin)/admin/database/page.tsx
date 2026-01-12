@@ -1,12 +1,12 @@
 import { CompsDataTable } from "@/components/admin/competitions/CompsDataTable";
 import AccountsDataTable from "@/components/admin/database/AccountsDataTable";
 import SessionsDataTable from "@/components/admin/database/SessionsDataTable";
-import { PaymentsDataTable } from "@/components/admin/payments/PaymentsDataTable";
 import { TeamsDataTable } from "@/components/admin/teams/TeamsDataTable";
 import { UsersDataTable } from "@/components/admin/users/UsersDataTable";
 import { DocumentsDataTable } from "@/components/admin/documents/DocumentsDataTable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Metadata } from "next";
+import { ExamDataTable } from "@/components/admin/exam/ExamDataTable";
 
 export const metadata: Metadata = {
   title: "Database Management | Admin Panel",
@@ -41,8 +41,8 @@ export default function DatabasePage() {
           <TabsTrigger value="competitions" className="cursor-pointer">
             Competitions
           </TabsTrigger>
-          <TabsTrigger value="invoices" className="cursor-pointer">
-            Invoices
+          <TabsTrigger value="exam-submission" className="cursor-pointer">
+            Exam
           </TabsTrigger>
         </TabsList>
         <TabsContent value="account">
@@ -75,9 +75,9 @@ export default function DatabasePage() {
             <CompsDataTable />
           </div>
         </TabsContent>
-        <TabsContent value="invoices">
+        <TabsContent value="exam-submission">
           <div className="mt-8">
-            <PaymentsDataTable />
+            <ExamDataTable />
           </div>
         </TabsContent>
       </Tabs>

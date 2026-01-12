@@ -1,8 +1,8 @@
 # Mechanical Festival 2026 — Registration & Team Management System
 
-A modern web platform built for **Mechanical Festival 2026**, designed to handle team registrations, competition enrollments, and payment integrations with a smooth, secure, and user-friendly interface.
+A modern web platform built for **Mechanical Festival 2026**, designed to handle team registrations, competition enrollments.
 
-This project was developed using **Next.js (App Router)**, with **TypeScript**, **Prisma**, **Auth.js**, and **DuitKu POP** for payments.  
+This project was developed using **Next.js (App Router)**, with **TypeScript**, **Prisma**, **Better-auth**, **TanStack Query** , **TanStack Table**, **tRPC**, **Zod**, **React Hook Form**, **Zustand**, **UploadThing**, **Sentry**.
 It serves as the official system for participants to register, create teams, and manage competition payments online.
 
 ---
@@ -25,7 +25,6 @@ It serves as the official system for participants to register, create teams, and
 | **Form Managment**                                                          | [React Hook Form](https://react-hook-form.com/)     |
 | **State Managment**                                                         | [Zustand](https://zustand.docs.pmnd.rs/)            |
 | **File Uploads**                                                            | [UploadThing](https://uploadthing.com/)             |
-| **Payments**                                                                | [DuitKu POP](https://docs.duitku.com/)              |
 | **Error Tracking**                                                          | [Sentry.js](https://sentry.io/)                     |
 | **Deployment**                                                              | [Vercel](https://vercel.com/)                       |
 
@@ -55,16 +54,8 @@ It serves as the official system for participants to register, create teams, and
 ### 🏆 Competition Registration
 
 - Team can be registered into available competitions.
-- Payment integration using **Duitku POP**.
 - Only team leaders are permitted to initiate registration.
 - Live transaction tracking with states: success, pending, failed.
-
-### 💳 Payment System
-
-- Fully integrated **Duitku POP** payment gateway.
-- Handles success, pending, and error redirects.
-- Payment callbacks update invoice + team competition status in realtime
-- Displays payment status and transaction details in dashboard.
 
 ### 📄 Document Handling & Verification
 

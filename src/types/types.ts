@@ -226,12 +226,6 @@ export type UploadDialogProps = {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export type ResultTransaction = {
-  resultCode: string;
-  merchantOrderId: string;
-  reference: string;
-};
-
 export type SuccessPageProps = {
   searchParams: Promise<{
     merchantOrderId: string;

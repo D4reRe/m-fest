@@ -72,7 +72,7 @@ export default function DataOverview() {
           <span className="text-2xl font-bold">
             {" "}
             Total Revenue : Rp.{" "}
-            {invoices?.reduce((acc, invoice) => acc + invoice.amount, 0)}
+            {invoices?.reduce((acc, invoice) => acc + invoice.paymentFee, 0)}
           </span>
         </div>
         <div>

@@ -48,11 +48,6 @@ export type Team = Prisma.TeamModel
  */
 export type TeamMember = Prisma.TeamMemberModel
 /**
- * Model Payment
- * 
- */
-export type Payment = Prisma.PaymentModel
-/**
  * Model Account
  * 
  */

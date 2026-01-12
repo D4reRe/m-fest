@@ -5,7 +5,6 @@ import {
   IconFileAnalytics,
   IconFileText,
   IconHelp,
-  IconInvoice,
   IconListDetails,
   IconUser,
   IconUsers,
@@ -85,10 +84,6 @@ export const menus = [
     title: "Team & Register",
     url: "/dashboard/team",
   },
-  {
-    title: "Invoices",
-    url: "/dashboard/invoices",
-  },
 ];
 
 export const dataNavSidebar = {
@@ -117,11 +112,6 @@ export const dataNavSidebar = {
       title: "Team & Register",
       url: "/dashboard/team",
       icon: IconUsersGroup,
-    },
-    {
-      title: "Invoices",
-      url: "/dashboard/invoices",
-      icon: IconInvoice,
     },
   ],
   navSecondary: [
@@ -182,11 +172,6 @@ export const dataNavSidebarAdmin = {
       icon: IconConfetti,
     },
     {
-      title: "Payments & Invoices",
-      url: "/admin/payments",
-      icon: IconInvoice,
-    },
-    {
       title: "Database",
       url: "/admin/database",
       icon: IconDatabase,
@@ -240,10 +225,6 @@ export const adminMenus = [
   {
     title: "Events",
     url: "/admin/events",
-  },
-  {
-    title: "Payments & Invoices",
-    url: "/admin/payments",
   },
   {
     title: "Database",
