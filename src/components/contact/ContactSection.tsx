@@ -6,13 +6,10 @@ const ContactSection = () => {
     <section className="bg-transparent py-16 sm:py-20" id="contact">
       <BlurFade inView delay={0.5}>
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mt-12 mb-12">
-            <h2 className="text-3xl font-extrabold text-primary sm:text-4xl">
-              Contact Us
+          <div className="text-center pb-6">
+            <h2 className="text-9xl font-extrabold text-white sm:text-4xl">
+              Contact Us!
             </h2>
-            <p className="mt-4 text-lg leading-6 text-muted-foreground">
-              Please don&apos;t hesitate to contact us!
-            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="bg-trasnparent backdrop-blur-lg rounded-lg shadow-lg p-8 text-white">
