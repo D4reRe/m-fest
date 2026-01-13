@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 
@@ -29,7 +27,7 @@ export default function HeroSection() {
   return (
     <>
       <main className="overflow-hidden">
-        <section className="relative min-h-[100vh] bg-[url('/new.svg')] bg-center bg-cover bg-bottom-left bg-no-repeat pb-16 pt-45 md:pb-32 lg:pt-16">
+        <section className="mask-b-from-80% mask-b-to-100% relative min-h-[100vh] bg-[url('/new.svg')] bg-center bg-cover bg-bottom-left bg-no-repeat pb-16 pt-45 md:pb-32 lg:pt-16">
                 <span className="absolute bottom-20 left-10">
                   <TextEffect
                     preset="fade-in-blur"
