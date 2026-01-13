@@ -25,6 +25,8 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { IconListDetails } from "@tabler/icons-react";
+import { cn, currentDate } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export default function RegisteredCompetitionList() {
     return (
@@ -47,7 +49,11 @@ async function FetchUserAvailableCompetitions() {
             },
             statusOrder: "SUCCESS",
         },
+        include: {
+            team: true,
+        },
     });
+
     // console.log("Registered competitions: ", registeredCompetitions);
     const registeredCompetitionNames = registeredCompetitions.map(
         (competition) => competition.competitionName,
@@ -90,10 +96,33 @@ async function FetchUserAvailableCompetitions() {
                     className="w-full max-w-sm bg-white/5 flex flex-col backdrop-blur-sm"
                 >
                     <CardHeader className="flex flex-col justify-center items-center mb-auto">
-                        <CardTitle>{comp.abbreviation}</CardTitle>
-                        <CardDescription className="text-center">
+                        <CardTitle className="flex items-center gap-2">
+                            {comp.abbreviation}
+                        </CardTitle>
+                        <CardDescription className="text-center text-sm line-clamp-1">
                             {comp.title}
                         </CardDescription>
+                        {currentDate < comp.startRegDate1 ? (
+                            <Badge variant={"default"}>Not Started</Badge>
+                        ) : comp.startRegDate1 < currentDate &&
+                          currentDate < comp.endRegDate1 ? (
+                            <Badge
+                                variant={"secondary"}
+                                className="bg-blue-500 text-white dark:bg-blue-600"
+                            >
+                                Early Bird
+                            </Badge>
+                        ) : comp.startRegDate2 < currentDate &&
+                          currentDate < comp.endRegDate3 ? (
+                            <Badge
+                                variant="secondary"
+                                className="bg-green-600 text-white"
+                            >
+                                Regular
+                            </Badge>
+                        ) : (
+                            <Badge variant="destructive">Closed</Badge>
+                        )}
                     </CardHeader>
                     <CardContent className="flex justify-center items-center grow my-auto">
                         <Image
@@ -105,14 +134,32 @@ async function FetchUserAvailableCompetitions() {
                             className="object-cover"
                         />
                     </CardContent>
-                    <CardFooter className="flex justify-center mt-auto">
+                    <CardFooter className="flex flex-col justify-center mt-auto">
                         <Button
                             variant="default"
                             size="sm"
-                            className="gap-1 pr-1.5 cursor-pointer"
+                            className={cn("gap-1 pr-1.5 cursor-pointer", {
+                                "bg-muted-foreground pointer-events-none cursor-not-allowed":
+                                    registeredCompetitions.length ||
+                                    currentDate < comp.startRegDate1 ||
+                                    currentDate > comp.endRegDate3,
+                            })}
+                            disabled={
+                                registeredCompetitions.length
+                                    ? true
+                                    : false ||
+                                      currentDate < comp.startRegDate1 ||
+                                      currentDate > comp.endRegDate3
+                            }
                         >
                             <Link
-                                href={`/dashboard/team/register/${comp.abbreviation}`}
+                                href={
+                                    registeredCompetitions.length ||
+                                    currentDate < comp.startRegDate1 ||
+                                    currentDate > comp.endRegDate3
+                                        ? ""
+                                        : `/dashboard/team/register/${comp.abbreviation}`
+                                }
                                 prefetch
                                 className="flex items-center gap-2"
                             >
