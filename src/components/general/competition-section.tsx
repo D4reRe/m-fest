@@ -4,6 +4,8 @@ import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
 import EventCard from "./eventcard";
 import { events } from "@/lib/event";
+import CompetitionCard from "./competition-card";
+import { Competitions } from "@/components/general/competition-card";
 
 const transitionVariants = {
   item: {
@@ -27,7 +29,7 @@ const transitionVariants = {
 
 export default function EventSection() {
     return(
-        <section className="mask-b-from-90% mask-b-to-100% mask-t-from-80% mask-t-to-100% py-40 px-6 md:px-12 lg:px-24 bg-[url('/eventslice.png')] bg-cover bg-center">
+        <section className="mask-b-from-90% mask-b-to-100% mask-t-from-80% mask-t-to-100% py-40 px-6 md:px-12 lg:px-24 bg-[url('/compeslice.png')] bg-cover bg-center">
             <div>
                 <TextEffect
                     preset="fade-in-blur"
@@ -35,27 +37,26 @@ export default function EventSection() {
                     as="h1"
                     className="text-left text-7xl lg:mt-16[font-family:var(--font-next-montserrat)] font-bold mb-5"
                     >
-                    What's the big deal?
+                    Surely that’s not all of it?
                 </TextEffect>
                 <span className="mt-10 text-xl font-bold w-4/5 leading-relaxed text-white [font-family:var(--font-next-montserrat)]">
-                    We got plenty of events, go paint the town red!
+                    We also got plenty of competitons, no strings attached...
                 </span>
             </div>
 
             <div className="flex justify-center">
                 <h1 className="text-9xl font-bold mt-20 text-white [font-family:var(--font-next-montserrat)]">
-                    Events
+                    Competitions
                 </h1>
             </div>
 
             <div className="flex flex-row justify-center items-center gap-10 mt-20">
-                {events.map((event, index) => (
-                    <EventCard 
+                {Competitions.map((Competition, index) => (
+                    <CompetitionCard 
                         key={index}
-                        href={event.href}
-                        title={event.title}
-                        imageSrc={event.img}
-                        Icon={event.logo}
+                        href={Competition.href}
+                        title={Competition.title}
+                        card={Competition.card}
                     />
                 ))}
             </div>
@@ -80,14 +81,14 @@ export default function EventSection() {
                       <Button
                         asChild
                         size="lg"
-                        className="drop-shadow-xl/50 w-72 group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-6 text-lg transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] rounded-xl px-6 py-6 text-lg transition-all duration-300shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
+                        className="drop-shadow-xl/50 w-72 h-18 group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-6 text-lg transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] rounded-xl px-6 py-6 text-lg transition-all duration-300shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
                       >
                         <Link
-                          href="/events"
-                          className="flex items-center gap-3"
+                          href="/competitions"
+                          className="flex items-center justify-center gap-3"
                           prefetch
                         >
-                          <span className="text-nowrap text-3xl">Explore Events</span>
+                          <span className="text-wrap text-center text-3xl mx-auto">Explore Competitions</span>
                         </Link>
                       </Button>
                     </div>
