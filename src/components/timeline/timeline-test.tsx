@@ -68,13 +68,12 @@ export function TimelineTest() {
   ];
 
   return (
-    <section
-      className="relative w-full max-w-5xl mx-auto overflow-clip"
-      id="timeline"
-    >
-      <BlurFade inView delay={0.2}>
-        <Timeline data={timelineData} />
-      </BlurFade>
+    <section className="py-16 bg-[url('/timeslice.png')]">
+      <div className="relative w-full mx-auto max-w-5xl" id="Timeline">
+        <BlurFade inView delay={0.2}>
+          <Timeline data={timelineData} />
+        </BlurFade>
+      </div>
     </section>
   );
 }

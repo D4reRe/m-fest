@@ -62,7 +62,7 @@ export default function FAQs() {
   ];
 
   return (
-    <section className="py-16 md:py-24" id="faqs">
+    <section className="py-16 md:py-24 bg-[url('/FAQslice.png')]" id="faqs">
       <BlurFade inView delay={0.3}>
         <div className="mx-auto max-w-9xl px-4 md:px-6">
           <div className="mx-auto max-w-9xl text-center">
