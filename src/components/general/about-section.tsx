@@ -2,7 +2,7 @@ import { TextEffect } from "../ui/text-effect";
 
 export default function AboutSection() {
     return (
-    <section className="py-80 px-6 md:px-12 lg:px-24"> 
+    <section className="mask-b-from-90% mask-b-to-100% mask-t-from-95% mask-t-to-100% py-40 px-6 md:px-12 lg:px-24 bg-[url('/aboutslice.png')] bg-cover bg-center"> 
         <TextEffect
             preset="fade-in-blur"
             speedSegment={0.3}
@@ -27,12 +27,12 @@ export default function AboutSection() {
     
     <div className="max-w-4xl flex-1 text-left">
         <h2 className="text-white text-4xl font-bold mt-10 [font-family:var(--font-next-montserrat)]">
-            About Mechanical Festival
+            Mechanical Festival
         </h2>
-        <p className="mt-10 text-lg leading-relaxed text-white [font-family:var(--font-next-montserrat)]">
-            Mechanical Festival is a celebration of innovation, creativity, and engineering excellence. 
-            Our mission is to inspire and empower individuals to explore the fascinating world of mechanics through engaging events, competitions, and workshops. 
-            Join us as we transform visions into motions and push the boundaries of what is possible!
+        <p className="mt-10 text-lg w-4/5 leading-relaxed text-white [font-family:var(--font-next-montserrat)]">
+            Festival held by ITB's undergraduate mechanical engineering students. M-Fest contains 
+            events and competitions around engineering innovation by discussing current problems 
+            and how to find the right solutions.
         </p>
     </div>
     <img
@@ -40,7 +40,7 @@ export default function AboutSection() {
         alt="About Mechanical Festival"
         width={150} 
         height={150}
-        className="mt-6 rounded-lg shadow-lg object-contain h-auto pt-20" 
+        className="mt-6 rounded-lg object-contain h-auto pt-20" 
     />
 </div>
     </section>

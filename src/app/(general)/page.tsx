@@ -4,12 +4,14 @@ import Sponsors from "@/components/sponsors";
 import ContactSection from "@/components/contact/ContactSection";
 import { TimelineTest } from "@/components/timeline/timeline-test";
 import AboutSection from "@/components/general/about-section";
+import EventSection from "@/components/general/event-section";
 
 export default function Home() {
   return (
     <main>
       <HeroSection />
       <AboutSection />
+      <EventSection/>
       <TimelineTest />
       <Sponsors />
       <FAQs />
