@@ -20,7 +20,7 @@ export default function AboutSection() {
                     src="/logo.svg"
                     alt="Mfest Logo"
                     /* Adjusted logo height for responsiveness */
-                    className="h-32 w-auto md:h-60 object-contain mb-6"
+                    className="h-32 w-auto md:h-60 object-contain my-4 md:my-8"
                 />
                 <span className="text-xl md:text-3xl font-bold italic tracking-wider text-center">
                     Transforming Visions. Into Motions

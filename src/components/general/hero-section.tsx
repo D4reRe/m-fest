@@ -28,13 +28,8 @@ export default function HeroSection() {
     return (
         <>
             <main className="overflow-hidden">
-                {/* 1. min-h-[100dvh]: Use dynamic viewport height for mobile browsers 
-                  2. flex-col justify-end: Pushes content to the bottom
-                  3. pt-24: Adds space for navbar on mobile
-                */}
                 <section className="relative min-h-[100dvh] w-full flex flex-col justify-end pb-10 px-6 pt-24 md:pb-20 md:px-12 lg:pt-16">
                     
-                    {/* Container to separate Text (Left) and Buttons (Right) */}
                     <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between w-full max-w-[1600px] mx-auto">
                         
                         {/* --- TEXT SECTION --- */}
@@ -43,7 +38,6 @@ export default function HeroSection() {
                                 preset="fade-in-blur"
                                 speedSegment={0.3}
                                 as="h1"
-                                // Responsive Text: 5xl on mobile, 8xl on desktop
                                 className="text-left text-5xl md:text-8xl [font-family:var(--font-next-montserrat)] font-bold leading-tight"
                             >
                                 Mechanical
@@ -72,6 +66,8 @@ export default function HeroSection() {
 
                         {/* --- BUTTONS SECTION --- */}
                         <div className="flex flex-col gap-4 z-10 w-full md:w-auto">
+                            
+                            {/* BUTTON 1: Explore Events */}
                             <AnimatedGroup
                                 variants={{
                                     container: {
@@ -90,15 +86,13 @@ export default function HeroSection() {
                                     <Button
                                         asChild
                                         size="lg"
-                                        // Mobile: w-full (full width), Desktop: w-72
                                         className="drop-shadow-xl/50 w-full md:w-72 h-auto group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-5 md:py-6 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
                                     >
                                         <Link
                                             href="/events"
-                                            className="flex items-center justify-between md:justify-start gap-3 w-full"
+                                            className="flex items-center justify-center gap-3 w-full"
                                             prefetch
                                         >
-                                            {/* Text scales down on mobile */}
                                             <span className="text-xl md:text-3xl font-semibold">
                                                 Explore Events
                                             </span>
@@ -112,6 +106,7 @@ export default function HeroSection() {
                                 </div>
                             </AnimatedGroup>
 
+                            {/* BUTTON 2: Explore Competitions */}
                             <AnimatedGroup
                                 variants={{
                                     container: {
@@ -134,11 +129,12 @@ export default function HeroSection() {
                                     >
                                         <Link
                                             href="/competitions"
-                                            className="flex items-center justify-between md:justify-start gap-3 w-full"
+                                            className="flex items-center text-left gap-3 w-full"
                                             prefetch
                                         >
-                                            <span className="text-xl md:text-3xl font-semibold">
-                                                Explore Competitions
+                                            {/* Two lines logic: added <br/> and leading-none */}
+                                            <span className="text-xl md:text-3xl font-semibold text-left leading-none">
+                                                Explore <br /> Competitions
                                             </span>
                                             <img
                                                 src="/compbuttonlogo.svg"
@@ -149,6 +145,7 @@ export default function HeroSection() {
                                     </Button>
                                 </div>
                             </AnimatedGroup>
+
                         </div>
                     </div>
                 </section>
