@@ -77,7 +77,7 @@ function RegisterForm({
                 }),
             });
             router.refresh();
-            router.push("/dashboard/competitions");
+            router.push("/dashboard/documents");
         },
     });
 

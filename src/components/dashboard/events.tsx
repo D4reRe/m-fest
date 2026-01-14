@@ -2,46 +2,50 @@
 
 import { Calendar, Users, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { IconConfetti } from "@tabler/icons-react";
+import { EmptyMedia } from "../ui/empty";
 
 export function Events() {
-  const events = [
-    {
-      id: 1,
-      name: "Web Development Hackathon",
-      date: "March 15, 2024",
-      location: "Tech Hub, Downtown",
-      participants: 45,
-      status: "Upcoming",
-    },
-    {
-      id: 2,
-      name: "AI & Machine Learning Workshop",
-      date: "March 22, 2024",
-      location: "Innovation Center",
-      participants: 32,
-      status: "Upcoming",
-    },
-    {
-      id: 3,
-      name: "Mobile App Development Challenge",
-      date: "February 28, 2024",
-      location: "Campus Hall A",
-      participants: 28,
-      status: "Completed",
-    },
-  ];
+    const events = [
+        {
+            id: 1,
+            name: "Web Development Hackathon",
+            date: "March 15, 2024",
+            location: "Tech Hub, Downtown",
+            participants: 45,
+            status: "Upcoming",
+        },
+        {
+            id: 2,
+            name: "AI & Machine Learning Workshop",
+            date: "March 22, 2024",
+            location: "Innovation Center",
+            participants: 32,
+            status: "Upcoming",
+        },
+        {
+            id: 3,
+            name: "Mobile App Development Challenge",
+            date: "February 28, 2024",
+            location: "Campus Hall A",
+            participants: 28,
+            status: "Completed",
+        },
+    ];
 
-  const getStatusColor = (status: string) => {
-    return status === "Upcoming"
-      ? "bg-primary/30 text-primary border-primary/50"
-      : "bg-muted/30 text-muted-foreground border-muted/50";
-  };
+    const getStatusColor = (status: string) => {
+        return status === "Upcoming"
+            ? "bg-primary/30 text-primary border-primary/50"
+            : "bg-muted/30 text-muted-foreground border-muted/50";
+    };
 
-  return (
-    <div className="glass p-6">
-      <h3 className="text-lg font-semibold text-foreground mb-6">Events</h3>
-      <div className="space-y-4">
-        {events.map((event) => (
+    return (
+        <div className="glass p-6">
+            <h3 className="text-lg font-semibold text-foreground mb-6">
+                Events
+            </h3>
+            <div className="space-y-4">
+                {/*{events.map((event) => (
           <div
             key={event.id}
             className="glass-sm p-4 hover:bg-card/50 transition-colors"
@@ -69,8 +73,14 @@ export function Events() {
               </div>
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-  );
+        ))}*/}
+                <div className="glass-sm p-4 transition-colors flex flex-col justify-center items-center">
+                    <EmptyMedia variant={"icon"}>
+                        <IconConfetti />
+                    </EmptyMedia>
+                    <h1>No Available Events</h1>
+                </div>
+            </div>
+        </div>
+    );
 }
