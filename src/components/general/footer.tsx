@@ -4,10 +4,8 @@ import { links } from "@/constants/constants";
 
 export default function FooterSection() {
     return (
-        <footer className="relative py-16 md:py-32">
-            <div className="absolute inset-0 bg-[url('/bg-footer-white.png')] bg-cover bg-position-[center_90%]" />
-            <div className="absolute inset-0 bg-[url('/footer-slice.png')] bg-cover bg-position-[center_90%]" />
-            <div className="relative mx-auto max-w-5xl px-6">
+        <footer className="py-16 md:py-32">
+            <div className="mx-auto max-w-5xl px-6">
                 <Link
                     href="/"
                     aria-label="go home"
@@ -20,7 +18,6 @@ export default function FooterSection() {
                         width={60}
                         height={60}
                         loading="lazy"
-                        className="invert"
                     />
                     <Image
                         src="/hmm.png"
@@ -36,7 +33,7 @@ export default function FooterSection() {
                         <Link
                             key={index}
                             href={link.href}
-                            className="text-black hover:text-primary block duration-150"
+                            className="text-muted-foreground hover:text-primary block duration-150"
                             prefetch
                         >
                             <span>{link.title}</span>
@@ -49,7 +46,7 @@ export default function FooterSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="X/Twitter"
-                        className="text-black hover:text-primary block"
+                        className="text-muted-foreground hover:text-primary block"
                     >
                         <svg
                             className="size-6"
@@ -69,7 +66,7 @@ export default function FooterSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="LinkedIn"
-                        className="text-black hover:text-primary block"
+                        className="text-muted-foreground hover:text-primary block"
                     >
                         <svg
                             className="size-6"
@@ -89,7 +86,7 @@ export default function FooterSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Facebook"
-                        className="text-black hover:text-primary block"
+                        className="text-muted-foreground hover:text-primary block"
                     >
                         <svg
                             className="size-6"
@@ -109,7 +106,7 @@ export default function FooterSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Threads"
-                        className="text-black hover:text-primary block"
+                        className="text-muted-foreground hover:text-primary block"
                     >
                         <svg
                             className="size-6"
@@ -134,7 +131,7 @@ export default function FooterSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="Instagram"
-                        className="text-black hover:text-primary block"
+                        className="text-muted-foreground hover:text-primary block"
                     >
                         <svg
                             className="size-6"
@@ -154,7 +151,7 @@ export default function FooterSection() {
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="TikTok"
-                        className="text-black hover:text-primary block"
+                        className="text-muted-foreground hover:text-primary block"
                     >
                         <svg
                             className="size-6"
@@ -170,7 +167,7 @@ export default function FooterSection() {
                         </svg>
                     </Link>
                 </div>
-                <span className="text-black text-center text-sm flex flex-col">
+                <span className="text-muted-foreground text-center text-sm flex flex-col">
                     {" "}
                     © {new Date().getFullYear()} Mechanical Festival 2026, All
                     rights reserved.{" "}

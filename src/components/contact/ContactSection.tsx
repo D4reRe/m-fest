@@ -5,10 +5,7 @@ import { IconPhone } from "@tabler/icons-react";
 
 const ContactSection = () => {
     return (
-        <section
-            className=" mask-t-from-80% mask-t-to-100% bg-[url('/Contactslice.png')] bg-cover py-16 sm:py-20"
-            id="contact"
-        >
+        <section className=" py-16 sm:py-20" id="contact">
             <div className="pl-16 pb-14 pt-20">
                 <h1 className="text-7xl font-extrabold ">
                     {`That's all we're afraid.`}

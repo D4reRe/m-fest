@@ -6,36 +6,36 @@ import EventCard from "./eventcard";
 import { events } from "@/lib/event";
 
 const transitionVariants = {
-  item: {
-    hidden: {
-      opacity: 0,
-      filter: "blur(12px)",
-      y: 12,
+    item: {
+        hidden: {
+            opacity: 0,
+            filter: "blur(12px)",
+            y: 12,
+        },
+        visible: {
+            opacity: 1,
+            filter: "blur(0px)",
+            y: 0,
+            transition: {
+                type: "spring" as const,
+                bounce: 0.3,
+                duration: 1.5,
+            },
+        },
     },
-    visible: {
-      opacity: 1,
-      filter: "blur(0px)",
-      y: 0,
-      transition: {
-        type: "spring" as const,
-        bounce: 0.3,
-        duration: 1.5,
-      },
-    },
-  },
 };
 
 export default function EventSection() {
-    return(
-        <section className="mask-b-from-90% mask-b-to-100% mask-t-from-80% mask-t-to-100% py-40 px-6 md:px-12 lg:px-24 bg-[url('/eventslice.png')] bg-cover bg-center">
+    return (
+        <section className="py-40 px-6 md:px-12 lg:px-24">
             <div>
                 <TextEffect
                     preset="fade-in-blur"
                     speedSegment={0.3}
                     as="h1"
                     className="text-left text-7xl lg:mt-16[font-family:var(--font-next-montserrat)] font-bold mb-5"
-                    >
-                    What's the big deal?
+                >
+                    {`What's the big deal?`}
                 </TextEffect>
                 <span className="mt-10 text-xl font-bold w-4/5 leading-relaxed text-white [font-family:var(--font-next-montserrat)]">
                     We got plenty of events, go paint the town red!
@@ -50,7 +50,7 @@ export default function EventSection() {
 
             <div className="flex flex-row justify-center items-center gap-10 mt-20">
                 {events.map((event, index) => (
-                    <EventCard 
+                    <EventCard
                         key={index}
                         href={event.href}
                         title={event.title}
@@ -63,36 +63,36 @@ export default function EventSection() {
             <div className="flex justify-center mt-20">
                 <AnimatedGroup
                     variants={{
-                      container: {
-                        visible: {
-                          transition: {
-                            staggerChildren: 0.05,
-                            delayChildren: 0.75,
-                          },
+                        container: {
+                            visible: {
+                                transition: {
+                                    staggerChildren: 0.05,
+                                    delayChildren: 0.75,
+                                },
+                            },
                         },
-                      },
-                      ...transitionVariants,
+                        ...transitionVariants,
                     }}
-                  >
-                    <div
-                      key={1}
-                    >
-                      <Button
-                        asChild
-                        size="lg"
-                        className="drop-shadow-xl/50 w-72 group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-6 text-lg transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] rounded-xl px-6 py-6 text-lg transition-all duration-300shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
-                      >
-                        <Link
-                          href="/events"
-                          className="flex items-center gap-3"
-                          prefetch
+                >
+                    <div key={1}>
+                        <Button
+                            asChild
+                            size="lg"
+                            className="drop-shadow-xl/50 w-72 group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-6 text-lg transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] duration-300shadow-[0_0_20px_rgba(0,0,0,0.1)]"
                         >
-                          <span className="text-nowrap text-3xl">Explore Events</span>
-                        </Link>
-                      </Button>
+                            <Link
+                                href="/events"
+                                className="flex items-center gap-3"
+                                prefetch
+                            >
+                                <span className="text-nowrap text-3xl">
+                                    Explore Events
+                                </span>
+                            </Link>
+                        </Button>
                     </div>
-                  </AnimatedGroup>
+                </AnimatedGroup>
             </div>
         </section>
-    )
+    );
 }

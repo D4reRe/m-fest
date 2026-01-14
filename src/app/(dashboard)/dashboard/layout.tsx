@@ -5,27 +5,27 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import "react-image-crop/dist/ReactCrop.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-      // className={`min-h-screen`}
-      className={`min-h-screen bg-[url("/landing.webp")] bg-cover bg-center bg-fixed bg-repeat`}
-    >
-      <AppSidebar variant="inset" />
-      <SidebarInset
-        className={`min-h-screen bg-[url("/landing.webp")] bg-cover bg-center bg-fixed bg-repeat`}
-      >
-        {/* <SidebarInset className="bg-card"> */}
-        <SiteHeader />
+    return (
+        <SidebarProvider
+            style={
+                {
+                    "--sidebar-width": "calc(var(--spacing) * 72)",
+                    "--header-height": "calc(var(--spacing) * 12)",
+                } as React.CSSProperties
+            }
+            // className={`min-h-screen`}
+            className={`min-h-screen bg-[url("/aboutslice.png")] bg-cover bg-center bg-fixed`}
+        >
+            <AppSidebar variant="inset" />
+            <SidebarInset
+                className={`min-h-screen bg-[url("/aboutslice.png")] bg-cover bg-center bg-fixed`}
+            >
+                {/* <SidebarInset className="bg-card"> */}
+                <SiteHeader />
 
-        {children}
-      </SidebarInset>
-      <HelpButton />
-    </SidebarProvider>
-  );
+                {children}
+            </SidebarInset>
+            <HelpButton />
+        </SidebarProvider>
+    );
 }
