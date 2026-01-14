@@ -1,4 +1,4 @@
-import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaMapMarked, FaMapMarkerAlt } from "react-icons/fa";
 import { BlurFade } from "../ui/blur-fade";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { IconPhone } from "@tabler/icons-react";
@@ -6,7 +6,7 @@ import { IconPhone } from "@tabler/icons-react";
 const ContactSection = () => {
   return (
     <section
-      className="bg-[url('/Contactslice.png')] py-16 sm:py-20"
+      className="bg-[url('/Contactslice.png')] bg-cover py-16 sm:py-20"
       id="contact"
     >
       <div className="pl-16 pb-14">
@@ -58,9 +58,12 @@ const ContactSection = () => {
               </div>
             </div>
             <div>
-              <h3 className="text-3xl font-bold text-primary mb-2">
-                Our Location on Google Maps
-              </h3>
+              <FaMapMarked className="w-20 h-20 inline" />
+              <div className="inline-flex max-w-3xs">
+                <h3 className="text-2xl font-medium text-primary mb-5 pb-3 px-5 max-w-xs ">
+                  Our Location on Google Maps
+                </h3>
+              </div>
               <div className="rounded-lg shadow-lg overflow-hidden h-92 w-112">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3961.0020064428986!2d107.60761627474339!3d-6.890361693108697!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e65767c9b183%3A0x2478e3dcdce37961!2sInstitut%20Teknologi%20Bandung!5e0!3m2!1sen!2sid!4v1762297011770!5m2!1sen!2sid"
