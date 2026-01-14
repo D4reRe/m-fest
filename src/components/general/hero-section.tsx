@@ -2,8 +2,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { TextEffect } from "@/components/ui/text-effect";
 import { AnimatedGroup } from "@/components/ui/animated-group";
+import type { Variants } from "framer-motion";
 
-const transitionVariants = {
+const transitionVariants: { item: Variants } = {
     item: {
         hidden: {
             opacity: 0,
@@ -27,40 +28,50 @@ export default function HeroSection() {
     return (
         <>
             <main className="overflow-hidden">
-                <section className=" relative min-h-[100vh] pb-16 pt-45 md:pb-32 lg:pt-16">
-                    <span className="absolute bottom-20 left-10">
-                        <TextEffect
-                            preset="fade-in-blur"
-                            speedSegment={0.3}
-                            as="h1"
-                            className="text-left text-9xl lg:mt-16[font-family:var(--font-next-montserrat)] font-bold"
-                        >
-                            Mechanical
-                        </TextEffect>
+                {/* 1. min-h-[100dvh]: Use dynamic viewport height for mobile browsers 
+                  2. flex-col justify-end: Pushes content to the bottom
+                  3. pt-24: Adds space for navbar on mobile
+                */}
+                <section className="relative min-h-[100dvh] w-full flex flex-col justify-end pb-10 px-6 pt-24 md:pb-20 md:px-12 lg:pt-16">
+                    
+                    {/* Container to separate Text (Left) and Buttons (Right) */}
+                    <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between w-full max-w-[1600px] mx-auto">
+                        
+                        {/* --- TEXT SECTION --- */}
+                        <div className="flex flex-col gap-2 md:gap-6 z-10">
+                            <TextEffect
+                                preset="fade-in-blur"
+                                speedSegment={0.3}
+                                as="h1"
+                                // Responsive Text: 5xl on mobile, 8xl on desktop
+                                className="text-left text-5xl md:text-8xl [font-family:var(--font-next-montserrat)] font-bold leading-tight"
+                            >
+                                Mechanical
+                            </TextEffect>
 
-                        <TextEffect
-                            preset="fade-in-blur"
-                            speedSegment={0.3}
-                            as="h1"
-                            className="text-left text-9xl [font-family:var(--font-next-montserrat)] font-bold"
-                        >
-                            Festival 2026
-                        </TextEffect>
+                            <TextEffect
+                                preset="fade-in-blur"
+                                speedSegment={0.3}
+                                as="h1"
+                                className="text-left text-5xl md:text-8xl [font-family:var(--font-next-montserrat)] font-bold leading-tight"
+                            >
+                                Festival 2026
+                            </TextEffect>
 
-                        <TextEffect
-                            per="line"
-                            preset="fade-in-blur"
-                            speedSegment={0.3}
-                            delay={0.5}
-                            as="p"
-                            className="max-w-2xl text-left text-xl [font-family:var(--font-next-montserrat)] font-semibold"
-                        >
-                            Transforming Visions. Into Motions
-                        </TextEffect>
-                    </span>
+                            <TextEffect
+                                per="line"
+                                preset="fade-in-blur"
+                                speedSegment={0.3}
+                                delay={0.5}
+                                as="p"
+                                className="max-w-2xl text-left text-lg md:text-xl [font-family:var(--font-next-montserrat)] font-semibold mt-2 md:mt-0"
+                            >
+                                Transforming Visions. Into Motions
+                            </TextEffect>
+                        </div>
 
-                    <span className="absolute right-10 bottom-10 flex flex-col gap-4 md:flex-row pb-20 pr-20">
-                        <div className="flex flex-col gap-4">
+                        {/* --- BUTTONS SECTION --- */}
+                        <div className="flex flex-col gap-4 z-10 w-full md:w-auto">
                             <AnimatedGroup
                                 variants={{
                                     container: {
@@ -73,25 +84,28 @@ export default function HeroSection() {
                                     },
                                     ...transitionVariants,
                                 }}
+                                className="flex flex-col gap-4"
                             >
-                                <div key={1}>
+                                <div key={1} className="w-full">
                                     <Button
                                         asChild
                                         size="lg"
-                                        className="drop-shadow-xl/50 w-72 group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-6 text-lg transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]  duration-300shadow-[0_0_20px_rgba(0,0,0,0.1)] "
+                                        // Mobile: w-full (full width), Desktop: w-72
+                                        className="drop-shadow-xl/50 w-full md:w-72 h-auto group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-5 md:py-6 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
                                     >
                                         <Link
                                             href="/events"
-                                            className="flex items-center gap-3"
+                                            className="flex items-center justify-between md:justify-start gap-3 w-full"
                                             prefetch
                                         >
-                                            <span className="text-nowrap text-3xl">
+                                            {/* Text scales down on mobile */}
+                                            <span className="text-xl md:text-3xl font-semibold">
                                                 Explore Events
                                             </span>
                                             <img
                                                 src="/eventbuttonlogo.svg"
                                                 alt="Rocket"
-                                                className="relative size-7"
+                                                className="relative size-6 md:size-7"
                                             />
                                         </Link>
                                     </Button>
@@ -110,32 +124,33 @@ export default function HeroSection() {
                                     },
                                     ...transitionVariants,
                                 }}
+                                className="flex flex-col gap-4"
                             >
-                                <div key={1}>
+                                <div key={1} className="w-full">
                                     <Button
                                         asChild
                                         size="lg"
-                                        className="drop-shadow-xl/50 w-72 h-18 group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-6 text-lg transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]  duration-300shadow-[0_0_20px_rgba(0,0,0,0.1)]"
+                                        className="drop-shadow-xl/50 w-full md:w-72 h-auto group relative overflow-hidden bg-slate-900/30 hover:bg-slate-800/50 backdrop-blur-md border border-white/20 text-white rounded-xl px-6 py-5 md:py-6 transition-all duration-300 shadow-[0_0_20px_rgba(0,0,0,0.1)] hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
                                     >
                                         <Link
                                             href="/competitions"
-                                            className="flex items-center gap-3"
+                                            className="flex items-center justify-between md:justify-start gap-3 w-full"
                                             prefetch
                                         >
-                                            <span className="text-wrap text-3xl">
+                                            <span className="text-xl md:text-3xl font-semibold">
                                                 Explore Competitions
                                             </span>
                                             <img
                                                 src="/compbuttonlogo.svg"
                                                 alt="Rocket"
-                                                className="relative size-7"
+                                                className="relative size-6 md:size-7"
                                             />
                                         </Link>
                                     </Button>
                                 </div>
                             </AnimatedGroup>
                         </div>
-                    </span>
+                    </div>
                 </section>
             </main>
         </>

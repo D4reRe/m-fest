@@ -12,7 +12,7 @@ export default function EventCard({ title, imageSrc, Icon, href }: EventCardProp
   return (
    <Link 
       href={href}
-      className="group block w-40 md:w-48 rounded-2xl overflow-hidden shadow-lg bg-white transition-transform grayscale hover:grayscale-0 hover:-translate-y-1"
+      className="group block w-40 md:w-48 rounded-2xl overflow-hidden shadow-lg bg-white transition-transform md:grayscale hover:grayscale-0 hover:-translate-y-1"
     >
       <div className="flex flex-col h-full"> {/* Inner wrapper to maintain flex layout */}
         

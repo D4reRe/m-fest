@@ -1,11 +1,4 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { TextEffect } from "@/components/ui/text-effect";
-import { AnimatedGroup } from "@/components/ui/animated-group";
-import EventCard from "./eventcard";
-import { events } from "@/lib/event";
-import { competitions } from "@/lib/competition";
-import { title } from "process";
 
 interface CompetitionCardProps {
     title: string;
@@ -43,7 +36,7 @@ export default function CompetitionCard({ title, card, href }: CompetitionCardPr
     return (
         <Link 
             href={href}
-            className="group block w-40 md:w-48 rounded-xl overflow-hidden shadow-lg bg-white transition-transform grayscale hover:grayscale-0 hover:-translate-y-1"
+            className="group block w-40 md:w-48 rounded-xl overflow-hidden shadow-lg bg-white transition-transform md:grayscale hover:grayscale-0 hover:-translate-y-1"
         >
             <div className="flex flex-col h-full">
                     <img 
