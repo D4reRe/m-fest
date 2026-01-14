@@ -62,20 +62,25 @@ export default function FAQs() {
   ];
 
   return (
-    <section className="py-16 md:py-24" id="faqs">
+    <section
+      className="py-16 md:py-24 bg-[url('/FAQslice.png')] bg-contain"
+      id="faqs"
+    >
       <BlurFade inView delay={0.3}>
-        <div className="mx-auto max-w-5xl px-4 md:px-6">
-          <div className="mx-auto max-w-xl text-center">
-            <h2 className="text-balance text-3xl font-bold md:text-4xl lg:text-5xl">
+        <div className="mx-auto max-w-9xl px-4 md:px-6">
+          <div className="mx-auto max-w-9xl text-center">
+            <h2 className="text-[150px] font-bold md:text-4xl lg:text-5xl">
               Frequently Asked Questions
             </h2>
-            <p className="text-muted-foreground mt-4 text-balance">
-              Discover quick and comprehensive answers to common questions about
-              our platform, services, and features.
-            </p>
+            <div className="mx-auto max-w-2xl text-center">
+              <p className="text-semibold mt-4 text-2xl">
+                Discover quick and comprehensive answers to common questions
+                about our platform, services, and features.
+              </p>
+            </div>
           </div>
 
-          <div className="mx-auto mt-12 max-w-xl">
+          <div className="mx-auto mt-12 max-w-4xl">
             <Accordion
               type="single"
               collapsible
@@ -85,7 +90,7 @@ export default function FAQs() {
                 <div className="group" key={item.id}>
                   <AccordionItem
                     value={item.id}
-                    className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm"
+                    className="data-[state=open]:bg-card dark:data-[state=open]:bg-muted peer rounded-xl border-none px-7 py-1 data-[state=open]:border-none data-[state=open]:shadow-sm "
                   >
                     <AccordionTrigger className="cursor-pointer text-base hover:no-underline">
                       {item.question}
@@ -94,17 +99,17 @@ export default function FAQs() {
                       <p className="text-base">{item.answer}</p>
                     </AccordionContent>
                   </AccordionItem>
-                  <hr className="mx-7 border-dashed group-last:hidden peer-data-[state=open]:opacity-0" />
+                  <hr className="mx-7 border-dashed border-b-2 border-b-white group-last:hidden peer-data-[state=open]:opacity-0" />
                 </div>
               ))}
             </Accordion>
 
             <div className="text-muted-foreground mt-6 px-8">
-              Cannot find what you are looking for? please contact our
+              Cannot find what you are looking for? Please contact our
               <Dialog>
                 <DialogTrigger
                   asChild
-                  className="text-muted-foreground hover:text-primary block duration-150 cursor-pointer underline underline-offset-1"
+                  className="text-muted-foreground hover:text-primary duration-150 cursor-pointer underline underline-offset-1 px-1"
                 >
                   <span>contact person</span>
                 </DialogTrigger>

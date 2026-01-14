@@ -57,7 +57,6 @@ export const ModelName = {
   Documents: 'Documents',
   Team: 'Team',
   TeamMember: 'TeamMember',
-  Payment: 'Payment',
   Account: 'Account',
   Session: 'Session',
   Verification: 'Verification',
@@ -92,6 +91,8 @@ export const CompRegistrationScalarFieldEnum = {
   teamName: 'teamName',
   teamId: 'teamId',
   paymentId: 'paymentId',
+  paymentFee: 'paymentFee',
+  paymentProofUrl: 'paymentProofUrl',
   statusOrder: 'statusOrder',
   teamStatus: 'teamStatus',
   competitionName: 'competitionName',
@@ -103,7 +104,8 @@ export const CompRegistrationScalarFieldEnum = {
   submissionFileSubmitted: 'submissionFileSubmitted',
   mentor: 'mentor',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isVerified: 'isVerified'
 } as const
 
 export type CompRegistrationScalarFieldEnum = (typeof CompRegistrationScalarFieldEnum)[keyof typeof CompRegistrationScalarFieldEnum]
@@ -175,6 +177,7 @@ export const TeamScalarFieldEnum = {
   name: 'name',
   competition: 'competition',
   paymentId: 'paymentId',
+  paymentProofUrl: 'paymentProofUrl',
   leaderUserId: 'leaderUserId',
   leaderEmail: 'leaderEmail',
   leaderName: 'leaderName',
@@ -203,22 +206,6 @@ export const TeamMemberScalarFieldEnum = {
 } as const
 
 export type TeamMemberScalarFieldEnum = (typeof TeamMemberScalarFieldEnum)[keyof typeof TeamMemberScalarFieldEnum]
-
-
-export const PaymentScalarFieldEnum = {
-  id: 'id',
-  orderId: 'orderId',
-  userId: 'userId',
-  status: 'status',
-  competition: 'competition',
-  amount: 'amount',
-  paymentUrl: 'paymentUrl',
-  referenceDuitku: 'referenceDuitku',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type PaymentScalarFieldEnum = (typeof PaymentScalarFieldEnum)[keyof typeof PaymentScalarFieldEnum]
 
 
 export const AccountScalarFieldEnum = {

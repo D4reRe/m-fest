@@ -7,8 +7,8 @@ export function TimelineTest() {
       title: "February 2026",
       content: (
         <div className="flex flex-col gap-2">
-          <p className="text-2xl font-semibold">Pre-Program</p>
-          <p className="text-lg">M-Care: Klinik Mesin</p>
+          <p className="text-4xl font-semibold">Pre-Program</p>
+          <p className="text-2xl font-semibold">M-Care: Klinik Mesin</p>
         </div>
       ),
     },
@@ -16,8 +16,10 @@ export function TimelineTest() {
       title: "February 2026",
       content: (
         <div className="flex flex-col gap-2">
-          <p className="text-2xl font-semibold">Pre-Program</p>
-          <p className="text-lg">M-Care: Hari Bermain Bersama (HMB)</p>
+          <p className="text-4xl font-semibold">Pre-Program</p>
+          <p className="text-2xl font-semibold">
+            M-Care: Hari Bermain Bersama (HMB)
+          </p>
         </div>
       ),
     },
@@ -25,8 +27,10 @@ export function TimelineTest() {
       title: "February - April 2026",
       content: (
         <div className="flex flex-col gap-2">
-          <p className="text-2xl font-semibold">Starting Phase</p>
-          <p className="text-lg">Competitions Registration and Submission</p>
+          <p className="text-4xl font-semibold">Starting Phase</p>
+          <p className="text-2xl font-semibold">
+            Competitions Registration and Submission
+          </p>
         </div>
       ),
     },
@@ -34,8 +38,8 @@ export function TimelineTest() {
       title: "13 April 2026",
       content: (
         <div className="flex flex-col gap-2">
-          <p className="text-2xl font-semibold">Acceleration Phase</p>
-          <p className="text-lg">M-Run and Engine Tune-Up</p>
+          <p className="text-4xl font-semibold">Acceleration Phase</p>
+          <p className="text-2xl font-semibold">M-Run and Engine Tune-Up</p>
         </div>
       ),
     },
@@ -43,8 +47,8 @@ export function TimelineTest() {
       title: "2 May 2026",
       content: (
         <div className="flex flex-col gap-2">
-          <p className="text-2xl font-semibold">Final Phase</p>
-          <p className="text-lg">
+          <p className="text-4xl font-semibold">Final Phase</p>
+          <p className="text-2xl font-semibold">
             Competitions Final, M-Expo, and Solidarity Forever Summit
           </p>
         </div>
@@ -54,8 +58,8 @@ export function TimelineTest() {
       title: "3 May 2026",
       content: (
         <div className="flex flex-col gap-2">
-          <p className="text-2xl font-semibold">Ending Phase</p>
-          <p className="text-lg">
+          <p className="text-4xl font-semibold">Ending Phase</p>
+          <p className="text-2xl font-semibold">
             M-Talks, M-Expo, Solidarity Forever Summit, and Ceremony
           </p>
         </div>
@@ -64,13 +68,12 @@ export function TimelineTest() {
   ];
 
   return (
-    <section
-      className="relative w-full max-w-5xl mx-auto overflow-clip"
-      id="timeline"
-    >
-      <BlurFade inView delay={0.2}>
-        <Timeline data={timelineData} />
-      </BlurFade>
+    <section className="py-16 bg-[url('/timeslice.png')]">
+      <div className="relative w-full mx-auto max-w-5xl" id="Timeline">
+        <BlurFade inView delay={0.2}>
+          <Timeline data={timelineData} />
+        </BlurFade>
+      </div>
     </section>
   );
 }

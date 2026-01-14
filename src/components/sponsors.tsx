@@ -3,7 +3,7 @@ import { BlurFade } from "@/components/ui/blur-fade";
 
 export default function Sponsors() {
   return (
-    <section className="py-16">
+    <section className="py-16 bg-[url('/sponsslice.png')]">
       <BlurFade inView delay={0.2}>
         <div className="mx-auto max-w-5xl px-6">
           <h2 className="text-6xl font-bold text-center mt-8">Our Sponsors</h2>

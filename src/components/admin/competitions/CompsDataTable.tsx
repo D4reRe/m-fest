@@ -140,6 +140,26 @@ export function CompsDataTable() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
+                  approveCompRegistration.mutate({
+                    compRegistrationId: item.id,
+                  });
+                }}
+                className="cursor-pointer text-green-500 hover:text-green-500! hover:bg-green-900/60!"
+              >
+                Approve registration
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  rejectCompRegistration.mutate({
+                    compRegistrationId: item.id,
+                  });
+                }}
+                className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/80!"
+              >
+                Reject registration
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
                   deleteCompRegistration.mutate({
                     compRegistrationId: item.id,
                     teamId: item.teamId as string,
@@ -173,6 +193,34 @@ export function CompsDataTable() {
       filterFn: "includesString",
     },
     {
+      accessorKey: "isVerified",
+      accessorFn: (row) => {
+        const registration = registrations?.find(
+          (regis) => regis.id === row.id
+        );
+        return registration?.isVerified ? "Verified" : "Not Verified";
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Is Verified" />;
+      },
+      cell: ({ row }) => (
+        <span>
+          {row.getValue("isVerified") === "Verified" ? (
+            <Badge
+              variant="secondary"
+              className="bg-blue-500 text-white dark:bg-blue-600"
+            >
+              <BadgeCheckIcon />
+              Verified
+            </Badge>
+          ) : (
+            <Badge className="bg-red-500 text-white">Not Verified</Badge>
+          )}
+        </span>
+      ),
+      filterFn: "includesString",
+    },
+    {
       accessorKey: "paymentId",
       accessorFn: (row) => {
         const registration = registrations?.find(
@@ -184,6 +232,54 @@ export function CompsDataTable() {
         return <DataTableColumnHeader column={column} title="Payment Id" />;
       },
       cell: ({ row }) => <span>{row.getValue("paymentId")}</span>,
+      filterFn: "includesString",
+    },
+    {
+      accessorKey: "paymentProofUrl",
+      accessorFn: (row) => {
+        const registration = registrations?.find(
+          (regis) => regis.id === row.id
+        );
+        return registration?.paymentProofUrl ?? "";
+      },
+      header: ({ column }) => {
+        return (
+          <DataTableColumnHeader column={column} title="Payment Proof URL" />
+        );
+      },
+      cell: ({ row }) => {
+        const paymentProofUrl = row.getValue("paymentProofUrl") as string;
+        return (
+          <>
+            {paymentProofUrl ? (
+              <Link
+                href={(paymentProofUrl as string) ?? ""}
+                className={cn(
+                  paymentProofUrl ? "underline italic font-bold" : ""
+                )}
+                target="_blank"
+              >
+                {paymentProofUrl ? "View" : "No File"}
+              </Link>
+            ) : (
+              <span>No File</span>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      accessorKey: "paymentFee",
+      accessorFn: (row) => {
+        const registration = registrations?.find(
+          (regis) => regis.id === row.id
+        );
+        return registration?.paymentFee ?? 0;
+      },
+      header: ({ column }) => {
+        return <DataTableColumnHeader column={column} title="Payment Fee" />;
+      },
+      cell: ({ row }) => <span>{row.getValue("paymentFee")}</span>,
       filterFn: "includesString",
     },
     {
@@ -578,6 +674,109 @@ export function CompsDataTable() {
     },
   });
 
+  const approveCompRegistration = useMutation({
+    ...trpc.admin.approveCompRegistration.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Approving registration...", {
+        id: "approve-registration",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("approve-registration");
+      toast.error("Failed to approve registration", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess() {
+      toast.dismiss("approve-registration");
+      toast.success(`Approved registration successfully`);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getRegistrations.queryKey(),
+      });
+    },
+  });
+
+  const approveCompRegistrationByMany = useMutation({
+    ...trpc.admin.approveCompRegistrationByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Approving registrations...", {
+        id: "approve-registrations",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("approve-registrations");
+      toast.error("Failed to approve registrations", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("approve-registrations");
+      toast.success(
+        `Approved ${variables.compRegistrationIds.length} registrations successfully`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getRegistrations.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
+  const rejectCompRegistration = useMutation({
+    ...trpc.admin.rejectCompRegistration.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Rejecting registration...", {
+        id: "reject-registration",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("reject-registration");
+      toast.error("Failed to reject registration", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess() {
+      toast.dismiss("reject-registration");
+      toast.success(`Rejected registration successfully`);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getRegistrations.queryKey(),
+      });
+    },
+  });
+  const rejectCompRegistrationByMany = useMutation({
+    ...trpc.admin.rejectCompRegistrationByMany.mutationOptions(),
+    onMutate: () => {
+      toast.loading("Rejecting registrations...", {
+        id: "reject-registrations",
+      });
+    },
+    onError: (error) => {
+      toast.dismiss("reject-registrations");
+      toast.error("Failed to reject registrations", {
+        description: error.message,
+      });
+      console.log(error.message);
+    },
+    onSuccess(data, variables) {
+      toast.dismiss("reject-registrations");
+      toast.success(
+        `Rejected ${variables.compRegistrationIds.length} registrations successfully`
+      );
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: trpc.admin.getRegistrations.queryKey(),
+      });
+      table.resetRowSelection();
+    },
+  });
   const deleteCompRegistration = useMutation({
     ...trpc.admin.deleteCompRegistration.mutationOptions(),
     onMutate: () => {
@@ -822,7 +1021,36 @@ export function CompsDataTable() {
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  variant="destructive"
+                  className="cursor-pointer text-green-500 hover:text-green-500! hover:bg-green-900/60!"
+                  onClick={() => {
+                    const compRegistrationIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.id);
+
+                    approveCompRegistrationByMany.mutate({
+                      compRegistrationIds,
+                    });
+                  }}
+                >
+                  Approve {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  registrations
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer text-yellow-500 hover:text-yellow-500! hover:bg-yellow-900/80!"
+                  onClick={() => {
+                    const compRegistrationIds = table
+                      .getFilteredSelectedRowModel()
+                      .rows.map((row) => row.original.id);
+
+                    rejectCompRegistrationByMany.mutate({
+                      compRegistrationIds,
+                    });
+                  }}
+                >
+                  Reject {table.getFilteredSelectedRowModel().rows.length}{" "}
+                  registrations
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   onClick={() => {
                     const teamIds = table
                       .getFilteredSelectedRowModel()
@@ -840,6 +1068,7 @@ export function CompsDataTable() {
                     });
                   }}
                   className="cursor-pointer"
+                  variant="destructive"
                 >
                   Delete {table.getFilteredSelectedRowModel().rows.length}{" "}
                   registrations

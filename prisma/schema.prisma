@@ -73,8 +73,10 @@ model CompRegistration {
   leaderPhoneNumber       String?
   teamInstitution         String?
   teamName                String?
-  teamId                  String?         @unique
+  teamId                  String?          @unique
   paymentId               String          @unique
+  paymentFee              Int
+  paymentProofUrl         String
   statusOrder             String?         @default("PENDING")
   teamStatus              TeamStatus?
   competitionName         CompetitionName
@@ -87,9 +89,10 @@ model CompRegistration {
   mentor                  String?
   createdAt               DateTime        @default(now())
   updatedAt               DateTime        @updatedAt
-  payment                 Payment         @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
   team                    Team?           @relation(fields: [teamId], references: [id], onDelete: Cascade)
   user                    User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  isVerified              Boolean         @default(false)
 
   @@index([userId])
   @@index([teamId])
@@ -132,7 +135,6 @@ model User {
   registration      CompRegistration[]
   documents         Documents?
   eventRegistration EventRegistration[]
-  payments          Payment[]
   quizResults       quizResult[]
   sessions          Session[]
   team_member       TeamMember[]
@@ -176,6 +178,7 @@ model Team {
   name                   String?           @unique
   competition            CompetitionName?
   paymentId              String?           @unique
+  paymentProofUrl        String?
   leaderUserId           String?
   leaderEmail            String?
   leaderName             String?
@@ -187,7 +190,6 @@ model Team {
   updatedAt              DateTime          @updatedAt
   verificationDeadlineAt DateTime?
   registration           CompRegistration?
-  payment                Payment?          @relation(fields: [paymentId], references: [orderId], onDelete: Cascade)
   members                TeamMember[]
 
   @@index([name])
@@ -214,26 +216,6 @@ model TeamMember {
   @@index([userId])
   @@index([teamId])
   @@map("team_member")
-}
-
-model Payment {
-  id              String            @id @default(cuid())
-  orderId         String            @unique
-  userId          String?
-  status          String?           @default("PENDING")
-  competition     String?
-  amount          Int
-  paymentUrl      String?
-  referenceDuitku String?
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  registration    CompRegistration?
-  user            User?             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  team            Team?
-
-  @@index([userId])
-  @@index([orderId])
-  @@map("payment")
 }
 
 model Account {

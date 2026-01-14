@@ -20,8 +20,18 @@ export type CompRegistrationModel = runtime.Types.Result.DefaultSelection<Prisma
 
 export type AggregateCompRegistration = {
   _count: CompRegistrationCountAggregateOutputType | null
+  _avg: CompRegistrationAvgAggregateOutputType | null
+  _sum: CompRegistrationSumAggregateOutputType | null
   _min: CompRegistrationMinAggregateOutputType | null
   _max: CompRegistrationMaxAggregateOutputType | null
+}
+
+export type CompRegistrationAvgAggregateOutputType = {
+  paymentFee: number | null
+}
+
+export type CompRegistrationSumAggregateOutputType = {
+  paymentFee: number | null
 }
 
 export type CompRegistrationMinAggregateOutputType = {
@@ -35,6 +45,8 @@ export type CompRegistrationMinAggregateOutputType = {
   teamName: string | null
   teamId: string | null
   paymentId: string | null
+  paymentFee: number | null
+  paymentProofUrl: string | null
   statusOrder: string | null
   teamStatus: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName | null
@@ -47,6 +59,7 @@ export type CompRegistrationMinAggregateOutputType = {
   mentor: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  isVerified: boolean | null
 }
 
 export type CompRegistrationMaxAggregateOutputType = {
@@ -60,6 +73,8 @@ export type CompRegistrationMaxAggregateOutputType = {
   teamName: string | null
   teamId: string | null
   paymentId: string | null
+  paymentFee: number | null
+  paymentProofUrl: string | null
   statusOrder: string | null
   teamStatus: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName | null
@@ -72,6 +87,7 @@ export type CompRegistrationMaxAggregateOutputType = {
   mentor: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  isVerified: boolean | null
 }
 
 export type CompRegistrationCountAggregateOutputType = {
@@ -85,6 +101,8 @@ export type CompRegistrationCountAggregateOutputType = {
   teamName: number
   teamId: number
   paymentId: number
+  paymentFee: number
+  paymentProofUrl: number
   statusOrder: number
   teamStatus: number
   competitionName: number
@@ -97,9 +115,18 @@ export type CompRegistrationCountAggregateOutputType = {
   mentor: number
   createdAt: number
   updatedAt: number
+  isVerified: number
   _all: number
 }
 
+
+export type CompRegistrationAvgAggregateInputType = {
+  paymentFee?: true
+}
+
+export type CompRegistrationSumAggregateInputType = {
+  paymentFee?: true
+}
 
 export type CompRegistrationMinAggregateInputType = {
   id?: true
@@ -112,6 +139,8 @@ export type CompRegistrationMinAggregateInputType = {
   teamName?: true
   teamId?: true
   paymentId?: true
+  paymentFee?: true
+  paymentProofUrl?: true
   statusOrder?: true
   teamStatus?: true
   competitionName?: true
@@ -124,6 +153,7 @@ export type CompRegistrationMinAggregateInputType = {
   mentor?: true
   createdAt?: true
   updatedAt?: true
+  isVerified?: true
 }
 
 export type CompRegistrationMaxAggregateInputType = {
@@ -137,6 +167,8 @@ export type CompRegistrationMaxAggregateInputType = {
   teamName?: true
   teamId?: true
   paymentId?: true
+  paymentFee?: true
+  paymentProofUrl?: true
   statusOrder?: true
   teamStatus?: true
   competitionName?: true
@@ -149,6 +181,7 @@ export type CompRegistrationMaxAggregateInputType = {
   mentor?: true
   createdAt?: true
   updatedAt?: true
+  isVerified?: true
 }
 
 export type CompRegistrationCountAggregateInputType = {
@@ -162,6 +195,8 @@ export type CompRegistrationCountAggregateInputType = {
   teamName?: true
   teamId?: true
   paymentId?: true
+  paymentFee?: true
+  paymentProofUrl?: true
   statusOrder?: true
   teamStatus?: true
   competitionName?: true
@@ -174,6 +209,7 @@ export type CompRegistrationCountAggregateInputType = {
   mentor?: true
   createdAt?: true
   updatedAt?: true
+  isVerified?: true
   _all?: true
 }
 
@@ -215,6 +251,18 @@ export type CompRegistrationAggregateArgs<ExtArgs extends runtime.Types.Extensio
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: CompRegistrationAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: CompRegistrationSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: CompRegistrationMinAggregateInputType
@@ -245,6 +293,8 @@ export type CompRegistrationGroupByArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   _count?: CompRegistrationCountAggregateInputType | true
+  _avg?: CompRegistrationAvgAggregateInputType
+  _sum?: CompRegistrationSumAggregateInputType
   _min?: CompRegistrationMinAggregateInputType
   _max?: CompRegistrationMaxAggregateInputType
 }
@@ -260,6 +310,8 @@ export type CompRegistrationGroupByOutputType = {
   teamName: string | null
   teamId: string | null
   paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder: string | null
   teamStatus: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -272,7 +324,10 @@ export type CompRegistrationGroupByOutputType = {
   mentor: string | null
   createdAt: Date
   updatedAt: Date
+  isVerified: boolean
   _count: CompRegistrationCountAggregateOutputType | null
+  _avg: CompRegistrationAvgAggregateOutputType | null
+  _sum: CompRegistrationSumAggregateOutputType | null
   _min: CompRegistrationMinAggregateOutputType | null
   _max: CompRegistrationMaxAggregateOutputType | null
 }
@@ -306,6 +361,8 @@ export type CompRegistrationWhereInput = {
   teamName?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamId?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   paymentId?: Prisma.StringFilter<"CompRegistration"> | string
+  paymentFee?: Prisma.IntFilter<"CompRegistration"> | number
+  paymentProofUrl?: Prisma.StringFilter<"CompRegistration"> | string
   statusOrder?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableFilter<"CompRegistration"> | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFilter<"CompRegistration"> | $Enums.CompetitionName
@@ -318,7 +375,7 @@ export type CompRegistrationWhereInput = {
   mentor?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
-  payment?: Prisma.XOR<Prisma.PaymentScalarRelationFilter, Prisma.PaymentWhereInput>
+  isVerified?: Prisma.BoolFilter<"CompRegistration"> | boolean
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -334,6 +391,8 @@ export type CompRegistrationOrderByWithRelationInput = {
   teamName?: Prisma.SortOrderInput | Prisma.SortOrder
   teamId?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentId?: Prisma.SortOrder
+  paymentFee?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
   statusOrder?: Prisma.SortOrderInput | Prisma.SortOrder
   teamStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   competitionName?: Prisma.SortOrder
@@ -346,7 +405,7 @@ export type CompRegistrationOrderByWithRelationInput = {
   mentor?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  payment?: Prisma.PaymentOrderByWithRelationInput
+  isVerified?: Prisma.SortOrder
   team?: Prisma.TeamOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -365,6 +424,8 @@ export type CompRegistrationWhereUniqueInput = Prisma.AtLeast<{
   leaderPhoneNumber?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamInstitution?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamName?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
+  paymentFee?: Prisma.IntFilter<"CompRegistration"> | number
+  paymentProofUrl?: Prisma.StringFilter<"CompRegistration"> | string
   statusOrder?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableFilter<"CompRegistration"> | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFilter<"CompRegistration"> | $Enums.CompetitionName
@@ -377,7 +438,7 @@ export type CompRegistrationWhereUniqueInput = Prisma.AtLeast<{
   mentor?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
-  payment?: Prisma.XOR<Prisma.PaymentScalarRelationFilter, Prisma.PaymentWhereInput>
+  isVerified?: Prisma.BoolFilter<"CompRegistration"> | boolean
   team?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "teamId" | "paymentId">
@@ -393,6 +454,8 @@ export type CompRegistrationOrderByWithAggregationInput = {
   teamName?: Prisma.SortOrderInput | Prisma.SortOrder
   teamId?: Prisma.SortOrderInput | Prisma.SortOrder
   paymentId?: Prisma.SortOrder
+  paymentFee?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
   statusOrder?: Prisma.SortOrderInput | Prisma.SortOrder
   teamStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   competitionName?: Prisma.SortOrder
@@ -405,9 +468,12 @@ export type CompRegistrationOrderByWithAggregationInput = {
   mentor?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
   _count?: Prisma.CompRegistrationCountOrderByAggregateInput
+  _avg?: Prisma.CompRegistrationAvgOrderByAggregateInput
   _max?: Prisma.CompRegistrationMaxOrderByAggregateInput
   _min?: Prisma.CompRegistrationMinOrderByAggregateInput
+  _sum?: Prisma.CompRegistrationSumOrderByAggregateInput
 }
 
 export type CompRegistrationScalarWhereWithAggregatesInput = {
@@ -424,6 +490,8 @@ export type CompRegistrationScalarWhereWithAggregatesInput = {
   teamName?: Prisma.StringNullableWithAggregatesFilter<"CompRegistration"> | string | null
   teamId?: Prisma.StringNullableWithAggregatesFilter<"CompRegistration"> | string | null
   paymentId?: Prisma.StringWithAggregatesFilter<"CompRegistration"> | string
+  paymentFee?: Prisma.IntWithAggregatesFilter<"CompRegistration"> | number
+  paymentProofUrl?: Prisma.StringWithAggregatesFilter<"CompRegistration"> | string
   statusOrder?: Prisma.StringNullableWithAggregatesFilter<"CompRegistration"> | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableWithAggregatesFilter<"CompRegistration"> | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameWithAggregatesFilter<"CompRegistration"> | $Enums.CompetitionName
@@ -436,6 +504,7 @@ export type CompRegistrationScalarWhereWithAggregatesInput = {
   mentor?: Prisma.StringNullableWithAggregatesFilter<"CompRegistration"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CompRegistration"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CompRegistration"> | Date | string
+  isVerified?: Prisma.BoolWithAggregatesFilter<"CompRegistration"> | boolean
 }
 
 export type CompRegistrationCreateInput = {
@@ -446,6 +515,9 @@ export type CompRegistrationCreateInput = {
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
   teamName?: string | null
+  paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -458,7 +530,7 @@ export type CompRegistrationCreateInput = {
   mentor?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  payment: Prisma.PaymentCreateNestedOneWithoutRegistrationInput
+  isVerified?: boolean
   team?: Prisma.TeamCreateNestedOneWithoutRegistrationInput
   user: Prisma.UserCreateNestedOneWithoutRegistrationInput
 }
@@ -474,6 +546,8 @@ export type CompRegistrationUncheckedCreateInput = {
   teamName?: string | null
   teamId?: string | null
   paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -486,6 +560,7 @@ export type CompRegistrationUncheckedCreateInput = {
   mentor?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isVerified?: boolean
 }
 
 export type CompRegistrationUpdateInput = {
@@ -496,6 +571,9 @@ export type CompRegistrationUpdateInput = {
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -508,7 +586,7 @@ export type CompRegistrationUpdateInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  payment?: Prisma.PaymentUpdateOneRequiredWithoutRegistrationNestedInput
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   team?: Prisma.TeamUpdateOneWithoutRegistrationNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutRegistrationNestedInput
 }
@@ -524,6 +602,8 @@ export type CompRegistrationUncheckedUpdateInput = {
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -536,6 +616,7 @@ export type CompRegistrationUncheckedUpdateInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CompRegistrationCreateManyInput = {
@@ -549,6 +630,8 @@ export type CompRegistrationCreateManyInput = {
   teamName?: string | null
   teamId?: string | null
   paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -561,6 +644,7 @@ export type CompRegistrationCreateManyInput = {
   mentor?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isVerified?: boolean
 }
 
 export type CompRegistrationUpdateManyMutationInput = {
@@ -571,6 +655,9 @@ export type CompRegistrationUpdateManyMutationInput = {
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -583,6 +670,7 @@ export type CompRegistrationUpdateManyMutationInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CompRegistrationUncheckedUpdateManyInput = {
@@ -596,6 +684,8 @@ export type CompRegistrationUncheckedUpdateManyInput = {
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -608,6 +698,7 @@ export type CompRegistrationUncheckedUpdateManyInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CompRegistrationCountOrderByAggregateInput = {
@@ -621,6 +712,8 @@ export type CompRegistrationCountOrderByAggregateInput = {
   teamName?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
+  paymentFee?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
   statusOrder?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   competitionName?: Prisma.SortOrder
@@ -633,6 +726,11 @@ export type CompRegistrationCountOrderByAggregateInput = {
   mentor?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+}
+
+export type CompRegistrationAvgOrderByAggregateInput = {
+  paymentFee?: Prisma.SortOrder
 }
 
 export type CompRegistrationMaxOrderByAggregateInput = {
@@ -646,6 +744,8 @@ export type CompRegistrationMaxOrderByAggregateInput = {
   teamName?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
+  paymentFee?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
   statusOrder?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   competitionName?: Prisma.SortOrder
@@ -658,6 +758,7 @@ export type CompRegistrationMaxOrderByAggregateInput = {
   mentor?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
 }
 
 export type CompRegistrationMinOrderByAggregateInput = {
@@ -671,6 +772,8 @@ export type CompRegistrationMinOrderByAggregateInput = {
   teamName?: Prisma.SortOrder
   teamId?: Prisma.SortOrder
   paymentId?: Prisma.SortOrder
+  paymentFee?: Prisma.SortOrder
+  paymentProofUrl?: Prisma.SortOrder
   statusOrder?: Prisma.SortOrder
   teamStatus?: Prisma.SortOrder
   competitionName?: Prisma.SortOrder
@@ -683,6 +786,11 @@ export type CompRegistrationMinOrderByAggregateInput = {
   mentor?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isVerified?: Prisma.SortOrder
+}
+
+export type CompRegistrationSumOrderByAggregateInput = {
+  paymentFee?: Prisma.SortOrder
 }
 
 export type CompRegistrationListRelationFilter = {
@@ -706,6 +814,14 @@ export type StringFieldUpdateOperationsInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type NullableEnumTeamStatusFieldUpdateOperationsInput = {
@@ -798,38 +914,6 @@ export type CompRegistrationUncheckedUpdateOneWithoutTeamNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CompRegistrationUpdateToOneWithWhereWithoutTeamInput, Prisma.CompRegistrationUpdateWithoutTeamInput>, Prisma.CompRegistrationUncheckedUpdateWithoutTeamInput>
 }
 
-export type CompRegistrationCreateNestedOneWithoutPaymentInput = {
-  create?: Prisma.XOR<Prisma.CompRegistrationCreateWithoutPaymentInput, Prisma.CompRegistrationUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.CompRegistrationCreateOrConnectWithoutPaymentInput
-  connect?: Prisma.CompRegistrationWhereUniqueInput
-}
-
-export type CompRegistrationUncheckedCreateNestedOneWithoutPaymentInput = {
-  create?: Prisma.XOR<Prisma.CompRegistrationCreateWithoutPaymentInput, Prisma.CompRegistrationUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.CompRegistrationCreateOrConnectWithoutPaymentInput
-  connect?: Prisma.CompRegistrationWhereUniqueInput
-}
-
-export type CompRegistrationUpdateOneWithoutPaymentNestedInput = {
-  create?: Prisma.XOR<Prisma.CompRegistrationCreateWithoutPaymentInput, Prisma.CompRegistrationUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.CompRegistrationCreateOrConnectWithoutPaymentInput
-  upsert?: Prisma.CompRegistrationUpsertWithoutPaymentInput
-  disconnect?: Prisma.CompRegistrationWhereInput | boolean
-  delete?: Prisma.CompRegistrationWhereInput | boolean
-  connect?: Prisma.CompRegistrationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CompRegistrationUpdateToOneWithWhereWithoutPaymentInput, Prisma.CompRegistrationUpdateWithoutPaymentInput>, Prisma.CompRegistrationUncheckedUpdateWithoutPaymentInput>
-}
-
-export type CompRegistrationUncheckedUpdateOneWithoutPaymentNestedInput = {
-  create?: Prisma.XOR<Prisma.CompRegistrationCreateWithoutPaymentInput, Prisma.CompRegistrationUncheckedCreateWithoutPaymentInput>
-  connectOrCreate?: Prisma.CompRegistrationCreateOrConnectWithoutPaymentInput
-  upsert?: Prisma.CompRegistrationUpsertWithoutPaymentInput
-  disconnect?: Prisma.CompRegistrationWhereInput | boolean
-  delete?: Prisma.CompRegistrationWhereInput | boolean
-  connect?: Prisma.CompRegistrationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CompRegistrationUpdateToOneWithWhereWithoutPaymentInput, Prisma.CompRegistrationUpdateWithoutPaymentInput>, Prisma.CompRegistrationUncheckedUpdateWithoutPaymentInput>
-}
-
 export type CompRegistrationCreateWithoutUserInput = {
   id?: string
   leaderUserId?: string | null
@@ -838,6 +922,9 @@ export type CompRegistrationCreateWithoutUserInput = {
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
   teamName?: string | null
+  paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -850,7 +937,7 @@ export type CompRegistrationCreateWithoutUserInput = {
   mentor?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  payment: Prisma.PaymentCreateNestedOneWithoutRegistrationInput
+  isVerified?: boolean
   team?: Prisma.TeamCreateNestedOneWithoutRegistrationInput
 }
 
@@ -864,6 +951,8 @@ export type CompRegistrationUncheckedCreateWithoutUserInput = {
   teamName?: string | null
   teamId?: string | null
   paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -876,6 +965,7 @@ export type CompRegistrationUncheckedCreateWithoutUserInput = {
   mentor?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isVerified?: boolean
 }
 
 export type CompRegistrationCreateOrConnectWithoutUserInput = {
@@ -918,6 +1008,8 @@ export type CompRegistrationScalarWhereInput = {
   teamName?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamId?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   paymentId?: Prisma.StringFilter<"CompRegistration"> | string
+  paymentFee?: Prisma.IntFilter<"CompRegistration"> | number
+  paymentProofUrl?: Prisma.StringFilter<"CompRegistration"> | string
   statusOrder?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   teamStatus?: Prisma.EnumTeamStatusNullableFilter<"CompRegistration"> | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFilter<"CompRegistration"> | $Enums.CompetitionName
@@ -930,6 +1022,7 @@ export type CompRegistrationScalarWhereInput = {
   mentor?: Prisma.StringNullableFilter<"CompRegistration"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CompRegistration"> | Date | string
+  isVerified?: Prisma.BoolFilter<"CompRegistration"> | boolean
 }
 
 export type CompRegistrationCreateWithoutTeamInput = {
@@ -940,6 +1033,9 @@ export type CompRegistrationCreateWithoutTeamInput = {
   leaderPhoneNumber?: string | null
   teamInstitution?: string | null
   teamName?: string | null
+  paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -952,7 +1048,7 @@ export type CompRegistrationCreateWithoutTeamInput = {
   mentor?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  payment: Prisma.PaymentCreateNestedOneWithoutRegistrationInput
+  isVerified?: boolean
   user: Prisma.UserCreateNestedOneWithoutRegistrationInput
 }
 
@@ -966,6 +1062,8 @@ export type CompRegistrationUncheckedCreateWithoutTeamInput = {
   teamInstitution?: string | null
   teamName?: string | null
   paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -978,6 +1076,7 @@ export type CompRegistrationUncheckedCreateWithoutTeamInput = {
   mentor?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isVerified?: boolean
 }
 
 export type CompRegistrationCreateOrConnectWithoutTeamInput = {
@@ -1004,6 +1103,9 @@ export type CompRegistrationUpdateWithoutTeamInput = {
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -1016,7 +1118,7 @@ export type CompRegistrationUpdateWithoutTeamInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  payment?: Prisma.PaymentUpdateOneRequiredWithoutRegistrationNestedInput
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   user?: Prisma.UserUpdateOneRequiredWithoutRegistrationNestedInput
 }
 
@@ -1030,6 +1132,8 @@ export type CompRegistrationUncheckedUpdateWithoutTeamInput = {
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -1042,118 +1146,7 @@ export type CompRegistrationUncheckedUpdateWithoutTeamInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type CompRegistrationCreateWithoutPaymentInput = {
-  id?: string
-  leaderUserId?: string | null
-  leaderEmail?: string | null
-  leaderName?: string | null
-  leaderPhoneNumber?: string | null
-  teamInstitution?: string | null
-  teamName?: string | null
-  statusOrder?: string | null
-  teamStatus?: $Enums.TeamStatus | null
-  competitionName: $Enums.CompetitionName
-  submissionFileName?: string | null
-  submissionFileUrl?: string | null
-  submissionFileKey?: string | null
-  submissionFileCreatedAt?: Date | string
-  submissionFileUploaded?: boolean
-  submissionFileSubmitted?: boolean
-  mentor?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  team?: Prisma.TeamCreateNestedOneWithoutRegistrationInput
-  user: Prisma.UserCreateNestedOneWithoutRegistrationInput
-}
-
-export type CompRegistrationUncheckedCreateWithoutPaymentInput = {
-  id?: string
-  userId: string
-  leaderUserId?: string | null
-  leaderEmail?: string | null
-  leaderName?: string | null
-  leaderPhoneNumber?: string | null
-  teamInstitution?: string | null
-  teamName?: string | null
-  teamId?: string | null
-  statusOrder?: string | null
-  teamStatus?: $Enums.TeamStatus | null
-  competitionName: $Enums.CompetitionName
-  submissionFileName?: string | null
-  submissionFileUrl?: string | null
-  submissionFileKey?: string | null
-  submissionFileCreatedAt?: Date | string
-  submissionFileUploaded?: boolean
-  submissionFileSubmitted?: boolean
-  mentor?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type CompRegistrationCreateOrConnectWithoutPaymentInput = {
-  where: Prisma.CompRegistrationWhereUniqueInput
-  create: Prisma.XOR<Prisma.CompRegistrationCreateWithoutPaymentInput, Prisma.CompRegistrationUncheckedCreateWithoutPaymentInput>
-}
-
-export type CompRegistrationUpsertWithoutPaymentInput = {
-  update: Prisma.XOR<Prisma.CompRegistrationUpdateWithoutPaymentInput, Prisma.CompRegistrationUncheckedUpdateWithoutPaymentInput>
-  create: Prisma.XOR<Prisma.CompRegistrationCreateWithoutPaymentInput, Prisma.CompRegistrationUncheckedCreateWithoutPaymentInput>
-  where?: Prisma.CompRegistrationWhereInput
-}
-
-export type CompRegistrationUpdateToOneWithWhereWithoutPaymentInput = {
-  where?: Prisma.CompRegistrationWhereInput
-  data: Prisma.XOR<Prisma.CompRegistrationUpdateWithoutPaymentInput, Prisma.CompRegistrationUncheckedUpdateWithoutPaymentInput>
-}
-
-export type CompRegistrationUpdateWithoutPaymentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
-  competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
-  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  submissionFileUploaded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  submissionFileSubmitted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  team?: Prisma.TeamUpdateOneWithoutRegistrationNestedInput
-  user?: Prisma.UserUpdateOneRequiredWithoutRegistrationNestedInput
-}
-
-export type CompRegistrationUncheckedUpdateWithoutPaymentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  leaderUserId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
-  competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
-  submissionFileName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  submissionFileUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  submissionFileKey?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  submissionFileCreatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  submissionFileUploaded?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  submissionFileSubmitted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CompRegistrationCreateManyUserInput = {
@@ -1166,6 +1159,8 @@ export type CompRegistrationCreateManyUserInput = {
   teamName?: string | null
   teamId?: string | null
   paymentId: string
+  paymentFee: number
+  paymentProofUrl: string
   statusOrder?: string | null
   teamStatus?: $Enums.TeamStatus | null
   competitionName: $Enums.CompetitionName
@@ -1178,6 +1173,7 @@ export type CompRegistrationCreateManyUserInput = {
   mentor?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  isVerified?: boolean
 }
 
 export type CompRegistrationUpdateWithoutUserInput = {
@@ -1188,6 +1184,9 @@ export type CompRegistrationUpdateWithoutUserInput = {
   leaderPhoneNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamInstitution?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -1200,7 +1199,7 @@ export type CompRegistrationUpdateWithoutUserInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  payment?: Prisma.PaymentUpdateOneRequiredWithoutRegistrationNestedInput
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   team?: Prisma.TeamUpdateOneWithoutRegistrationNestedInput
 }
 
@@ -1214,6 +1213,8 @@ export type CompRegistrationUncheckedUpdateWithoutUserInput = {
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -1226,6 +1227,7 @@ export type CompRegistrationUncheckedUpdateWithoutUserInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type CompRegistrationUncheckedUpdateManyWithoutUserInput = {
@@ -1238,6 +1240,8 @@ export type CompRegistrationUncheckedUpdateManyWithoutUserInput = {
   teamName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   paymentId?: Prisma.StringFieldUpdateOperationsInput | string
+  paymentFee?: Prisma.IntFieldUpdateOperationsInput | number
+  paymentProofUrl?: Prisma.StringFieldUpdateOperationsInput | string
   statusOrder?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   teamStatus?: Prisma.NullableEnumTeamStatusFieldUpdateOperationsInput | $Enums.TeamStatus | null
   competitionName?: Prisma.EnumCompetitionNameFieldUpdateOperationsInput | $Enums.CompetitionName
@@ -1250,6 +1254,7 @@ export type CompRegistrationUncheckedUpdateManyWithoutUserInput = {
   mentor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -1265,6 +1270,8 @@ export type CompRegistrationSelect<ExtArgs extends runtime.Types.Extensions.Inte
   teamName?: boolean
   teamId?: boolean
   paymentId?: boolean
+  paymentFee?: boolean
+  paymentProofUrl?: boolean
   statusOrder?: boolean
   teamStatus?: boolean
   competitionName?: boolean
@@ -1277,7 +1284,7 @@ export type CompRegistrationSelect<ExtArgs extends runtime.Types.Extensions.Inte
   mentor?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
+  isVerified?: boolean
   team?: boolean | Prisma.CompRegistration$teamArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["compRegistration"]>
@@ -1293,6 +1300,8 @@ export type CompRegistrationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   teamName?: boolean
   teamId?: boolean
   paymentId?: boolean
+  paymentFee?: boolean
+  paymentProofUrl?: boolean
   statusOrder?: boolean
   teamStatus?: boolean
   competitionName?: boolean
@@ -1305,7 +1314,7 @@ export type CompRegistrationSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   mentor?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
+  isVerified?: boolean
   team?: boolean | Prisma.CompRegistration$teamArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["compRegistration"]>
@@ -1321,6 +1330,8 @@ export type CompRegistrationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   teamName?: boolean
   teamId?: boolean
   paymentId?: boolean
+  paymentFee?: boolean
+  paymentProofUrl?: boolean
   statusOrder?: boolean
   teamStatus?: boolean
   competitionName?: boolean
@@ -1333,7 +1344,7 @@ export type CompRegistrationSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   mentor?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
+  isVerified?: boolean
   team?: boolean | Prisma.CompRegistration$teamArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["compRegistration"]>
@@ -1349,6 +1360,8 @@ export type CompRegistrationSelectScalar = {
   teamName?: boolean
   teamId?: boolean
   paymentId?: boolean
+  paymentFee?: boolean
+  paymentProofUrl?: boolean
   statusOrder?: boolean
   teamStatus?: boolean
   competitionName?: boolean
@@ -1361,21 +1374,19 @@ export type CompRegistrationSelectScalar = {
   mentor?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isVerified?: boolean
 }
 
-export type CompRegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "leaderUserId" | "leaderEmail" | "leaderName" | "leaderPhoneNumber" | "teamInstitution" | "teamName" | "teamId" | "paymentId" | "statusOrder" | "teamStatus" | "competitionName" | "submissionFileName" | "submissionFileUrl" | "submissionFileKey" | "submissionFileCreatedAt" | "submissionFileUploaded" | "submissionFileSubmitted" | "mentor" | "createdAt" | "updatedAt", ExtArgs["result"]["compRegistration"]>
+export type CompRegistrationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "leaderUserId" | "leaderEmail" | "leaderName" | "leaderPhoneNumber" | "teamInstitution" | "teamName" | "teamId" | "paymentId" | "paymentFee" | "paymentProofUrl" | "statusOrder" | "teamStatus" | "competitionName" | "submissionFileName" | "submissionFileUrl" | "submissionFileKey" | "submissionFileCreatedAt" | "submissionFileUploaded" | "submissionFileSubmitted" | "mentor" | "createdAt" | "updatedAt" | "isVerified", ExtArgs["result"]["compRegistration"]>
 export type CompRegistrationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
   team?: boolean | Prisma.CompRegistration$teamArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CompRegistrationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
   team?: boolean | Prisma.CompRegistration$teamArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type CompRegistrationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  payment?: boolean | Prisma.PaymentDefaultArgs<ExtArgs>
   team?: boolean | Prisma.CompRegistration$teamArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -1383,7 +1394,6 @@ export type CompRegistrationIncludeUpdateManyAndReturn<ExtArgs extends runtime.T
 export type $CompRegistrationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CompRegistration"
   objects: {
-    payment: Prisma.$PaymentPayload<ExtArgs>
     team: Prisma.$TeamPayload<ExtArgs> | null
     user: Prisma.$UserPayload<ExtArgs>
   }
@@ -1398,6 +1408,8 @@ export type $CompRegistrationPayload<ExtArgs extends runtime.Types.Extensions.In
     teamName: string | null
     teamId: string | null
     paymentId: string
+    paymentFee: number
+    paymentProofUrl: string
     statusOrder: string | null
     teamStatus: $Enums.TeamStatus | null
     competitionName: $Enums.CompetitionName
@@ -1410,6 +1422,7 @@ export type $CompRegistrationPayload<ExtArgs extends runtime.Types.Extensions.In
     mentor: string | null
     createdAt: Date
     updatedAt: Date
+    isVerified: boolean
   }, ExtArgs["result"]["compRegistration"]>
   composites: {}
 }
@@ -1804,7 +1817,6 @@ readonly fields: CompRegistrationFieldRefs;
  */
 export interface Prisma__CompRegistrationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  payment<T extends Prisma.PaymentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PaymentDefaultArgs<ExtArgs>>): Prisma.Prisma__PaymentClient<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   team<T extends Prisma.CompRegistration$teamArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompRegistration$teamArgs<ExtArgs>>): Prisma.Prisma__TeamClient<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
@@ -1846,6 +1858,8 @@ export interface CompRegistrationFieldRefs {
   readonly teamName: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly teamId: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly paymentId: Prisma.FieldRef<"CompRegistration", 'String'>
+  readonly paymentFee: Prisma.FieldRef<"CompRegistration", 'Int'>
+  readonly paymentProofUrl: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly statusOrder: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly teamStatus: Prisma.FieldRef<"CompRegistration", 'TeamStatus'>
   readonly competitionName: Prisma.FieldRef<"CompRegistration", 'CompetitionName'>
@@ -1858,6 +1872,7 @@ export interface CompRegistrationFieldRefs {
   readonly mentor: Prisma.FieldRef<"CompRegistration", 'String'>
   readonly createdAt: Prisma.FieldRef<"CompRegistration", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CompRegistration", 'DateTime'>
+  readonly isVerified: Prisma.FieldRef<"CompRegistration", 'Boolean'>
 }
     
 
