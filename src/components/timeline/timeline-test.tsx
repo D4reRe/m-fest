@@ -68,10 +68,10 @@ export function TimelineTest() {
   ];
 
   return (
-    <section className="py-16 bg-[url('/timeslice.png')]">
+    <section className="bg-[url('/timeslice.png')] mask-b-from-90% mask-b-to-100% mask-t-from-80% mask-t-to-100%">
       <div className="relative w-full mx-auto max-w-5xl" id="Timeline">
         <BlurFade inView delay={0.2}>
-          <Timeline data={timelineData} />
+          <Timeline data={timelineData}/>
         </BlurFade>
       </div>
     </section>

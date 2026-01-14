@@ -63,13 +63,13 @@ export default function FAQs() {
 
   return (
     <section
-      className="py-16 md:py-24 bg-[url('/FAQslice.png')] bg-contain"
+      className="py-16 md:py-24 bg-[url('/FAQslice.png')] bg-contain mask-b-from-80% mask-b-to-100% mask-t-from-80% mask-t-to-100%"
       id="faqs"
     >
       <BlurFade inView delay={0.3}>
         <div className="mx-auto max-w-9xl px-4 md:px-6">
           <div className="mx-auto max-w-9xl text-center">
-            <h2 className="text-[150px] font-bold md:text-4xl lg:text-5xl">
+            <h2 className="text-[150px] font-bold pt-20 md:text-4xl lg:text-5xl">
               Frequently Asked Questions
             </h2>
             <div className="mx-auto max-w-2xl text-center">

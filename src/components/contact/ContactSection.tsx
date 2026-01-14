@@ -6,10 +6,10 @@ import { IconPhone } from "@tabler/icons-react";
 const ContactSection = () => {
   return (
     <section
-      className="bg-[url('/Contactslice.png')] bg-cover py-16 sm:py-20"
+      className="mask-b-from-90% mask-b-to-100% mask-t-from-80% mask-t-to-100% bg-[url('/Contactslice.png')] bg-cover py-16 sm:py-20"
       id="contact"
     >
-      <div className="pl-16 pb-14">
+      <div className="pl-16 pb-14 pt-20">
         <h1 className="text-7xl font-extrabold ">That's all we're afraid.</h1>
         <p className="text-3xl font-bold">
           Wish to know more about us per chance?
